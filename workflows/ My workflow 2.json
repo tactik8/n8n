@@ -1,0 +1,235 @@
+{
+    "createdAt": "2025-07-08T15:03:50.020Z",
+    "updatedAt": "2025-07-11T13:30:26.000Z",
+    "id": "v1bYIiMz4tIVxHMG",
+    "name": "My workflow 2",
+    "active": false,
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -160,
+                0
+            ],
+            "id": "82dfa67f-449e-4dfc-bb6b-9ea75712635e",
+            "name": "When chat message received",
+            "webhookId": "32e294f9-24dc-4adf-919a-bf97268ba3fb"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.chatInput }}",
+                "options": {
+                    "systemMessage": "={{ $json.prompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                880,
+                0
+            ],
+            "id": "8bf35e78-6a3e-4f62-9a62-42c9fdcc113d",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                780,
+                240
+            ],
+            "id": "62ab944d-e520-4b9e-bf17-731334afeec9",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sseEndpoint": "https://tactik8.app.n8n.cloud/mcp/2ca448f2-d8ef-4b06-bb9e-66dc7f7fd44d/sse"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1,
+            "position": [
+                1140,
+                200
+            ],
+            "id": "9839469e-d2f6-41b1-b380-4ea40bfcfd8a",
+            "name": "MCP Client"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                480,
+                20
+            ],
+            "id": "85056ba7-8ec2-4792-baf1-766a5366be48",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "SVVEgMsJI3GBBvPI",
+                    "mode": "list",
+                    "cachedResultName": "Prompt DB - Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "id": "claim-extractor-v1"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                200,
+                160
+            ],
+            "id": "6540b36e-e872-4b75-9213-fcca9fe0d1cc",
+            "name": "Get prompt"
+        },
+        {
+            "parameters": {},
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.3,
+            "position": [
+                980,
+                220
+            ],
+            "id": "9fa49701-3160-4ad1-846e-2afcc0141b36",
+            "name": "Simple Memory"
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Get prompt",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MCP Client": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get prompt": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "2a669dc6-235b-4873-8d4b-7fd6af048d4d",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T15:03:50.023Z",
+            "updatedAt": "2025-07-08T15:03:50.023Z",
+            "role": "workflow:owner",
+            "workflowId": "v1bYIiMz4tIVxHMG",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
