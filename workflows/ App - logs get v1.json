@@ -1,0 +1,192 @@
+{
+    "createdAt": "2025-07-11T13:54:17.253Z",
+    "updatedAt": "2025-07-11T14:03:53.000Z",
+    "id": "houPSpxWNe83F1y1",
+    "name": "App - logs get v1",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "projectID"
+                        },
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "filter",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "80044dbe-507d-4275-b55d-c15757ac03ae",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "FgZKkYHObYWbwn6O",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "projectID": "={{ $('When Executed by Another Workflow').item.json.projectID }}",
+                        "tenantID": "logs_v1",
+                        "@type": "={{ $('When Executed by Another Workflow').item.json['@type'] }}",
+                        "@id": "={{ $('When Executed by Another Workflow').item.json['@id'] }}",
+                        "filter": "={{ $('When Executed by Another Workflow').item.json.filter }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "filter",
+                            "displayName": "filter",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "ba3db3ba-9f80-4e68-a62f-f75de2122df4",
+            "name": "Get Log"
+        },
+        {
+            "parameters": {
+                "content": "## App Logs get\n\nManages logs for other apps"
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -660,
+                -200
+            ],
+            "typeVersion": 1,
+            "id": "f0c9842d-f71b-43a0-93dc-345bb4b59e6f",
+            "name": "Sticky Note"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Get Log",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "projectID": "test_project_v1",
+                    "@type": "Action",
+                    "@id": "action_1",
+                    "filter": {
+                        "name": "action_1"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "39925399-34b1-4b01-9981-665e63a195b9",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T13:54:17.258Z",
+            "updatedAt": "2025-07-11T13:54:17.258Z",
+            "role": "workflow:owner",
+            "workflowId": "houPSpxWNe83F1y1",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T13:27:12.728Z",
+            "updatedAt": "2025-07-11T13:28:29.033Z",
+            "id": "ZoyZr6DZSDRTzi0t",
+            "name": "type:app"
+        },
+        {
+            "createdAt": "2025-07-11T13:48:03.117Z",
+            "updatedAt": "2025-07-11T13:48:03.117Z",
+            "id": "qesXdAFv90aasTNB",
+            "name": "id:logs"
+        }
+    ]
+}
