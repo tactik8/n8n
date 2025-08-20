@@ -1,0 +1,463 @@
+{
+    "createdAt": "2025-07-09T18:13:36.222Z",
+    "updatedAt": "2025-07-11T14:49:16.000Z",
+    "id": "g8kBTu9R6Auf7Qah",
+    "name": "API - Google Cloud Storage Post Text",
+    "active": false,
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "tenantID"
+                        },
+                        {
+                            "name": "projectID"
+                        },
+                        {
+                            "name": "filename"
+                        },
+                        {
+                            "name": "data",
+                            "type": "any"
+                        },
+                        {
+                            "name": "content"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -440,
+                -60
+            ],
+            "id": "a25c151e-9c47-467a-9b9a-1345c4362a73",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "resource": "object",
+                "operation": "create",
+                "bucketName": "={{ $('Add pojectID to filename').item.json.tenantID }}",
+                "objectName": "={{ $('Add pojectID to filename').item.json.filename }}",
+                "updateProjection": "noAcl",
+                "createData": {},
+                "createQuery": {},
+                "encryptionHeaders": {},
+                "requestOptions": {}
+            },
+            "type": "n8n-nodes-base.googleCloudStorage",
+            "typeVersion": 1,
+            "position": [
+                440,
+                -60
+            ],
+            "id": "c87d9420-985c-4595-a25a-1584cb285a4b",
+            "name": "Google Cloud Storage",
+            "credentials": {
+                "googleCloudStorageOAuth2Api": {
+                    "id": "dp4nwqLMRUOV59br",
+                    "name": "Google Cloud Storage account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ffwMI0oRaDpvtvvk",
+                    "mode": "list",
+                    "cachedResultName": "Schema DigitalDocument"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ $json.name }}",
+                        "datePublished": "={{ $now }}",
+                        "url": "={{ $json.mediaLink }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "datePublished",
+                            "displayName": "datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                660,
+                -60
+            ],
+            "id": "c506a5cf-9f3e-4755-9032-5a15049200da",
+            "name": "Get DigitalDocument object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "H7E1XaJ0xtx8Je7t",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}",
+                        "tenantID": "={{ $('Add pojectID to filename').item.json.tenantID }}",
+                        "projectID": "={{ $('Add pojectID to filename').item.json.projectID }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                920,
+                -240
+            ],
+            "id": "5960c862-d040-4c14-8749-0c7ab60ec20b",
+            "name": "Save to mongoDB cdn"
+        },
+        {
+            "parameters": {
+                "mode": "chooseBranch",
+                "useDataOfInput": 2
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                1160,
+                -80
+            ],
+            "id": "e0980d5f-7a9e-4ba5-bd32-3f4cce711120",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "content": "## Saves a text document google cloud\n\nbucket: kraken_cdn_ai_agent\n\nmongodb: n8nAIAgentCdn",
+                "height": 260,
+                "width": 260
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -580,
+                -420
+            ],
+            "typeVersion": 1,
+            "id": "cce60d79-bb2e-469d-86fa-03b583ea1a91",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6ac9deba-4a17-4c80-85c1-f2d8fc0d5e3e",
+                            "name": "filename",
+                            "value": "={{ encodeURIComponent($json.filename) }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b347626a-b588-4c08-9258-7321ed2ba9ad",
+                            "name": "content",
+                            "value": "={{$json.content}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -220,
+                -60
+            ],
+            "id": "5927c2c6-4b5b-45be-afc2-6cd3527b6be3",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "operation": "toText",
+                "sourceProperty": "content",
+                "options": {
+                    "encoding": "utf8",
+                    "fileName": "={{ $json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                220,
+                -60
+            ],
+            "id": "467adc8c-2374-4bb4-a5d9-6771b05dab89",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "bec3d4db-6b9a-4a32-b8c3-3460e67d4b62",
+                            "name": "filename",
+                            "value": "={{ $json.projectID }}/{{ $json.filename }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                0,
+                -60
+            ],
+            "id": "5e199b81-de42-4b2b-bb8e-aeedc51210aa",
+            "name": "Add pojectID to filename"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Cloud Storage": {
+            "main": [
+                [
+                    {
+                        "node": "Get DigitalDocument object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get DigitalDocument object": {
+            "main": [
+                [
+                    {
+                        "node": "Save to mongoDB cdn",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Save to mongoDB cdn": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Add pojectID to filename",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "Google Cloud Storage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add pojectID to filename": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "tenantID": "test_tenant_v1",
+                    "projectID": "test_project_v1",
+                    "filename": "https___www.mondou.com - Customer Persona_Profile Documents.md",
+                    "data": "test",
+                    "content": "Here are three distinct customer persona documents for Mondou, designed to provide a comprehensive understanding of key customer archetypes within the Canadian pet supply market, specifically with Mondou's presence in mind.\n\n---\n\n### **1. Profile: Sophie Dubois**\n\n*   **Archetype:** The Holistic Caregiver\n*   **Quote:** 'My pet's health and happiness come first, no matter the cost. I want the best, and I want to understand why.'\n\n**2. Demographics:**\n\n*   **Age:** 32-45\n*   **Location:** Urban/Suburban areas (e.g., Montreal, Quebec City, or surrounding affluent communities)\n*   **Occupation:** Professional (e.g., Marketing Manager, Teacher, Software Engineer)\n*   **Education:** University Degree (Bachelor's or Master's)\n*   **Income Level:** Upper-middle to High income ($70,000 - $120,000+ household)\n*   **Family Status:** Single, DINK (Dual Income No Kids), or young family with children (pets often considered 'first children').\n\n**3. Psychographics:**\n\n*   **Core Values:** Pet welfare, health, quality, authenticity, community, sustainability, responsible pet ownership.\n*   **Motivations:** Providing optimal care for their pet, ensuring longevity, deep emotional connection with their animal companion, staying informed about pet wellness trends.\n*   **Interests:** Pet nutrition (especially raw, organic, limited-ingredient), animal welfare issues, outdoor activities with pets (hiking, dog parks), advanced pet training, holistic living.\n*   **Hobbies:** Researching pet health topics online, attending pet-friendly events, creating homemade pet treats, engaging with online pet communities.\n*   **Lifestyle:** Active, health-conscious, environmentally aware, tech-savvy, values experiences and quality over sheer quantity.\n\n**4. Goals & Motivations:**\n\n*   **Primary Goal:** To ensure their pet receives the absolute best care in terms of nutrition, preventative health, and mental stimulation, leading to a long, healthy, and happy life.\n*   **Secondary Goals:** Finding trustworthy, scientifically-backed advice for pet care; supporting ethical and sustainable pet brands; simplifying complex pet care routines with reliable, high-quality products and services.\n\n**5. Challenges & Pain Points:**\n\n*   **Information Overload:** Navigating the vast amount of conflicting information and product claims in the pet health space.\n*   **Trust & Authenticity:** Concerns about 'greenwashing' or misleading product labels, seeking genuine transparency from brands.\n*   **Time Constraints:** While dedicated, busy schedules make in-depth research or multiple shopping trips challenging.\n*   **Lack of Specialized Guidance:** Difficulty finding highly knowledgeable staff who can provide truly in-depth advice on complex dietary needs or behavioral issues.\n*   **Premium Cost:** The higher cost associated with specialized, high-quality pet products.\n\n**6. Key Decision Drivers:**\n\n*   **Quality of Ingredients/Product Efficacy:** Foremost concern for pet's health.\n*   **Brand Reputation & Trust:** Prioritizes brands with strong ethical practices and positive reviews.\n*   **Veterinarian Recommendations:** Highly influences food and health product choices.\n*   **Peer Reviews & Expert Endorsements:** Values insights from other informed pet owners and reputable pet care professionals.\n*   **In-Store Staff Expertise:** Appreciates personalized, knowledgeable advice.\n*   **Ethical & Sustainable Practices:** Preference for brands that align with their values.\n\n**7. Communication Preferences:**\n\n*   **Platforms:** Detailed product information and articles on retailer websites, engaging and educational content on Instagram/Facebook, personalized email newsletters with new product alerts or health tips, in-store consultations.\n*   **Style:** Data-driven and informative, empathetic, focused on benefits and long-term well-being rather than just price. Appreciates personalized recommendations.\n\n**8. 'A Day in the Life' Narrative:**\n\nSophie wakes up early, often to the enthusiastic nudges of her energetic Border Collie, Finn. After their morning run in the local park, she carefully prepares Finn's breakfast – a mix of high-quality, grain-free kibble, a scoop of raw food, and a joint supplement she researched meticulously. While Finn eats, Sophie sips her coffee and scrolls through her favorite pet nutrition blog, looking for insights on canine dental health. She remembers Mondou's recent email about a new line of eco-friendly dental chews. Later that day, during her lunch break, she quickly checks Mondou's app to see if they offer curbside pickup for the chews and a specific type of durable, non-toxic toy Finn desperately needs. She values Mondou's commitment to Canadian brands and the ease of online ordering for pickup, but she truly appreciates the few times she's found a staff member in-store who could provide deep insights into Finn's specific dietary sensitivities.\n\n---\n\n### **1. Profile: Marc Tremblay**\n\n*   **Archetype:** The Efficient Provider\n*   **Quote:** 'I love my pets, but I also have a budget. I need good value and convenience for their everyday needs.'\n\n**2. Demographics:**\n\n*   **Age:** 40-55\n*   **Location:** Suburban/Rural Quebec (e.g., towns outside major cities)\n*   **Occupation:** Skilled Tradesperson (e.g., Electrician, Carpenter), Office Administrator, Retail Manager\n*   **Education:** College/Vocational Training\n*   **Income Level:** Middle income ($50,000 - $80,000 household)\n*   **Family Status:** Family with school-aged children, or empty-nesters. Often has multiple pets (e.g., a dog, a couple of cats).\n\n**3. Psychographics:**\n\n*   **Core Values:** Practicality, value for money, family well-being, reliability, efficiency, community-minded.\n*   **Motivations:** Providing adequately for his pets without overspending; managing household expenses effectively; finding reliable, durable products that simplify routines.\n*   **Interests:** Home improvement, outdoor activities (hunting, fishing), local community events, finding good deals and discounts.\n*   **Hobbies:** Gardening, weekend DIY projects, watching local sports, spending time with family and pets.\n*   **Lifestyle:** Busy, family-focused, prefers straightforward solutions, loyal to brands and stores that offer consistent value.\n\n**4. Goals & Motivations:**\n\n*   **Primary Goal:** To efficiently purchase all necessary pet essentials at the best possible price, minimizing time spent shopping.\n*   **Secondary Goals:** Ensuring pets are healthy and well-fed with trusted, affordable brands; finding reliable products that last; leveraging promotions and loyalty programs to maximize savings.\n\n**5. Challenges & Pain Points:**\n\n*   **Cost Management:** Managing the ongoing costs of pet ownership, especially for larger pets or multiple animals.\n*   **Time Efficiency:** Limited time for extensive shopping or browsing; needs quick, hassle-free transactions.\n*   **Product Overload:** Finding it overwhelming to compare numerous products when simply looking for a good value option.\n*   **Inconsistent Promotions:** Frustration when good deals are fleeting or hard to find.\n*   **Bulky Purchases:** Difficulty transporting large bags of food or litter.\n\n**6. Key Decision Drivers:**\n\n*   **Price & Promotions:** Top priority, actively seeks sales, discounts, and loyalty program benefits.\n*   **Convenience:** Ease of shopping (physical store proximity, clear store layout, quick checkout), availability of larger sizes/bulk options.\n*   **Brand Familiarity:** Sticks with trusted, well-known brands that have proven reliable.\n*   **Quantity/Value Packs:** Prefers larger sizes or bundles for cost-effectiveness.\n*   **Availability of Standard Necessities:** Ensures core products are consistently in stock.\n\n**7. Communication Preferences:**\n\n*   **Platforms:** Weekly flyers/circulars (both physical and digital), email promotions highlighting deals, clear in-store signage for sales, simple and direct messaging on social media.\n*   **Style:** Direct, factual, focused on savings and product utility. Appreciates clear pricing and bundle offers.\n\n**8. 'A Day in the Life' Narrative:**\n\nMarc starts his day by feeding his Labrador, Buster, and two cats, Mimi and Charlie. He notices Buster's kibble bag is almost empty. During his lunch break at work, he quickly pulls up Mondou's digital flyer on his phone, scanning for deals on large bags of dog food or cat litter. He spots a 'buy one, get one half off' offer on a brand he trusts. After finishing his shift, he makes a quick stop at the nearest Mondou. He knows exactly where to find the bulk food aisle, grabs two large bags, a bucket of cat litter, and a value pack of treats. He appreciates the efficient checkout and the help of a store associate to load the heavy bag into his truck. He doesn't linger, focused on getting his essentials and getting home to his family.\n\n---\n\n### **1. Profile: Clara Lévesque**\n\n*   **Archetype:** The Guided Novice\n*   **Quote:** 'This is my first pet, and I want to do everything right. I need simple, clear advice and a trusted place to start.'\n\n**2. Demographics:**\n\n*   **Age:** 22-30\n*   **Location:** Urban apartment (e.g., Downtown Montreal, smaller city centers)\n*   **Occupation:** Entry-level Professional (e.g., Junior Graphic Designer, Administrative Assistant), University Student (part-time work)\n*   **Education:** College/University Student or Recent Graduate\n*   **Income Level:** Lower to mid-range ($30,000 - $60,000 personal income)\n*   **Family Status:** Single, couple, first-time pet owner (often a rescue pet).\n\n**3. Psychographics:**\n\n*   **Core Values:** Learning, responsibility, emotional connection, guidance, simplicity, trustworthiness.\n*   **Motivations:** Being a good and responsible pet parent, avoiding mistakes, ensuring their pet's initial comfort and happiness, gaining confidence in their pet care abilities.\n*   **Interests:** Social media, pop culture, basic pet care information, apartment-friendly pet products, ethical pet adoption.\n*   **Hobbies:** Exploring pet-friendly cafes, watching pet training videos on YouTube/TikTok, spending quality time with their new pet, connecting with other new pet owners online.\n*   **Lifestyle:** Learning-oriented, cautious, budget-aware but willing to invest in the 'right' initial products, relies heavily on digital resources and recommendations.\n\n**4. Goals & Motivations:**\n\n*   **Primary Goal:** To successfully acquire all necessary basic supplies and foundational knowledge for their new pet without feeling overwhelmed.\n*   **Secondary Goals:** Feeling confident and supported in their new role as a pet parent; establishing healthy routines for their pet; finding reliable, easy-to-understand information and products.\n\n**5. Challenges & Pain Points:**\n\n*   **Information Overwhelm:** Drowning in a sea of conflicting advice from online sources and well-meaning friends/family.\n*   **Decision Paralysis:** Uncertainty about what essential items are truly needed versus what is excessive.\n*   **Budget Constraints:** Limited disposable income, making unexpected pet expenses stressful.\n*   **Anxiety of the Unknown:** Fear of making the 'wrong' choice that could harm their pet.\n*   **Lack of Hands-on Guidance:** Needing more than just online articles; seeking direct, reassuring, and patient advice.\n\n**6. Key Decision Drivers:**\n\n*   **Clear Recommendations:** Highly values direct advice from veterinarians, experienced friends, or patient store staff.\n*   **Beginner-Friendly Solutions:** Prefers bundles, starter kits, or products explicitly marketed for new pet owners.\n*   **Positive Reviews & Trust:** Relies on clear, relatable reviews and trusts reputable brand names.\n*   **Ease of Understanding:** Products with straightforward benefits and simple instructions.\n*   **Moderate Pricing:** Seeks good quality at an accessible price point.\n\n**7. Communication Preferences:**\n\n*   **Platforms:** Simple, digestible online guides and checklists (website, blog), short video tips on social media (Instagram, TikTok), patient and reassuring in-store conversations with staff, email series for new pet owners.\n*   **Style:** Encouraging, clear, concise, step-by-step guidance. Avoids jargon and overly technical terms.\n\n**8. 'A Day in the Life' Narrative:**\n\nClara recently adopted her first-ever pet, a small rescue dog named Pippin, and she's still learning the ropes. Her evenings are often spent scrolling through beginner pet care accounts on Instagram and watching 'how-to' videos on leash training. Today, she realized Pippin is rapidly outgrowing his puppy collar and needs a proper harness, and she's confused by the vast selection of dog foods. Feeling a bit overwhelmed, she decides a trip to her local Mondou is best. She walks in, looking for a clear, well-displayed 'new pet' section. She approaches a friendly-looking staff member, explaining she's a first-time dog owner and needs advice on a harness that won't chafe and a good, basic food that's healthy for a growing puppy. She asks a lot of questions, appreciating the patient and clear answers. She leaves feeling much more confident, with the right harness, a starter bag of recommended kibble, and a checklist of essentials for her next visit.\n\n---"
+                }
+            }
+        ]
+    },
+    "versionId": "4c2a078c-84bd-4a37-a791-b21a13fb7902",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-09T18:13:36.225Z",
+            "updatedAt": "2025-07-09T18:13:36.225Z",
+            "role": "workflow:owner",
+            "workflowId": "g8kBTu9R6Auf7Qah",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:11:55.156Z",
+            "updatedAt": "2025-07-11T13:28:22.519Z",
+            "id": "IDoNgAgFMAqCrBi3",
+            "name": "type:api"
+        },
+        {
+            "createdAt": "2025-07-11T13:21:27.246Z",
+            "updatedAt": "2025-07-11T13:28:48.124Z",
+            "id": "el3xFYPHk6lKiOnu",
+            "name": "id:Google Cloud Storage"
+        }
+    ]
+}
