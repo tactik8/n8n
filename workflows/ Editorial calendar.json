@@ -1,0 +1,257 @@
+{
+    "createdAt": "2025-06-18T21:11:01.483Z",
+    "updatedAt": "2025-06-18T21:26:02.000Z",
+    "id": "FWVUonV2zgxrw5gf",
+    "name": "Editorial calendar",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "d9cbd4a6-e0fc-42ca-8127-4cb51721de73",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "Please make a blog editorial calendar for a full year with one blog post per week for a pet food price comparison site taking into account seasonality. ",
+                "hasOutputParser": true,
+                "messages": {
+                    "messageValues": [
+                        {
+                            "message": "You make blog editorial calendars with one publication per week for a full year. "
+                        }
+                    ]
+                },
+                "batching": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.7,
+            "position": [
+                320,
+                0
+            ],
+            "id": "642262d6-e271-4881-80cd-ae4a8dce5a88",
+            "name": "Basic LLM Chain"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                420,
+                220
+            ],
+            "id": "658d88b9-fd7b-4730-8487-f4f75fa37120",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "[{\n\t\"date\": \"2025-01-01\",\n\t\"headline\": \"Preparing Your Pet's Paws for Winter: A Look at Balms and Booties\", \n  \"topics\": \"seasonal allergies\",\n  \"main messages\": \"Importance of protecting dog feet in winter. \"\n  \n}]"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                560,
+                220
+            ],
+            "id": "9cd41419-d681-4566-99ed-2d5247c598df",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY",
+                    "mode": "list",
+                    "cachedResultName": "Cuddle Editorial Calendar V2",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Sheet1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Date": "={{ $json.output.date }}",
+                        "Headline": "={{ $json.output.headline }}",
+                        "Topics": "={{ $json.output.topics }}",
+                        "Main Messages": "={{ $json.output['main messages'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "Date",
+                            "displayName": "Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Headline",
+                            "displayName": "Headline",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Topics",
+                            "displayName": "Topics",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Main Messages",
+                            "displayName": "Main Messages",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                1000,
+                0
+            ],
+            "id": "b1f446bc-2fdd-4847-9844-84843ccefc00",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "output",
+                "include": "allOtherFields",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                680,
+                0
+            ],
+            "id": "b0722b53-8498-4ec8-b231-b948e99cabf6",
+            "name": "Split Out"
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "56ede740-e5f3-4a7b-ac6b-d18fafe2a7f5",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-06-18T21:11:01.487Z",
+            "updatedAt": "2025-06-18T21:11:01.487Z",
+            "role": "workflow:owner",
+            "workflowId": "FWVUonV2zgxrw5gf",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
