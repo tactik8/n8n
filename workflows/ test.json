@@ -1,0 +1,242 @@
+{
+    "createdAt": "2025-07-11T15:49:23.619Z",
+    "updatedAt": "2025-07-11T16:17:16.000Z",
+    "id": "YxXzClGrNWsVtwQA",
+    "name": "test",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                -480,
+                0
+            ],
+            "id": "8128339e-ef51-4f88-b015-d5d2157f7703",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "931THV5mo5mQDBRw",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Storage Post File"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "=cdn_v1",
+                        "projectID": "=test_project_v1",
+                        "filename": "={{ $json.filename }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                240,
+                0
+            ],
+            "id": "f51c26e3-cc9e-4ab9-b30b-b0797c9f7218",
+            "name": "Execute Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "644e5dc7-1a59-465a-96cc-23d8a1ec19e3",
+                            "name": "text",
+                            "value": "some text",
+                            "type": "string"
+                        },
+                        {
+                            "id": "bed6d5f1-7176-4683-825b-16a0e939ca41",
+                            "name": "filename",
+                            "value": "some filename.txt",
+                            "type": "string"
+                        },
+                        {
+                            "id": "87669636-205b-4f77-b639-eb2fe25c5091",
+                            "name": "tenantID",
+                            "value": "cdn_v1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ab3783b1-07ab-4493-a205-38cd9addc833",
+                            "name": "projectID",
+                            "value": "test_proejct_v1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -260,
+                0
+            ],
+            "id": "42dbca8d-2920-455e-9ae3-2a51e07311b7",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "scv267DT6Izf2Xnk",
+                    "mode": "list",
+                    "cachedResultName": "Helpers - to File v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "={{ $json.filename }}",
+                        "text": "={{ $json.text }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "text",
+                            "displayName": "text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "records",
+                            "displayName": "records",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "array"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -40,
+                0
+            ],
+            "id": "608eeea9-9a35-4838-976d-ce3d44b9678a",
+            "name": "Execute Workflow1"
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow1": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "cf1e2d8b-49af-4822-8d4a-c7e1c9cb8813",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T15:49:23.622Z",
+            "updatedAt": "2025-07-11T15:49:23.622Z",
+            "role": "workflow:owner",
+            "workflowId": "YxXzClGrNWsVtwQA",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
