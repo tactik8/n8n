@@ -1,0 +1,379 @@
+{
+    "createdAt": "2025-07-09T16:54:24.876Z",
+    "updatedAt": "2025-07-11T13:42:03.000Z",
+    "id": "ZQXI2h49GnfoJO3R",
+    "name": "API - mongoDB Update",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "collectionName"
+                        },
+                        {
+                            "name": "record",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -520,
+                60
+            ],
+            "id": "9034aca7-057d-48d8-8b7d-b2831b6fd060",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "FgZKkYHObYWbwn6O",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@type": "={{ $json.record['@type'] }}",
+                        "@id": "={{ $json.record['@id'] }}",
+                        "tenantID": "={{ $json.tenantID }}",
+                        "projectID": "={{ $json.projectID }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filter",
+                            "displayName": "filter",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                120,
+                -100
+            ],
+            "id": "a9c2cd4e-15df-464c-93e2-54db13651847",
+            "name": "Get Record",
+            "alwaysOutputData": true
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f2ccddd3-73d3-4ff1-b04c-4e67193e008d",
+                            "name": "dbRecord",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                340,
+                -100
+            ],
+            "id": "f9fada94-c02e-4573-8454-8ac0c3418d38",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                660,
+                40
+            ],
+            "id": "9569a8e9-3ee6-4593-9113-f72ab2cbfe4d",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\n\nfunction isIn(items, item){\n\n  if(item === undefined || item === null){\n    return true\n  }\n\n  items = Array.isArray(items) ? items : [items]\n  if(items.length === 0){\n    return false\n  }\n\n  \n  for(let i of items){\n    if(i == item){\n      return true\n    } \n\n    if(i?.['@type'] && i?.['@id'] && i?.['@type'] == item?.['@type'] && i?.['@id'] == item?.['@id']){\n      return true\n    } \n\n    \n  }\n\n  return false\n  \n}\n\n\n\nlet newRecords = []\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n\n  let dbRecord = item.json.dbRecord\n\n  dbRecord._tenantID = item.json.tenantID\n  dbRecord._projectID = item.json.projectID\n\n  let newRecord = item.json.record\n\n  let record = item.json?.dbRecord \n\n  if(record === undefined){\n    record = newRecord\n    newRecords.push(record)\n    continue\n  }\n  \n  for(let k in newRecord){\n    \n    let dbValue = dbRecord?.[k]\n    let newValue = newRecord?.[k]\n\n\n    // Undefined or null\n    if(dbValue === undefined || dbValue === null){\n      record[k] = newValue\n      continue\n    }\n\n    let dbValues = Array.isArray(dbValue) ? dbValue : [dbValue]\n\n    let newValues = Array.isArray(newValue) ? newValue : [newValue]\n\n    for(let v of newValues){\n      if(isIn(dbValues, v) === false){\n        dbValues.push(v)\n      }\n    }\n\n    // Clean up\n    if(dbValues.length === 1){\n      record[k] = dbValues?.[0]\n    } else {\n      record[k] = dbValues\n    }\n    \n    \n  }\n\n  newRecords.push(record)\n  \n}\n\nreturn newRecords"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                880,
+                40
+            ],
+            "id": "d5d29314-2481-413c-bea4-71550cf45c34",
+            "name": "Code - Merge Schema records"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "H7E1XaJ0xtx8Je7t",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}",
+                        "tenantID": "={{ $json._tenantID }}",
+                        "projectID": "={{ $json._projectID }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1100,
+                40
+            ],
+            "id": "fe99d5fd-418e-4fc4-8b97-d321ca9146b3",
+            "name": "Execute Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nlet results = []\nfor (const item of $input.all()) {\n\n\n  let records = item.json.record\n  records = Array.isArray(records) ? records : [records]\n\n  for(let r of records){\n\n    let newItem = {\n      record: r,\n      tenantID: item.json?.tenantID,\n      projectID: item.json?.projectID,\n    }\n    results.push(newItem)\n  }\n\n \n\n  \n}\nreturn results\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -300,
+                60
+            ],
+            "id": "f367c2c4-e38b-4251-b069-1a69b2a2c60d",
+            "name": "Code Flatten records"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code Flatten records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Record": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Code - Merge Schema records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code - Merge Schema records": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code Flatten records": {
+            "main": [
+                [
+                    {
+                        "node": "Get Record",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "tenantID": "test_tenant_v1",
+                    "projectID": "test_project_v1",
+                    "record": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "tenantID": "test_tenant_v1",
+                    "projectID": "test_project_v1",
+                    "record": [
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing2",
+                            "name": "thing2"
+                        },
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing3",
+                            "name": "thing3"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "versionId": "3157aca5-0779-47ee-8873-ec18fb26d16b",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-09T16:54:24.878Z",
+            "updatedAt": "2025-07-09T16:54:24.878Z",
+            "role": "workflow:owner",
+            "workflowId": "ZQXI2h49GnfoJO3R",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:11:55.156Z",
+            "updatedAt": "2025-07-11T13:28:22.519Z",
+            "id": "IDoNgAgFMAqCrBi3",
+            "name": "type:api"
+        },
+        {
+            "createdAt": "2025-07-11T13:22:10.309Z",
+            "updatedAt": "2025-07-11T13:28:53.509Z",
+            "id": "bmh0Q5O1a9NXN6U8",
+            "name": "id:MongoDB"
+        }
+    ]
+}
