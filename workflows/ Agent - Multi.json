@@ -1,0 +1,193 @@
+{
+    "createdAt": "2025-07-10T13:38:25.215Z",
+    "updatedAt": "2025-07-11T13:44:55.000Z",
+    "id": "ejRHvO5JvAaGxhmJ",
+    "name": "Agent - Multi",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "formTitle": "Test",
+                "formFields": {
+                    "values": [
+                        {
+                            "fieldLabel": "Title"
+                        },
+                        {
+                            "fieldLabel": "Prompt",
+                            "fieldType": "textarea"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.formTrigger",
+            "typeVersion": 2.2,
+            "position": [
+                -440,
+                20
+            ],
+            "id": "0685a7ad-a03b-4907-be2f-228e5642ec3f",
+            "name": "On form submission",
+            "webhookId": "f7df7c8a-50f7-43fe-b5d2-90afe52e2d56"
+        },
+        {
+            "parameters": {
+                "defineForm": "json",
+                "jsonOutput": "=[\n\t{\n\t\t\"fieldLabel\": \"Date Field\",\n\t\t\"fieldType\": \"date\",\n\t\t\"formatDate\": \"mm/dd/yyyy\", \n\t\t\"requiredField\": true\n\t},\n\t{\n\t\t\"fieldLabel\": \"Dropdown Options\",\n\t\t\"fieldType\": \"dropdown\",\n\t\t\"fieldOptions\": {\n\t\t\t\"values\": {{ JSON.stringify($json.options)}}\n        },\n\t\t\"requiredField\": true\n\t}\n]",
+                "limitWaitTime": true,
+                "resumeAmount": 0.1,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.form",
+            "typeVersion": 1,
+            "position": [
+                500,
+                20
+            ],
+            "id": "61b8ab6d-c6c5-4c1d-95ee-fc7c5be6c2a7",
+            "name": "Form",
+            "webhookId": "3a94bc71-60a1-4bd1-931c-1068e6e3d897"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU",
+                    "mode": "list",
+                    "cachedResultName": "AI Prompts",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU/edit#gid=0"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                -220,
+                20
+            ],
+            "id": "7f0ad7c1-d737-4246-8695-f2d549b7a419",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "fieldsToAggregate": {
+                    "fieldToAggregate": [
+                        {
+                            "fieldToAggregate": "id"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                0,
+                20
+            ],
+            "id": "c29d580e-b4dd-40f6-bd63-84fd13bfc028",
+            "name": "Aggregate"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let names = item.json.id\n  names = [ ...new Set(names)]\n  names.sort()\n  item.json.id = names\n\n  let records = []\n  for(let n of names){\n    let r = { \"option\": n}\n    records.push(r)\n  }\n\n  item.json.options = records\n  \n}\n\n\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                220,
+                20
+            ],
+            "id": "82370bbc-8d68-4720-b96c-7d4b08f54627",
+            "name": "Code"
+        }
+    ],
+    "connections": {
+        "On form submission": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Form",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "9b1bc79f-8757-4823-bc52-1b1404e67035",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-10T13:38:25.218Z",
+            "updatedAt": "2025-07-10T13:38:25.218Z",
+            "role": "workflow:owner",
+            "workflowId": "ejRHvO5JvAaGxhmJ",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:19.644Z",
+            "updatedAt": "2025-07-11T13:29:39.556Z",
+            "id": "fsYQGx4UGwRejmSm",
+            "name": "type:agent"
+        }
+    ]
+}
