@@ -1,0 +1,199 @@
+{
+    "createdAt": "2025-07-02T11:58:52.247Z",
+    "updatedAt": "2025-07-12T12:50:35.000Z",
+    "id": "RIKjERUrQe1hlh4R",
+    "name": "Schema - tool Set Action Complete",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "action",
+                            "type": "object"
+                        },
+                        {
+                            "name": "result",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "c3988dd0-4bc0-4e53-a381-b9a9e3579cd9",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0123bc52-60d2-4804-b477-0fe86a373682",
+                            "name": "action.actionStatus",
+                            "value": "=CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c1f0fe87-4e27-45e5-94d4-05967aa252cb",
+                            "name": "action.startTime",
+                            "value": "={{ $json.action.startTime || $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7e4ed611-3944-43f4-a803-f77db180c225",
+                            "name": "action.endTime",
+                            "value": "={{ $json.action.endTime || $now}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2dc56f33-6ce1-4217-a400-58a8a556c234",
+                            "name": "action.result",
+                            "value": "={{ $json.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                220,
+                0
+            ],
+            "id": "d0f8e929-242e-4158-9c9a-08a26c1e92bb",
+            "name": "Set default values"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "46d8ccc1-0c71-4375-812d-a93deae7a4ee",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                440,
+                0
+            ],
+            "id": "971ee78a-96fc-4955-82b6-8137a001bcb1",
+            "name": "Keep only action"
+        },
+        {
+            "parameters": {
+                "mode": "runOnceForEachItem",
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nreturn $json.action"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                660,
+                0
+            ],
+            "id": "9600c963-2900-4ead-931b-24b6854f424f",
+            "name": "Code"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Set default values",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set default values": {
+            "main": [
+                [
+                    {
+                        "node": "Keep only action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Keep only action": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "action": {
+                        "@type": "action",
+                        "@id": "action_1",
+                        "name": "action_1",
+                        "actionStatus": "completedActionStatus",
+                        "startTime": "",
+                        "endTime": "",
+                        "object": "",
+                        "result": "",
+                        "instrument": ""
+                    },
+                    "result": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "3d16ff88-3e9a-46d6-9a88-cf7a1d7e129a",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T11:58:52.249Z",
+            "updatedAt": "2025-07-02T11:58:52.249Z",
+            "role": "workflow:owner",
+            "workflowId": "RIKjERUrQe1hlh4R",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:31.446Z",
+            "updatedAt": "2025-07-02T16:12:31.446Z",
+            "id": "o5KghriZ0ICU7irP",
+            "name": "helpers"
+        }
+    ]
+}
