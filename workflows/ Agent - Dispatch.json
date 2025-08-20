@@ -1,0 +1,1076 @@
+{
+    "createdAt": "2025-07-02T13:31:54.226Z",
+    "updatedAt": "2025-07-11T13:44:45.000Z",
+    "id": "YjTmBRODKEl7mJlu",
+    "name": "Agent - Dispatch",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "public": true,
+                "options": {
+                    "allowFileUploads": true
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -980,
+                -700
+            ],
+            "id": "269d8662-cb44-4fda-8dd2-e2a91d20f724",
+            "name": "When chat message received",
+            "webhookId": "fe4a84f5-13a5-4250-912f-9caf9321ac2b"
+        },
+        {
+            "parameters": {
+                "inputText": "={{ $json.query }}",
+                "categories": {
+                    "categories": [
+                        {
+                            "category": "Javascript functions",
+                            "description": "Request contains a request to develop a javascript function or js function "
+                        }
+                    ]
+                },
+                "options": {
+                    "fallback": "other"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.textClassifier",
+            "typeVersion": 1.1,
+            "position": [
+                120,
+                -435
+            ],
+            "id": "6fed6d57-0f02-4264-9451-4ba8cdc2ed88",
+            "name": "Text Classifier",
+            "alwaysOutputData": false
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-lite-preview-06-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                208,
+                -215
+            ],
+            "id": "fcef82f6-6286-4d5f-ab5f-1304be39f982",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "JfSQIlkv0O3NKPxn",
+                    "mode": "list",
+                    "cachedResultName": "Builder - JS Functions"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "prompt": "={{ $json.query }}"
+                    },
+                    "matchingColumns": [
+                        "prompt"
+                    ],
+                    "schema": [
+                        {
+                            "id": "prompt",
+                            "displayName": "prompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                496,
+                -535
+            ],
+            "id": "50c41b1e-e50e-4e77-bd1f-d69677bac0aa",
+            "name": "JS Builder"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "yTYwOjUDjMwy3pIC",
+                    "mode": "list",
+                    "cachedResultName": "Action - New"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "type": "SearchAction",
+                        "name": "New request to n8n generic agent"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "type",
+                            "displayName": "type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "object",
+                            "displayName": "object",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "instrument",
+                            "displayName": "instrument",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "agent",
+                            "displayName": "agent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeStart",
+                            "displayName": "timeStart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeEnd",
+                            "displayName": "timeEnd",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -540,
+                -700
+            ],
+            "id": "ff7da316-a370-460c-aeac-48517ab3f021",
+            "name": "Init action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ae8e4b58-eb5e-4a90-9bab-ddfe18c22c81",
+                            "name": "action.query",
+                            "value": "={{ $('When chat message received').item.json.chatInput }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -320,
+                -700
+            ],
+            "id": "b8b36ce8-6de6-4c8b-979d-01b44ab9584c",
+            "name": "Add action.query"
+        },
+        {
+            "parameters": {
+                "operation": "appendOrUpdate",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1JzJFYp0MmU6Ws79dyKkMjCi9r3Oq5z8h8uhlHbWzctw",
+                    "mode": "list",
+                    "cachedResultName": "Basic AI DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JzJFYp0MmU6Ws79dyKkMjCi9r3Oq5z8h8uhlHbWzctw/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Sheet1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JzJFYp0MmU6Ws79dyKkMjCi9r3Oq5z8h8uhlHbWzctw/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "id": "={{ $json.action['@id'] }}",
+                        "type": "={{ $json.action['@type'] }}",
+                        "name": "={{ $json.action.name }}",
+                        "startTime": "={{ $json.action.startTime }}",
+                        "actionStatus": "={{ $json.action.actionStatus }}",
+                        "query": "={{ $json.action.query }}"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "type",
+                            "displayName": "type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "query",
+                            "displayName": "query",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "startTime",
+                            "displayName": "startTime",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "endTime",
+                            "displayName": "endTime",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                -100,
+                -435
+            ],
+            "id": "3b938832-78fd-4a9d-af64-c553f109b5d5",
+            "name": "Register action in google sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "createFromText",
+                "content": "={{ JSON.stringify($json, null, 4) }}",
+                "name": "=Basic_agent_{{ $json.action.startTime }}_{{ $json.action[\"@id\"] }}.json",
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "folderId": {
+                    "__rl": true,
+                    "value": "1E1bT8OIXPxEgZMU66EJ4mEZdFvMjYJOO",
+                    "mode": "list",
+                    "cachedResultName": "Basic AI",
+                    "cachedResultUrl": "https://drive.google.com/drive/folders/1E1bT8OIXPxEgZMU66EJ4mEZdFvMjYJOO"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                1600,
+                -620
+            ],
+            "id": "33ac259a-96eb-409f-aec0-99d187cb3b93",
+            "name": "Save action to google drive",
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "XiGnwBYQSsTq25Ml",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                1160,
+                -680
+            ],
+            "id": "5495cada-d87d-4991-99cb-d99a20ab10cc",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "90df74a6-2ab7-419f-8ac7-2df74294d277",
+                            "name": "action.instrument",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                716,
+                -535
+            ],
+            "id": "52a4648b-e7d6-4efb-b03d-cd89d7942991",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "83abd543-7c3b-48e5-80d2-2dd5ff397397",
+                            "name": "action.actionStatus",
+                            "value": "={{ $json.action.instrument.actionStatus }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d4744634-4892-4523-ae88-5d7b8008f784",
+                            "name": "endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7c6be4ab-08aa-46f4-bf88-27d12b2f6fa8",
+                            "name": "action.result",
+                            "value": "={{ $json.action.instrument.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {
+                    "ignoreConversionErrors": false
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1380,
+                -680
+            ],
+            "id": "54471860-f37f-480f-b632-65a6d1081e88",
+            "name": "Update status"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "804d5afb-7eb0-40f6-94dc-46fc133b9507",
+                            "name": "url",
+                            "value": "=https://drive.google.com/file/d/{{$json.id}}/view?usp=sharing",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1820,
+                -620
+            ],
+            "id": "dad6c0a9-ab4d-4c64-801c-68d9e895a137",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                2040,
+                -680
+            ],
+            "id": "92306888-fa8f-489a-be34-c1012fbb9751",
+            "name": "Merge Google drive url"
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1JzJFYp0MmU6Ws79dyKkMjCi9r3Oq5z8h8uhlHbWzctw",
+                    "mode": "list",
+                    "cachedResultName": "Basic AI Agent DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JzJFYp0MmU6Ws79dyKkMjCi9r3Oq5z8h8uhlHbWzctw/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Sheet1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JzJFYp0MmU6Ws79dyKkMjCi9r3Oq5z8h8uhlHbWzctw/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "id": "={{ $json.id }}",
+                        "endTime": "={{ $json.endTime }}",
+                        "url": "={{ $json.url }}",
+                        "actionStatus": "={{ $json.actionStatus }}"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "type",
+                            "displayName": "type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "query",
+                            "displayName": "query",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "startTime",
+                            "displayName": "startTime",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "endTime",
+                            "displayName": "endTime",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                2260,
+                -620
+            ],
+            "id": "358268ec-3c5a-4a83-9c00-3ed9fb710aa7",
+            "name": "Update google sheets db",
+            "alwaysOutputData": true,
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "HxLwcvSIDDfiQG5t",
+                    "mode": "list",
+                    "cachedResultName": "Agent - Basic"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "prompt": "={{ $json.query }}"
+                    },
+                    "matchingColumns": [
+                        "prompt"
+                    ],
+                    "schema": [
+                        {
+                            "id": "prompt",
+                            "displayName": "prompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                496,
+                -335
+            ],
+            "id": "0a8e8280-494f-45f6-8fe3-beff076145af",
+            "name": "Execute Basic agent"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "47740f8e-3ac1-40b5-b149-d23b157c068b",
+                            "name": "action.instrument",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                716,
+                -335
+            ],
+            "id": "b9d14a63-7b64-41d0-8750-f2c0ebfc4699",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                936,
+                -435
+            ],
+            "id": "c678e534-44a1-4f62-98bd-0244e45d0cbe",
+            "name": "Combine data"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b41d0bb0-b33a-4f26-8da6-96ceedcea7bc",
+                            "name": "text",
+                            "value": "={{ $json.action.result.text }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2700,
+                -680
+            ],
+            "id": "24fbc1fd-3e0d-4a32-9cad-ca64ad2fcb27",
+            "name": "Respond to chat"
+        },
+        {
+            "parameters": {
+                "mode": "chooseBranch"
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                2480,
+                -680
+            ],
+            "id": "a5e68b01-5712-446c-869f-b734bf40d632",
+            "name": "Merge1"
+        },
+        {
+            "parameters": {
+                "enableResponseOutput": true,
+                "respondWith": "text",
+                "responseBody": "got it",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.4,
+            "position": [
+                -760,
+                -700
+            ],
+            "id": "b6dd01f0-dc9f-4ca3-9a2c-9260e124ae75",
+            "name": "Respond to Webhook1"
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Text Classifier",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Text Classifier": {
+            "main": [
+                [
+                    {
+                        "node": "JS Builder",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Execute Basic agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "JS Builder": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Init action": {
+            "main": [
+                [
+                    {
+                        "node": "Add action.query",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add action.query": {
+            "main": [
+                [
+                    {
+                        "node": "Register action in google sheets",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Register action in google sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Text Classifier",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save action to google drive": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Combine data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Update status",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update status": {
+            "main": [
+                [
+                    {
+                        "node": "Save action to google drive",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge Google drive url",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Google drive url",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge Google drive url": {
+            "main": [
+                [
+                    {
+                        "node": "Update google sheets db",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update google sheets db": {
+            "main": [
+                [
+                    {
+                        "node": "Merge1",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Execute Basic agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Combine data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Combine data": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge1": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to chat",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Respond to Webhook1": {
+            "main": [
+                [
+                    {
+                        "node": "Init action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Init action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "f0a01aa7-b75c-43ca-b452-077cbb159ad1",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T13:31:54.230Z",
+            "updatedAt": "2025-07-02T13:31:54.230Z",
+            "role": "workflow:owner",
+            "workflowId": "YjTmBRODKEl7mJlu",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:19.644Z",
+            "updatedAt": "2025-07-11T13:29:39.556Z",
+            "id": "fsYQGx4UGwRejmSm",
+            "name": "type:agent"
+        }
+    ]
+}
