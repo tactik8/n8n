@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-07-11T16:51:31.936Z",
-    "updatedAt": "2025-08-20T13:34:55.000Z",
+    "updatedAt": "2025-08-20T13:49:03.000Z",
     "id": "iVzZq0XLcepnkExi",
     "name": "Trigger - daily",
     "active": false,
@@ -17,7 +17,7 @@
             "type": "n8n-nodes-base.scheduleTrigger",
             "typeVersion": 1.2,
             "position": [
-                -768,
+                -992,
                 -64
             ],
             "id": "129d8bef-a50a-4a37-ae06-9eda2ee4b3d8",
@@ -28,26 +28,8 @@
                 "assignments": {
                     "assignments": [
                         {
-                            "id": "b88252b3-d6e2-4c83-b5df-eec9751857af",
-                            "name": "@type",
-                            "value": "Action",
-                            "type": "string"
-                        },
-                        {
-                            "id": "18af2526-04f2-487c-a4b0-84b2cb198cf8",
-                            "name": "name",
-                            "value": "=n8n cloud daily trigger - {{ $now.year }}-{{ $now.month }}-{{  $now.day }}, {{  $now.hour }}:{{  $now.minute }}",
-                            "type": "string"
-                        },
-                        {
-                            "id": "2fd6b824-a331-458c-b389-9297acab0976",
-                            "name": "description",
-                            "value": "",
-                            "type": "string"
-                        },
-                        {
-                            "id": "25557415-8905-4b3a-881c-371450bc63ca",
-                            "name": "timeStart",
+                            "id": "67b32cf2-2f24-47bb-b641-96465e815bee",
+                            "name": "startTime",
                             "value": "={{ $now }}",
                             "type": "string"
                         }
@@ -58,19 +40,256 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                -544,
+                -784,
                 -64
             ],
-            "id": "845041e1-bf04-45ba-9f25-92b89f15ab60",
-            "name": "Init action"
+            "id": "d5dddd17-c196-4ca3-aa51-ea993ebb73a2",
+            "name": "Init time"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "destinationFieldName": "result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                624,
+                -32
+            ],
+            "id": "81bed6ff-10d5-4ac7-8033-d0ecd93805b1",
+            "name": "Aggregate"
         },
         {
             "parameters": {
                 "workflowId": {
                     "__rl": true,
-                    "value": "yIsNJe5MMDD5GdhR",
+                    "value": "yTYwOjUDjMwy3pIC",
                     "mode": "list",
-                    "cachedResultName": "API Github - Backup Workflows"
+                    "cachedResultName": "Schema Action"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "n8n cloud daily trigger - {{ $now.year }}-{{ $now.month }}-{{  $now.day }}, {{  $now.hour }}:{{  $now.minute }}",
+                        "result": "={{ $json.result.filter( x=> x.actionStatus == 'CompletedActionStatus') }}",
+                        "error": "={{ $json.result.filter( x=> x.actionStatus == 'FailedActionStatus') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "object",
+                            "displayName": "object",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "instrument",
+                            "displayName": "instrument",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "agent",
+                            "displayName": "agent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "startTime",
+                            "displayName": "startTime",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "endTime",
+                            "displayName": "endTime",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "error",
+                            "displayName": "error",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1104,
+                -32
+            ],
+            "id": "eb308e6a-aa30-45c1-8a74-ae55fc8c44ea",
+            "name": "Execute Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "37dd2874-d225-42a0-97b0-5f6f538a12b6",
+                            "name": "result",
+                            "value": "={{ $json.result.filter(x => x.actionStatus == 'CompletedActionStatus') }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "bb73c9f3-22df-4ef4-9c8c-51717ab0ec9a",
+                            "name": "error",
+                            "value": "={{ $json.result.filter(x => x.actionStatus == 'FailedActionStatus') }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "aa3e97a2-18d0-439f-b460-bf0fb6ed3a6c",
+                            "name": "total ",
+                            "value": "={{ $json.result.length }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c4bfd702-dbe7-40a9-a703-bbfa9f9c1c5b",
+                            "name": "successRate",
+                            "value": "={{ Math.round($json.result.filter(x => x.actionStatus == 'CompleteddActionStatus').length / $json.result.length) * 100 }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "33483ef5-b146-436c-9170-7243ed6c687e",
+                            "name": "description",
+                            "value": "={{ '---\\n' + $json.result.map(x => x.name + '\\n' + x.description).join('---\\n') }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                832,
+                -32
+            ],
+            "id": "672dc0c6-ee5f-40a8-9e10-8a1ce0ed33d9",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "filters": {
+                    "tags": "trigger:daily"
+                },
+                "requestOptions": {}
+            },
+            "type": "n8n-nodes-base.n8n",
+            "typeVersion": 1,
+            "position": [
+                -576,
+                -64
+            ],
+            "id": "9e616d52-c1fc-4532-89ce-9d93d53ce785",
+            "name": "Get many workflows",
+            "credentials": {
+                "n8nApi": {
+                    "id": "f0llQKVDDrQnurmq",
+                    "name": "n8n account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "mode": "id",
+                    "cachedResultName": ""
                 },
                 "workflowInputs": {
                     "mappingMode": "defineBelow",
@@ -85,11 +304,11 @@
             "type": "n8n-nodes-base.executeWorkflow",
             "typeVersion": 1.2,
             "position": [
-                -256,
-                -192
+                -368,
+                -64
             ],
-            "id": "894d5965-8c76-4eb4-8768-38fc98d42f6c",
-            "name": "n8n workflow backup"
+            "id": "c7505422-ec84-4009-9f41-a3a3853dd3b3",
+            "name": "Execute Workflow1"
         }
     ],
     "connections": {
@@ -97,18 +316,62 @@
             "main": [
                 [
                     {
-                        "node": "Init action",
+                        "node": "Init time",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Init action": {
+        "Init time": {
             "main": [
                 [
                     {
-                        "node": "n8n workflow backup",
+                        "node": "Get many workflows",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many workflows": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow1": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate",
                         "type": "main",
                         "index": 0
                     }
@@ -120,9 +383,11 @@
         "executionOrder": "v1"
     },
     "staticData": null,
-    "meta": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
     "pinData": {},
-    "versionId": "7543c1ae-45c3-4d72-95e1-f971856b1146",
+    "versionId": "c017929f-25ee-4d26-95d7-a644f2d4c25c",
     "triggerCount": 0,
     "shared": [
         {
