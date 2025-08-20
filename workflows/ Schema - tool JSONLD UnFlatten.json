@@ -1,0 +1,115 @@
+{
+    "createdAt": "2025-07-13T16:57:54.151Z",
+    "updatedAt": "2025-07-13T17:16:39.000Z",
+    "id": "iK7YsMS2EPBLDSu2",
+    "name": "Schema - tool JSONLD UnFlatten",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "valueToUnflatten",
+                            "type": "object"
+                        },
+                        {
+                            "name": "referenceValues",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "ca86ad9a-397d-4e1e-a63c-03a15310d6f6",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "function generateUUID() {\n  let d = new Date().getTime(); // Timestamp\n  let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0; // High-res timestamp\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    let r = Math.random() * 16; // Random number between 0 and 16\n    if (d > 0) { // Use timestamp until it's consumed\n      r = (d + r) % 16 | 0;\n      d = Math.floor(d / 16);\n    } else { // Use high-res timestamp if available\n      r = (d2 + r) % 16 | 0;\n      d2 = Math.floor(d2 / 16);\n    }\n    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);\n  });\n}\nfunction assignUUIDsToJsonLd(jsonLdObject) {\n  // If the input is not an object or array, return it as is.\n  if (typeof jsonLdObject !== 'object' || jsonLdObject === null) {\n    return jsonLdObject;\n  }\n\n  // If it's an array, iterate over its elements and process each.\n  if (Array.isArray(jsonLdObject)) {\n    return jsonLdObject.map(item => assignUUIDsToJsonLd(item));\n  }\n\n  // If it's an object, process its properties.\n  const processedObject = { ...jsonLdObject };\n\n  // Check if the current object has an '@id' property.\n  // If not, assign a new UUID.\n  if (typeof processedObject['@id'] === 'undefined' || processedObject['@id'] === null || processedObject['@id'] === '') {\n    processedObject['@id'] = generateUUID();\n  }\n\n  // Recursively process all other properties of the object.\n  for (const key in processedObject) {\n    if (Object.prototype.hasOwnProperty.call(processedObject, key)) {\n      processedObject[key] = assignUUIDsToJsonLd(processedObject[key]);\n    }\n  }\n\n  return processedObject;\n}\nfunction extractNestedRecords(jsonLd, extractedRecords = []) {\n            // Ensure the input is an object and not null\n            if (typeof jsonLd !== 'object' || jsonLd === null) {\n                return extractedRecords;\n            }\n\n            // If it's an array, iterate over its elements\n            if (Array.isArray(jsonLd)) {\n                jsonLd.forEach(item => {\n                    // Recursively call for each item in the array\n                    extractNestedRecords(item, extractedRecords);\n                });\n            } else {\n                // It's an object, so it's a potential record\n                // Add the current object to the list of extracted records\n                extractedRecords.push(jsonLd);\n\n                // Iterate over its properties\n                for (const key in jsonLd) {\n                    // Ensure the property belongs to the object itself and is not inherited\n                    if (Object.prototype.hasOwnProperty.call(jsonLd, key)) {\n                        const value = jsonLd[key];\n\n                        // If the value is an object (and not null) or an array, recurse\n                        if (typeof value === 'object' && value !== null) {\n                            extractNestedRecords(value, extractedRecords);\n                        }\n                    }\n                }\n            }\n            return extractedRecords;\n        }\n\nfunction generateDB(values){\n\n  values = Array.isArray(values) ? values : [values]\n\n  let newDB = {}\n\n  for(let v of values){\n\n    let record_type = v?.['@type']\n    let record_id = v?.['@id']\n\n    if(! record_type || !record_id){\n      continue\n    }\n\n    newDB[record_type] = newDB?.[record_type] || {}\n    newDB[record_type][record_id] = v\n\n  }\n\n  return newDB\n}\n\n\nfunction unflattenChildValue(value, db, max_depth=5, depth=0){\n\n  // array\n  if(Array.isArray(value)){\n    return value.map(x => unflattenChildValue(x, db))\n  }\n  \n  // If object \n  if(typeof value === 'object' && value !== null){\n\n    let record_type = value?.['@type']\n    let record_id = value?.['@id']\n\n    value = db[record_type]?.[record_id] || value\n\n    if(depth < max_depth){\n\n      let keys = Object.keys(value)\n      for(let k of keys){\n        value[k] = unflattenChildValue(value[k], db)\n      }\n    }\n   \n  }\n\n  return value\n\n  \n}\n\n\nfunction unFlatten(value, values){\n\n  // array\n  if(Array.isArray(value)){\n    return value.map(x => unFlatten(x, values))\n  }\n\n  let db = generateDB(values)\n  \n  // If object \n  if(typeof value === 'object' && value !== null){\n\n    let keys = Object.keys(value)\n    for(let k of keys){\n      value[k] = unflattenChildValue(value[k], db)\n    }\n  }\n\n  return value\n  \n}\n\n\n\n// Process all items\nfor (let item of $input.all()){\n  item.json = unFlatten( item.json.valueToUnflatten, item.json.referenceValues)\n}\n\nreturn  $input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "d63faa50-0671-46fb-b98c-cb2a452eefaa",
+            "name": "UnFlatten"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "UnFlatten",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "valueToUnflatten": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1",
+                        "other": {
+                            "@type": "Thing",
+                            "@id": "thing2"
+                        }
+                    },
+                    "referenceValues": [
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing1",
+                            "name": "thing1"
+                        },
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing2",
+                            "name": "thing2"
+                        },
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing3",
+                            "name": "thing3"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "versionId": "f4c7f7d3-5043-4ebd-87be-ce8632996aa0",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-13T16:57:54.158Z",
+            "updatedAt": "2025-07-13T16:57:54.158Z",
+            "role": "workflow:owner",
+            "workflowId": "iK7YsMS2EPBLDSu2",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
