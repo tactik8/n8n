@@ -1,0 +1,192 @@
+{
+    "createdAt": "2025-07-08T19:35:42.807Z",
+    "updatedAt": "2025-07-11T13:39:31.000Z",
+    "id": "s6svGF3rttb6h7KB",
+    "name": "Schema WebAPI",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "name"
+                        },
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "id": "9945570d-d918-4287-ae03-ddf2f56c84c8",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                -600,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "da4d7c02-044c-4309-86d6-64ea76149a89",
+                            "name": "@type",
+                            "value": "={{ $json['@type'] || 'WebAPI' }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -380,
+                0
+            ],
+            "id": "bfc63d53-5192-4043-b2a8-2a8026bf3ba3",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - Set id"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -160,
+                0
+            ],
+            "id": "a37ae739-41d6-4bc1-a95c-2db11b061df2",
+            "name": "Set ID"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                60,
+                0
+            ],
+            "id": "f548e2b0-10ee-4891-ac8f-975b6c2be8d3",
+            "name": "Edit Fields1"
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Set ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set ID": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "@id": "person_1",
+                    "name": "givenName_1",
+                    "url": "familyName_1"
+                }
+            }
+        ]
+    },
+    "versionId": "4592235f-fda9-47db-9539-38718d0bf315",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T19:35:42.810Z",
+            "updatedAt": "2025-07-08T19:35:42.810Z",
+            "role": "workflow:owner",
+            "workflowId": "s6svGF3rttb6h7KB",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
