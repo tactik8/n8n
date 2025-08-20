@@ -1,0 +1,303 @@
+{
+    "createdAt": "2025-07-09T18:27:22.475Z",
+    "updatedAt": "2025-08-03T17:23:59.000Z",
+    "id": "ffwMI0oRaDpvtvvk",
+    "name": "Schema DigitalDocument",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "_parentObject",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentProperty"
+                        },
+                        {
+                            "name": "_record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "name"
+                        },
+                        {
+                            "name": "datePublished"
+                        },
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "id": "56b0ecf7-3831-4234-8f45-6905d8de5907",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                -920,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "da4d7c02-044c-4309-86d6-64ea76149a89",
+                            "name": "@type",
+                            "value": "={{ $json?.['@type'] || 'DigitalDocument'}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -480,
+                0
+            ],
+            "id": "8022cb18-ea67-4f2c-ac1c-d80f1b0e262e",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -260,
+                0
+            ],
+            "id": "93370cf9-8226-4beb-947c-0711da46dbe1",
+            "name": "Set ID"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -40,
+                0
+            ],
+            "id": "641eea68-b771-46b3-8f86-f17e3800acde",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "UHVbnm4d896IS4aO",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool make Dynamic Thing"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@type": "DigitalDocument",
+                        "content": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -700,
+                0
+            ],
+            "id": "e0f95d20-cd88-4b07-b28f-180c950d2961",
+            "name": "Process Schema inputs"
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Process Schema inputs",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Set ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set ID": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Process Schema inputs": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "@context": "https://schema.org/",
+                    "@type": "Conversation",
+                    "name": "Duck Season vs Rabbit Season",
+                    "sameAs": "https://www.youtube.com/watch?v=9-k5J4RxQdE",
+                    "hasPart": [
+                        {
+                            "@type": "Message",
+                            "sender": {
+                                "@type": "Person",
+                                "name": "Bugs Bunny"
+                            },
+                            "recipient": {
+                                "@type": "Person",
+                                "name": "Daffy Duck"
+                            },
+                            "about": {
+                                "@type": "Thing",
+                                "name": "Duck Season"
+                            },
+                            "datePublished": "2016-02-29"
+                        },
+                        {
+                            "@type": "Message",
+                            "sender": {
+                                "@type": "Person",
+                                "name": "Daffy Duck"
+                            },
+                            "recipient": {
+                                "@type": "Person",
+                                "name": "Bugs Bunny"
+                            },
+                            "about": {
+                                "@type": "Thing",
+                                "name": "Rabbit Season"
+                            },
+                            "datePublished": "2016-03-01"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "versionId": "c274e883-604c-4e33-9075-39c4497112ce",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-09T18:27:22.478Z",
+            "updatedAt": "2025-07-09T18:27:22.478Z",
+            "role": "workflow:owner",
+            "workflowId": "ffwMI0oRaDpvtvvk",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
