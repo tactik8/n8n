@@ -1,0 +1,28 @@
+{
+    "createdAt": "2025-07-10T15:47:37.444Z",
+    "updatedAt": "2025-07-11T12:31:02.000Z",
+    "id": "sa6kZxl9wJejh9SX",
+    "name": "RAF - tool sharding",
+    "active": false,
+    "isArchived": true,
+    "nodes": [],
+    "connections": {},
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "6aba9288-a6b5-45d8-9883-ba9d9170846e",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-10T15:47:37.447Z",
+            "updatedAt": "2025-07-10T15:47:37.447Z",
+            "role": "workflow:owner",
+            "workflowId": "sa6kZxl9wJejh9SX",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
