@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-07-11T16:51:31.936Z",
-    "updatedAt": "2025-07-11T18:27:58.000Z",
+    "updatedAt": "2025-08-20T13:34:55.000Z",
     "id": "iVzZq0XLcepnkExi",
     "name": "Trigger - daily",
     "active": false,
@@ -17,19 +17,60 @@
             "type": "n8n-nodes-base.scheduleTrigger",
             "typeVersion": 1.2,
             "position": [
-                -320,
-                -60
+                -768,
+                -64
             ],
             "id": "129d8bef-a50a-4a37-ae06-9eda2ee4b3d8",
             "name": "Schedule Trigger"
         },
         {
             "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b88252b3-d6e2-4c83-b5df-eec9751857af",
+                            "name": "@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "18af2526-04f2-487c-a4b0-84b2cb198cf8",
+                            "name": "name",
+                            "value": "=n8n cloud daily trigger - {{ $now.year }}-{{ $now.month }}-{{  $now.day }}, {{  $now.hour }}:{{  $now.minute }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2fd6b824-a331-458c-b389-9297acab0976",
+                            "name": "description",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "25557415-8905-4b3a-881c-371450bc63ca",
+                            "name": "timeStart",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -544,
+                -64
+            ],
+            "id": "845041e1-bf04-45ba-9f25-92b89f15ab60",
+            "name": "Init action"
+        },
+        {
+            "parameters": {
                 "workflowId": {
                     "__rl": true,
-                    "value": "cPUha4oFMwAjOzIK",
+                    "value": "yIsNJe5MMDD5GdhR",
                     "mode": "list",
-                    "cachedResultName": "Crawler - Pipeline V2"
+                    "cachedResultName": "API Github - Backup Workflows"
                 },
                 "workflowInputs": {
                     "mappingMode": "defineBelow",
@@ -44,11 +85,11 @@
             "type": "n8n-nodes-base.executeWorkflow",
             "typeVersion": 1.2,
             "position": [
-                -100,
-                -60
+                -256,
+                -192
             ],
-            "id": "0c8de7e3-6f5b-4b42-b5e3-ac79aba18b77",
-            "name": "Crawlers"
+            "id": "894d5965-8c76-4eb4-8768-38fc98d42f6c",
+            "name": "n8n workflow backup"
         }
     ],
     "connections": {
@@ -56,7 +97,18 @@
             "main": [
                 [
                     {
-                        "node": "Crawlers",
+                        "node": "Init action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Init action": {
+            "main": [
+                [
+                    {
+                        "node": "n8n workflow backup",
                         "type": "main",
                         "index": 0
                     }
@@ -70,7 +122,7 @@
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "d89e63ee-41c3-43aa-a683-787c81734983",
+    "versionId": "7543c1ae-45c3-4d72-95e1-f971856b1146",
     "triggerCount": 0,
     "shared": [
         {
