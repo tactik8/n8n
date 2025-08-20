@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-20T12:55:07.364Z",
-    "updatedAt": "2025-08-20T13:12:35.000Z",
+    "updatedAt": "2025-08-20T13:16:25.000Z",
     "id": "yIsNJe5MMDD5GdhR",
     "name": "API Github - Backup Workflows",
     "active": false,
@@ -13,7 +13,7 @@
             "type": "n8n-nodes-base.executeWorkflowTrigger",
             "typeVersion": 1.1,
             "position": [
-                -304,
+                -432,
                 -16
             ],
             "id": "5cd81a2b-0f8c-4218-b854-659031d1def9",
@@ -27,7 +27,7 @@
             "type": "n8n-nodes-base.n8n",
             "typeVersion": 1,
             "position": [
-                -32,
+                176,
                 -16
             ],
             "id": "2329e637-0a47-4705-99b5-6c25cf6d26c3",
@@ -62,7 +62,7 @@
             "type": "n8n-nodes-base.github",
             "typeVersion": 1.1,
             "position": [
-                944,
+                1152,
                 112
             ],
             "id": "a8e9bee3-c31e-4724-975c-8e0dddc9aa39",
@@ -102,7 +102,7 @@
             "type": "n8n-nodes-base.github",
             "typeVersion": 1.1,
             "position": [
-                528,
+                736,
                 -16
             ],
             "id": "7e8f08b9-4825-4b01-a9da-ef89723d91c9",
@@ -142,7 +142,7 @@
             "type": "n8n-nodes-base.github",
             "typeVersion": 1.1,
             "position": [
-                928,
+                1136,
                 -128
             ],
             "id": "e2fb1fe0-4699-40a8-bba6-3c063bf1cb08",
@@ -186,7 +186,7 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                256,
+                464,
                 -16
             ],
             "id": "1bcc53e5-e7bb-491f-b1da-28d3ef02a84d",
@@ -200,7 +200,7 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                1152,
+                1360,
                 208
             ],
             "id": "fa223e3b-0bb8-4e94-9db6-229f1372cf59",
@@ -213,11 +213,82 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                1136,
+                1552,
                 -32
             ],
             "id": "725bf783-69f2-4df7-ade1-fee6d8d1cbda",
             "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1afef2b2-a2e5-4cd0-8e42-bb655b758f67",
+                            "name": "timeStart",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -224,
+                -16
+            ],
+            "id": "afe58179-257b-4f1b-878d-25768024f5a0",
+            "name": "Edit Fields3"
+        },
+        {
+            "parameters": {
+                "numberInputs": 4
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                2064,
+                -64
+            ],
+            "id": "adf00cbc-be49-4f1f-9bb5-a49bba667144",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4a46d967-e671-4a8c-ab01-23139c8f69f0",
+                            "name": "@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "27cf0fec-e04d-4e81-bc5b-a6dbd5f4adb5",
+                            "name": "name",
+                            "value": "=Backup workflow to github -  {{ $json.content.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1d7996fb-2281-4514-8349-bc3b24cf568d",
+                            "name": "timeStart",
+                            "value": "",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1344,
+                -224
+            ],
+            "id": "db3e0832-4865-4a76-999d-9d8e65ab6270",
+            "name": "Edit Fields4"
         }
     ],
     "connections": {
@@ -225,7 +296,7 @@
             "main": [
                 [
                     {
-                        "node": "Get many workflows",
+                        "node": "Edit Fields3",
                         "type": "main",
                         "index": 0
                     }
@@ -286,10 +357,49 @@
         },
         "Edit a file": {
             "main": [
-                [],
+                [
+                    {
+                        "node": "Edit Fields4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
                 [
                     {
                         "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields3": {
+            "main": [
+                [
+                    {
+                        "node": "Get many workflows",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Edit Fields4": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
                         "type": "main",
                         "index": 0
                     }
@@ -305,7 +415,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "a4e67944-4cd6-4a51-9950-56ed07a869cc",
+    "versionId": "7378d387-6d71-443a-b41c-4e5c4e34d2e6",
     "triggerCount": 0,
     "shared": [
         {
