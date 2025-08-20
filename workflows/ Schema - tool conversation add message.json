@@ -1,0 +1,303 @@
+{
+    "createdAt": "2025-07-09T15:23:46.576Z",
+    "updatedAt": "2025-07-11T13:40:30.000Z",
+    "id": "yIvxDtMNeSHUXH01",
+    "name": "Schema - tool conversation add message",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "jsonExample",
+                "jsonExample": "\n{\n\"@context\": \n\"https://schema.org/\",\n\"@type\": \n\"Conversation\",\n\"name\": \n\"Duck Season vs Rabbit Season\",\n\"sameAs\": \n\"https://www.youtube.com/watch?v=9-k5J4RxQdE\",\n\"hasPart\": \n[\n{\n\"@type\": \n\"Message\",\n\"sender\": \n{\n\"@type\": \n\"Person\",\n  \"@id\": \"id\",\n\"name\": \n\"Bugs Bunny\"\n},\n\"recipient\": \n{\n\"@type\": \n\"Person\",\n  \"@id\": \"id\",\n\"name\": \n\"Daffy Duck\"\n},\n\"about\": \n{\n\"@type\": \n\"Thing\",\n  \"@id\": \"id\",\n\"name\": \n\"Duck Season\"\n},\n\"datePublished\": \n\"2016-02-29\"\n},\n{\n\"@type\": \n\"Message\",\n\"sender\": \n{\n\"@type\": \n\"Person\",\n\"@id\": \"id\",\n\"name\": \n\"Daffy Duck\"\n},\n\"recipient\": \n{\n\"@type\": \n\"Person\",\n  \"@id\": \"id\",\n\"name\": \n\"Bugs Bunny\"\n},\n\"about\": \n{\n\"@type\": \n\"Thing\",\n  \"@id\": \"id\",\n\"name\": \n\"Rabbit Season\"\n},\n\"datePublished\": \n\"2016-03-01\"\n}\n]\n}"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "1ca219bb-7497-4610-9d5e-69062d35052a",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "WWt66w8o7FfxYQwR",
+                    "mode": "list",
+                    "cachedResultName": "Schema Message"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "recipient": "={{ $json.recipient }}",
+                        "sender": "={{ $json.sender }}",
+                        "headline": "={{ $json.headline }}",
+                        "text": "={{ $json.text }}",
+                        "recipient.url": "={{ $json['recipient.url'] }}",
+                        "recipient.name": "={{ $json['recipient.name'] }}",
+                        "recipient.@id": "={{ $json['recipient.@id'] }}",
+                        "recipient.@type": "={{ $json['recipient.@type'] }}",
+                        "sender.@id": "={{ $json['sender.@id'] }}",
+                        "sender.@type": "={{ $json['sender.@type'] }}",
+                        "sender.url": "={{ $json['sender.url'] }}",
+                        "sender.name": "={{ $json['sender.name'] }}",
+                        "about": "={{ $json.about }}",
+                        "@type": "{{ $json['@type']}}",
+                        "@id": "={{ $json['@id']}}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "headline",
+                            "displayName": "headline",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "text",
+                            "displayName": "text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "datePublished",
+                            "displayName": "datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender",
+                            "displayName": "sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "recipient",
+                            "displayName": "recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "about",
+                            "displayName": "about",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "recipient.@type",
+                            "displayName": "recipient.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "recipient.@id",
+                            "displayName": "recipient.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "recipient.name",
+                            "displayName": "recipient.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "recipient.url",
+                            "displayName": "recipient.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender.@type",
+                            "displayName": "sender.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender.@id",
+                            "displayName": "sender.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender.name",
+                            "displayName": "sender.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender.url",
+                            "displayName": "sender.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "741ca044-ff8b-4b8c-a839-4bf8dee0fbd2",
+            "name": "Get Message"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Get Message",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "Conversation": {
+                        "@context": "https://schema.org/",
+                        "@type": "Conversation",
+                        "name": "Duck Season vs Rabbit Season",
+                        "sameAs": "https://www.youtube.com/watch?v=9-k5J4RxQdE",
+                        "hasPart": [
+                            {
+                                "@type": "Message",
+                                "sender": {
+                                    "@type": "Person",
+                                    "name": "Bugs Bunny"
+                                },
+                                "recipient": {
+                                    "@type": "Person",
+                                    "name": "Daffy Duck"
+                                },
+                                "about": {
+                                    "@type": "Thing",
+                                    "name": "Duck Season"
+                                },
+                                "datePublished": "2016-02-29"
+                            },
+                            {
+                                "@type": "Message",
+                                "sender": {
+                                    "@type": "Person",
+                                    "name": "Daffy Duck"
+                                },
+                                "recipient": {
+                                    "@type": "Person",
+                                    "name": "Bugs Bunny"
+                                },
+                                "about": {
+                                    "@type": "Thing",
+                                    "name": "Rabbit Season"
+                                },
+                                "datePublished": "2016-03-01"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "json": {
+                    "sender": {},
+                    "recipient": {},
+                    "headline": "headline",
+                    "text": "text",
+                    "sender.@type": "sd",
+                    "sender.@id": "ss",
+                    "sender.name": "ss",
+                    "sender.url": "ed",
+                    "recipient.@type": "sd",
+                    "recipient.@id": "ss",
+                    "recipient.name": "ss",
+                    "recipient.url": "ed"
+                }
+            }
+        ]
+    },
+    "versionId": "2a8c0677-d115-4241-b74e-90428ba2e8a2",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-09T15:23:46.579Z",
+            "updatedAt": "2025-07-09T15:23:46.579Z",
+            "role": "workflow:owner",
+            "workflowId": "yIvxDtMNeSHUXH01",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
