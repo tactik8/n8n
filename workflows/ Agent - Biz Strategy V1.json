@@ -1,0 +1,1223 @@
+{
+    "createdAt": "2025-07-10T15:09:42.369Z",
+    "updatedAt": "2025-07-11T13:44:32.000Z",
+    "id": "NbPYzCwulPIKLo65",
+    "name": "Agent - Biz Strategy V1",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "record"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                -80
+            ],
+            "id": "cbf0517a-7b33-4807-8f6b-09c5cc5f1e68",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ",
+                    "mode": "list",
+                    "cachedResultName": "Cie Strategy DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1417800227,
+                    "mode": "list",
+                    "cachedResultName": "organizations",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit#gid=1417800227"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                220,
+                -80
+            ],
+            "id": "45439654-6a9a-4b76-ac9a-3decbad1cf0c",
+            "name": "Retrieve Organizations",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ",
+                    "mode": "list",
+                    "cachedResultName": "Cie Strategy DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit#gid=0"
+                },
+                "filtersUI": {
+                    "values": [
+                        {
+                            "lookupColumn": "about.@id",
+                            "lookupValue": "={{ $json[\"@id\"] }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                660,
+                -180
+            ],
+            "id": "0256cd65-e55b-4fe8-b1e3-7c3e48cbebc4",
+            "name": "Retrieve Data",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ",
+                    "mode": "list",
+                    "cachedResultName": "Cie Strategy DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 647355366,
+                    "mode": "list",
+                    "cachedResultName": "topics",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit#gid=647355366"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                440,
+                20
+            ],
+            "id": "2db7b577-26f0-40ee-8a05-dc645723ffb9",
+            "name": "Retrieve topics",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "advanced": true,
+                "mergeByFields": {
+                    "values": [
+                        {
+                            "field1": "topic",
+                            "field2": "topic"
+                        }
+                    ]
+                },
+                "joinMode": "keepNonMatches",
+                "outputDataFrom": "input2",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                1100,
+                -80
+            ],
+            "id": "9ac7c7e6-4fd6-4cba-a9b6-185fd6fc0ad3",
+            "name": "Get missing topics"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=***Produce***: {{ $('Get missing topics').item.json['Deliverable name'] }}\n***For***: {{ $('Get missing topics').item.json.about.name }} ({{ $('Get missing topics').item.json.about.url }})\n***In format***: {{ $('Get missing topics').item.json['Deliverable Format'] }}\n\nYou are operating without user interaction. Use the organization ifnormation available in your tools and make assumptions when required. The tone should always be professional, as you are a top-tier management consultant. ",
+                "options": {
+                    "systemMessage": "={{ $json.prompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                1572,
+                -80
+            ],
+            "id": "4d208d76-8572-42fd-96fc-0f45e038707e",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                1360,
+                200
+            ],
+            "id": "9dd29f4e-e138-4455-82d9-7685a35f5664",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "={{ $('Get missing topics').item.json.about['@id'] }}",
+                "contextWindowLength": 20
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.3,
+            "position": [
+                1600,
+                220
+            ],
+            "id": "4b3a1937-c2a7-4cea-a1c8-4e0361fc563e",
+            "name": "Simple Memory"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7947f3d4-8a67-4206-aa6a-bd12e017f908",
+                            "name": "about",
+                            "value": "={{ $('Retrieve Organizations').item.json }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                880,
+                20
+            ],
+            "id": "d482a3e9-0738-42ca-92c1-d037f9b5b9e1",
+            "name": "Combine orgs and topics"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                880,
+                -180
+            ],
+            "id": "3ba2265b-de05-4705-8ef0-904973cae3b6",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "sseEndpoint": "https://tactik8.app.n8n.cloud/mcp/2ca448f2-d8ef-4b06-bb9e-66dc7f7fd44d/sse"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1,
+            "position": [
+                1880,
+                200
+            ],
+            "id": "ee8b32b7-1b62-4c9b-9a24-f1c898273695",
+            "name": "MCP Client"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "F1aCL5rVbvfYd5cV",
+                    "mode": "list",
+                    "cachedResultName": "Datatype - tool JSON to record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2200,
+                -180
+            ],
+            "name": "Call Datatype - tool JSON to record",
+            "id": "bd3ff006-b058-4e6e-b061-c2e313dddec5"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $('Get missing topics').item.json[\"Deliverable Format\"] }}",
+                                        "rightValue": "json",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        },
+                                        "id": "4f0ed775-056f-4743-9dea-78e97f82b690"
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "1d80e45f-55db-430a-943f-29d12a4b1534",
+                                        "leftValue": "={{ $('Get missing topics').item.json[\"Deliverable Format\"] }}",
+                                        "rightValue": "text",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        }
+                    ]
+                },
+                "options": {
+                    "fallbackOutput": 1
+                }
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                1980,
+                -80
+            ],
+            "id": "344c48bf-f7ac-4d7f-8f5f-32da02fab314",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "P54d3SIAFKCgyxgn",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Post JSON"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "={{ $('Get missing topics').item.json.about.name }}  {{ $('Get missing topics').item.json.topic }}.json",
+                        "content": "={{ JSON.stringify($json.output, null, 4) }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "data",
+                            "displayName": "data",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2420,
+                -180
+            ],
+            "id": "3dc5659e-43fa-4352-9868-733497113c02",
+            "name": "Save to Google Cloud JSON"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "g8kBTu9R6Auf7Qah",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Post Text"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "={{ $('Get missing topics').item.json.about[\"@id\"] }} - {{ $('Get missing topics').item.json.topic }}.md",
+                        "content": "={{ $json.output }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "data",
+                            "displayName": "data",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2200,
+                20
+            ],
+            "id": "e6b755d6-e873-4383-a591-c0d2dd00eded",
+            "name": "Save to Google Cloud Text",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ",
+                    "mode": "list",
+                    "cachedResultName": "Cie Strategy DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ $json.name }}",
+                        "datePublished": "={{ $json.datePublished }}",
+                        "url": "={{ $json.url }}",
+                        "@type": "={{ $json[\"@type\"] }}",
+                        "@id": "={{ $json[\"@id\"] }}",
+                        "about.@type": "={{ $('Get missing topics').item.json.about[\"@type\"] }}",
+                        "about.@id": "={{ $('Get missing topics').item.json.about[\"@id\"] }}",
+                        "topic": "={{ $('Get missing topics').item.json.topic }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "about.@type",
+                            "displayName": "about.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "about.@id",
+                            "displayName": "about.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "topic",
+                            "displayName": "topic",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "datePublished",
+                            "displayName": "datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                2640,
+                -180
+            ],
+            "id": "f04a85f4-1205-4e34-a208-278d565f788d",
+            "name": "Save new JSON document record to google sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ",
+                    "mode": "list",
+                    "cachedResultName": "Cie Strategy DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ $json.name }}",
+                        "datePublished": "={{ $json.datePublished }}",
+                        "url": "={{ $json.url }}",
+                        "@type": "={{ $json[\"@type\"] }}",
+                        "@id": "={{ $json[\"@id\"] }}",
+                        "about.@type": "={{ $('Get missing topics').item.json.about[\"@type\"] }}",
+                        "about.@id": "={{ $('Get missing topics').item.json.about[\"@id\"] }}",
+                        "topic": "={{ $('Get missing topics').item.json.topic }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "about.@type",
+                            "displayName": "about.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "about.@id",
+                            "displayName": "about.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "topic",
+                            "displayName": "topic",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "datePublished",
+                            "displayName": "datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                2420,
+                20
+            ],
+            "id": "489c59cf-67ef-4f0c-915b-230821edef83",
+            "name": "Save new TEXT document record to google sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "SVVEgMsJI3GBBvPI",
+                    "mode": "list",
+                    "cachedResultName": "Prompt DB - Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "id": "={{ $json.Agent }}, biz-strategy-agent-common-guidelines"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1320,
+                -80
+            ],
+            "id": "4f2a9fce-1c56-4b74-b95f-80f0bc41bb20",
+            "name": "Get Prompt"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "50e28224-b7f6-4781-be15-b6c6ddac27c0",
+                            "leftValue": "={{ $json.Agent }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.2,
+            "position": [
+                660,
+                20
+            ],
+            "id": "42aea21d-c50f-4926-9b66-342c6916bb89",
+            "name": "Filter"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "NC5wkzYOGFvMs9FQ",
+                    "mode": "list",
+                    "cachedResultName": "Agent - Biz Strategy tool  Embeddings Ingest"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@type": "={{ $json['@type'] }}",
+                        "@id": "={{ $json['@id'] }}",
+                        "text": "={{ $('AI Agent').item.json.output }}",
+                        "about.@type": "={{ $json['about.@type'] }}",
+                        "about.@id": "={{ $json['about.@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "text",
+                            "displayName": "text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "about.@type",
+                            "displayName": "about.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "about.@id",
+                            "displayName": "about.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2640,
+                20
+            ],
+            "id": "b5013ac6-4863-4228-8226-110138bfcb9b",
+            "name": "Save Embeddings"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "NC5wkzYOGFvMs9FQ",
+                    "mode": "list",
+                    "cachedResultName": "Agent - Biz Strategy tool  Embeddings Ingest"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@type": "={{ $json['@type'] }}",
+                        "@id": "={{ $json['@id'] }}",
+                        "text": "={{ $('AI Agent').item.json.output }}",
+                        "about.@type": "={{ $json['about.@type'] }}",
+                        "about.@id": "={{ $json['about.@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "text",
+                            "displayName": "text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "about.@type",
+                            "displayName": "about.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "about.@id",
+                            "displayName": "about.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2860,
+                -180
+            ],
+            "id": "435f3cb4-1290-47ce-b998-67648e5c47d9",
+            "name": "Save Embeddings1"
+        },
+        {
+            "parameters": {
+                "content": "# Agent - Biz Strategy\n\nGenerate biz strategy documents automatically. \n\n## Step 1. Retrieves the types of documents that should exist for each cies (topics)\n\n## Step 2. Retrieves companies and their existing documents\n\n## Step 3. Identify the documents / topics to generate\n\n## Step 4. For each combination of topic/ org, retrieves the proper prompt and generate the document.\n\n## Step 5. Save the document on google cloud storage. Creates the record in google sheets and add the document to the embeddings. ",
+                "height": 840,
+                "width": 580
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -800,
+                -900
+            ],
+            "typeVersion": 1,
+            "id": "6b06bedf-a9f9-4829-b494-b6aa844595ac",
+            "name": "Sticky Note1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve Organizations",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve Organizations": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve topics",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Retrieve Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve topics": {
+            "main": [
+                [
+                    {
+                        "node": "Filter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve Data": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get missing topics": {
+            "main": [
+                [
+                    {
+                        "node": "Get Prompt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Combine orgs and topics": {
+            "main": [
+                [
+                    {
+                        "node": "Get missing topics",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Get missing topics",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MCP Client": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Call Datatype - tool JSON to record",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Save to Google Cloud Text",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call Datatype - tool JSON to record": {
+            "main": [
+                [
+                    {
+                        "node": "Save to Google Cloud JSON",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save to Google Cloud Text": {
+            "main": [
+                [
+                    {
+                        "node": "Save new TEXT document record to google sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save to Google Cloud JSON": {
+            "main": [
+                [
+                    {
+                        "node": "Save new JSON document record to google sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Prompt": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter": {
+            "main": [
+                [
+                    {
+                        "node": "Combine orgs and topics",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save new JSON document record to google sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Save Embeddings1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save new TEXT document record to google sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Save Embeddings",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "bf983fcc-7e27-4395-8a56-f9a88978c80c",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-10T15:09:42.372Z",
+            "updatedAt": "2025-07-10T15:09:42.372Z",
+            "role": "workflow:owner",
+            "workflowId": "NbPYzCwulPIKLo65",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:19.644Z",
+            "updatedAt": "2025-07-11T13:29:39.556Z",
+            "id": "fsYQGx4UGwRejmSm",
+            "name": "type:agent"
+        }
+    ]
+}
