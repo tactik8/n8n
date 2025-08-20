@@ -1,0 +1,150 @@
+{
+    "createdAt": "2025-07-02T17:47:31.189Z",
+    "updatedAt": "2025-07-11T13:40:36.000Z",
+    "id": "cSMRThNKYkMHRBbq",
+    "name": "Schema - tool Log action",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "Action",
+                            "type": "any"
+                        },
+                        {
+                            "name": "googleSheetsUrl"
+                        },
+                        {
+                            "name": "googleSheetsTab"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "215a5882-4f1e-496f-be99-ad58ff947106",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "content": "## Action Log\nTakes an action object and logs it in excel sheet and as google drive json doc\n"
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -20,
+                -220
+            ],
+            "typeVersion": 1,
+            "id": "5ef5ed22-1607-4989-bc9a-edb4e6677460",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "H7E1XaJ0xtx8Je7t",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "collectionName": "systemLogs",
+                        "record": "={{ $json.Action }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "collectionName",
+                            "displayName": "collectionName",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "31ab356b-6ece-4519-a187-43320475e9f4",
+            "name": "Post to MongoDB"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Post to MongoDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "Action": {
+                        "@type": "action",
+                        "@id": "action_1",
+                        "name": "action_1",
+                        "actionStatus": "completedActionStatus",
+                        "startTime": "",
+                        "endTime": "",
+                        "object": "",
+                        "result": "",
+                        "instrument": ""
+                    },
+                    "googleSheetsUrl": "testDb",
+                    "googleSheetsTab": "TestTab"
+                }
+            }
+        ]
+    },
+    "versionId": "51b0dadc-a98c-4abd-9908-748e0c0620a8",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T17:47:31.193Z",
+            "updatedAt": "2025-07-02T17:47:31.193Z",
+            "role": "workflow:owner",
+            "workflowId": "cSMRThNKYkMHRBbq",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
