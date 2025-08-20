@@ -1,0 +1,681 @@
+{
+    "createdAt": "2025-07-08T16:18:35.399Z",
+    "updatedAt": "2025-07-11T20:26:09.000Z",
+    "id": "H7E1XaJ0xtx8Je7t",
+    "name": "API - mongoDB Post",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "75e8e9fc-826f-4363-a8a6-1996c2a0bb20",
+                            "name": "records",
+                            "value": "={{ Array.isArray($json.record) ? $json.record : [$json.record] }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "8ea3cc0d-78f9-4251-8a2a-3c0af30a42bd",
+                            "name": "projectID",
+                            "value": "={{ $json.projectID || \"test_project_v1\" }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -260,
+                180
+            ],
+            "id": "5fc7258a-7a39-4e9e-83a0-122bb91f567e",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nlet results = []\nfor (const item of $input.all()) {\n\n  let values = item.json?.records || undefined\n  if(values){\n\n    let values = item.json.records\n    values = Array.isArray(values) ? values : [values]\n    for(let v of values){\n  \n      if(!v){\n        continue\n      }\n      \n      v['_tenantID'] = item.json?.['tenantID'] || null\n      v['_projectID'] = item.json?.['projectID'] || null\n      results.push(v)\n    }\n  }\n}\n\nresults = results.length === 1 ? results[0] : results\nconsole.log('r', results)\nreturn results"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -40,
+                180
+            ],
+            "id": "7c9a083d-3e34-4379-8d22-b53a5d91e270",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "tenantID"
+                        },
+                        {
+                            "name": "projectID"
+                        },
+                        {
+                            "name": "record",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -700,
+                180
+            ],
+            "id": "8ea54595-9157-4840-ad36-fb904df4b43a",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Set id and clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                180,
+                180
+            ],
+            "id": "ba2ed78f-d5e3-4bc6-a478-067089ee1e4d",
+            "name": "Add ID"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "5fcd2764-aeda-411a-b7d7-942beadddbfe",
+                            "name": "@ref['@type']",
+                            "value": "={{ $json['@type'] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b1a0284a-4b5e-4e83-92e9-0259a84e12bd",
+                            "name": "@ref['@id']",
+                            "value": "={{ $json['@id'] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                400,
+                180
+            ],
+            "id": "4dd7051e-dc9f-46ea-afca-6a9e02871d31",
+            "name": "Add @ref"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d955608d-1059-4589-8ec0-20b8f1d3582b",
+                            "name": "record",
+                            "value": "={{ typeof $json.record == 'string' ? JSON.parse($json.record) : $json.record}}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -480,
+                180
+            ],
+            "id": "6c2c4cb6-0fe3-428a-9a62-a4a225fcce9b",
+            "name": "Parse JSON"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "fac3d58c-d29c-4b6c-91dc-574099789ae5",
+                                        "leftValue": "={{ $json._tenantID }}",
+                                        "rightValue": "test_tenant_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json._tenantID }}",
+                                        "rightValue": "cdn_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        },
+                                        "id": "581bf123-29c4-44dd-a3bd-9cdd7f038ddb"
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "50025065-4bf8-434f-bfc6-abc147b90fc1",
+                                        "leftValue": "={{ $json._tenantID }}",
+                                        "rightValue": "raf_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "08d03ae2-ef19-4959-9382-9e30d89070d1",
+                                        "leftValue": "={{ $json._tenantID }}",
+                                        "rightValue": "cms_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "7812479c-4052-4c22-87d5-a1a12efe10d4",
+                                        "leftValue": "={{ $json._tenantID }}",
+                                        "rightValue": "logs_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "7a30492a-37b5-4f61-b492-91f425f76f35",
+                                        "leftValue": "={{ $json._tenantID }}",
+                                        "rightValue": "crawler_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "crawler_v1"
+                        }
+                    ]
+                },
+                "looseTypeValidation": "=",
+                "options": {
+                    "fallbackOutput": 0
+                }
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                620,
+                138
+            ],
+            "id": "255b4670-11e0-49b1-b64d-21c31cc0aafe",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "operation": "findOneAndReplace",
+                "collection": "={{ $json._projectID }}",
+                "updateKey": "@ref",
+                "fields": "={{ Object.keys($json).filter(x => !x.startsWith('_')).join(',') }}",
+                "upsert": true,
+                "options": {
+                    "dateFields": "={{ Object.keys($json).filter(x => x.toLowerCase().includes('date')).join(',') }}"
+                }
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                840,
+                -220
+            ],
+            "id": "8e4a1781-afab-4e04-9b9d-fb48ed2d110c",
+            "name": "MongoDB test_tenant_v1 Post Records",
+            "credentials": {
+                "mongoDb": {
+                    "id": "fRKxxS5YfqqiiqGx",
+                    "name": "MongoDB tenant test_tenant_v1"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "operation": "findOneAndReplace",
+                "collection": "={{ $json._projectID }}",
+                "updateKey": "@ref",
+                "fields": "={{ Object.keys($json).filter(x => !x.startsWith('_')).join(',') }}",
+                "upsert": true,
+                "options": {
+                    "dateFields": "={{ Object.keys($json).filter(x => x.toLowerCase().includes('date')).join(',') }}"
+                }
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                840,
+                -20
+            ],
+            "id": "9510a03e-f091-49ac-bb07-dbeeeea617a5",
+            "name": "MongoDB cdn_v1 Post Records",
+            "credentials": {
+                "mongoDb": {
+                    "id": "G9zcSGW2Red3XfI5",
+                    "name": "MongoDB tenant cdn_v1"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "operation": "findOneAndReplace",
+                "collection": "={{ $json._projectID }}",
+                "updateKey": "@ref",
+                "fields": "={{ Object.keys($json).filter(x => !x.startsWith('_')).join(',') }}",
+                "upsert": true,
+                "options": {
+                    "dateFields": "={{ Object.keys($json).filter(x => x.toLowerCase().includes('date')).join(',') }}"
+                }
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                840,
+                180
+            ],
+            "id": "e514ba0d-1213-4c3a-8440-c40a3fba8c64",
+            "name": "MongoDB raf_v1 Post Records",
+            "credentials": {
+                "mongoDb": {
+                    "id": "FCuhFTcuB5dNWOfJ",
+                    "name": "MongoDB tenant raf_v1"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "operation": "findOneAndReplace",
+                "collection": "={{ $json._projectID }}",
+                "updateKey": "@ref",
+                "fields": "={{ Object.keys($json).filter(x => !x.startsWith('_')).join(',') }}",
+                "upsert": true,
+                "options": {
+                    "dateFields": "={{ Object.keys($json).filter(x => x.toLowerCase().includes('date')).join(',') }}"
+                }
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                1000,
+                380
+            ],
+            "id": "9a73d526-5142-40a5-a47d-66573175f74d",
+            "name": "MongoDB cms_v1 Post Records",
+            "credentials": {
+                "mongoDb": {
+                    "id": "5NrZwaRpsBVwfK9C",
+                    "name": "MongoDB tenant cms_v1"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "operation": "findOneAndReplace",
+                "collection": "={{ $json._projectID }}",
+                "updateKey": "@ref",
+                "fields": "={{ Object.keys($json).filter(x => !x.startsWith('_')).join(',') }}",
+                "upsert": true,
+                "options": {
+                    "dateFields": "={{ Object.keys($json).filter(x => x.toLowerCase().includes('date')).join(',') }}"
+                }
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                880,
+                600
+            ],
+            "id": "ba2d9bfc-811c-4f24-9afd-46eb7c8d44af",
+            "name": "MongoDB logs_v1 Post Records",
+            "credentials": {
+                "mongoDb": {
+                    "id": "AE7VT5lZoekoUXho",
+                    "name": "MongoDB tenant logs_v1"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "operation": "findOneAndReplace",
+                "collection": "={{ $json._projectID }}",
+                "updateKey": "@ref",
+                "fields": "={{ Object.keys($json).filter(x => !x.startsWith('_')).join(',') }}",
+                "upsert": true,
+                "options": {
+                    "dateFields": "={{ Object.keys($json).filter(x => x.toLowerCase().includes('date')).join(',') }}"
+                }
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                840,
+                820
+            ],
+            "id": "19ec8787-7d0b-4074-a291-6eb3b14e4f9a",
+            "name": "MongoDB logs_v1 Post Records1",
+            "credentials": {
+                "mongoDb": {
+                    "id": "agBTRPcqlRNfKuGI",
+                    "name": "MongoDB tenant crawler_v1"
+                }
+            },
+            "onError": "continueErrorOutput"
+        }
+    ],
+    "connections": {
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Add ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Parse JSON",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add ID": {
+            "main": [
+                [
+                    {
+                        "node": "Add @ref",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add @ref": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse JSON": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "MongoDB test_tenant_v1 Post Records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB cdn_v1 Post Records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB raf_v1 Post Records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB cms_v1 Post Records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB logs_v1 Post Records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB logs_v1 Post Records1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MongoDB test_tenant_v1 Post Records": {
+            "main": [
+                [],
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "tenantID": "crawler_v1",
+                    "projectID": "crawler_project_v1",
+                    "record": {
+                        "name": "Crawler -  https://www.petsmart.ca - 2025-07-11T16:15:33.615-04:00",
+                        "object": {
+                            "url": "https://www.petsmart.ca",
+                            "@type": "WebSite",
+                            "@id": "https://www.petsmart.ca"
+                        },
+                        "agent": {
+                            "@type": "WebAPI",
+                            "@id": "V26Tb92HmiOdJpi6",
+                            "name": "Crawler - Crawl Website V2"
+                        },
+                        "actionStatus": "FailedActionStatus",
+                        "timeStart": "2025-07-11T20:15:33.615Z",
+                        "timeEnd": "2025-07-11T20:15:33.615Z",
+                        "error": "timeout of 10000ms exceeded",
+                        "@type": "Action",
+                        "startTime": "2025-07-11T20:15:33.890Z",
+                        "@id": "629c2cf7-a2e4-4990-8494-b5d9642422d2"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "81c5ac9f-28fa-426d-b48f-94b124917e66",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T16:18:35.402Z",
+            "updatedAt": "2025-07-08T16:18:35.402Z",
+            "role": "workflow:owner",
+            "workflowId": "H7E1XaJ0xtx8Je7t",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:11:55.156Z",
+            "updatedAt": "2025-07-11T13:28:22.519Z",
+            "id": "IDoNgAgFMAqCrBi3",
+            "name": "type:api"
+        },
+        {
+            "createdAt": "2025-07-11T13:22:10.309Z",
+            "updatedAt": "2025-07-11T13:28:53.509Z",
+            "id": "bmh0Q5O1a9NXN6U8",
+            "name": "id:MongoDB"
+        }
+    ]
+}
