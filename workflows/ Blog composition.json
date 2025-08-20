@@ -1,0 +1,287 @@
+{
+    "createdAt": "2025-06-18T21:26:14.772Z",
+    "updatedAt": "2025-06-18T21:45:27.000Z",
+    "id": "WpdmQpMAtC1fGeAX",
+    "name": "Blog composition",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "3e96b7eb-b8ec-47bb-afbf-ab799e4e58e7",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY",
+                    "mode": "list",
+                    "cachedResultName": "Cuddle Editorial Calendar V2",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Sheet1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY/edit#gid=0"
+                },
+                "filtersUI": {
+                    "values": [
+                        {
+                            "lookupColumn": "Content url"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                220,
+                0
+            ],
+            "id": "c72cff3b-1ca5-4367-be2c-320d6fe4c915",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Please write a blog post for a pet food price comparison site with the following information:\nHeadline: {{ $json.Headline }}\nTopics: {{ $json.Topics }}\nMain messages: {{ $json['Main Messages'] }}\n\nThe blog post should be professional but friendly, and be SEO optimized. ",
+                "messages": {
+                    "messageValues": [
+                        {
+                            "message": "Respond only with the result of the request. "
+                        }
+                    ]
+                },
+                "batching": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.7,
+            "position": [
+                440,
+                0
+            ],
+            "id": "7d6f1008-68d2-4903-b60a-6e0522ab27fa",
+            "name": "Basic LLM Chain"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                540,
+                220
+            ],
+            "id": "9af3708f-7e69-424e-ba69-686dfbb49da9",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY",
+                    "mode": "list",
+                    "cachedResultName": "Cuddle Editorial Calendar V2",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Sheet1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZTezxLJA_F5zEQlVnZlypRWcAeUBqUS0HR_F2xDE_AY/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Article": "={{ $json.text }}",
+                        "Date": "={{ $('Google Sheets').item.json.Date }}"
+                    },
+                    "matchingColumns": [
+                        "Date"
+                    ],
+                    "schema": [
+                        {
+                            "id": "Date",
+                            "displayName": "Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Headline",
+                            "displayName": "Headline",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Topics",
+                            "displayName": "Topics",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Main Messages",
+                            "displayName": "Main Messages",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Content url",
+                            "displayName": "Content url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Article",
+                            "displayName": "Article",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                880,
+                0
+            ],
+            "id": "26db1f5b-44a8-47a7-8ce3-5adddf3d1af1",
+            "name": "Google Sheets1",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "f32d6160-2049-498d-aa87-77764692c14e",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-06-18T21:26:14.776Z",
+            "updatedAt": "2025-06-18T21:26:14.776Z",
+            "role": "workflow:owner",
+            "workflowId": "WpdmQpMAtC1fGeAX",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
