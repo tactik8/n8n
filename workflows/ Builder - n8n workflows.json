@@ -1,0 +1,297 @@
+{
+    "createdAt": "2025-07-02T13:16:00.969Z",
+    "updatedAt": "2025-07-11T12:33:54.000Z",
+    "id": "GYJyH1c46akmtBpM",
+    "name": "Builder - n8n workflows",
+    "active": false,
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "prompt"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "c49ea3e7-4979-49d8-9259-99ff3f9d4645",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.output.technicalRequirements }}",
+                "hasOutputParser": true,
+                "messages": {
+                    "messageValues": [
+                        {
+                            "message": "Persona: You are a senior n8n developer.   Task: Please take the technical requirements provided by the business analyst and develop a n8n workflow.   Context:    Output format: Please provide your answer as a json with property code for the code itself and property name for the name of the workflow. See example as follows for function testFn: { \t\"code\": \"function testFn(){}\", \t\"name\": \"testFn\" }  Constraints: Includes comments in your code for the key elements.  Take into account edge conditions and error handling. "
+                        }
+                    ]
+                },
+                "batching": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.7,
+            "position": [
+                740,
+                -20
+            ],
+            "id": "78c35d97-2ed8-47a7-9743-4958255f53bd",
+            "name": "Basic LLM Chain",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.prompt }}",
+                "hasOutputParser": true,
+                "messages": {
+                    "messageValues": [
+                        {
+                            "message": "Persona: You are a senior business analyst.   Task: Please take the requirements provided by the user and evelop technical requirements for a n8n workflow developer.   Output format: Please provide your answer as a json with technicalRequirements for the technical requirements and name for the name of the workflow. See example as follows for workflow testFn: { \t\"technicalRequirements\": \"The technical requirements for the workflow\", \"name\": \"testFn\" }  "
+                        }
+                    ]
+                },
+                "batching": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.7,
+            "position": [
+                220,
+                0
+            ],
+            "id": "5e145b9e-5759-4f89-829c-5c6c7ab1372a",
+            "name": "Basic LLM Chain1",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-preview-04-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                320,
+                220
+            ],
+            "id": "c90ab6c5-0814-4af5-b802-719c4ad6dffa",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{ \t\"technicalRequirements\": \"The technical requirements for the workflow\", \"name\": \"testFn\" }  "
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                460,
+                220
+            ],
+            "id": "d9723c4b-d4cb-4dad-b6d4-21aacbacdac4",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-preview-04-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                720,
+                220
+            ],
+            "id": "80418e49-ca31-435f-83aa-cd67339e804f",
+            "name": "Google Gemini Chat Model1",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{ \t\"code\": \"function testFn(){}\", \t\"name\": \"testFn\" }"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                980,
+                200
+            ],
+            "id": "bf46159d-7d62-4f80-aa5e-369a05f0763d",
+            "name": "Structured Output Parser1"
+        },
+        {
+            "parameters": {
+                "operation": "create",
+                "workflowObject": "={{ $json.output.code }}",
+                "requestOptions": {}
+            },
+            "type": "n8n-nodes-base.n8n",
+            "typeVersion": 1,
+            "position": [
+                1320,
+                -20
+            ],
+            "id": "69600d2f-02a4-4450-9206-052e100ceb9d",
+            "name": "n8n",
+            "credentials": {
+                "n8nApi": {
+                    "id": "f0llQKVDDrQnurmq",
+                    "name": "n8n account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "binaryPropertyName": "=data {{ $json.output.code }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1,
+            "position": [
+                1100,
+                -20
+            ],
+            "id": "34ce2c46-544f-4434-8b07-e2cd4173a332",
+            "name": "Extract from File"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Basic LLM Chain1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain1": {
+            "main": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain1",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "Basic LLM Chain1",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model1": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser1": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "n8n",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "prompt": "make a n8n workflow that updates the actionStatus key of a given record to completeActionStatus"
+                }
+            }
+        ]
+    },
+    "versionId": "2b062b0b-ebcb-4a81-bbbd-ca009739e6de",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T13:16:00.972Z",
+            "updatedAt": "2025-07-02T13:16:00.972Z",
+            "role": "workflow:owner",
+            "workflowId": "GYJyH1c46akmtBpM",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
