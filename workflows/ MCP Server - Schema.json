@@ -1,0 +1,510 @@
+{
+    "createdAt": "2025-07-08T14:31:17.604Z",
+    "updatedAt": "2025-08-03T16:59:28.000Z",
+    "id": "1JzjqRkZf7oHvUtz",
+    "name": "MCP Server - Schema",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "path": "2ca448f2-d8ef-4b06-bb9e-66dc7f7fd44d"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "7c499359-97f0-4836-9b36-3d7239a7c6f1",
+            "name": "MCP Server Trigger",
+            "webhookId": "2ca448f2-d8ef-4b06-bb9e-66dc7f7fd44d"
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to retrieve a record from the mongoDB database. \n **MongoDB database get tool:**\n    * **Description:** Gets a record from mongoDB database\n    * **Usage:** \n- Set the collection name in collectionName field. Leave blank if collection name is not specified.\n- Set @type property of the record to retrieve\n- Set @id property of the record to retrieve\n- The combination of both @type and @id returns a unique record\n- use filter field to do a query on specific properties. No need to fill in @type or @id in this case.  \n    ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "FgZKkYHObYWbwn6O",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "collectionName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('collectionName', `The name of the collection to retrieve the record from. Leave blank if not specified.`, 'string') }}",
+                        "@type": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('_type', `The @type, based on schema.org classes of the record.`, 'string') }}",
+                        "@id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('_id', `The @type, based on schema.org classes of the record.`, 'string') }}",
+                        "filter": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('filter', `mongodb compatible query.`, 'string') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "collectionName",
+                            "displayName": "collectionName",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filter",
+                            "displayName": "filter",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                540,
+                160
+            ],
+            "id": "7df96c43-752d-4810-b3e0-9ccd81cd241a",
+            "name": "MongoDB database get tool"
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to store a record or several records to the database. \n **MongoDB database post tool:**\n    * **Description:** Post or writes one or several records to a mongoDB database\n    * **Usage:** \n- Set the collection name in collectionName field. Leave blank if collection name is not specified.\n- Set record property the one or several records to write\n\n    ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "H7E1XaJ0xtx8Je7t",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "collectionName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('collectionName', `The name of the collection. Leave blank if no specified.`, 'string') }}",
+                        "record": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('record', `The record or records to post. `, 'string') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "collectionName",
+                            "displayName": "collectionName",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                760,
+                160
+            ],
+            "id": "842077d5-2193-407c-aaaa-653276490f54",
+            "name": "MongoDB database post tool"
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to store a file to google cloud that is in JSON. The tools return a schrema.org DigitalDocument object with the url being the url where to download the new document. The filename needs to finish by .json and the content of the file goes in the content field. ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "P54d3SIAFKCgyxgn",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Post JSON"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('filename', ``, 'string') }}",
+                        "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('content', ``, 'string') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "data",
+                            "displayName": "data",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                520,
+                340
+            ],
+            "id": "dda039a6-fa0f-4be5-a16a-4aab6eebd360",
+            "name": "Google Cloud Storage Save JSON tool"
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to store a file to google cloud that is in text format (not JSON). The tools return a schrema.org DigitalDocument object with the url being the url where to download the new document. ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "g8kBTu9R6Auf7Qah",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Post Text"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('filename', ``, 'string') }}",
+                        "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('content', ``, 'string') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "data",
+                            "displayName": "data",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                700,
+                340
+            ],
+            "id": "1569947b-5cd3-48dc-a418-c447fe97bfa0",
+            "name": "Google Cloud Storage Save Text tool"
+        },
+        {
+            "parameters": {
+                "toolDescription": "Call this tool to get the content of a webpage or url or to perform search.",
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.2,
+            "position": [
+                20,
+                220
+            ],
+            "id": "c81383c3-d62d-415e-91a7-48c16fe24a85",
+            "name": "http request tool"
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to get the current date and/or time. The tools returns the date in iso 8601 in the UTC timezone.",
+                "jsCode": "// Example: convert the incoming query to uppercase and return it\nreturn (new Date()).toISOString()\n"
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolCode",
+            "typeVersion": 1.2,
+            "position": [
+                -120,
+                220
+            ],
+            "id": "f6e194ee-fa5d-44f3-aa50-0b285edc839b",
+            "name": "get current date tool"
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to get information on an organization by using its @id value\n **Get organization information tool:**\n    * **Description:** Retrieve information on a company such as business plans, competitors list, business strategy, brand book, etc.\n    * **Usage:** \n- Set the @id of the organization in the organizationID field. The information is given as an array of schema.org DigitalDocument records, where the property 'name' specifies the type of document and the property 'text' is the actual content. \n\n    ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "PXTyABRlkFGAuVyE",
+                    "mode": "list",
+                    "cachedResultName": "MCP - tool Get info on organization"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "organizationID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('organizationID', ``, 'string') }}"
+                    },
+                    "matchingColumns": [
+                        "organizationID"
+                    ],
+                    "schema": [
+                        {
+                            "id": "organizationID",
+                            "displayName": "organizationID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                320,
+                420
+            ],
+            "id": "a97b43fc-f2e7-4a33-a923-eee9b1d2b390",
+            "name": "Get organization information tool"
+        },
+        {
+            "parameters": {
+                "mode": "retrieve-as-tool",
+                "toolName": "organizationInfo",
+                "toolDescription": "retrieve documentation on organizations",
+                "mongoCollection": {
+                    "__rl": true,
+                    "value": "organizationInfo",
+                    "mode": "list",
+                    "cachedResultName": "organizationInfo"
+                },
+                "vectorIndexName": "vector_index",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.vectorStoreMongoDBAtlas",
+            "typeVersion": 1.2,
+            "position": [
+                -200,
+                580
+            ],
+            "id": "31ca274b-f9a1-4c89-8327-c6737a85adb0",
+            "name": "MongoDB Atlas Vector Store",
+            "credentials": {
+                "mongoDb": {
+                    "id": "yiBYRoA1iwAXOQhq",
+                    "name": "MongoDB Embeddings"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-embedding-exp-03-07"
+            },
+            "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                -120,
+                800
+            ],
+            "id": "d9f0d782-0e7b-4127-ad31-5a2e7aa2bad0",
+            "name": "Embeddings Google Gemini",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "MongoDB database get tool": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MongoDB database post tool": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Cloud Storage Save JSON tool": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Cloud Storage Save Text tool": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "http request tool": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "get current date tool": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get organization information tool": {
+            "ai_tool": [
+                []
+            ]
+        },
+        "MongoDB Atlas Vector Store": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Embeddings Google Gemini": {
+            "ai_embedding": [
+                [
+                    {
+                        "node": "MongoDB Atlas Vector Store",
+                        "type": "ai_embedding",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "23d8cb50-fd95-48bd-95be-3ba45a7c074d",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T14:31:17.613Z",
+            "updatedAt": "2025-07-08T14:31:17.613Z",
+            "role": "workflow:owner",
+            "workflowId": "1JzjqRkZf7oHvUtz",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:34:10.007Z",
+            "updatedAt": "2025-07-11T13:34:10.007Z",
+            "id": "y85jBMhFkI5Af7f7",
+            "name": "type:mcp"
+        }
+    ]
+}
