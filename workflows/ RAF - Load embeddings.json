@@ -1,0 +1,248 @@
+{
+    "createdAt": "2025-07-10T20:01:04.493Z",
+    "updatedAt": "2025-07-11T12:31:15.000Z",
+    "id": "vM7TrKmdrNtQdKzf",
+    "name": "RAF - Load embeddings",
+    "active": false,
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "36b1d4b7-7505-4417-a1aa-37bfd94840b7",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ",
+                    "mode": "list",
+                    "cachedResultName": "Cie Strategy DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit#gid=0"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                220,
+                0
+            ],
+            "id": "40e7fc79-150c-4fb4-91fb-dd1412ddf594",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "0954444a-a913-4f5f-934b-8cde5f6f934a",
+                            "leftValue": "={{ $json.url }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.2,
+            "position": [
+                440,
+                0
+            ],
+            "id": "e95be00e-6659-48cc-b7ff-7a10e4a8523a",
+            "name": "Filter"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                660,
+                0
+            ],
+            "id": "dcae99a6-214f-4149-822a-4f71cfead15a",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "NC5wkzYOGFvMs9FQ",
+                    "mode": "list",
+                    "cachedResultName": "Agent - Biz Strategy tool  Embeddings Ingest"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@type": "={{ $('Google Sheets').item.json['@type'] }}",
+                        "@id": "={{ $('Google Sheets').item.json['@id'] }}",
+                        "text": "={{ $json.data }}",
+                        "about.@type": "={{ $('Google Sheets').item.json['about.@type'] }}",
+                        "about.@id": "={{ $('Google Sheets').item.json['about.@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "text",
+                            "displayName": "text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "about.@type",
+                            "displayName": "about.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "about.@id",
+                            "displayName": "about.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1060,
+                0
+            ],
+            "id": "b42571bc-57cb-4fed-b8ca-ff7ac2b7faee",
+            "name": "Save embedding"
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Filter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Save embedding",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "df2ef3d2-a19d-490a-9d7f-fd8d1781f973",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-10T20:01:04.496Z",
+            "updatedAt": "2025-07-10T20:01:04.496Z",
+            "role": "workflow:owner",
+            "workflowId": "vM7TrKmdrNtQdKzf",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
