@@ -1,0 +1,236 @@
+{
+    "createdAt": "2025-07-02T17:00:45.259Z",
+    "updatedAt": "2025-08-03T16:19:56.000Z",
+    "id": "KoPfmAVaeSR1fq2r",
+    "name": "Schema WebSite",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "_record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentObject",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentProperty"
+                        },
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -300,
+                -100
+            ],
+            "id": "6c4a8c16-00e6-4df9-be45-cae557b1e34b",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "mode": "runOnceForEachItem",
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfunction getDomainFromUrl(urlString) {\n\n            if(!urlString){\n              return null\n            }\n            let hostname = urlString.trim();\n\n            // Step 1: Remove the protocol (e.g., \"http://\", \"https://\")\n            const protocolIndex = hostname.indexOf('://');\n            if (protocolIndex > -1) {\n                hostname = hostname.substring(protocolIndex + 3);\n            }\n\n            // Step 2: Remove user info (e.g., \"user:pass@\")\n            const atIndex = hostname.indexOf('@');\n            if (atIndex > -1) {\n                hostname = hostname.substring(atIndex + 1);\n            }\n\n            // Step 3: Remove path, query string, and fragment identifier.\n            // This isolates the host and port.\n            const pathIndex = hostname.indexOf('/');\n            if (pathIndex > -1) {\n                hostname = hostname.substring(0, pathIndex);\n            }\n            const queryIndex = hostname.indexOf('?');\n            if (queryIndex > -1) {\n                hostname = hostname.substring(0, queryIndex);\n            }\n            const hashIndex = hostname.indexOf('#');\n            if (hashIndex > -1) {\n                hostname = hostname.substring(0, hashIndex);\n            }\n            \n            // Step 4: Remove the port number.\n            const portIndex = hostname.indexOf(':');\n            if (portIndex > -1) {\n                hostname = hostname.substring(0, portIndex);\n            }\n\n            // Return the extracted hostname, or null if it's an empty string.\n            return \"https://\" + hostname || null\n        }\n\n        \n  $json.url = getDomainFromUrl($json?.url)\n  $json[\"@id\"] = $json.url\n\nreturn $json"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                140,
+                -100
+            ],
+            "id": "865723f2-c31e-4dc6-9ae1-1f295e719aa4",
+            "name": "Get Domain"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                360,
+                -100
+            ],
+            "id": "9fe97289-4fbb-4a6b-a911-13aac8bf49ec",
+            "name": "Get ID"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "UHVbnm4d896IS4aO",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool make Dynamic Thing"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@type": "WebSite",
+                        "content": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -80,
+                -100
+            ],
+            "id": "56f61297-4786-4a62-abca-222fd0b5cb55",
+            "name": "Make Thing"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Make Thing",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Domain": {
+            "main": [
+                [
+                    {
+                        "node": "Get ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Make Thing": {
+            "main": [
+                [
+                    {
+                        "node": "Get Domain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "_parentObject": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    },
+                    "_parentProperty": "pp",
+                    "_record": {
+                        "@context": "https://schema.org/",
+                        "@type": "WebSite",
+                        "url": "https://www.test.com/page1.html"
+                    },
+                    "url": null
+                }
+            },
+            {
+                "json": {
+                    "url": "https://www.test.com"
+                }
+            }
+        ]
+    },
+    "versionId": "0567d30c-9969-477d-8a53-f6500767cba1",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T17:00:45.268Z",
+            "updatedAt": "2025-07-02T17:00:45.268Z",
+            "role": "workflow:owner",
+            "workflowId": "KoPfmAVaeSR1fq2r",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
