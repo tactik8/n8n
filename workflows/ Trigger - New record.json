@@ -1,0 +1,64 @@
+{
+    "createdAt": "2025-07-11T16:52:46.979Z",
+    "updatedAt": "2025-07-11T16:53:21.000Z",
+    "id": "p3qHzfuzR7N4TEFP",
+    "name": "Trigger - New record",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "tenantID"
+                        },
+                        {
+                            "name": "projectID"
+                        },
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "@id"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "3ee9798a-dcd8-478c-8a87-7c79aa45a36d",
+            "name": "When Executed by Another Workflow"
+        }
+    ],
+    "connections": {},
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "dd388115-fe25-4168-9a8f-c2ad8e2f7435",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T16:52:46.984Z",
+            "updatedAt": "2025-07-11T16:52:46.984Z",
+            "role": "workflow:owner",
+            "workflowId": "p3qHzfuzR7N4TEFP",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T16:53:11.570Z",
+            "updatedAt": "2025-07-11T16:53:11.570Z",
+            "id": "c8r20RXL2kJi4Jeq",
+            "name": "type:trigger"
+        }
+    ]
+}
