@@ -1,0 +1,139 @@
+{
+    "createdAt": "2025-07-13T16:07:21.252Z",
+    "updatedAt": "2025-07-13T17:25:39.000Z",
+    "id": "n0TaMX9R1nweO0hL",
+    "name": "Schema - tool JSONLD Set ID",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "content",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "e169e0b1-8c2d-4bc6-a790-850caa04427c",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "function generateUUID() {\n  let d = new Date().getTime(); // Timestamp\n  let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0; // High-res timestamp\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    let r = Math.random() * 16; // Random number between 0 and 16\n    if (d > 0) { // Use timestamp until it's consumed\n      r = (d + r) % 16 | 0;\n      d = Math.floor(d / 16);\n    } else { // Use high-res timestamp if available\n      r = (d2 + r) % 16 | 0;\n      d2 = Math.floor(d2 / 16);\n    }\n    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);\n  });\n}\n\n\nfunction nestedFnGenerator(value, fnOnValue, fnOnObject, fnOnArray){\n\n  console.log('input')\n  console.log('r', value)\n  fnOnArray = fnOnArray || fnOnValue\n  fnOnObject = fnOnObject || fnOnValue\n  \n  // If array\n  if(Array.isArray(value)){\n    console.log('is array')\n    value = value.map(x => nestedFnGenerator(x, fnOnValue, fnOnObject, fnOnArray))\n    value = value.map(x => fnOnArray(x))\n    return value\n  }\n\n\n  // If object \n  if(typeof value === 'object' && value !== null){\n    value = fnOnObject(value)\n\n    if(typeof value === 'object' && value !== null){\n      let keys = Object.keys(value)\n      for(let k of keys){\n        value[k] = fnOnObject(value[k])\n        value[k] = nestedFnGenerator(value[k], fnOnValue, fnOnObject, fnOnArray)\n      }\n    }\n    return value\n  }\n\n\n  // Else\n  console.log('is value')\n\n  value = fnOnValue(value)\n  return value\n  \n}\n\n\nfunction assignID(value){\n\n  if(typeof value === 'object' && value !== null){\n\n    value['@id'] = value?.['@id'] || generateUUID()\n    \n  }\n  return value\n}\n\n\n\n\n// Process all items\nfor (let item of $input.all()){\n  item.json = nestedFnGenerator(item.json?.content, assignID)\n}\n\nreturn  $input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "f8d7ce35-0f10-4ff9-9b48-a0a6aec17f06",
+            "name": "Set ID"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Set ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "content": {
+                        "@context": "http://schema.org",
+                        "@type": "Book",
+                        "name": "The Great Adventure",
+                        "author": {
+                            "@type": "Person",
+                            "name": "Jane Doe",
+                            "affiliation": {
+                                "@type": "Organization",
+                                "name": "Adventure Writers Guild"
+                            },
+                            "contact": {
+                                "email": "jane.doe@example.com",
+                                "phone": "555-1234"
+                            }
+                        },
+                        "isbn": "978-0321765723",
+                        "keywords": [
+                            "adventure",
+                            "fantasy",
+                            "journey"
+                        ],
+                        "publisher": {
+                            "@type": "Organization",
+                            "name": "Epic Books Inc.",
+                            "address": {
+                                "@type": "PostalAddress",
+                                "streetAddress": "123 Story Lane",
+                                "addressLocality": "Imagination City",
+                                "addressRegion": "Dreamland",
+                                "postalCode": "98765",
+                                "addressCountry": "USA"
+                            }
+                        },
+                        "reviews": [
+                            {
+                                "@type": "Review",
+                                "author": "Bookworm Bob",
+                                "reviewRating": {
+                                    "@type": "Rating",
+                                    "ratingValue": "5",
+                                    "bestRating": "5"
+                                },
+                                "reviewBody": "An absolutely captivating read!"
+                            },
+                            {
+                                "@type": "Review",
+                                "author": "Literary Liz",
+                                "reviewRating": {
+                                    "@type": "Rating",
+                                    "ratingValue": "4",
+                                    "bestRating": "5"
+                                },
+                                "reviewBody": "Great plot, slightly slow start."
+                            }
+                        ],
+                        "publicationDate": "2023-01-15"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "c1aeec9c-816b-43f5-b29b-636ce884fe60",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-13T16:07:21.256Z",
+            "updatedAt": "2025-07-13T16:07:21.256Z",
+            "role": "workflow:owner",
+            "workflowId": "n0TaMX9R1nweO0hL",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
