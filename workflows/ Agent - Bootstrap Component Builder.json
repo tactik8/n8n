@@ -1,7 +1,7 @@
 {
-    "createdAt": "2025-08-08T18:16:47.986Z",
-    "updatedAt": "2025-08-08T18:16:47.986Z",
-    "id": "dcRxZ8AhLcRNWmza",
+    "createdAt": "2025-08-08T18:16:42.095Z",
+    "updatedAt": "2025-08-08T18:16:42.095Z",
+    "id": "vpaaZ0Zad3Mb6D3J",
     "name": "Agent - Bootstrap Component Builder",
     "active": false,
     "isArchived": false,
@@ -1100,14 +1100,14 @@
     "staticData": null,
     "meta": null,
     "pinData": null,
-    "versionId": "051af80a-12b7-4dfe-8e79-89f7532d2e9d",
+    "versionId": "dc0ef3ae-5905-437a-85c2-adbf36445d43",
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-08-08T18:16:47.987Z",
-            "updatedAt": "2025-08-08T18:16:47.987Z",
+            "createdAt": "2025-08-08T18:16:42.096Z",
+            "updatedAt": "2025-08-08T18:16:42.096Z",
             "role": "workflow:owner",
-            "workflowId": "dcRxZ8AhLcRNWmza",
+            "workflowId": "vpaaZ0Zad3Mb6D3J",
             "projectId": "q4hW5jXLU3axUty6"
         }
     ],
