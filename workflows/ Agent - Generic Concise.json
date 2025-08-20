@@ -1,0 +1,719 @@
+{
+    "createdAt": "2025-07-08T18:46:05.110Z",
+    "updatedAt": "2025-07-11T13:44:50.000Z",
+    "id": "zRjBUKjwD6xFilKD",
+    "name": "Agent - Generic Concise",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $('When chat message received').item.json.chatInput }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "={{ $json.prompt }}",
+                    "returnIntermediateSteps": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                -308,
+                -60
+            ],
+            "id": "e79cec79-14c8-45ec-83c5-88bc2a2bbcb5",
+            "name": "AI Agent",
+            "retryOnFail": false,
+            "maxTries": 2,
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                -400,
+                160
+            ],
+            "id": "20995e76-3632-47be-8ad5-dd81713f9ad9",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "={{ $('When chat message received').item.json.sessionId }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.3,
+            "position": [
+                -280,
+                160
+            ],
+            "id": "6c7ed94b-e7c0-4a23-9cbb-460bddb961e5",
+            "name": "Simple Memory"
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.2,
+            "position": [
+                -160,
+                160
+            ],
+            "id": "1187c1b7-b9ab-4f4d-a4c5-7946e4b1c81a",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "SVVEgMsJI3GBBvPI",
+                    "mode": "list",
+                    "cachedResultName": "Prompt DB - Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "id": "factual_inference_agent_v1"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -620,
+                -60
+            ],
+            "id": "d526e5a7-5b6f-4eaf-b622-dc86e9fa0931",
+            "name": "Get System Prompt"
+        },
+        {
+            "parameters": {
+                "sseEndpoint": "https://tactik8.app.n8n.cloud/mcp/2ca448f2-d8ef-4b06-bb9e-66dc7f7fd44d/sse"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1,
+            "position": [
+                -40,
+                160
+            ],
+            "id": "d43441fd-7c82-4d0b-9dcf-693bc012c81a",
+            "name": "MCP Client"
+        },
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Go.",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -840,
+                -60
+            ],
+            "id": "da0b9d86-0e84-42a2-84b1-a19681324e12",
+            "name": "When chat message received",
+            "webhookId": "fb0b155d-834e-4afc-b14f-eb5ef7ca82af"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "012a2be8-4998-4e6f-baa3-01ac5afa7cf9",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                300,
+                60
+            ],
+            "id": "861ca42b-7a20-4883-a817-539d5d53aa22",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "mode": "chooseBranch",
+                "numberInputs": 3,
+                "useDataOfInput": 2
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                1020,
+                -80
+            ],
+            "id": "b4107632-d54f-4a39-ae88-6045eeff763e",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "20lcP6IYp6JpopKg",
+                    "mode": "list",
+                    "cachedResultName": "Schema Conversation"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@id": "={{ $('When chat message received').item.json.sessionId }}",
+                        "hasPart[0].sender.@type": "Person",
+                        "hasPart[0].recipient.@type": "WebAPI",
+                        "hasPart[1].recipient.@id": "=",
+                        "hasPart[1].sender.@type": "WebAPI",
+                        "hasPart[1].sender.@id": "={{ $workflow.id }}",
+                        "hasPart[1].recipient.@type": "Person",
+                        "hasPart[1].sender.name": "={{ $workflow.name }}",
+                        "hasPart[0].recipient.name": "={{ $workflow.name }}",
+                        "hasPart[0].recipient.@id": "={{ $workflow.id }}",
+                        "hasPart[0].datePublished": "={{ $now }}",
+                        "hasPart[1].datePublished": "={{ $now }}",
+                        "hasPart[0].text": "={{ $('When chat message received').item.json.chatInput }}",
+                        "hasPart[1].text": "={{ $json.output }}",
+                        "name": "=AI Agent Conversation - agent: {{ $workflow.name }} - id:{{ $('When chat message received').item.json.sessionId }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "hasPart",
+                            "displayName": "hasPart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "hasPart[0].sender.@type",
+                            "displayName": "hasPart[0].sender.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].sender.@id",
+                            "displayName": "hasPart[0].sender.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].sender.name",
+                            "displayName": "hasPart[0].sender.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].sender.url",
+                            "displayName": "hasPart[0].sender.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].recipient.@type",
+                            "displayName": "hasPart[0].recipient.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].recipient.@id",
+                            "displayName": "hasPart[0].recipient.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].recipient.name",
+                            "displayName": "hasPart[0].recipient.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].recipient.url",
+                            "displayName": "hasPart[0].recipient.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender.@type",
+                            "displayName": "hasPart[1].sender.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender.@id",
+                            "displayName": "hasPart[1].sender.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender.name",
+                            "displayName": "hasPart[1].sender.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender.url",
+                            "displayName": "hasPart[1].sender.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient.@type",
+                            "displayName": "hasPart[1].recipient.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient.@id",
+                            "displayName": "hasPart[1].recipient.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient.name",
+                            "displayName": "hasPart[1].recipient.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient.url",
+                            "displayName": "hasPart[1].recipient.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].sender",
+                            "displayName": "hasPart[0].sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart.recipient",
+                            "displayName": "hasPart.recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender",
+                            "displayName": "hasPart[1].sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient",
+                            "displayName": "hasPart[1].recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].text",
+                            "displayName": "hasPart[0].text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].text",
+                            "displayName": "hasPart[1].text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].datePublished",
+                            "displayName": "hasPart[0].datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].datePublished",
+                            "displayName": "hasPart[1].datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                300,
+                -240
+            ],
+            "id": "bbf4e2bb-4f3d-4a6c-8d1c-48ef70780dca",
+            "name": "Get conversation object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ZQXI2h49GnfoJO3R",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Update"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "collectionName": "=agent_api_{{ ($workflow.name).replaceAll(' ', '_').replaceAll('-', '_') }}",
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "collectionName",
+                            "displayName": "collectionName",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                580,
+                -240
+            ],
+            "id": "3074870f-4134-46c0-9001-544798dc58f8",
+            "name": "Update MongoDB"
+        }
+    ],
+    "connections": {
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get conversation object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get System Prompt": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MCP Client": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Get System Prompt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Get conversation object": {
+            "main": [
+                [
+                    {
+                        "node": "Update MongoDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update MongoDB": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "b32e0ed7-a0d6-4dbd-b2a1-77e27a91263a",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T18:46:05.113Z",
+            "updatedAt": "2025-07-08T18:46:05.113Z",
+            "role": "workflow:owner",
+            "workflowId": "zRjBUKjwD6xFilKD",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:19.644Z",
+            "updatedAt": "2025-07-11T13:29:39.556Z",
+            "id": "fsYQGx4UGwRejmSm",
+            "name": "type:agent"
+        }
+    ]
+}
