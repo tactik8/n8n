@@ -1,0 +1,212 @@
+{
+    "createdAt": "2025-07-07T19:38:03.605Z",
+    "updatedAt": "2025-07-11T13:42:51.000Z",
+    "id": "SVVEgMsJI3GBBvPI",
+    "name": "App - Prompt DB Get",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "id"
+                        },
+                        {
+                            "name": "id2"
+                        },
+                        {
+                            "name": "id3"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -100,
+                -200
+            ],
+            "id": "e2fb28da-833a-4eee-b2c9-d5a5d49f3ef6",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU",
+                    "mode": "list",
+                    "cachedResultName": "AI Prompts",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU/edit#gid=0"
+                },
+                "filtersUI": {
+                    "values": [
+                        {
+                            "lookupColumn": "id",
+                            "lookupValue": "={{ $json.promptID }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                340,
+                -200
+            ],
+            "id": "d07d006c-f0e6-4d29-90cd-cb28f98458ca",
+            "name": "Google Sheets",
+            "executeOnce": false,
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7c6f99ec-1404-4b1b-9731-5c0d850fdf69",
+                            "name": "prompt",
+                            "value": "={{ $json.result }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                780,
+                -200
+            ],
+            "id": "3287583e-28b2-44b8-b7f1-d25e5745f95a",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nlet promptRecord = {}\nfor (const item of $input.all()) {\n  let category = item.json.category\n  promptRecord[category] = promptRecord[category] || ''\n  promptRecord[category] += item.json.value\n  \n}\nlet content = ''\nfor(let k in promptRecord){\n  content += \"**\" + k + \"**:\"\n  content += promptRecord[k]\n  content += \"  \"\n}\n\nlet output = {\n  result: content\n}\n\nreturn output"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                560,
+                -200
+            ],
+            "id": "55362a3e-49f9-4ef3-b88b-c983f10b628b",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nlet results = []\nfor (const item of $input.all()) {\n  let ids = item.json?.id.split(',')\n  for(let id of ids){\n    id = id.trim()\n    id = { \"promptID\": id}\n    results.push(id)\n  }\n\n}\nconsole.log('r', results)\nreturn results"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                120,
+                -200
+            ],
+            "id": "03acbd06-2256-4986-b40d-2c3112b0a0d0",
+            "name": "Code3"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                []
+            ]
+        },
+        "Code3": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "id": "Market Insight Analyst, biz-strategy-agent-common-guidelines"
+                }
+            }
+        ]
+    },
+    "versionId": "69c25303-8839-4adf-990e-79f1c3438679",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-07T19:38:03.609Z",
+            "updatedAt": "2025-07-07T19:38:03.609Z",
+            "role": "workflow:owner",
+            "workflowId": "SVVEgMsJI3GBBvPI",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T13:27:12.728Z",
+            "updatedAt": "2025-07-11T13:28:29.033Z",
+            "id": "ZoyZr6DZSDRTzi0t",
+            "name": "type:app"
+        }
+    ]
+}
