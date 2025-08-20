@@ -1,0 +1,92 @@
+{
+    "createdAt": "2025-07-11T16:51:31.936Z",
+    "updatedAt": "2025-07-11T18:27:58.000Z",
+    "id": "iVzZq0XLcepnkExi",
+    "name": "Trigger - daily",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {}
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -320,
+                -60
+            ],
+            "id": "129d8bef-a50a-4a37-ae06-9eda2ee4b3d8",
+            "name": "Schedule Trigger"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "cPUha4oFMwAjOzIK",
+                    "mode": "list",
+                    "cachedResultName": "Crawler - Pipeline V2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -100,
+                -60
+            ],
+            "id": "0c8de7e3-6f5b-4b42-b5e3-ac79aba18b77",
+            "name": "Crawlers"
+        }
+    ],
+    "connections": {
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Crawlers",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "d89e63ee-41c3-43aa-a683-787c81734983",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T16:51:31.942Z",
+            "updatedAt": "2025-07-11T16:51:31.942Z",
+            "role": "workflow:owner",
+            "workflowId": "iVzZq0XLcepnkExi",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T16:53:11.570Z",
+            "updatedAt": "2025-07-11T16:53:11.570Z",
+            "id": "c8r20RXL2kJi4Jeq",
+            "name": "type:trigger"
+        }
+    ]
+}
