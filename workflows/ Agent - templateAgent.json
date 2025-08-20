@@ -1,7 +1,7 @@
 {
-    "createdAt": "2025-08-08T14:28:43.318Z",
-    "updatedAt": "2025-08-08T14:30:53.000Z",
-    "id": "tq4euWExDd87tvOH",
+    "createdAt": "2025-08-08T14:29:15.870Z",
+    "updatedAt": "2025-08-08T14:30:51.000Z",
+    "id": "NnZDEF0szmMKRxDU",
     "name": "Agent - templateAgent",
     "active": false,
     "isArchived": true,
@@ -908,7 +908,7 @@
                         {
                             "id": "feb1ea7b-3f36-43a8-996e-0ec7af7a9384",
                             "name": "promptID",
-                            "value": "={{ $json.promptID  || \"somePrompt\"}}",
+                            "value": "={{ $json.promptID  || \"test-agent-prompt\"}}",
                             "type": "string"
                         }
                     ]
@@ -1096,14 +1096,14 @@
     "staticData": null,
     "meta": null,
     "pinData": null,
-    "versionId": "81ea7008-f2f9-45b1-b0ab-aa3be1e855fc",
+    "versionId": "44d96a98-83a8-4022-a532-9d95f3b6b1f9",
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-08-08T14:28:43.320Z",
-            "updatedAt": "2025-08-08T14:28:43.320Z",
+            "createdAt": "2025-08-08T14:29:15.871Z",
+            "updatedAt": "2025-08-08T14:29:15.871Z",
             "role": "workflow:owner",
-            "workflowId": "tq4euWExDd87tvOH",
+            "workflowId": "NnZDEF0szmMKRxDU",
             "projectId": "q4hW5jXLU3axUty6"
         }
     ],
