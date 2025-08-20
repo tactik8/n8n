@@ -1,0 +1,436 @@
+{
+    "createdAt": "2025-07-11T00:14:13.546Z",
+    "updatedAt": "2025-07-11T00:25:55.000Z",
+    "id": "Ldf0MXDwxIRGV6Xs",
+    "name": "API - Google Cloud Post File",
+    "active": false,
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "filename"
+                        },
+                        {
+                            "name": "data",
+                            "type": "any"
+                        },
+                        {
+                            "name": "content"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -660,
+                -60
+            ],
+            "id": "975844a5-8a3e-4ebe-8567-0d4c83fa9e2d",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "resource": "object",
+                "operation": "create",
+                "bucketName": "kraken_cdn_ai_agent",
+                "objectName": "={{ $('Edit Fields').item.json.filename }}",
+                "updateProjection": "noAcl",
+                "createData": {},
+                "createQuery": {},
+                "encryptionHeaders": {},
+                "requestOptions": {}
+            },
+            "type": "n8n-nodes-base.googleCloudStorage",
+            "typeVersion": 1,
+            "position": [
+                660,
+                -60
+            ],
+            "id": "e659172a-c4cc-4677-849c-9c89ce8452a8",
+            "name": "Google Cloud Storage",
+            "credentials": {
+                "googleCloudStorageOAuth2Api": {
+                    "id": "dp4nwqLMRUOV59br",
+                    "name": "Google Cloud Storage account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ffwMI0oRaDpvtvvk",
+                    "mode": "list",
+                    "cachedResultName": "Schema DigitalDocument"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ $json.name }}",
+                        "datePublished": "={{ $now }}",
+                        "url": "={{ $json.mediaLink }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "datePublished",
+                            "displayName": "datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                880,
+                -60
+            ],
+            "id": "44b8988c-d3ec-4514-9332-2d10cad6def4",
+            "name": "Get DigitalDocument object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "H7E1XaJ0xtx8Je7t",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "collectionName": "n8nAIAgentCdn",
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "collectionName",
+                            "displayName": "collectionName",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1140,
+                -240
+            ],
+            "id": "646ee87f-056d-4af4-9309-53dd0fd01064",
+            "name": "Save to mongoDB cdn"
+        },
+        {
+            "parameters": {
+                "mode": "chooseBranch",
+                "useDataOfInput": 2
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                1380,
+                -80
+            ],
+            "id": "2ecd8cbe-f53d-488a-9598-4c9d8240e756",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "content": "## Saves a text document google cloud\n\nbucket: kraken_cdn_ai_agent\n\nmongodb: n8nAIAgentCdn",
+                "height": 260,
+                "width": 260
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -580,
+                -420
+            ],
+            "typeVersion": 1,
+            "id": "5e3627a4-e6b9-4e4a-840b-b9db7436876c",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6eae2d4-326f-46c3-a78f-1d8245babf8a",
+                            "name": "content",
+                            "value": "={{ typeof $json.content != 'string' ? JSON.stringify($json.content, null, 4) : $json.content  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e378f4ea-46f4-4775-b664-bc8db87f3c67",
+                            "name": "filename",
+                            "value": "={{ encodeURIComponent($json.filename)}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -340,
+                -60
+            ],
+            "id": "82a06908-2494-4f13-be1b-3e8d513c53a4",
+            "name": "Stringify JSON if required"
+        },
+        {
+            "parameters": {
+                "operation": "toText",
+                "sourceProperty": "content",
+                "options": {
+                    "encoding": "utf8",
+                    "fileName": "={{ $json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                220,
+                -60
+            ],
+            "id": "6fbcc09c-8858-4add-bb18-623a03e39a5a",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "395dd0b0-b97d-4616-9347-07c5b3f32bae",
+                            "name": "",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "288bebec-4123-41b2-97eb-d248b10af421",
+                            "name": "filename",
+                            "value": "={{ !$json.filename.endsWith('json') ? $json.filename + '.json' : $json.filename }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -120,
+                -60
+            ],
+            "id": "85d60b1f-4359-439b-9ced-ff85ca67761c",
+            "name": "Edit Fields"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Stringify JSON if required",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Cloud Storage": {
+            "main": [
+                [
+                    {
+                        "node": "Get DigitalDocument object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get DigitalDocument object": {
+            "main": [
+                [
+                    {
+                        "node": "Save to mongoDB cdn",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Save to mongoDB cdn": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Stringify JSON if required": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "Google Cloud Storage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "filename": "test.txt",
+                    "data": "test",
+                    "content": "some content"
+                }
+            }
+        ]
+    },
+    "versionId": "07f69766-65a3-4b26-b8ce-59f0af5a49d5",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T00:14:13.548Z",
+            "updatedAt": "2025-07-11T00:14:13.548Z",
+            "role": "workflow:owner",
+            "workflowId": "Ldf0MXDwxIRGV6Xs",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
