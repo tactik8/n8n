@@ -1,0 +1,497 @@
+{
+    "createdAt": "2025-07-08T16:45:23.490Z",
+    "updatedAt": "2025-07-11T17:55:15.000Z",
+    "id": "FgZKkYHObYWbwn6O",
+    "name": "API - mongoDB Get",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "75e8e9fc-826f-4363-a8a6-1996c2a0bb20",
+                            "name": "filter.@type",
+                            "value": "={{ $json['@type'] || $json.filter['@type']}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d4bacde8-7367-4e9b-8815-b775570fb0d1",
+                            "name": "filter.@id",
+                            "value": "={{ $json['@id'] || $json.filter['@id']}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9b9834e7-9410-4d87-be68-8162029c6880",
+                            "name": "tenantID",
+                            "value": "={{ $json.tenantID || 'test_tenant_v1' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "38957e64-4180-4680-906b-eafee12aa363",
+                            "name": "projectID",
+                            "value": "={{ $json.projectID || 'test_project_v1' }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -420,
+                220
+            ],
+            "id": "b23e6dff-286e-4bea-82dc-d92c04c37f8d",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "tenantID"
+                        },
+                        {
+                            "name": "projectID"
+                        },
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "filter",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -640,
+                220
+            ],
+            "id": "84a6d887-7f8b-4ed1-911d-e9cc8d0080d6",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.tenantID }}",
+                                        "rightValue": "test_tenant_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        },
+                                        "id": "d1c2dcb2-ac39-41a6-874b-a8625a0aa993"
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "3aa65239-140e-45b3-86ca-9da0a71cd5a9",
+                                        "leftValue": "={{ $json.tenantID }}",
+                                        "rightValue": "cdn_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "e18b5330-2d9f-4bf8-9fe2-d5fe8a51dd2e",
+                                        "leftValue": "={{ $json.tenantID }}",
+                                        "rightValue": "raf_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "6a160523-88d1-4550-8e3c-7c5a1347c79d",
+                                        "leftValue": "={{ $json.tenantID }}",
+                                        "rightValue": "cms_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "cc653cc8-0013-4085-9878-6fab09245221",
+                                        "leftValue": "={{ $json.tenantID }}",
+                                        "rightValue": "logs_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "fa6ff228-be3a-461c-8d72-d5f9cac60b60",
+                                        "leftValue": "={{ $json.tenantID }}",
+                                        "rightValue": "crawler_v1",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "crawler_v1"
+                        }
+                    ]
+                },
+                "options": {
+                    "fallbackOutput": 0
+                }
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                -200,
+                178
+            ],
+            "id": "23046255-d19f-4f54-928a-10dbb40b8981",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "collection": "={{ $json.projectID }}",
+                "options": {},
+                "query": "={{  JSON.stringify($json.filter, null, 4) }}\n"
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                20,
+                -180
+            ],
+            "id": "ad25b1fd-2588-4852-9411-64222fc54342",
+            "name": "MongoDB tenant test_tenant_v1 Get",
+            "executeOnce": false,
+            "alwaysOutputData": true,
+            "credentials": {
+                "mongoDb": {
+                    "id": "fRKxxS5YfqqiiqGx",
+                    "name": "MongoDB tenant test_tenant_v1"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "collection": "={{ $json.projectID }}",
+                "options": {},
+                "query": "={{  JSON.stringify($json.filter, null, 4) }}\n"
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                20,
+                20
+            ],
+            "id": "feeec627-9ad1-4e4c-9b82-f3ae46fe4340",
+            "name": "MongoDB tenant cdn_v1 Get",
+            "executeOnce": false,
+            "alwaysOutputData": true,
+            "credentials": {
+                "mongoDb": {
+                    "id": "G9zcSGW2Red3XfI5",
+                    "name": "MongoDB tenant cdn_v1"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "collection": "={{ $json.projectID }}",
+                "options": {},
+                "query": "={{  JSON.stringify($json.filter, null, 4) }}\n"
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                20,
+                220
+            ],
+            "id": "682c543a-b648-4b60-92c2-5bd999c37f3c",
+            "name": "MongoDB tenant raf_v1 Get",
+            "executeOnce": false,
+            "alwaysOutputData": true,
+            "credentials": {
+                "mongoDb": {
+                    "id": "FCuhFTcuB5dNWOfJ",
+                    "name": "MongoDB tenant raf_v1"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "collection": "={{ $json.projectID }}",
+                "options": {},
+                "query": "={{  JSON.stringify($json.filter, null, 4) }}\n"
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                20,
+                420
+            ],
+            "id": "ed2fda11-4910-4f2a-b8f2-3ed1b04f307e",
+            "name": "MongoDB tenant cms_v1 Get",
+            "executeOnce": false,
+            "alwaysOutputData": true,
+            "credentials": {
+                "mongoDb": {
+                    "id": "5NrZwaRpsBVwfK9C",
+                    "name": "MongoDB tenant cms_v1"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "collection": "={{ $json.projectID }}",
+                "options": {},
+                "query": "={{  JSON.stringify($json.filter, null, 4) }}\n"
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                20,
+                620
+            ],
+            "id": "55c02a38-9c85-462e-8a28-ac70432e7db3",
+            "name": "MongoDB tenant logs_v1 Get1",
+            "executeOnce": false,
+            "alwaysOutputData": true,
+            "credentials": {
+                "mongoDb": {
+                    "id": "AE7VT5lZoekoUXho",
+                    "name": "MongoDB tenant logs_v1"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "collection": "={{ $json.projectID }}",
+                "options": {},
+                "query": "={{  JSON.stringify($json.filter, null, 4) }}\n"
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                20,
+                780
+            ],
+            "id": "db00c594-e2a3-48f7-8f76-f0f33a5490a6",
+            "name": "MongoDB tenant logs_v1 Get",
+            "executeOnce": false,
+            "alwaysOutputData": true,
+            "credentials": {
+                "mongoDb": {
+                    "id": "agBTRPcqlRNfKuGI",
+                    "name": "MongoDB tenant crawler_v1"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "MongoDB tenant test_tenant_v1 Get",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB tenant cdn_v1 Get",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB tenant raf_v1 Get",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB tenant cms_v1 Get",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB tenant logs_v1 Get1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "MongoDB tenant logs_v1 Get",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "tenantID": "test_tenant_v1",
+                    "projectID": "test_project_v1",
+                    "@type": "Thing",
+                    "@id": "thing1",
+                    "filter": {
+                        "name": "thing1"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "bbe32fe7-89a4-4746-80c5-8b8e0cfd2f01",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T16:45:23.493Z",
+            "updatedAt": "2025-07-08T16:45:23.493Z",
+            "role": "workflow:owner",
+            "workflowId": "FgZKkYHObYWbwn6O",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:11:55.156Z",
+            "updatedAt": "2025-07-11T13:28:22.519Z",
+            "id": "IDoNgAgFMAqCrBi3",
+            "name": "type:api"
+        },
+        {
+            "createdAt": "2025-07-11T13:22:10.309Z",
+            "updatedAt": "2025-07-11T13:28:53.509Z",
+            "id": "bmh0Q5O1a9NXN6U8",
+            "name": "id:MongoDB"
+        }
+    ]
+}
