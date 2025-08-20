@@ -1,0 +1,445 @@
+{
+    "createdAt": "2025-08-08T13:28:51.264Z",
+    "updatedAt": "2025-08-08T13:37:25.000Z",
+    "id": "TOUmE9SIvtptkJ8G",
+    "name": "templateAgent",
+    "active": false,
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "conversation",
+                            "type": "object"
+                        },
+                        {
+                            "name": "promptID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -340,
+                0
+            ],
+            "id": "fd4e009f-b60d-41a7-bf13-979f26262d44",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $('When Executed by Another Workflow').item.json.conversation.hasPart.text }}",
+                "options": {
+                    "systemMessage": "={{ $json.prompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                320,
+                0
+            ],
+            "id": "d97d801f-0fde-4b86-bf11-1449293b20d1",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                200,
+                220
+            ],
+            "id": "537482cb-b0f1-492a-b00f-88658fcd1230",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "={{ $('When Executed by Another Workflow').item.json.conversation?.['@id'] }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.3,
+            "position": [
+                420,
+                240
+            ],
+            "id": "c6b82313-f031-4982-a044-9aac6c658360",
+            "name": "Simple Memory"
+        },
+        {
+            "parameters": {
+                "sseEndpoint": "https://tactik8.app.n8n.cloud/mcp/2ca448f2-d8ef-4b06-bb9e-66dc7f7fd44d/sse"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1,
+            "position": [
+                660,
+                220
+            ],
+            "id": "3e5e3b18-a094-47aa-9940-495589451365",
+            "name": "MCP Client"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "WWt66w8o7FfxYQwR",
+                    "mode": "list",
+                    "cachedResultName": "Schema Message"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "_parentObject": "={{ $('When Executed by Another Workflow').item.json.conversation }}",
+                        "_parentProperty": "hasPart",
+                        "text": "={{ $json.output }}",
+                        "datePublished": "={{ $now }}",
+                        "sender.@id": "={{ $workflow.id }}",
+                        "sender.@type": "WebAPI",
+                        "sender.name": "={{ $workflow.name }}",
+                        "recipient": "={{ $('When Executed by Another Workflow').item.json.conversation.sender || '' }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "headline",
+                            "displayName": "headline",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "text",
+                            "displayName": "text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "datePublished",
+                            "displayName": "datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender",
+                            "displayName": "sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "recipient",
+                            "displayName": "recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "about",
+                            "displayName": "about",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "recipient.@type",
+                            "displayName": "recipient.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "recipient.@id",
+                            "displayName": "recipient.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "recipient.name",
+                            "displayName": "recipient.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "recipient.url",
+                            "displayName": "recipient.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender.@type",
+                            "displayName": "sender.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender.@id",
+                            "displayName": "sender.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender.name",
+                            "displayName": "sender.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "sender.url",
+                            "displayName": "sender.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                800,
+                0
+            ],
+            "id": "d9b5b111-4103-4ab0-96ff-97ee177310f3",
+            "name": "Execute Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "SVVEgMsJI3GBBvPI",
+                    "mode": "list",
+                    "cachedResultName": "App - Prompt DB Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "id": "={{ $json.promptID }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "id2",
+                            "displayName": "id2",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "id3",
+                            "displayName": "id3",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -20,
+                0
+            ],
+            "id": "74e7e21f-d9e8-47fc-b562-a511f98a4619",
+            "name": "Get Prompt"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Get Prompt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MCP Client": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Prompt": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": null,
+    "versionId": "edfcc25f-0d1d-4411-9a9b-0824f0201d8a",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-08-08T13:28:51.266Z",
+            "updatedAt": "2025-08-08T13:28:51.266Z",
+            "role": "workflow:owner",
+            "workflowId": "TOUmE9SIvtptkJ8G",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
