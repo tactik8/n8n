@@ -1,0 +1,430 @@
+{
+    "createdAt": "2025-07-07T19:45:05.609Z",
+    "updatedAt": "2025-08-08T14:21:28.000Z",
+    "id": "xq5tIX8gbjpl6xGM",
+    "name": "Agent - prompt builder v1",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Prompt builder. \nGo.",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -500,
+                -20
+            ],
+            "id": "0e8f644d-3548-4e41-9551-d912f25d5c14",
+            "name": "When chat message received",
+            "webhookId": "8ddaa7b0-54bf-4eee-9f0d-cb733896245a"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $('When chat message received').item.json.chatInput }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "={{ $json.prompt }}",
+                    "returnIntermediateSteps": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                252,
+                -20
+            ],
+            "id": "01110dc1-6bb9-49d9-9ffc-d3b0a4d42616",
+            "name": "AI Agent",
+            "retryOnFail": false,
+            "maxTries": 2,
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-pro",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                20,
+                220
+            ],
+            "id": "5768eeb0-d810-46f5-89d9-415d6efb1c20",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\n\t\"name\": \"js developer\",\n  \"role\": [\"you are a js developer\"],\n\t\"task\": [\"develop a js function that...\"],\n  \"context\": [\"here is some context\"],\n  \"output format\": [\"out put the result as a json...\"],\n  \"constraints\": [\"here are constraints...\", \"here is another constraint\"]\n}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                520,
+                280
+            ],
+            "id": "84937be0-d743-45c4-b5b3-2152128a46e7",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "action": "generate",
+                "dataPropertyName": "id"
+            },
+            "type": "n8n-nodes-base.crypto",
+            "typeVersion": 1,
+            "position": [
+                -60,
+                -20
+            ],
+            "id": "d1342e2e-67f1-414b-8a37-61a0901c1a42",
+            "name": "Crypto"
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "={{ $('When chat message received').item.json.sessionId }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.3,
+            "position": [
+                200,
+                220
+            ],
+            "id": "d20a0854-531c-415c-8ee4-5600947518dc",
+            "name": "Simple Memory"
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.2,
+            "position": [
+                340,
+                260
+            ],
+            "id": "81be82e5-6baa-4a9c-9553-5da78c708f2e",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "FqufLZZFhWgpPk2s",
+                    "mode": "list",
+                    "cachedResultName": "prompt - post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id', ``, 'string') }}",
+                        "promptRecord": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('promptRecord', ``, 'string') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "promptRecord",
+                            "displayName": "promptRecord",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                680,
+                200
+            ],
+            "id": "0e8d8c78-a5e3-4aca-a4d9-5ad939d12428",
+            "name": "Prompt post"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4c033199-a4d6-4dbd-822c-cbb34eb243e4",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                620,
+                -120
+            ],
+            "id": "c6e17316-abf8-47f1-9af3-a66099b48f19",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "SVVEgMsJI3GBBvPI",
+                    "mode": "list",
+                    "cachedResultName": "App - Prompt DB Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "id": "System Prompt Engineer"
+                    },
+                    "matchingColumns": [
+                        "id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -280,
+                -20
+            ],
+            "id": "ac74fe44-f402-4491-878e-5dbe597537ea",
+            "name": "Get System Prompt"
+        },
+        {
+            "parameters": {
+                "description": "This tool creates a new agent. Give the name of the agent and the promptID. ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "sksIBVI8kIgKYYoc",
+                    "mode": "list",
+                    "cachedResultName": "PromptDB - Create agent"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', ``, 'string') }}",
+                        "promptID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('promptID', ``, 'string') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "promptID",
+                            "displayName": "promptID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                900,
+                180
+            ],
+            "id": "92164633-3066-466d-b213-9da4969a9cb6",
+            "name": "Create agent"
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Get System Prompt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                []
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        },
+        "Crypto": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prompt post": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get System Prompt": {
+            "main": [
+                [
+                    {
+                        "node": "Crypto",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                []
+            ]
+        },
+        "Create agent": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "64c587de-987a-4762-a5f1-6b1e32ff3e4c",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "createdAt": "2025-07-07T19:45:05.612Z",
+            "updatedAt": "2025-07-07T19:45:05.612Z",
+            "role": "workflow:owner",
+            "workflowId": "xq5tIX8gbjpl6xGM",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T13:31:02.549Z",
+            "updatedAt": "2025-07-11T13:31:02.549Z",
+            "id": "EGfSCUfTaACQc2RV",
+            "name": "id:prompt builder"
+        },
+        {
+            "createdAt": "2025-07-02T16:12:19.644Z",
+            "updatedAt": "2025-07-11T13:29:39.556Z",
+            "id": "fsYQGx4UGwRejmSm",
+            "name": "type:agent"
+        }
+    ]
+}
