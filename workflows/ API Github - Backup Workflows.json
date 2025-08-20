@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-20T12:55:07.364Z",
-    "updatedAt": "2025-08-20T13:16:25.000Z",
+    "updatedAt": "2025-08-20T13:29:34.000Z",
     "id": "yIsNJe5MMDD5GdhR",
     "name": "API Github - Backup Workflows",
     "active": false,
@@ -194,33 +194,6 @@
         },
         {
             "parameters": {
-                "includeOtherFields": true,
-                "options": {}
-            },
-            "type": "n8n-nodes-base.set",
-            "typeVersion": 3.4,
-            "position": [
-                1360,
-                208
-            ],
-            "id": "fa223e3b-0bb8-4e94-9db6-229f1372cf59",
-            "name": "Edit Fields1"
-        },
-        {
-            "parameters": {
-                "options": {}
-            },
-            "type": "n8n-nodes-base.set",
-            "typeVersion": 3.4,
-            "position": [
-                1552,
-                -32
-            ],
-            "id": "725bf783-69f2-4df7-ade1-fee6d8d1cbda",
-            "name": "Edit Fields2"
-        },
-        {
-            "parameters": {
                 "assignments": {
                     "assignments": [
                         {
@@ -276,6 +249,30 @@
                             "name": "timeStart",
                             "value": "",
                             "type": "string"
+                        },
+                        {
+                            "id": "40efcba1-de32-4a76-b75c-b10743052978",
+                            "name": "timeEnd",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1748b5d8-f6de-4af4-a553-2ef68f22e06d",
+                            "name": "object.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "18ad8eb7-0e68-4679-ac12-3111e22d404c",
+                            "name": "object.name",
+                            "value": "={{ $json.content.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8dd19670-f55e-452d-86c5-67fec104e7b0",
+                            "name": "actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
                         }
                     ]
                 },
@@ -284,11 +281,280 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                1344,
-                -224
+                1536,
+                -240
             ],
             "id": "db3e0832-4865-4a76-999d-9d8e65ab6270",
-            "name": "Edit Fields4"
+            "name": "Create action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4a46d967-e671-4a8c-ab01-23139c8f69f0",
+                            "name": "@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "27cf0fec-e04d-4e81-bc5b-a6dbd5f4adb5",
+                            "name": "name",
+                            "value": "=Backup workflow to github -  {{ $json.content.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1d7996fb-2281-4514-8349-bc3b24cf568d",
+                            "name": "timeStart",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "40efcba1-de32-4a76-b75c-b10743052978",
+                            "name": "timeEnd",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1748b5d8-f6de-4af4-a553-2ef68f22e06d",
+                            "name": "object.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "18ad8eb7-0e68-4679-ac12-3111e22d404c",
+                            "name": "object.name",
+                            "value": "={{ $json.content.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8dd19670-f55e-452d-86c5-67fec104e7b0",
+                            "name": "actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1536,
+                -32
+            ],
+            "id": "ef516520-a281-4432-b7fa-5d274f4bb70a",
+            "name": "Create action1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4a46d967-e671-4a8c-ab01-23139c8f69f0",
+                            "name": "@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "27cf0fec-e04d-4e81-bc5b-a6dbd5f4adb5",
+                            "name": "name",
+                            "value": "=Backup workflow to github -  {{ $json.content.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1d7996fb-2281-4514-8349-bc3b24cf568d",
+                            "name": "timeStart",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "40efcba1-de32-4a76-b75c-b10743052978",
+                            "name": "timeEnd",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1748b5d8-f6de-4af4-a553-2ef68f22e06d",
+                            "name": "object.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "18ad8eb7-0e68-4679-ac12-3111e22d404c",
+                            "name": "object.name",
+                            "value": "={{ $json.content.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8dd19670-f55e-452d-86c5-67fec104e7b0",
+                            "name": "actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1536,
+                160
+            ],
+            "id": "7a885d2e-3ab1-441d-8de5-f96a4ad06ea6",
+            "name": "Create action2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4a46d967-e671-4a8c-ab01-23139c8f69f0",
+                            "name": "@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "27cf0fec-e04d-4e81-bc5b-a6dbd5f4adb5",
+                            "name": "name",
+                            "value": "=Backup workflow to github -  {{ $json.content.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1d7996fb-2281-4514-8349-bc3b24cf568d",
+                            "name": "timeStart",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "40efcba1-de32-4a76-b75c-b10743052978",
+                            "name": "timeEnd",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1748b5d8-f6de-4af4-a553-2ef68f22e06d",
+                            "name": "object.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "18ad8eb7-0e68-4679-ac12-3111e22d404c",
+                            "name": "object.name",
+                            "value": "={{ $json.content.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8dd19670-f55e-452d-86c5-67fec104e7b0",
+                            "name": "actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1536,
+                384
+            ],
+            "id": "2460057e-3578-4f70-958d-1a8e8a8ea5ce",
+            "name": "Create action3"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4a46d967-e671-4a8c-ab01-23139c8f69f0",
+                            "name": "@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "27cf0fec-e04d-4e81-bc5b-a6dbd5f4adb5",
+                            "name": "name",
+                            "value": "=Backup workflow to github",
+                            "type": "string"
+                        },
+                        {
+                            "id": "fa3e1dfa-a20c-4ae1-807c-35127c4cbdfb",
+                            "name": "description",
+                            "value": "=Duration: {{  ($now -  $('Edit Fields3').item.json.timeStart.toDateTime()) / 1000 }}s\nQuantity: {{  $json.result.length }}\nSuccess rate: {{ Math.round($json.result.filter(x => x.actionStatus == 'CompletedActionStatus').length / $json.result.length) * 100 }}%",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1d7996fb-2281-4514-8349-bc3b24cf568d",
+                            "name": "timeStart",
+                            "value": "={{ $('Edit Fields3').item.json.timeStart }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "40efcba1-de32-4a76-b75c-b10743052978",
+                            "name": "timeEnd",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1748b5d8-f6de-4af4-a553-2ef68f22e06d",
+                            "name": "object.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "18ad8eb7-0e68-4679-ac12-3111e22d404c",
+                            "name": "object.name",
+                            "value": "=",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8dd19670-f55e-452d-86c5-67fec104e7b0",
+                            "name": "actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b60471e8-40d9-49f4-93e7-399c78547f86",
+                            "name": "result",
+                            "value": "={{ $json.result.filter(x => x.actionStatus == 'CompletedActionStatus') }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "05fbe3f2-45a7-4300-a963-ffc8e089fe3a",
+                            "name": "error",
+                            "value": "={{ $json.result.filter(x => x.actionStatus == 'FailedActionStatus') }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2560,
+                -32
+            ],
+            "id": "a8cbb4cc-4a47-44e6-9b20-21e9ed4661df",
+            "name": "Wrapper action"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "destinationFieldName": "result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                2288,
+                -32
+            ],
+            "id": "f1615011-95cf-413b-81ba-e5bf1d52d9e4",
+            "name": "Aggregate"
         }
     ],
     "connections": {
@@ -345,10 +611,16 @@
         },
         "Create a file": {
             "main": [
-                [],
                 [
                     {
-                        "node": "Edit Fields1",
+                        "node": "Create action2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Create action3",
                         "type": "main",
                         "index": 0
                     }
@@ -359,14 +631,14 @@
             "main": [
                 [
                     {
-                        "node": "Edit Fields4",
+                        "node": "Create action",
                         "type": "main",
                         "index": 0
                     }
                 ],
                 [
                     {
-                        "node": "Edit Fields2",
+                        "node": "Create action1",
                         "type": "main",
                         "index": 0
                     }
@@ -384,7 +656,18 @@
                 ]
             ]
         },
-        "Edit Fields2": {
+        "Create action": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create action1": {
             "main": [
                 [
                     {
@@ -395,11 +678,44 @@
                 ]
             ]
         },
-        "Edit Fields4": {
+        "Create action3": {
             "main": [
                 [
                     {
                         "node": "Merge",
+                        "type": "main",
+                        "index": 3
+                    }
+                ]
+            ]
+        },
+        "Create action2": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 2
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate": {
+            "main": [
+                [
+                    {
+                        "node": "Wrapper action",
                         "type": "main",
                         "index": 0
                     }
@@ -415,7 +731,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "7378d387-6d71-443a-b41c-4e5c4e34d2e6",
+    "versionId": "400e5c32-d86d-4837-aa5d-ffc1475509f3",
     "triggerCount": 0,
     "shared": [
         {
