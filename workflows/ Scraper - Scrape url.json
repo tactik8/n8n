@@ -1,0 +1,204 @@
+{
+    "createdAt": "2025-06-19T19:31:32.127Z",
+    "updatedAt": "2025-06-20T13:45:33.000Z",
+    "id": "aH3Qumf6iWxqPpd6",
+    "name": "Scraper - Scrape url",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "url": "={{ $json.URL }}",
+                "sendHeaders": true,
+                "specifyHeaders": "json",
+                "jsonHeaders": "{\n  \"User-Agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:119.0) Gecko/20100101 Firefox/119.0\",\n  \"Accept\": \"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\",\n  \"Accept-Language\": \"en-CA,en;q=0.9\",\n  \"Accept-Encoding\": \"gzip, deflate, br\"\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                880,
+                0
+            ],
+            "id": "b457e791-bdf2-4385-8dec-bfe812e734db",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "operation": "extractHtmlContent",
+                "extractionValues": {
+                    "values": [
+                        {
+                            "key": "schema",
+                            "cssSelector": "script[type=\"application/ld+json\"]"
+                        },
+                        {
+                            "key": "title",
+                            "cssSelector": "title"
+                        },
+                        {
+                            "key": "lang",
+                            "cssSelector": "html",
+                            "returnValue": "attribute",
+                            "attribute": "lang"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.html",
+            "typeVersion": 1.2,
+            "position": [
+                1320,
+                0
+            ],
+            "id": "fb6109eb-755b-4f78-9eef-07e903725963",
+            "name": "HTML"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "URL"
+                        }
+                    ]
+                }
+            },
+            "id": "57addbd0-f5d7-47bb-b452-33410b299be3",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                660,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "599b814b-5729-4d14-9b32-738ae830555d",
+                            "name": "URL",
+                            "value": "={{ $('Start').item.json.URL }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0a69a4f6-81d5-4f57-ab73-95ea2c51bd29",
+                            "name": "date",
+                            "value": "={{ $now.setZone('UTC') }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1540,
+                0
+            ],
+            "id": "cdc1e144-216f-4996-9569-af19e625c1c9",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "be471152-03f2-4627-bfe5-8ad91600e5b5",
+                            "name": "URL",
+                            "value": "={{ $('Start').item.json.URL }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1100,
+                0
+            ],
+            "id": "59ef3a92-07d7-492b-9963-907b14173649",
+            "name": "Edit Fields1"
+        }
+    ],
+    "connections": {
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTML": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "HTML",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "URL": "https://www.mondou.com/fr-CA/nourriture-seche-recette-a-la-viande-rouge-pour-chiens-145-kg-1043486.html"
+                }
+            }
+        ]
+    },
+    "versionId": "33482c46-6412-47e2-b859-80be78dd0895",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-06-19T19:31:32.131Z",
+            "updatedAt": "2025-06-19T19:31:32.131Z",
+            "role": "workflow:owner",
+            "workflowId": "aH3Qumf6iWxqPpd6",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
