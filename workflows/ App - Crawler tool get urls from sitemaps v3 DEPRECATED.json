@@ -1,0 +1,1203 @@
+{
+    "createdAt": "2025-07-13T14:47:48.287Z",
+    "updatedAt": "2025-07-14T14:29:18.000Z",
+    "id": "EeYIbOv4INGbDbfM",
+    "name": "App - Crawler tool get urls from sitemaps v3 DEPRECATED",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "WebPage",
+                            "type": "object"
+                        },
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "id": "db15ea47-64e1-42dc-8ce4-5c648fbb81d1",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                2200,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "content": "## For sitemaps\nKeep sitemaps urls (.xml) and retrieve their urls",
+                "height": 340,
+                "width": 840
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                3500,
+                980
+            ],
+            "typeVersion": 1,
+            "id": "543ca95e-f7c7-458d-afbb-9164a0142f79",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "content": "## Process sitemaps\n",
+                "height": 580,
+                "width": 2380,
+                "color": 4
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                4480,
+                1360
+            ],
+            "typeVersion": 1,
+            "id": "d6df9040-87eb-4ca5-a59a-151a580209ef",
+            "name": "Sticky Note1"
+        },
+        {
+            "parameters": {
+                "content": "## Crawler sitemap\nRetrieves all urls from a website sitemap.\nFollows sitemaps of sitemaps.",
+                "height": 240,
+                "width": 960
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                2320,
+                160
+            ],
+            "typeVersion": 1,
+            "id": "fbc04fdf-d5a6-433e-8628-348d33c2a3ec",
+            "name": "Sticky Note2"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "yTYwOjUDjMwy3pIC",
+                    "mode": "list",
+                    "cachedResultName": "Schema Action"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ $workflow.name }}",
+                        "_record": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "object",
+                            "displayName": "object",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "instrument",
+                            "displayName": "instrument",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "agent",
+                            "displayName": "agent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "startTime",
+                            "displayName": "startTime",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "endTime",
+                            "displayName": "endTime",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "error",
+                            "displayName": "error",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2620,
+                700
+            ],
+            "id": "4cec4290-a16d-4ef8-861f-6e0ee6f9027b",
+            "name": "Get Action Object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "6aBdGuCcABE5Syhd",
+                    "mode": "list",
+                    "cachedResultName": "Schema Instrument"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ $workflow.name }}",
+                        "@id": "={{ $workflow.id }}",
+                        "@type": "WebAPI",
+                        "_parentRecord": "={{ $json }}",
+                        "_parentProperty": "instrument"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentRecord",
+                            "displayName": "_parentRecord",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2860,
+                700
+            ],
+            "id": "ab31152f-3b3d-4c73-89b8-506904e8ed26",
+            "name": "Add Instrument Object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "7G1kYE2HgBaJL6q4",
+                    "mode": "list",
+                    "cachedResultName": "Schema WebPage"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "_record": "={{ $('Start').item.json.WebPage }}",
+                        "_parentObject": "={{ $json }}",
+                        "_parentProperty": "object",
+                        "url": "={{ $('Start').item.json.WebPage.url }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "dateModified",
+                            "displayName": "dateModified",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "text",
+                            "displayName": "text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                3080,
+                700
+            ],
+            "id": "2025aa8a-bf57-4f84-b80e-0f42d88a4f50",
+            "name": "Add Object"
+        },
+        {
+            "parameters": {
+                "content": "## Action Object",
+                "height": 340,
+                "width": 4040
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                2500,
+                580
+            ],
+            "typeVersion": 1,
+            "id": "116b3f93-16f6-4bec-92ea-4cca238dca92",
+            "name": "Sticky Note3"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                3040,
+                420
+            ],
+            "id": "bcf4007e-6c6d-482e-aabb-45deef88c10e",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                5840,
+                420
+            ],
+            "id": "fa87c5f2-231d-4230-8da1-d4cba0ccc9d1",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "content": "## Error handling",
+                "height": 340,
+                "width": 4040
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                2740,
+                2060
+            ],
+            "typeVersion": 1,
+            "id": "129d3048-0653-4ad5-aef2-7f2601b183cf",
+            "name": "Sticky Note4"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "KuO1uLjUhqPXcCTh",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Set Action Failed"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "action": "={{ $json }}",
+                        "error": "={{ $json.error?.code || $json.error }} - {{   $json.error?.message || \"\" }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "action",
+                            "displayName": "action",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "error",
+                            "displayName": "error",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4640,
+                2200
+            ],
+            "id": "a11dda70-5809-47b1-b4f7-891283da28ee",
+            "name": "Set Failed"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                3280,
+                700
+            ],
+            "id": "5b9030cc-ccda-4f48-a43d-ea1dc53956e6",
+            "name": "Action Object"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "destinationFieldName": "result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                7460,
+                1580
+            ],
+            "id": "21787a4b-8b49-423d-b6e9-abadb8f9ee2e",
+            "name": "Aggregate",
+            "alwaysOutputData": false
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "54rv3ry6pfoWkI2j",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Set Action Add to result"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "action": "={{ $('Action Object').item.json }}",
+                        "result": "={{ $json.result }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "action",
+                            "displayName": "action",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                7740,
+                1580
+            ],
+            "id": "9146b2b8-862a-4172-97ae-ee5e80fa04b7",
+            "name": "Add to result 1",
+            "alwaysOutputData": false
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "XtxvU7eKcTCV3coV",
+                    "mode": "list",
+                    "cachedResultName": "App - Crawler tool get urls from sitemaps v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "WebPage": "={{  $json }}"
+                    },
+                    "matchingColumns": [
+                        "WebPage"
+                    ],
+                    "schema": [
+                        {
+                            "id": "WebPage",
+                            "displayName": "WebPage",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                6600,
+                1700
+            ],
+            "id": "2ec414fd-af96-4278-9e25-adb7aa8855fc",
+            "name": "Crawl sitemaps1",
+            "alwaysOutputData": false
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "dda64aa1-b448-455e-a7ca-90f76d4de4f5",
+                            "leftValue": "={{ $json.url }}",
+                            "rightValue": ".xml",
+                            "operator": {
+                                "type": "string",
+                                "operation": "contains"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.2,
+            "position": [
+                6400,
+                1700
+            ],
+            "id": "1ab4fc09-e65e-4698-830d-41c9932f5ec4",
+            "name": "Filter Sitemaps1"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                7220,
+                1580
+            ],
+            "id": "0872f00b-f4b5-410f-8041-289493bc8ec0",
+            "name": "Merge1"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                6780,
+                1700
+            ],
+            "id": "b1c97adf-8ee4-4b64-a5fe-dcd29c318012",
+            "name": "Split Out"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "0c07653d-607f-4727-a829-cdc6da7cbdac",
+                            "leftValue": "={{ $json.object.url }}",
+                            "rightValue": ".xml",
+                            "operator": {
+                                "type": "string",
+                                "operation": "contains"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                3680,
+                1120
+            ],
+            "id": "9d5b3dd2-286b-41ba-9780-ad3be6164429",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "9j3H0WrLsV5m3Yqp",
+                    "mode": "list",
+                    "cachedResultName": "Helpers - HTTP Request v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "WebPage or WebSite": "={{ $json.object }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "WebPage or WebSite",
+                            "displayName": "WebPage or WebSite",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                3980,
+                1120
+            ],
+            "id": "dc4bdb3d-77d6-413a-a835-26e15d1c58f9",
+            "name": "HTTP Get Content"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "ec88e358-6a2c-434b-8079-277c9ad4823d",
+                            "leftValue": "={{ $json.actionStatus }}",
+                            "rightValue": "CompletedActionStatus",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                4220,
+                1120
+            ],
+            "id": "465053ad-8e6c-4939-b007-10b276f7a257",
+            "name": "Is Success"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "x4W8bj4zPKCTAjd1",
+                    "mode": "list",
+                    "cachedResultName": "Helpers - sitemap content to WebPage"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json.result.text }}"
+                    },
+                    "matchingColumns": [
+                        "",
+                        "result_text"
+                    ],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4560,
+                1100
+            ],
+            "name": "Call Helpers - sitemap content to WebPage",
+            "id": "50a274bc-2d72-4566-a2f8-6f9bf54e1edd"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "destinationFieldName": "result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                4800,
+                1100
+            ],
+            "id": "3a1bea22-a40b-4264-9c81-ef76034343c0",
+            "name": "Aggregate1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "54rv3ry6pfoWkI2j",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Set Action Add to result"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "action": "={{ $('Action Object').item.json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "action",
+                            "displayName": "action",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                5120,
+                1100
+            ],
+            "id": "9877d764-24bc-411d-aa2c-6b895e4f7b62",
+            "name": "Execute Workflow"
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get Action Object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Action Object": {
+            "main": [
+                [
+                    {
+                        "node": "Add Instrument Object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add Instrument Object": {
+            "main": [
+                [
+                    {
+                        "node": "Add Object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add Object": {
+            "main": [
+                [
+                    {
+                        "node": "Action Object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                []
+            ]
+        },
+        "Action Object": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate": {
+            "main": [
+                [
+                    {
+                        "node": "Add to result 1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add to result 1": {
+            "main": [
+                []
+            ]
+        },
+        "Filter Sitemaps1": {
+            "main": [
+                [
+                    {
+                        "node": "Crawl sitemaps1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge1": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Crawl sitemaps1": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out": {
+            "main": [
+                [
+                    {
+                        "node": "Merge1",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Get Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Get Content": {
+            "main": [
+                [
+                    {
+                        "node": "Is Success",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is Success": {
+            "main": [
+                [
+                    {
+                        "node": "Call Helpers - sitemap content to WebPage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call Helpers - sitemap content to WebPage": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate1": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "callerPolicy": "workflowsFromSameOwner"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "WebPage": {
+                        "@context": "https://schema.org/",
+                        "@type": "WebPage",
+                        "@id": "webpage_1",
+                        "name": "webpage_1",
+                        "url": "https://www.mondou.com/sitemap_index.xml"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "WebPage": {
+                        "@context": "https://schema.org/",
+                        "@type": "WebPage",
+                        "@id": "webpage_3",
+                        "name": "webpage_3",
+                        "url": "https://www.mondou.com/sitemap_2-category.xml"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "WebPage": {
+                        "@context": "https://schema.org/",
+                        "@type": "WebPage",
+                        "@id": "webpage_2",
+                        "name": "webpage_2",
+                        "url": "https://www.test.com/sitemap_index.xml"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "ab649993-7995-4165-a5be-f0227003e791",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-13T14:47:48.291Z",
+            "updatedAt": "2025-07-13T14:47:48.291Z",
+            "role": "workflow:owner",
+            "workflowId": "EeYIbOv4INGbDbfM",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
