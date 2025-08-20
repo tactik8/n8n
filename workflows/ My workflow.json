@@ -1,24 +1,141 @@
 {
-    "createdAt": "2025-08-08T14:26:05.781Z",
-    "updatedAt": "2025-08-08T14:26:05.781Z",
-    "id": "XCWAhS5x8Wol3aV1",
+    "createdAt": "2025-07-02T15:46:56.124Z",
+    "updatedAt": "2025-07-11T13:30:23.000Z",
+    "id": "jP8k0aPSYSGxYmXv",
     "name": "My workflow",
     "active": false,
-    "isArchived": false,
-    "nodes": [],
-    "connections": {},
-    "settings": {},
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {
+                "public": true,
+                "options": {
+                    "responseMode": "responseNode"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -380,
+                0
+            ],
+            "id": "87095aeb-6923-4b93-bbe4-155df04850fb",
+            "name": "When chat message received",
+            "webhookId": "d5d12dfe-2bd8-47b7-b214-3d16edf29e26"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "97125272-2eb2-4240-afa1-b43ccc205cfe",
+                            "name": "text",
+                            "value": "success",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                440,
+                0
+            ],
+            "id": "0cd9f777-ac5b-4337-bab3-ed4207737903",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "enableResponseOutput": true,
+                "respondWith": "text",
+                "responseBody": "={{ $json.text }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.4,
+            "position": [
+                660,
+                0
+            ],
+            "id": "04ffdd7d-48da-41b7-b2a4-64182e5ddb53",
+            "name": "Respond to Webhook"
+        },
+        {
+            "parameters": {
+                "enableResponseOutput": true,
+                "respondWith": "text",
+                "responseBody": "got it",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.4,
+            "position": [
+                -160,
+                0
+            ],
+            "id": "6553c0a9-0e3f-45d1-9fb6-255523d9855c",
+            "name": "Respond to Webhook1",
+            "alwaysOutputData": true
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Respond to Webhook1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
     "staticData": null,
     "meta": null,
-    "pinData": null,
-    "versionId": "0f50f18f-6492-4d48-9db0-b21831792ff6",
+    "pinData": {},
+    "versionId": "a5a309e7-2512-465b-9e4d-1c45b38c1fb0",
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-08-08T14:26:05.783Z",
-            "updatedAt": "2025-08-08T14:26:05.783Z",
+            "createdAt": "2025-07-02T15:46:56.127Z",
+            "updatedAt": "2025-07-02T15:46:56.127Z",
             "role": "workflow:owner",
-            "workflowId": "XCWAhS5x8Wol3aV1",
+            "workflowId": "jP8k0aPSYSGxYmXv",
             "projectId": "q4hW5jXLU3axUty6"
         }
     ],
