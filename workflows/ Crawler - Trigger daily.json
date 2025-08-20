@@ -1,0 +1,162 @@
+{
+    "createdAt": "2025-06-19T18:38:29.081Z",
+    "updatedAt": "2025-07-09T13:32:40.000Z",
+    "id": "4Gg5zdxfPHnetZEk",
+    "name": "Crawler - Trigger daily",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "triggerAtHour": 7,
+                            "triggerAtMinute": 1
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "b5e5840e-3883-4c74-b55c-4f13b336903a",
+            "name": "Schedule Trigger"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "Yovx9TZzVB0puo2I",
+                    "mode": "list",
+                    "cachedResultName": "Crawler - Pipeline"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "c367cddc-950d-4e1b-9c06-265c20ade10c",
+            "name": "Execute Crawler"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "uGXPoIeFYJQIvotq",
+                    "mode": "list",
+                    "cachedResultName": "Scraper - Pipeline"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                660,
+                0
+            ],
+            "id": "8a806ac3-d708-43dd-bf6e-d1374335a110",
+            "name": "Execute Scraper"
+        },
+        {
+            "parameters": {
+                "fieldsToSummarize": {
+                    "values": [
+                        {
+                            "field": "crawlID"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.summarize",
+            "typeVersion": 1.1,
+            "position": [
+                440,
+                0
+            ],
+            "id": "b1bbe57a-9aad-4dc1-94ac-03f4b960c6da",
+            "name": "Summarize"
+        }
+    ],
+    "connections": {
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Crawler",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Crawler": {
+            "main": [
+                [
+                    {
+                        "node": "Summarize",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Summarize": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Scraper",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": {
+        "node:Schedule Trigger": {
+            "recurrenceRules": []
+        }
+    },
+    "meta": null,
+    "pinData": {},
+    "versionId": "7542e627-bb7a-4d05-b993-dc9650e81e9a",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "createdAt": "2025-06-19T18:38:29.084Z",
+            "updatedAt": "2025-06-19T18:38:29.084Z",
+            "role": "workflow:owner",
+            "workflowId": "4Gg5zdxfPHnetZEk",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
