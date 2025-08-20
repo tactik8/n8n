@@ -1,0 +1,94 @@
+{
+    "createdAt": "2025-08-03T16:00:55.439Z",
+    "updatedAt": "2025-08-03T16:00:55.439Z",
+    "id": "2MtCW38Zr62JlaQw",
+    "name": "My workflow 3",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Go.",
+                "options": {
+                    "allowFileUploads": true,
+                    "responseMode": "responseNode"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "a9bf7b68-c1a0-46af-8de8-4cf1a48ed982",
+            "name": "When chat message received",
+            "webhookId": "8626beda-8121-44d0-bfa2-94d87f7170ea"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "7346e6f5-d469-4f3b-8e5a-266e747e5c48",
+                            "leftValue": "",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "7eaac056-69ac-417e-82de-ab0e970d2502",
+            "name": "If"
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "97b3c5fb-0f3c-425e-a367-5198651b1571",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-08-03T16:00:55.450Z",
+            "updatedAt": "2025-08-03T16:00:55.450Z",
+            "role": "workflow:owner",
+            "workflowId": "2MtCW38Zr62JlaQw",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
