@@ -1,0 +1,526 @@
+{
+    "createdAt": "2025-06-19T16:01:24.596Z",
+    "updatedAt": "2025-07-11T17:35:11.000Z",
+    "id": "Yovx9TZzVB0puo2I",
+    "name": "Crawler - Pipeline V1",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                1080,
+                660
+            ],
+            "id": "7998eafc-fbe3-486c-a2fc-ef31a1d0694c",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "action": "generate",
+                "dataPropertyName": "jobID"
+            },
+            "type": "n8n-nodes-base.crypto",
+            "typeVersion": 1,
+            "position": [
+                1300,
+                660
+            ],
+            "id": "41a1c003-2b0e-4fae-be89-27fc81df7f2f",
+            "name": "Set jobID"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 772014790,
+                    "mode": "list",
+                    "cachedResultName": "Jobs",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=772014790"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "jobID": "={{ $json.jobID }}",
+                        "Date": "={{ $now.setZone('UTC') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "jobID",
+                            "displayName": "jobID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Date",
+                            "displayName": "Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                1520,
+                660
+            ],
+            "id": "8dbc6d4f-0c4c-4456-a675-148b0d86f8dc",
+            "name": "Log job Initialization",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Websites",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=0"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                1740,
+                660
+            ],
+            "id": "ad85de55-2c16-450a-89bf-08ec4e646a02",
+            "name": "Retrieve sites",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "V26Tb92HmiOdJpi6",
+                    "mode": "list",
+                    "cachedResultName": "Crawler V2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "jobID": "={{ $('Set jobID').item.json.jobID }}",
+                        "website": "={{ $json.url }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "jobID",
+                            "displayName": "jobID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "website",
+                            "displayName": "website",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {
+                    "waitForSubWorkflow": true
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1960,
+                560
+            ],
+            "id": "4523a08e-c346-4b1a-a906-ad2886e822b3",
+            "name": "Execute Workflow"
+        },
+        {
+            "parameters": {
+                "content": "## Crawler pipeline\nRetrieve websites to crawl from google sheets. \n\nInput: \nList of sites in google sheets\n\nOutput:\nUpdates sheets with urls",
+                "height": 200
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                820,
+                560
+            ],
+            "typeVersion": 1,
+            "id": "78d32cb0-8a2f-40cd-a4eb-76a9f38f2b84",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 772014790,
+                    "mode": "list",
+                    "cachedResultName": "Jobs",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=772014790"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "jobID": "={{ $('Set jobID').item.json.jobID }}",
+                        "ActionStatus": "CompletedActionStatus",
+                        "urls": "={{ $json.max_count_url }}",
+                        "sites": "={{ $json.max_sum_URLs_found }}"
+                    },
+                    "matchingColumns": [
+                        "jobID"
+                    ],
+                    "schema": [
+                        {
+                            "id": "jobID",
+                            "displayName": "jobID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Date",
+                            "displayName": "Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "ActionStatus",
+                            "displayName": "ActionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "sites",
+                            "displayName": "sites",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "urls",
+                            "displayName": "urls",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                3080,
+                620
+            ],
+            "id": "624f1d65-e653-4bd4-9d73-04d9a8853497",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "fieldsToSummarize": {
+                    "values": [
+                        {
+                            "field": "url"
+                        },
+                        {
+                            "aggregation": "sum",
+                            "field": "URLs found"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.summarize",
+            "typeVersion": 1.1,
+            "position": [
+                2180,
+                560
+            ],
+            "id": "8b1cd597-b91f-4ea6-a166-fe44d517b91f",
+            "name": "Summarize"
+        },
+        {
+            "parameters": {
+                "fieldsToSummarize": {
+                    "values": [
+                        {
+                            "field": "url"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.summarize",
+            "typeVersion": 1.1,
+            "position": [
+                2180,
+                760
+            ],
+            "id": "ef36aeb4-b65e-4cad-9a38-244c15fe3c9a",
+            "name": "SummarizeSites"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                2460,
+                620
+            ],
+            "id": "2a2c7fde-8e65-473e-9143-82fb0fd5e87d",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "fieldsToSummarize": {
+                    "values": [
+                        {
+                            "aggregation": "max",
+                            "field": "count_url"
+                        },
+                        {
+                            "aggregation": "max",
+                            "field": "sum_URLs_found"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.summarize",
+            "typeVersion": 1.1,
+            "position": [
+                2680,
+                620
+            ],
+            "id": "85a9db88-3b9f-4b09-8627-c560aba327cb",
+            "name": "Summarize1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Set jobID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set jobID": {
+            "main": [
+                [
+                    {
+                        "node": "Log job Initialization",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Log job Initialization": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve sites",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve sites": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "SummarizeSites",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Summarize",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Summarize": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "SummarizeSites": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Summarize1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Summarize1": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateId": "4671",
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "jobID": "abc123",
+                    "jobDate": "2025-06-19T16:28:11.260Z"
+                }
+            }
+        ]
+    },
+    "versionId": "2fad0e5d-7486-47c4-8d3c-62aa86afa81a",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-06-19T16:01:24.600Z",
+            "updatedAt": "2025-06-19T16:01:24.600Z",
+            "role": "workflow:owner",
+            "workflowId": "Yovx9TZzVB0puo2I",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
