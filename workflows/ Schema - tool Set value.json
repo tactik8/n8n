@@ -1,0 +1,131 @@
+{
+    "createdAt": "2025-07-12T18:58:13.340Z",
+    "updatedAt": "2025-07-12T19:23:36.000Z",
+    "id": "WEkbT2iQvJuibvTk",
+    "name": "Schema - tool Set value",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "propertyID_prefix"
+                        },
+                        {
+                            "name": "propertyID0"
+                        },
+                        {
+                            "name": "value0"
+                        },
+                        {
+                            "name": "propertyID1"
+                        },
+                        {
+                            "name": "value1"
+                        },
+                        {
+                            "name": "propertyID2"
+                        },
+                        {
+                            "name": "value2"
+                        },
+                        {
+                            "name": "propertyID3"
+                        },
+                        {
+                            "name": "value3"
+                        },
+                        {
+                            "name": "propertyID4"
+                        },
+                        {
+                            "name": "value4"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "b1da9d54-e260-41f8-bed9-36aa46f7a680",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "mode": "runOnceForEachItem",
+                "jsCode": "// Add a new field called 'myNewField' to the JSON of the item\n\n\nfunction setValue(record, fullPath, value) {\n\n\n  if(record === undefined || record === null){\n    return record\n  }\n\n  if(fullPath === undefined || fullPath === null){\n    return record\n  }\n\n  \n  if(Array.isArray(record)){\n    return record.map(x => setValue(x, fullPath, value))\n  }\n\n  \n  let pathItems = fullPath.split('.')\n\n  // Get path item\n  let path = pathItems[0]\n  path = path.split('[')[0]\n  let pathItemsRemaining = pathItems.slice(1)\n\n\n  // Get path position\n  let pathPosition = pathItems[0].split('[')?.[1]\n  if (pathPosition) {\n    pathPosition = pathPosition.split(']')?.[0] || 0\n    try {\n      pathPosition = parseInt(pathPosition || 0)\n    } catch (error) {\n\n    }\n  } else {\n    pathPosition = 0\n  }\n\n\n  // Create values if missing items\n  let subRecords = record?.[path] || []\n  subRecords = Array.isArray(subRecords) ? subRecords : [subRecords]\n\n  // Add values is position less than length\n  while (subRecords.length < pathPosition + 1) {\n    subRecords.push({  })\n  }\n  record[path] = subRecords\n\n  // Set value\n  if (pathItemsRemaining && pathItemsRemaining.length > 0) {\n\n    let currentValue = record[path][pathPosition]\n    record[path][pathPosition] = setValue(currentValue, pathItemsRemaining.join('.'), value)\n\n  } else {\n    record[path][pathPosition] = value\n  }\n\n\n  // Clean up\n  if(record[path].length === 0){\n    record[path] = undefined\n  }\n  \n  if(record[path].length === 1){\n    record[path] = record[path][0]\n  }\n  \n  return record\n}\n\n// Main\n\nlet record = $input.item.json?.record\nlet propertyID_prefix = $input.item.json?.propertyID_prefix || undefined\n\nif(record === undefined || record === null){\n    return {}\n  }\n\nfor(let x=0; x< 5; x++){\n\n  let propertyID = $input.item.json?.['propertyID' + String(x)]\n  let value = $input.item.json?.['value' + String(x)]\n\n  if(propertyID === undefined || propertyID === null){\n    continue\n  }\n\n  if(propertyID_prefix){\n    propertyID = propertyID_prefix + '.' + propertyID\n  }\n  \n  record = setValue(record, propertyID, value)\n  \n}\n\nreturn record\n\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "788a200a-9d43-4bf8-ad33-b006ede0227a",
+            "name": "Code"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "record": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1",
+                        "other": {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing2",
+                            "name": "thing2"
+                        }
+                    },
+                    "propertyID0": "other.name",
+                    "value0": "newName",
+                    "propertyID2": "other.name2",
+                    "value2": "newName2"
+                }
+            }
+        ]
+    },
+    "versionId": "0b6a709b-1e8a-4683-96b6-53971371ad08",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-12T18:58:13.347Z",
+            "updatedAt": "2025-07-12T18:58:13.347Z",
+            "role": "workflow:owner",
+            "workflowId": "WEkbT2iQvJuibvTk",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
