@@ -1,0 +1,188 @@
+{
+    "createdAt": "2025-08-08T13:06:49.253Z",
+    "updatedAt": "2025-08-08T13:10:52.000Z",
+    "id": "XKE1h30uYNDPsD8J",
+    "name": "App - Prompt DB Get Prompts",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -100,
+                -200
+            ],
+            "id": "562507ba-323b-450e-b913-4d2c1bb4c619",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU",
+                    "mode": "list",
+                    "cachedResultName": "AI Prompts",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1R-znEmkWOZHpVGOXZ2T4w1z850dfae0O0-d2FkM3azU/edit#gid=0"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                240,
+                -200
+            ],
+            "id": "92f872ba-bce5-40f6-950e-321e434846cf",
+            "name": "Google Sheets",
+            "executeOnce": false,
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a44eae08-176a-45ef-bde7-289197c42db8",
+                            "name": "@type",
+                            "value": "Prompt",
+                            "type": "string"
+                        },
+                        {
+                            "id": "be7205e1-21df-40cd-8850-e82a295fd17a",
+                            "name": "@id",
+                            "value": "={{ $json.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a59c8a22-b885-41ff-b5d6-f0791dd46820",
+                            "name": "name",
+                            "value": "={{ $json.id }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                740,
+                -200
+            ],
+            "id": "c0a0cabf-364e-459b-bc7e-9b48f04ff7f5",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "fieldsToSummarize": {
+                    "values": [
+                        {
+                            "field": "id"
+                        }
+                    ]
+                },
+                "fieldsToSplitBy": "id",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.summarize",
+            "typeVersion": 1.1,
+            "position": [
+                460,
+                -200
+            ],
+            "id": "ccf6cd1e-b14e-4c83-b3bf-b6b179483037",
+            "name": "Summarize"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Summarize",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                []
+            ]
+        },
+        "Summarize": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "id": "Market Insight Analyst, biz-strategy-agent-common-guidelines"
+                }
+            }
+        ]
+    },
+    "versionId": "36ae82b2-9a64-4823-bcaa-11659295b44f",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-08-08T13:06:49.258Z",
+            "updatedAt": "2025-08-08T13:06:49.258Z",
+            "role": "workflow:owner",
+            "workflowId": "XKE1h30uYNDPsD8J",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T13:27:12.728Z",
+            "updatedAt": "2025-07-11T13:28:29.033Z",
+            "id": "ZoyZr6DZSDRTzi0t",
+            "name": "type:app"
+        }
+    ]
+}
