@@ -1,0 +1,168 @@
+{
+    "createdAt": "2025-07-08T15:37:39.137Z",
+    "updatedAt": "2025-07-13T19:34:51.000Z",
+    "id": "6aBdGuCcABE5Syhd",
+    "name": "Schema Instrument",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "_record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentRecord",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentProperty"
+                        },
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "name"
+                        },
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "a1665f4c-5a65-4daa-b28a-db7782232ee9",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "UHVbnm4d896IS4aO",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool make Dynamic Thing"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "a9537b26-d03f-4122-8bc4-08811f4287d7",
+            "name": "Execute Workflow"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "_record": {
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    },
+                    "_parentRecord": {
+                        "@type": "Thing",
+                        "@id": "thingParent",
+                        "name": "thingParent"
+                    },
+                    "_parentProperty": "parentProperty",
+                    "@type": "NewsArticle",
+                    "@id": "someid",
+                    "name": "some name",
+                    "url": "some url"
+                }
+            }
+        ]
+    },
+    "versionId": "2757b677-4775-4ab7-817a-28559cbadb84",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T15:37:39.143Z",
+            "updatedAt": "2025-07-08T15:37:39.143Z",
+            "role": "workflow:owner",
+            "workflowId": "6aBdGuCcABE5Syhd",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
