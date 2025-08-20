@@ -1,0 +1,181 @@
+{
+    "createdAt": "2025-07-11T17:35:17.711Z",
+    "updatedAt": "2025-07-12T20:21:41.000Z",
+    "id": "cPUha4oFMwAjOzIK",
+    "name": "Crawler - Pipeline V2",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                1060,
+                620
+            ],
+            "id": "bd4d3bca-2474-4066-aa0a-71c5e9b04b16",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Websites",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=0"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                1280,
+                620
+            ],
+            "id": "be2020e4-ca79-4c92-8238-a7a2f0344c07",
+            "name": "Retrieve sites",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "## Crawler pipeline\nRetrieve websites to crawl from google sheets. \n\nInput: \nList of sites in google sheets\n\nOutput:\nUpdates sheets with urls",
+                "height": 200
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                700,
+                520
+            ],
+            "typeVersion": 1,
+            "id": "ba370cac-e193-45b6-8dec-49f74b54b6a9",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "cwa0MAp8OYTBPiPv",
+                    "mode": "list",
+                    "cachedResultName": "Crawler - Crawl Website V3"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.url }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "WebSite",
+                            "displayName": "WebSite",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {
+                    "waitForSubWorkflow": true
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1500,
+                620
+            ],
+            "id": "c0fd95f7-8385-48bf-b5a5-36d5a13bcc18",
+            "name": "Crawl Website"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve sites",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve sites": {
+            "main": [
+                [
+                    {
+                        "node": "Crawl Website",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Crawl Website": {
+            "main": [
+                [],
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateId": "4671",
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "jobID": "abc123",
+                    "jobDate": "2025-06-19T16:28:11.260Z"
+                }
+            }
+        ]
+    },
+    "versionId": "18c20e41-3793-4255-9de3-b486edd9a110",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T17:35:17.715Z",
+            "updatedAt": "2025-07-11T17:35:17.715Z",
+            "role": "workflow:owner",
+            "workflowId": "cPUha4oFMwAjOzIK",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
