@@ -1,0 +1,204 @@
+{
+    "createdAt": "2025-07-02T12:25:24.678Z",
+    "updatedAt": "2025-07-12T12:51:08.000Z",
+    "id": "KuO1uLjUhqPXcCTh",
+    "name": "Schema - tool Set Action Failed",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "action",
+                            "type": "object"
+                        },
+                        {
+                            "name": "error"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "78b391b5-f0a8-4fed-ae7c-273aae5ece50",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0123bc52-60d2-4804-b477-0fe86a373682",
+                            "name": "action.actionStatus",
+                            "value": "=FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c1f0fe87-4e27-45e5-94d4-05967aa252cb",
+                            "name": "action.startTime",
+                            "value": "={{ $json.action.startTime || $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7e4ed611-3944-43f4-a803-f77db180c225",
+                            "name": "action.endTime",
+                            "value": "={{ $json.action.endTime || $now}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2dc56f33-6ce1-4217-a400-58a8a556c234",
+                            "name": "action.error",
+                            "value": "={{ $json.error }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {
+                    "ignoreConversionErrors": false
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                220,
+                0
+            ],
+            "id": "b8e35c80-336b-497a-8bd9-9098c06bdf2c",
+            "name": "Set default values"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "46d8ccc1-0c71-4375-812d-a93deae7a4ee",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                440,
+                0
+            ],
+            "id": "7eba7cde-8efa-469f-8a82-802b68e88dc0",
+            "name": "Keep only action"
+        },
+        {
+            "parameters": {
+                "mode": "runOnceForEachItem",
+                "jsCode": "// Add a new field called 'myNewField' to the JSON of the item\n\nreturn $input.item.json.action;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                660,
+                0
+            ],
+            "id": "11f8fd89-9ce6-4634-8e12-f914f068e573",
+            "name": "Code1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Set default values",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set default values": {
+            "main": [
+                [
+                    {
+                        "node": "Keep only action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Keep only action": {
+            "main": [
+                [
+                    {
+                        "node": "Code1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code1": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "action": {
+                        "@type": "action",
+                        "@id": "action_1",
+                        "name": "action_1",
+                        "actionStatus": "completedActionStatus",
+                        "startTime": "",
+                        "endTime": "",
+                        "object": "",
+                        "result": "",
+                        "instrument": ""
+                    },
+                    "error": "error message"
+                }
+            }
+        ]
+    },
+    "versionId": "08ef010e-1d49-4861-8f53-5cebc2fb65fe",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T12:25:24.682Z",
+            "updatedAt": "2025-07-02T12:25:24.682Z",
+            "role": "workflow:owner",
+            "workflowId": "KuO1uLjUhqPXcCTh",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:24:58.354Z",
+            "updatedAt": "2025-07-11T13:29:26.063Z",
+            "id": "r2cvYyX9826F5fV6",
+            "name": "type:tool"
+        }
+    ]
+}
