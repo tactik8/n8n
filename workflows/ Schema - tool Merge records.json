@@ -1,0 +1,133 @@
+{
+    "createdAt": "2025-07-13T18:11:50.502Z",
+    "updatedAt": "2025-07-13T18:30:37.000Z",
+    "id": "YCqzHWLR1srmpXbf",
+    "name": "Schema - tool Merge records",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "object1",
+                            "type": "object"
+                        },
+                        {
+                            "name": "object2",
+                            "type": "object"
+                        },
+                        {
+                            "name": "object3",
+                            "type": "object"
+                        },
+                        {
+                            "name": "object4",
+                            "type": "object"
+                        },
+                        {
+                            "name": "object5",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "f03232a2-5ff4-4e8c-8e90-6f0934b400af",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "\n\nfunction containsValue(values, value){\n\n  values = Array.isArray(values) ? values : [values]\n    \n  for(let v of values){\n\n    if(value?.['@type'] && value?.['@id']){\n      if(v?.['@type'] == value?.['@type']){\n        if(v?.['@id'] == value?.['@id']){\n          return true\n      }\n    }\n    }\n\n    if(v == value){\n      return true\n    }\n  }\n  return false\n  \n}\n\nfunction mergeObject(object1, object2){\n  \n  let newObject = {}\n\n  for(let k in object1){\n    \n    let values1 = object1?.[k]\n    values1 = Array.isArray(values1) ? values1 : [values1]\n    values1 = values1.filter(x => x !== undefined && x !== null)\n\n    \n    let values2 = object2?.[k]\n    values2 = Array.isArray(values2) ? values2 : [values2]\n    values2 = values2.filter(x => x !== undefined && x !== null)\n\n    let newValues = []\n\n    for(let v1 of values1){\n      if(containsValue(newValues, v1) === false){\n        newValues.push(v1)\n      }\n    }\n    \n    for(let v2 of values2){\n      if(containsValue(newValues, v2) === false){\n        newValues.push(v2)\n      }\n    }\n\n    newValues = newValues.length === 1 ? newValues[0] : newValues\n\n    newObject[k] = newValues\n\n    \n  }\n\n  return newObject\n  \n  \n\n}\n\n\nfunction mergeMultipleObjects(objects){\n\n  let base = objects[0]\n\n  for(let i=1; i< objects.length; i++){\n    base = mergeObject(base, objects[i])\n  }\n  return base\n}\n\n\n// Process all items\nfor (let item of $input.all()){\n  item.json = mergeMultipleObjects([item.json.object1, item.json.object2, item.json.object3, item.json.object4, item.json.object5])\n}\n\nreturn  $input.all()\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "f7716239-b2d3-4147-806f-a807c626b66e",
+            "name": "Code"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "object1": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1",
+                        "other": {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing2",
+                            "name": "thing2"
+                        }
+                    },
+                    "object2": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1",
+                        "other": {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing3",
+                            "name": "thing3"
+                        }
+                    },
+                    "object3": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1",
+                        "other": {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing4",
+                            "name": "thing4"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "148068e5-6f8b-4fe8-be99-075c961b1023",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-13T18:11:50.508Z",
+            "updatedAt": "2025-07-13T18:11:50.508Z",
+            "role": "workflow:owner",
+            "workflowId": "YCqzHWLR1srmpXbf",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
