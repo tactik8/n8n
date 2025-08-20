@@ -1,0 +1,1012 @@
+{
+    "createdAt": "2025-07-11T14:05:42.437Z",
+    "updatedAt": "2025-07-11T16:46:52.000Z",
+    "id": "4nUYH72irunRuEB2",
+    "name": "App - CDN post v1",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "projectID"
+                        },
+                        {
+                            "name": "filename"
+                        },
+                        {
+                            "name": "text"
+                        },
+                        {
+                            "name": "record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "records",
+                            "type": "array"
+                        },
+                        {
+                            "name": "url"
+                        },
+                        {
+                            "name": "data",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -580,
+                120
+            ],
+            "id": "2380c38f-f9d2-43db-b0a9-2aa9eb4b0a8e",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "9a517fe7-bbf7-4acf-84e3-0ca95d54984b",
+                                        "leftValue": "={{ $json?.data }}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "boolean",
+                                            "operation": "exists",
+                                            "singleValue": true
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "binary"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "d69c8c17-cf4f-41b9-9a87-bb58c212cc31",
+                                        "leftValue": "={{ $json?.record }}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "object",
+                                            "operation": "exists",
+                                            "singleValue": true
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "record"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "08aec5f6-6d12-4d16-9479-4f348ad51491",
+                                        "leftValue": "={{ $json?.records }}",
+                                        "rightValue": 0,
+                                        "operator": {
+                                            "type": "array",
+                                            "operation": "lengthGt",
+                                            "rightType": "number"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "records"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "eeb104ce-be40-44dc-930b-3d1d09647076",
+                                        "leftValue": "={{ $json?.url }}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "notEmpty",
+                                            "singleValue": true
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "url"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json?.text }}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "notEmpty",
+                                            "singleValue": true
+                                        },
+                                        "id": "19742ec5-acc3-4954-b45a-2c200852b783"
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "text"
+                        }
+                    ]
+                },
+                "options": {
+                    "allMatchingOutputs": true
+                }
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                300,
+                78
+            ],
+            "id": "86347f9d-873b-4f9a-97ee-3d30e88cedf7",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "52f18861-8a1c-4b8f-b659-06281d6d9066",
+                            "name": "tenantID",
+                            "value": "cdn_v1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -360,
+                120
+            ],
+            "id": "6752f70c-e5bd-4689-9ea0-af130a718658",
+            "name": "Add tenantID"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "931THV5mo5mQDBRw",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Storage Post File"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $('Edit Fields1').item.json.tenantID }}",
+                        "projectID": "={{ $('Edit Fields1').item.json.projectID }}",
+                        "filename": "={{ $('Edit Fields1').item.json.filename }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                960,
+                120
+            ],
+            "id": "6d140d5f-1415-43a1-b43a-5ff3ae31659b",
+            "name": "Post File to Google Cloud Storage"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "file"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                740,
+                320
+            ],
+            "id": "6a5ac7ae-7020-480f-9ded-13d53fc95bfb",
+            "name": "Retrieve file form URL"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f7faad9c-137d-4d9a-84e2-8bd632dfaf88",
+                            "name": "records",
+                            "value": "={{ Array.isArray($json.records) ? $json.records : [$json.records] }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -140,
+                120
+            ],
+            "id": "be259726-c9a5-4505-9cc3-07d98ed4244f",
+            "name": "Ensure array"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                520,
+                -280
+            ],
+            "id": "0a5fb243-2498-4c4d-ac00-7321002c159b",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a0fa6761-0463-4cfa-be12-1ca8a9c10c58",
+                            "name": "records",
+                            "value": "={{ $json.records.filter(x => x !== null) }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                80,
+                120
+            ],
+            "id": "8b93b8de-cb91-4cda-bd48-1fb81bbf97ff",
+            "name": "Remove nulls from array"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "931THV5mo5mQDBRw",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Storage Post File"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $('Edit Fields').item.json.tenantID }}",
+                        "projectID": "={{ $('Edit Fields').item.json.projectID }}",
+                        "filename": "={{ $('Edit Fields').item.json.filename }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                740,
+                -280
+            ],
+            "id": "ebcbea25-1892-4705-9547-338d30b7f2f2",
+            "name": "Post File to Google Cloud Storage1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "931THV5mo5mQDBRw",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Storage Post File"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $('Edit Fields2').item.json.tenantID }}",
+                        "projectID": "={{ $('Edit Fields2').item.json.projectID }}",
+                        "filename": "={{ $('Edit Fields2').item.json.filename }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                960,
+                -80
+            ],
+            "id": "5da62aa2-47dd-4d78-9b84-856ff9daf65f",
+            "name": "Post File to Google Cloud Storage2"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "931THV5mo5mQDBRw",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Storage Post File"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $json.tenantID }}",
+                        "projectID": "={{ $json.projectID }}",
+                        "filename": "={{ $json.filename }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                960,
+                320
+            ],
+            "id": "a9b659df-cd69-45e2-8b4c-ecca1fe7f2c7",
+            "name": "Post File to Google Cloud Storage3"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "931THV5mo5mQDBRw",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Storage Post File"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $('Edit Fields4').item.json.tenantID }}",
+                        "projectID": "={{ $('Edit Fields4').item.json.projectID }}",
+                        "filename": "={{ $('Edit Fields4').item.json.filename }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                960,
+                520
+            ],
+            "id": "7d7e3643-a20c-44ef-b057-b90e65b27fe7",
+            "name": "Post File to Google Cloud Storage4"
+        },
+        {
+            "parameters": {
+                "operation": "toText",
+                "sourceProperty": "content",
+                "options": {
+                    "encoding": "utf8",
+                    "fileName": "={{ $json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                740,
+                -80
+            ],
+            "id": "2f212824-5005-43d6-b11d-02b196399663",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8b364e30-a502-4287-9d69-b2734dd6d8a1",
+                            "name": "content",
+                            "value": "={{JSON.stringify( $json.record , null, 4)}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                520,
+                -80
+            ],
+            "id": "98b01195-2029-42ad-93c8-8eead0c89684",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "15199090-3de4-4e01-a5b7-0f0f4ddc549a",
+                            "name": "=content",
+                            "value": "={{JSON.stringify( $json.records , null, 4)}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                520,
+                120
+            ],
+            "id": "4f0c3569-f8b5-4a4b-bf9c-1ff325c0b30c",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "operation": "toText",
+                "sourceProperty": "content",
+                "options": {
+                    "encoding": "utf8",
+                    "fileName": "={{ $json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                740,
+                120
+            ],
+            "id": "3d3c5995-83bd-4f38-bd24-f09da2b61a6e",
+            "name": "Convert to File1"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                520,
+                320
+            ],
+            "id": "dc4eceb6-6e9b-4d2d-a529-14f2e9976fe5",
+            "name": "Edit Fields3"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                520,
+                520
+            ],
+            "id": "86616642-be47-42d5-ab78-0b7d124e6467",
+            "name": "Edit Fields4"
+        },
+        {
+            "parameters": {
+                "operation": "toText",
+                "sourceProperty": "text",
+                "options": {
+                    "encoding": "utf8",
+                    "fileName": "={{ $json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                740,
+                520
+            ],
+            "id": "6c9522f7-833e-4ca8-b978-daf5d4966bb3",
+            "name": "Convert to File2"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Add tenantID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add tenantID": {
+            "main": [
+                [
+                    {
+                        "node": "Ensure array",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve file form URL": {
+            "main": [
+                [
+                    {
+                        "node": "Post File to Google Cloud Storage3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Post File to Google Cloud Storage": {
+            "main": [
+                []
+            ]
+        },
+        "Ensure array": {
+            "main": [
+                [
+                    {
+                        "node": "Remove nulls from array",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Post File to Google Cloud Storage1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Remove nulls from array": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "Post File to Google Cloud Storage2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File1": {
+            "main": [
+                [
+                    {
+                        "node": "Post File to Google Cloud Storage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields3": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve file form URL",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields4": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File2": {
+            "main": [
+                [
+                    {
+                        "node": "Post File to Google Cloud Storage4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "projectID": "test_project_v1",
+                    "filename": "file_to_save.txt",
+                    "text": "Some content to save"
+                }
+            },
+            {
+                "json": {
+                    "projectID": "test_project_v1",
+                    "filename": "file_to_save.txt",
+                    "record": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "projectID": "test_project_v1",
+                    "filename": "file_to_save.txt",
+                    "records": [
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing1",
+                            "name": "thing1"
+                        },
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing2",
+                            "name": "thing2"
+                        }
+                    ]
+                }
+            },
+            {
+                "json": {
+                    "projectID": "test_project_v1",
+                    "filename": "file_to_save.txt",
+                    "url": "https://www.wikipedia.org"
+                }
+            },
+            {
+                "json": {
+                    "projectID": "test_project_v1",
+                    "filename": "file_to_save.txt"
+                }
+            }
+        ]
+    },
+    "versionId": "914bcb0d-4f6b-4111-a4a2-f4b5d9ab51f2",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T14:05:42.441Z",
+            "updatedAt": "2025-07-11T14:05:42.441Z",
+            "role": "workflow:owner",
+            "workflowId": "4nUYH72irunRuEB2",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
