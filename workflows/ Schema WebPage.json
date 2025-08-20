@@ -1,0 +1,185 @@
+{
+    "createdAt": "2025-07-02T17:15:12.966Z",
+    "updatedAt": "2025-07-13T16:02:04.000Z",
+    "id": "7G1kYE2HgBaJL6q4",
+    "name": "Schema WebPage",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "_record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentObject",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentProperty"
+                        },
+                        {
+                            "name": "url"
+                        },
+                        {
+                            "name": "dateModified"
+                        },
+                        {
+                            "name": "text"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -180,
+                0
+            ],
+            "id": "519c54ed-b177-44fd-bf44-d4e772bfdf41",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "UHVbnm4d896IS4aO",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool make Dynamic Thing"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@type": "WebPage",
+                        "content": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                40,
+                0
+            ],
+            "id": "132bc4bd-94f3-49c4-a7a2-e1864d8750e5",
+            "name": "Convert to Thing"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to Thing",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to Thing": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "_record": {
+                        "@context": "https://schema.org/",
+                        "@type": "WebPage",
+                        "@id": "webpage_1",
+                        "name": "webpage_1",
+                        "url": "HTTPS://www.test.com/page1",
+                        "dateModified": "2022-01-01"
+                    },
+                    "_parentRecord": {
+                        "@type": "Thing",
+                        "@id": "thingParent",
+                        "name": "thingParent"
+                    },
+                    "_parentProperty": "parentProperty",
+                    "url": null,
+                    "dateModified": null
+                }
+            },
+            {
+                "json": {
+                    "_record": {
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    },
+                    "_parentRecord": {
+                        "@type": "Thing",
+                        "@id": "thingParent",
+                        "name": "thingParent"
+                    },
+                    "_parentProperty": "parentProperty",
+                    "url": "https://www.test.com/page1",
+                    "dateModified": "2022-01-01"
+                }
+            }
+        ]
+    },
+    "versionId": "5d3b82d8-b37d-4894-8cae-ddf09037a4fc",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T17:15:12.969Z",
+            "updatedAt": "2025-07-02T17:15:12.969Z",
+            "role": "workflow:owner",
+            "workflowId": "7G1kYE2HgBaJL6q4",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
