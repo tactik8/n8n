@@ -1,7 +1,7 @@
 {
-    "createdAt": "2025-08-08T13:00:13.447Z",
-    "updatedAt": "2025-08-08T13:00:13.447Z",
-    "id": "26Kx0Pa0GSxE3722",
+    "createdAt": "2025-08-08T14:22:52.952Z",
+    "updatedAt": "2025-08-08T14:22:52.952Z",
+    "id": "5KxjPMc97eZqKqRw",
     "name": "My workflow",
     "active": false,
     "isArchived": false,
@@ -11,14 +11,14 @@
     "staticData": null,
     "meta": null,
     "pinData": null,
-    "versionId": "4f330d4f-6e31-4f57-950d-c9a3051e149a",
+    "versionId": "af3a91d1-eef4-4fd0-b8d2-fc8a7159c724",
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-08-08T13:00:13.449Z",
-            "updatedAt": "2025-08-08T13:00:13.449Z",
+            "createdAt": "2025-08-08T14:22:52.955Z",
+            "updatedAt": "2025-08-08T14:22:52.955Z",
             "role": "workflow:owner",
-            "workflowId": "26Kx0Pa0GSxE3722",
+            "workflowId": "5KxjPMc97eZqKqRw",
             "projectId": "q4hW5jXLU3axUty6"
         }
     ],
