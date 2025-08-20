@@ -1,0 +1,211 @@
+{
+    "createdAt": "2025-07-08T14:07:52.188Z",
+    "updatedAt": "2025-07-13T17:45:59.000Z",
+    "id": "61jWR7Ht2kytIaFb",
+    "name": "Schema - tool Clean record",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "record",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "id": "78767c7c-d1f3-4a25-9b3c-5202029d1c89",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                660,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\nfunction setDate(record){\n\n  // Handle array\n  if(Array.isArray(record)){\n    return record.map(x => setDate(x))\n  }\n\n  // Handle objects \n  if(typeof record === 'object' && record !== null){\n\n    let keys = Object.keys(record)\n    for(let k of keys){\n      record[k] = setDate(record[k])\n    }\n    return record\n  }\n\n      \n  // Handle non-object\n  if(!record?.['@type']){\n    let v = undefined\n    if(typeof record === 'string'){\n      try {\n        v = new Date(record)\n      } catch(error){\n      } finally {        \n      }\n    }\n    if(v instanceof Date && !isNaN(v)){\n      record = v\n    }\n    return record\n  }\n\n  // Handle object\n  if(record?.['@type']){\n    for(let k in record){\n      record[k] = setDate(record[k])\n    }\n    return record\n  }\n$\n  // Other\n  return record\n}\n\n\n// Process all items\nfor (let item of $input.all()){\n  item.json = setDate(item.json)\n}\n\nreturn  $input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1540,
+                0
+            ],
+            "id": "9e383aa4-d841-4d6e-8ecf-5406b3488ec2",
+            "name": "Format dates"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\nfunction orderProperties(value){\n\n  //\n  if(Array.isArray(value) && typeof value != 'string' ){\n    console.log('is array')\n    return value.map(x => orderProperties(x))\n  }\n\n  // \n  if(typeof value == 'object' && value !== null){\n\n    let newRecord = {}\n    newRecord['@type'] = value?.['@type']\n    newRecord['@id'] = value?.['@id']\n    \n    let keys = Object.keys(value)\n    keys.sort()\n    \n    // \n    for(let k of keys){\n      if(k != '@type' && k != '@id'){\n        newRecord[k] = orderProperties(value?.[k])\n      }\n    }\n    return newRecord\n  }\n\n\n\n  //  Other\n  \n return value\n  \n}\n\n//\n\n\n// Process all items\nfor (let item of $input.all()){\n  item.json = orderProperties(item.json)\n}\n\nreturn  $input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1760,
+                0
+            ],
+            "id": "a50dffc8-cea7-4ac6-ad05-be44d9bef244",
+            "name": "Order properties"
+        },
+        {
+            "parameters": {
+                "jsCode": "\n\n\n// Method\nfunction recordOverrideId(value){\n\n  if(value === undefined || value === null){\n    return value\n  }\n  \n  if(value?.[\"@type\"] === undefined || value?.[\"@type\"] === null){\n    value['@id'] = value?.['url'] \n  }\n\n  if(value?.['url'] === undefined || value?.['url'] === null){\n    return value\n  }\n  \n  if(value?.[\"@type\"] === \"WebPage\"){\n    value['@id'] = value?.['url'] || value?.['@id']\n  }\n\n  if(value[\"@type\"] === \"WebSite\"){\n    value['@id'] = value?.['url'] || value?.['@id']\n  }\n  \n  \n  return value\n}\n\n\n\nfunction overrideID(value){\n\n  // If array\n  if(Array.isArray(value)){\n    value = value.map(x => overrideID(x))\n    return value\n  }\n\n\n  // If object \n  if(typeof value === 'object' && value !== null){\n\n    value = recordOverrideId(value)\n\n    let keys = Object.keys(value)\n    for(let k of keys){\n      value[k] = overrideID(value[k])\n    }\n\n    return value\n  }\n\n  // else\n  return value\n  \n}\n\n\n\n// Process all items\nlet results = []\nfor (let item of $input.all()){\n  item.json = overrideID(item.json)\n}\n\nreturn  $input.all()\n\n\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1100,
+                0
+            ],
+            "id": "b5bf51b6-7e52-4419-ad78-9fc59c3d6b03",
+            "name": "Override id"
+        },
+        {
+            "parameters": {
+                "jsCode": "\n// Method\nfunction recordMethod(record){\n\n  record = record?.record || undefined\n  \n  return record\n}\n\n\n// Process all items\nlet results = []\nfor (let item of $input.all()){\n  item.json = recordMethod(item.json)\n}\n\nreturn  $input.all()\n\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                880,
+                0
+            ],
+            "id": "085ed027-0f6e-43b3-8522-5ccaa2b43d06",
+            "name": "Keep only record property"
+        },
+        {
+            "parameters": {
+                "jsCode": "function generateUUID() {\n  let d = new Date().getTime(); // Timestamp\n  let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0; // High-res timestamp\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    let r = Math.random() * 16; // Random number between 0 and 16\n    if (d > 0) { // Use timestamp until it's consumed\n      r = (d + r) % 16 | 0;\n      d = Math.floor(d / 16);\n    } else { // Use high-res timestamp if available\n      r = (d2 + r) % 16 | 0;\n      d2 = Math.floor(d2 / 16);\n    }\n    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);\n  });\n}\n\n\n\n\nfunction assignID(value){\n\n\n  // If array\n  if(Array.isArray(value)){\n    return value.map(x => assignID(x))\n  }\n\n\n  // If object \n  if(typeof value === 'object' && value !== null){\n    \n\n    value['@id'] = value?.['@id'] || generateUUID()\n\n    \n    let keys = Object.keys(value)\n    for(let k of keys){\n      value[k] = assignID(value?.[k])\n    }\n  \n    return value\n  }\n  \n  // Else\n  return value\n}\n\n\n\n\n// Process all items\nfor (let item of $input.all()){\n  item.json = assignID(item.json)\n}\n\nreturn  $input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1320,
+                0
+            ],
+            "id": "902a394d-a55f-492a-b87c-931722a1f4c4",
+            "name": "Set ID"
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Keep only record property",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format dates": {
+            "main": [
+                [
+                    {
+                        "node": "Order properties",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Override id": {
+            "main": [
+                [
+                    {
+                        "node": "Set ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Keep only record property": {
+            "main": [
+                [
+                    {
+                        "node": "Override id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set ID": {
+            "main": [
+                [
+                    {
+                        "node": "Format dates",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "record": {
+                        "@type": "WebPage",
+                        "url": "https://www.test.com"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "record": {
+                        "@type": "Action",
+                        "name": "Crawler - https://www.homesalive.ca  - 2025-07-11T15:48:03.542-04:00",
+                        "object": {
+                            "url": "https://www.homesalive.ca",
+                            "@type": "WebSite",
+                            "@id": "https://www.homesalive.ca"
+                        },
+                        "actionStatus": "FailedActionStatus",
+                        "startTime": "2025-07-11T15:48:03.542-04:00",
+                        "endTime": "2025-07-11T15:48:03.542-04:00",
+                        "error": "Error retrieving robots.txt - Method not allowed - please check you are using the right HTTP method"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "d073fd3d-0380-47ee-b16f-8e0187dc0c6c",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T14:07:52.191Z",
+            "updatedAt": "2025-07-08T14:07:52.191Z",
+            "role": "workflow:owner",
+            "workflowId": "61jWR7Ht2kytIaFb",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:24:58.354Z",
+            "updatedAt": "2025-07-11T13:29:26.063Z",
+            "id": "r2cvYyX9826F5fV6",
+            "name": "type:tool"
+        }
+    ]
+}
