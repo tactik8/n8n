@@ -1,7 +1,7 @@
 {
-    "createdAt": "2025-08-08T18:29:21.036Z",
-    "updatedAt": "2025-08-08T18:29:21.036Z",
-    "id": "szjE1yUQyviTAtAq",
+    "createdAt": "2025-08-08T18:35:33.987Z",
+    "updatedAt": "2025-08-08T18:35:33.987Z",
+    "id": "t8zKZmqZKmpjVdqa",
     "name": "Agent - Bootstrap Snippet Builder",
     "active": false,
     "isArchived": false,
@@ -916,7 +916,7 @@
                         {
                             "id": "77049a1f-69e9-45e0-bc85-f50d304c8996",
                             "name": "promptID",
-                            "value": "={{ $json.promptID || \"bootstrap-snippet-builder-prompt\"}}",
+                            "value": "={{ $json.promptID || \"bs5-snippet-agent-prompt-v1\"}}",
                             "type": "string"
                         }
                     ]
@@ -1100,14 +1100,14 @@
     "staticData": null,
     "meta": null,
     "pinData": null,
-    "versionId": "a99920d7-a196-4335-b1cf-761cf11625f3",
+    "versionId": "c9266736-93e7-41f7-bbe4-cb0c3136cb34",
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-08-08T18:29:21.038Z",
-            "updatedAt": "2025-08-08T18:29:21.038Z",
+            "createdAt": "2025-08-08T18:35:33.990Z",
+            "updatedAt": "2025-08-08T18:35:33.990Z",
             "role": "workflow:owner",
-            "workflowId": "szjE1yUQyviTAtAq",
+            "workflowId": "t8zKZmqZKmpjVdqa",
             "projectId": "q4hW5jXLU3axUty6"
         }
     ],
