@@ -1,0 +1,257 @@
+{
+    "createdAt": "2025-07-10T19:02:00.420Z",
+    "updatedAt": "2025-07-11T13:44:08.000Z",
+    "id": "NC5wkzYOGFvMs9FQ",
+    "name": "RAG - Biz Analyst Ingest",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "chunkSize": 3000,
+                "chunkOverlap": 200,
+                "options": {
+                    "splitCode": "markdown"
+                }
+            },
+            "id": "321222cb-1daf-4be2-a6ca-1a03d24f670f",
+            "name": "Document Chunker",
+            "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+            "position": [
+                1560,
+                620
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-embedding-exp-03-07"
+            },
+            "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                1320,
+                480
+            ],
+            "id": "29acbbcf-2bc7-430e-a20d-33e8db4abac4",
+            "name": "Embeddings Google Gemini",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonMode": "expressionData",
+                "jsonData": "={{ $json.text }}",
+                "options": {
+                    "metadata": {
+                        "metadataValues": [
+                            {
+                                "name": "@id",
+                                "value": "={{ $('Start').item.json[\"@id\"] }}"
+                            },
+                            {
+                                "name": "@type",
+                                "value": "={{ $('Start').item.json[\"@type\"] }}"
+                            },
+                            {
+                                "name": "about.@type",
+                                "value": "={{ $json['about.@type'] }}"
+                            },
+                            {
+                                "name": "about.@id",
+                                "value": "={{ $json['about.@id'] }}"
+                            }
+                        ]
+                    }
+                }
+            },
+            "id": "c473c33d-5681-4f3a-ac36-0d3012e7251f",
+            "name": "Document Section Loader",
+            "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+            "position": [
+                1540,
+                420
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "mode": "insert",
+                "mongoCollection": {
+                    "__rl": true,
+                    "value": "organizationInfo",
+                    "mode": "name"
+                },
+                "vectorIndexName": "vector_index",
+                "options": {}
+            },
+            "id": "716519f5-cec1-4bfe-afbe-614fc23e74b5",
+            "name": "MongoDB Vector Store Inserter",
+            "type": "@n8n/n8n-nodes-langchain.vectorStoreMongoDBAtlas",
+            "position": [
+                1340,
+                260
+            ],
+            "typeVersion": 1.1,
+            "credentials": {
+                "mongoDb": {
+                    "id": "LHqprNkjvokedGlX",
+                    "name": "MongoDB Vector Store"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "text"
+                        },
+                        {
+                            "name": "about.@type"
+                        },
+                        {
+                            "name": "about.@id"
+                        }
+                    ]
+                }
+            },
+            "id": "d8ce872b-72e6-43e1-9071-eca72a614466",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                1120,
+                260
+            ]
+        },
+        {
+            "parameters": {
+                "content": "Search Index Example \n\n{\n  \"mappings\": {\n    \"dynamic\": false,\n    \"fields\": {\n      \"_id\": {\n        \"type\": \"string\"\n      },\n      \"text\": {\n        \"type\": \"string\"\n      },\n      \"embedding\": {\n        \"type\": \"knnVector\",\n        \"dimensions\": 1536,\n        \"similarity\": \"cosine\"\n      },\n      \"source\": {\n        \"type\": \"string\"\n      },\n      \"doc_id\": {\n        \"type\": \"string\"\n      }\n    }\n  }\n}\n"
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                1980,
+                140
+            ],
+            "typeVersion": 1,
+            "id": "a0a47f15-f3ab-4fda-a100-3b5e1be77d44",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "content": "## RAG - Biz Analyst Ingest\n\nIngestion tool to add documents to the Biz analyst RAG\n\nBased on:\nhttps://n8n.io/workflows/4526-build-a-knowledge-base-chatbot-with-openai-rag-and-mongodb-vector-embeddings/\n\nAssets:\nmongoDB db: n8nEmbeddings\nmongoDB collection: organizationInfo\nmongoDB index: vector_index\n\n",
+                "height": 380,
+                "width": 420
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                580,
+                -120
+            ],
+            "typeVersion": 1,
+            "id": "c86daeff-ed85-4038-b903-59ea05c9c58e",
+            "name": "Sticky Note1"
+        }
+    ],
+    "connections": {
+        "Document Chunker": {
+            "ai_textSplitter": [
+                [
+                    {
+                        "node": "Document Section Loader",
+                        "type": "ai_textSplitter",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Document Section Loader": {
+            "ai_document": [
+                [
+                    {
+                        "node": "MongoDB Vector Store Inserter",
+                        "type": "ai_document",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Embeddings Google Gemini": {
+            "ai_embedding": [
+                [
+                    {
+                        "node": "MongoDB Vector Store Inserter",
+                        "type": "ai_embedding",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "MongoDB Vector Store Inserter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "@type": "ttt",
+                    "@id": "sss",
+                    "text": "Some content",
+                    "headline": "some headline",
+                    "about.@type": "ss",
+                    "about.@id": "cc"
+                }
+            }
+        ]
+    },
+    "versionId": "db9012c2-91bb-424e-b76c-1e6abeb49a35",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-10T19:02:00.422Z",
+            "updatedAt": "2025-07-10T19:02:00.422Z",
+            "role": "workflow:owner",
+            "workflowId": "NC5wkzYOGFvMs9FQ",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T13:32:28.684Z",
+            "updatedAt": "2025-07-11T13:32:28.684Z",
+            "id": "lFe6QqouZ7dOrfM1",
+            "name": "id: Biz Analyst"
+        },
+        {
+            "createdAt": "2025-07-11T12:27:44.308Z",
+            "updatedAt": "2025-07-11T13:32:11.379Z",
+            "id": "rFtGJawQyacH76NZ",
+            "name": "type:rag"
+        }
+    ]
+}
