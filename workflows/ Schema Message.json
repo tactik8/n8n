@@ -1,0 +1,296 @@
+{
+    "createdAt": "2025-07-08T19:10:03.612Z",
+    "updatedAt": "2025-08-03T16:21:59.000Z",
+    "id": "WWt66w8o7FfxYQwR",
+    "name": "Schema Message",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "_record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentObject",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentProperty"
+                        },
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "headline"
+                        },
+                        {
+                            "name": "text"
+                        },
+                        {
+                            "name": "datePublished"
+                        },
+                        {
+                            "name": "sender",
+                            "type": "any"
+                        },
+                        {
+                            "name": "recipient",
+                            "type": "any"
+                        },
+                        {
+                            "name": "about",
+                            "type": "any"
+                        },
+                        {
+                            "name": "recipient.@type"
+                        },
+                        {
+                            "name": "recipient.@id"
+                        },
+                        {
+                            "name": "recipient.name"
+                        },
+                        {
+                            "name": "recipient.url"
+                        },
+                        {
+                            "name": "sender.@type"
+                        },
+                        {
+                            "name": "sender.@id"
+                        },
+                        {
+                            "name": "sender.name"
+                        },
+                        {
+                            "name": "sender.url"
+                        }
+                    ]
+                }
+            },
+            "id": "5b71fe5d-fe27-469f-b186-2b1c40921353",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                -640,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -160,
+                0
+            ],
+            "id": "9c49ec43-ea9b-4a44-8531-d5a4594fd311",
+            "name": "Set ID"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                60,
+                0
+            ],
+            "id": "af8a250b-6335-4548-a6c8-db3a6ed964b6",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "UHVbnm4d896IS4aO",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool make Dynamic Thing"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json }}",
+                        "@type": "={{ $json['@type'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -380,
+                0
+            ],
+            "name": "Call Schema - tool merge record and properties",
+            "id": "b94a9156-723c-47da-a4d5-40a00690e025"
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Call Schema - tool merge record and properties",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set ID": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call Schema - tool merge record and properties": {
+            "main": [
+                [
+                    {
+                        "node": "Set ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "@type": "Message",
+                    "sender": {
+                        "@type": "Person",
+                        "name": "Bugs Bunny"
+                    },
+                    "recipient": {
+                        "@type": "Person",
+                        "name": "Daffy Duck"
+                    },
+                    "about": {
+                        "@type": "Thing",
+                        "name": "Duck Season"
+                    },
+                    "datePublished": "2016-02-29"
+                }
+            },
+            {
+                "json": {
+                    "@type": "Message",
+                    "sender.@type": "Person",
+                    "sender.@id": "P2",
+                    "recipient": {
+                        "@type": "Person",
+                        "name": "Daffy Duck"
+                    },
+                    "about": {
+                        "@type": "Thing",
+                        "name": "Duck Season"
+                    },
+                    "datePublished": "2016-02-29"
+                }
+            }
+        ]
+    },
+    "versionId": "0fc08c5f-5171-482a-8c4a-0322e82e10e8",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T19:10:03.616Z",
+            "updatedAt": "2025-07-08T19:10:03.616Z",
+            "role": "workflow:owner",
+            "workflowId": "WWt66w8o7FfxYQwR",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
