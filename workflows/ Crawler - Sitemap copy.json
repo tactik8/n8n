@@ -1,0 +1,434 @@
+{
+    "createdAt": "2025-07-02T20:20:34.584Z",
+    "updatedAt": "2025-07-11T17:32:58.000Z",
+    "id": "mCylJe7SLVmoI2bn",
+    "name": "Crawler - Sitemap copy",
+    "active": false,
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "responseFormat": "string",
+                "jsonParameters": "={{ true }}",
+                "options": {
+                    "timeout": 10000
+                }
+            },
+            "id": "3862cb78-a20d-463a-b750-42a23f7dbd04",
+            "name": "Crawl sitemap ",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                3180,
+                1220
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "6bd71c01-0035-483e-a4e5-bc495b77ffa5",
+            "name": "XML ",
+            "type": "n8n-nodes-base.xml",
+            "position": [
+                3400,
+                1220
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "urlset.url",
+                "options": {}
+            },
+            "id": "6666e9e0-de18-4f44-a2f9-61ce6ee56184",
+            "name": "Split Out URLs1",
+            "type": "n8n-nodes-base.splitOut",
+            "position": [
+                3640,
+                1060
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "9ac22337-5a3a-44d8-b58b-91e173fba1ab",
+                            "name": "sitemapUrl",
+                            "value": "={{ $('Start').item.json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "eea4769c-d4de-4e5d-bf13-a7596e734172",
+                            "name": "domain",
+                            "value": "={{ $('Start').item.json.domain }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "832e3d1b-9d34-4921-986e-db0458bd1024",
+                            "name": "jobID",
+                            "value": "={{ $('Start').item.json.jobID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1c2ead86-25d8-406d-94b5-a2de5c840901",
+                            "name": "crawlID",
+                            "value": "={{ $('Start').item.json.crawlID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3e589c3-104d-4723-94bb-165a1c7c0465",
+                            "name": "lastmod",
+                            "value": "={{ DateTime.fromISO($json.lastmod || '2000-01-01').toUTC()}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "aa628a7c-17c7-4037-8ebd-553aec61daf9",
+                            "name": "lastmodDate",
+                            "value": "={{ DateTime.fromISO($json.lastmod || '2000-01-01').toFormat('yyyy-MM-dd')}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ec3e286f-8b10-47f2-97d9-0626b51a82a8",
+                            "name": "lastmodString",
+                            "value": "={{ $json.lastmod }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                3860,
+                1060
+            ],
+            "id": "20e6b304-2ff9-465a-8fbc-95c04da1e1d0",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url",
+                            "type": "any"
+                        },
+                        {
+                            "name": "domain"
+                        },
+                        {
+                            "name": "jobID"
+                        },
+                        {
+                            "name": "crawlID"
+                        }
+                    ]
+                }
+            },
+            "id": "4f4dd729-a612-4bfd-9c2d-d2af7b33a01c",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                2960,
+                1220
+            ]
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "sitemapindex.sitemap",
+                "options": {}
+            },
+            "id": "ba2a0064-667c-4a15-9fc4-0af0c24166bd",
+            "name": "Split Out Sitemaps",
+            "type": "n8n-nodes-base.splitOut",
+            "position": [
+                3660,
+                1320
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "XtxvU7eKcTCV3coV",
+                    "mode": "list",
+                    "cachedResultName": "Crawler - Sitemap"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.loc }}",
+                        "domain": "={{ $json.domain }}",
+                        "jobID": "={{ $json.jobID }}",
+                        "crawlID": "={{ $json.crawlID }}"
+                    },
+                    "matchingColumns": [
+                        "loc"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "domain",
+                            "displayName": "domain",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "jobID",
+                            "displayName": "jobID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "crawlID",
+                            "displayName": "crawlID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4100,
+                1320
+            ],
+            "id": "bad259aa-1fd6-4045-aac5-0f7482ed568e",
+            "name": "Execute Workflow"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                4500,
+                1220
+            ],
+            "id": "fc556454-1dd8-431e-b792-cfc9808d88f1",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d202e496-2b2e-4996-a66c-71301734dc04",
+                            "name": "domain",
+                            "value": "={{ $('Start').item.json.domain }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8c7e1297-6213-4eb0-a873-3f45f1288d88",
+                            "name": "jobID",
+                            "value": "={{ $('Start').item.json.jobID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d874393e-1424-4aac-a042-b91034fab4a5",
+                            "name": "crawlID",
+                            "value": "={{ $('Start').item.json.crawlID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "95b48470-be46-49be-88b3-ff9f0e1af93c",
+                            "name": "lastmod",
+                            "value": "={{ DateTime.fromISO($json.lastmod || '2000-01-01').toUTC() }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "dddb2b5c-5180-46a2-825b-7f84206c2f51",
+                            "name": "lastmodDate",
+                            "value": "={{ DateTime.fromISO($json.lastmod || '2000-01-01').toFormat('yyyy-MM-dd')}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2bbc92f8-6cbe-4ad3-b937-1c65e21fae30",
+                            "name": "lastmodString",
+                            "value": "={{ $json.lastmod }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                3880,
+                1320
+            ],
+            "id": "23af2e47-7f30-47c4-8de8-a82cd2f946a2",
+            "name": "Edit Fields"
+        }
+    ],
+    "connections": {
+        "Crawl sitemap ": {
+            "main": [
+                [
+                    {
+                        "node": "XML ",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "XML ": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out URLs1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Split Out Sitemaps",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out URLs1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Crawl sitemap ",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out Sitemaps": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "url": "https://www.mondou.com/sitemap_index.xml",
+                    "domain": "https://www.mondou.com",
+                    "jobID": "job01",
+                    "crawlID": "crawl01"
+                }
+            },
+            {
+                "json": {
+                    "url": "https://www.mondou.com/sitemap_1-image.xml",
+                    "domain": "https://www.mondou.com",
+                    "jobID": "job01",
+                    "crawlID": "crawl01"
+                }
+            }
+        ]
+    },
+    "versionId": "4de13e6d-2e8b-4768-b148-e225fc117aa8",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T20:20:34.587Z",
+            "updatedAt": "2025-07-02T20:20:34.587Z",
+            "role": "workflow:owner",
+            "workflowId": "mCylJe7SLVmoI2bn",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
