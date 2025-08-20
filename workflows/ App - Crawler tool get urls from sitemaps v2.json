@@ -1,0 +1,584 @@
+{
+    "createdAt": "2025-07-11T17:32:17.810Z",
+    "updatedAt": "2025-07-11T19:56:50.000Z",
+    "id": "ymBZhHFOWQtB1lx5",
+    "name": "App - Crawler tool get urls from sitemaps v2",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "responseFormat": "string",
+                "jsonParameters": true,
+                "options": {
+                    "followAllRedirects": false,
+                    "timeout": 10000
+                },
+                "headerParametersJson": "{\n  \"User-Agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\",\n  \"Accept\": \"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\",\n  \"Accept-Language\": \"en-US,en;q=0.9\",\n  \"Accept-Encoding\": \"gzip, deflate, br\"\n}"
+            },
+            "id": "1d69868a-5851-4e63-b108-cd8eb151ab3f",
+            "name": "Crawl sitemap ",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                3800,
+                1220
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "d4d2ab42-eb9d-4001-a1dd-b0a24f2abd51",
+            "name": "XML ",
+            "type": "n8n-nodes-base.xml",
+            "position": [
+                4060,
+                1220
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "WebPage",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "id": "5ba68f8d-1588-4f19-8828-1a7c99a0a9c3",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                2460,
+                800
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "dda64aa1-b448-455e-a7ca-90f76d4de4f5",
+                            "leftValue": "={{ $json.url }}",
+                            "rightValue": ".xml",
+                            "operator": {
+                                "type": "string",
+                                "operation": "contains"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.2,
+            "position": [
+                3540,
+                1220
+            ],
+            "id": "999beb0c-e72b-4083-aec9-e919c716a421",
+            "name": "Filter Sitemaps"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "7G1kYE2HgBaJL6q4",
+                    "mode": "list",
+                    "cachedResultName": "Schema WebPage"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "dateModified": "={{ $json.lastmod }}",
+                        "WebPage": "={{  null }}",
+                        "url": "={{ $json.loc }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "WebPage",
+                            "displayName": "WebPage",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "dateModified",
+                            "displayName": "dateModified",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4580,
+                1520
+            ],
+            "id": "f5bd6ed1-7824-4bbc-a90e-5a1bba740031",
+            "name": "To Webpage Object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "XtxvU7eKcTCV3coV",
+                    "mode": "list",
+                    "cachedResultName": "App - Crawler tool get urls from sitemaps v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "WebPage": "={{  $json }}"
+                    },
+                    "matchingColumns": [
+                        "WebPage"
+                    ],
+                    "schema": [
+                        {
+                            "id": "WebPage",
+                            "displayName": "WebPage",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4860,
+                1520
+            ],
+            "id": "09ecd83e-7094-4ebd-90f3-041801efa15c",
+            "name": "Crawl sitemaps"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "7G1kYE2HgBaJL6q4",
+                    "mode": "list",
+                    "cachedResultName": "Schema WebPage"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "WebPage": "={{ null }}",
+                        "url": "={{ $json.loc }}",
+                        "dateModified": "={{ $json.lastmod }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "WebPage",
+                            "displayName": "WebPage",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "dateModified",
+                            "displayName": "dateModified",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4580,
+                1220
+            ],
+            "id": "1a9bdecc-9540-4833-a8a4-8953813d0787",
+            "name": "To Webpage Objects"
+        },
+        {
+            "parameters": {
+                "numberInputs": 4
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                5160,
+                820
+            ],
+            "id": "41bc632d-5bf1-4191-9498-f0d65714c666",
+            "name": "Merge All Webpage Links"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "WebPage",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                3040,
+                800
+            ],
+            "id": "fd8128df-defb-481c-bb24-7453f83bfddf",
+            "name": "Split Out2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "781c05ab-f7b9-475d-8b0a-16849cb50da3",
+                            "name": "WebPage",
+                            "value": "={{ Array.isArray($json.WebPage) ? $json.WebPage : [$json.WebPage] }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2740,
+                800
+            ],
+            "id": "ec91871c-b746-4663-be28-f58fa1c8c9bb",
+            "name": "Ensure array"
+        },
+        {
+            "parameters": {
+                "content": "## For sitemaps\nKeep sitemaps urls (.xml) and retrieve their urls",
+                "height": 340,
+                "width": 1320
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                3460,
+                1060
+            ],
+            "typeVersion": 1,
+            "id": "5f40f945-87ec-4996-89eb-7ce8839c86d4",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "sitemapindex.sitemap",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                4320,
+                1520
+            ],
+            "id": "08171643-9d98-4d45-90f6-2f1b3648ed65",
+            "name": "Split Out Sitemaps"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "urlset.url",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                4320,
+                1220
+            ],
+            "id": "ca3d153f-a252-4331-b14a-98e29c3aa05e",
+            "name": "Split Out Urls"
+        },
+        {
+            "parameters": {
+                "content": "## Recursive for url that are sitemaps (.xml)\n",
+                "height": 340,
+                "width": 960,
+                "color": 4
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                4180,
+                1420
+            ],
+            "typeVersion": 1,
+            "id": "e6817a7f-4858-47da-a4cd-d382b5f96596",
+            "name": "Sticky Note1"
+        },
+        {
+            "parameters": {
+                "content": "## Crawler sitemap\nRetrieves all urls from a website sitemap.\nFollows sitemaps of sitemaps.",
+                "height": 240,
+                "width": 960
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                2460,
+                460
+            ],
+            "typeVersion": 1,
+            "id": "f67e5c7d-638e-40f7-9ab0-9e39bbc58b30",
+            "name": "Sticky Note2"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                5380,
+                840
+            ],
+            "id": "0de61d6f-3793-4859-b0f4-1dfa3fbaf94d",
+            "name": "Output formater"
+        }
+    ],
+    "connections": {
+        "Crawl sitemap ": {
+            "main": [
+                [
+                    {
+                        "node": "XML ",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "XML ": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out Sitemaps",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Split Out Urls",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Ensure array",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter Sitemaps": {
+            "main": [
+                [
+                    {
+                        "node": "Crawl sitemap ",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "To Webpage Object": {
+            "main": [
+                [
+                    {
+                        "node": "Crawl sitemaps",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge All Webpage Links",
+                        "type": "main",
+                        "index": 2
+                    }
+                ]
+            ]
+        },
+        "Crawl sitemaps": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Webpage Links",
+                        "type": "main",
+                        "index": 3
+                    }
+                ]
+            ]
+        },
+        "To Webpage Objects": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Webpage Links",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge All Webpage Links": {
+            "main": [
+                [
+                    {
+                        "node": "Output formater",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out2": {
+            "main": [
+                [
+                    {
+                        "node": "Filter Sitemaps",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge All Webpage Links",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ensure array": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out Sitemaps": {
+            "main": [
+                [
+                    {
+                        "node": "To Webpage Object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out Urls": {
+            "main": [
+                [
+                    {
+                        "node": "To Webpage Objects",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "callerPolicy": "workflowsFromSameOwner"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "WebPage": [
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "WebPage",
+                            "@id": "webpage_1",
+                            "name": "webpage_1",
+                            "url": "https://www.mondou.com/sitemap_index.xml"
+                        },
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "WebPage",
+                            "@id": "webpage_1",
+                            "name": "webpage_1",
+                            "url": "https://www.mondou.com/sitemap_0-product.xml"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "versionId": "ac7ba6b1-2feb-475c-a2d7-3245d25a117e",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T17:32:17.818Z",
+            "updatedAt": "2025-07-11T17:32:17.818Z",
+            "role": "workflow:owner",
+            "workflowId": "ymBZhHFOWQtB1lx5",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
