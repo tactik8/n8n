@@ -1,0 +1,374 @@
+{
+    "createdAt": "2025-07-08T19:26:14.338Z",
+    "updatedAt": "2025-08-03T16:33:22.000Z",
+    "id": "20lcP6IYp6JpopKg",
+    "name": "Schema Conversation",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "_parentObject",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentProperty"
+                        },
+                        {
+                            "name": "_record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "name"
+                        },
+                        {
+                            "name": "hasPart",
+                            "type": "any"
+                        },
+                        {
+                            "name": "hasPart[0].sender.@type"
+                        },
+                        {
+                            "name": "hasPart[0].sender.@id"
+                        },
+                        {
+                            "name": "hasPart[0].sender.name"
+                        },
+                        {
+                            "name": "hasPart[0].sender.url"
+                        },
+                        {
+                            "name": "hasPart[0].recipient.@type"
+                        },
+                        {
+                            "name": "hasPart[0].recipient.@id"
+                        },
+                        {
+                            "name": "hasPart[0].recipient.name"
+                        },
+                        {
+                            "name": "hasPart[0].recipient.url"
+                        },
+                        {
+                            "name": "hasPart[1].sender.@type"
+                        },
+                        {
+                            "name": "hasPart[1].sender.@id"
+                        },
+                        {
+                            "name": "hasPart[1].sender.name"
+                        },
+                        {
+                            "name": "hasPart[1].sender.url"
+                        },
+                        {
+                            "name": "hasPart[1].recipient.@type"
+                        },
+                        {
+                            "name": "hasPart[1].recipient.@id"
+                        },
+                        {
+                            "name": "hasPart[1].recipient.name"
+                        },
+                        {
+                            "name": "hasPart[1].recipient.url"
+                        },
+                        {
+                            "name": "hasPart[0].sender",
+                            "type": "object"
+                        },
+                        {
+                            "name": "hasPart.recipient",
+                            "type": "object"
+                        },
+                        {
+                            "name": "hasPart[1].sender",
+                            "type": "object"
+                        },
+                        {
+                            "name": "hasPart[1].recipient",
+                            "type": "object"
+                        },
+                        {
+                            "name": "hasPart[0].text"
+                        },
+                        {
+                            "name": "hasPart[1].text"
+                        },
+                        {
+                            "name": "hasPart[0].datePublished"
+                        },
+                        {
+                            "name": "hasPart[1].datePublished"
+                        }
+                    ]
+                }
+            },
+            "id": "6af0d867-e252-439d-a189-ab5fef0e6991",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                -920,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -200,
+                0
+            ],
+            "id": "e7c69bd0-5420-4647-b321-63dbda47ede6",
+            "name": "Set ID"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                180,
+                0
+            ],
+            "id": "fc082927-6ee0-450f-b432-3bbd57f5a62c",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "UHVbnm4d896IS4aO",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool make Dynamic Thing"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json }}",
+                        "@type": "Conversation"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -700,
+                0
+            ],
+            "id": "a14272af-2258-40ab-af44-db22a15a169c",
+            "name": "Process Schema inputs"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "e1610137-2241-4fe1-8f59-281cc0831de9",
+                            "name": "@type",
+                            "value": "={{ $json['@type'] || 'Conversation' }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -480,
+                0
+            ],
+            "id": "80d44ef6-94fa-4a7c-8f83-2edfba3e03b4",
+            "name": "Set Type"
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Process Schema inputs",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set ID": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Process Schema inputs": {
+            "main": [
+                [
+                    {
+                        "node": "Set Type",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set Type": {
+            "main": [
+                [
+                    {
+                        "node": "Set ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "@context": "https://schema.org/",
+                    "@type": "Conversation",
+                    "name": "Duck Season vs Rabbit Season",
+                    "sameAs": "https://www.youtube.com/watch?v=9-k5J4RxQdE",
+                    "hasPart": [
+                        {
+                            "@type": "Message",
+                            "sender": {
+                                "@type": "Person",
+                                "name": "Bugs Bunny"
+                            },
+                            "recipient": {
+                                "@type": "Person",
+                                "name": "Daffy Duck"
+                            },
+                            "about": {
+                                "@type": "Thing",
+                                "name": "Duck Season"
+                            },
+                            "datePublished": "2016-02-29"
+                        },
+                        {
+                            "@type": "Message",
+                            "sender": {
+                                "@type": "Person",
+                                "name": "Daffy Duck"
+                            },
+                            "recipient": {
+                                "@type": "Person",
+                                "name": "Bugs Bunny"
+                            },
+                            "about": {
+                                "@type": "Thing",
+                                "name": "Rabbit Season"
+                            },
+                            "datePublished": "2016-03-01"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "versionId": "dff3406f-7783-4ff8-b382-7f0066e54664",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T19:26:14.340Z",
+            "updatedAt": "2025-07-08T19:26:14.340Z",
+            "role": "workflow:owner",
+            "workflowId": "20lcP6IYp6JpopKg",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
