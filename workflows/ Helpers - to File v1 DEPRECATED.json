@@ -1,0 +1,638 @@
+{
+    "createdAt": "2025-07-11T14:42:03.968Z",
+    "updatedAt": "2025-07-11T16:47:06.000Z",
+    "id": "scv267DT6Izf2Xnk",
+    "name": "Helpers - to File v1 DEPRECATED",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "filename"
+                        },
+                        {
+                            "name": "text"
+                        },
+                        {
+                            "name": "record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "records",
+                            "type": "array"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -440,
+                660
+            ],
+            "id": "a9e9f305-18c2-44b0-b31a-a213fa404bd5",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "35019b60-fbee-424e-b578-27ecbbe2f0cb",
+                                        "leftValue": "={{ $json.record }}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "object",
+                                            "operation": "exists",
+                                            "singleValue": true
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "record"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "9d7d7a3f-08c3-4848-81d1-cbff89ffd301",
+                                        "leftValue": "={{ $json.records }}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "array",
+                                            "operation": "exists",
+                                            "singleValue": true
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "array"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.text}}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "exists",
+                                            "singleValue": true
+                                        },
+                                        "id": "3f5441ed-9edd-4366-a4ec-389cdd5aec38"
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "text"
+                        }
+                    ]
+                },
+                "options": {
+                    "fallbackOutput": "extra"
+                }
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                220,
+                100
+            ],
+            "id": "bdaaaddd-9400-42f7-b45b-7e12507d8a69",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Add a new field called 'myNewField' to the JSON of the item\n\nreturn $input.item.json.record;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                440,
+                -100
+            ],
+            "id": "601b968b-49b9-4e3d-80e5-3c760c0fa78d",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "operation": "toJson",
+                "mode": "each",
+                "options": {
+                    "format": true,
+                    "encoding": "utf8",
+                    "fileName": "={{ $('When Executed by Another Workflow').item.json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                660,
+                -100
+            ],
+            "id": "0738de86-d03a-4ab9-a089-d1e1653e4ccf",
+            "name": "Convert to JSON File"
+        },
+        {
+            "parameters": {
+                "operation": "toText",
+                "sourceProperty": "text",
+                "options": {
+                    "encoding": "utf8",
+                    "fileName": "={{ $json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                480,
+                300
+            ],
+            "id": "b2038921-c6f0-4b01-849f-52c3df27e34e",
+            "name": "Convert to Text File"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nlet results = []\nfor (const item of $input.all()) {\n  item.json.records.map(x => results.push(x))\n}\n\nreturn results"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                440,
+                100
+            ],
+            "id": "34eefabc-8a6a-4e9d-a077-26aba4c4253c",
+            "name": "Code2"
+        },
+        {
+            "parameters": {
+                "operation": "toJson",
+                "options": {
+                    "format": true,
+                    "encoding": "utf8",
+                    "fileName": "={{ $('When Executed by Another Workflow').item.json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                660,
+                100
+            ],
+            "id": "a029e819-2f6b-4c20-8ce7-e7a44de5b47b",
+            "name": "Convert to Json array file"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "50a3bff4-ae6e-4f2a-b3bc-65e8c528b6e6",
+                            "name": "filename",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.filename }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9f633728-3510-4a78-84dc-fcaf2385c0d3",
+                            "name": "text",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.text }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "de5f37d1-81ba-4358-8c4e-f05aa1672abb",
+                            "name": "record",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.record }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "74bd4008-c7cd-453a-bd91-8cfc95c09e9f",
+                            "name": "records",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.records }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                880,
+                -100
+            ],
+            "id": "5cc15edc-d921-4c64-9854-2c1821e21eba",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "3dd1d336-b1ce-4814-97d5-8ceddea33997",
+                            "name": "filename",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.filename }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "47f51edf-b7f5-4bec-8bf4-29ec4e66c37c",
+                            "name": "text",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.text }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "5018ee7a-7697-41db-aa35-7599ab06c521",
+                            "name": "record",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.record }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "73e177e1-ac8a-45ef-a956-e4de097994e3",
+                            "name": "records",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.records }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                880,
+                100
+            ],
+            "id": "8f93c4d2-007c-473a-800c-ee3599289b07",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "9736e0d8-9cf3-4c1d-9784-c524afaf18ea",
+                            "name": "filename",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.filename }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3c0568c3-bd27-4e70-b7e5-70e5e8a6a2d3",
+                            "name": "text",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.text }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d636e696-2bb0-4233-89c1-25984e5a94d4",
+                            "name": "record",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.record }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "af51c97e-f4d3-424b-8089-7759e275f489",
+                            "name": "records",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.records }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                680,
+                300
+            ],
+            "id": "0e956a90-9d53-430e-b1d3-2505a339de10",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c706ff59-6104-4c26-816f-b41be3a08247",
+                            "name": "filename",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.filename }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c8a6f19c-3005-4cd3-9067-85532dbbc5a8",
+                            "name": "text",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.text }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "db79ff7b-9d8b-4687-a391-6131e265e5f6",
+                            "name": "record",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.record }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c21cc6d4-b07a-4410-b622-2585b57a5f69",
+                            "name": "records",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.records }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                460,
+                520
+            ],
+            "id": "c641c0fd-2e54-4bd2-9ef0-03d6f743abe9",
+            "name": "Edit Fields3"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "bc3280d0-c111-48c1-854d-5099b9b89a60",
+                            "name": "content",
+                            "value": "={{ $json.records ? JSON.stringify($json.records, null, 4) : $json.record ? JSON.stringify($json.record, null, 4) : $json.text }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -60,
+                720
+            ],
+            "id": "feb04418-155c-4ebc-b1bf-c4928b64ed49",
+            "name": "Edit Fields4"
+        },
+        {
+            "parameters": {
+                "operation": "toText",
+                "sourceProperty": "content",
+                "options": {
+                    "encoding": "utf8",
+                    "fileName": "={{ $json.filename }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                260,
+                740
+            ],
+            "id": "80232fe0-7302-4651-9761-11dd96530b9a",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ebfbb4cd-ee41-4477-88a2-db60a90af71e",
+                            "name": "filename",
+                            "value": "={{ $('Edit Fields4').item.json.filename }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                480,
+                740
+            ],
+            "id": "e5002487-1721-4a26-a0cb-ba1a8d462385",
+            "name": "Edit Fields5"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Code2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Convert to Text File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to JSON File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code2": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to Json array file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to JSON File": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to Json array file": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to Text File": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                []
+            ]
+        },
+        "Edit Fields4": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields5",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "filename": "test0.txt",
+                    "text": "Some text",
+                    "record": null,
+                    "records": null
+                }
+            },
+            {
+                "json": {
+                    "filename": "test1.json",
+                    "text": null,
+                    "record": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    },
+                    "records": null
+                }
+            },
+            {
+                "json": {
+                    "filename": "test0.txt",
+                    "record": null,
+                    "records": [
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing1",
+                            "name": "thing1"
+                        },
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing2",
+                            "name": "thing2"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "versionId": "309b43bf-e872-42b0-8972-fea436cf54f8",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T14:42:03.972Z",
+            "updatedAt": "2025-07-11T14:42:03.972Z",
+            "role": "workflow:owner",
+            "workflowId": "scv267DT6Izf2Xnk",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
