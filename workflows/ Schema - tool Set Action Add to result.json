@@ -1,0 +1,110 @@
+{
+    "createdAt": "2025-07-13T15:30:11.046Z",
+    "updatedAt": "2025-07-13T15:33:38.000Z",
+    "id": "54rv3ry6pfoWkI2j",
+    "name": "Schema - tool Set Action Add to result",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "action",
+                            "type": "object"
+                        },
+                        {
+                            "name": "result",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "ea71a7ce-406b-4022-957b-0ed285dc0506",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "mode": "runOnceForEachItem",
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\nlet action = $json.action\n\nlet currentResults = action?.result || []\ncurrentResults = Array.isArray(currentResults) ? currentResults : [currentResults]\n\nlet newResults = $json.result || []\nnewResults = Array.isArray(newResults) ? newResults : [newResults]\n\n\naction.result = currentResults\nnewResults.map(x => action.result.push(x))\n\nif (action.result.length === 1){\n  action.result = action.result[0]\n}\n\nreturn action"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                300,
+                0
+            ],
+            "id": "e06bb514-9266-4680-8c64-423c97960ee8",
+            "name": "Code"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "action": {
+                        "@type": "action",
+                        "@id": "action_1",
+                        "name": "action_1",
+                        "actionStatus": "completedActionStatus",
+                        "startTime": "",
+                        "endTime": "",
+                        "object": "",
+                        "result": "",
+                        "instrument": ""
+                    },
+                    "result": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "bfdaf7fb-90bc-456c-b997-0bed0db84660",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-13T15:30:11.051Z",
+            "updatedAt": "2025-07-13T15:30:11.051Z",
+            "role": "workflow:owner",
+            "workflowId": "54rv3ry6pfoWkI2j",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:31.446Z",
+            "updatedAt": "2025-07-02T16:12:31.446Z",
+            "id": "o5KghriZ0ICU7irP",
+            "name": "helpers"
+        }
+    ]
+}
