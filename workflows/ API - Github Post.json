@@ -1,0 +1,673 @@
+{
+    "createdAt": "2025-07-02T11:34:29.821Z",
+    "updatedAt": "2025-07-11T13:41:31.000Z",
+    "id": "m83cJcKPf92gmPCK",
+    "name": "API - Github Post",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "filename"
+                        },
+                        {
+                            "name": "content"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -380,
+                -255
+            ],
+            "id": "f3ba018b-daa1-4afb-a350-3401a7bd8c47",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "yTYwOjUDjMwy3pIC",
+                    "mode": "list",
+                    "cachedResultName": "Action - New"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "=Create or update a new github file {{ $json.name }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "type",
+                            "displayName": "type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": true
+                        },
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": true
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "object",
+                            "displayName": "object",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "instrument",
+                            "displayName": "instrument",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "agent",
+                            "displayName": "agent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeStart",
+                            "displayName": "timeStart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeEnd",
+                            "displayName": "timeEnd",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -160,
+                -255
+            ],
+            "id": "78e0f135-9a6d-4086-9378-47c8fbec4544",
+            "name": "Init action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "3e3db8f4-4fae-4fdd-9c20-bd1adac4a5c7",
+                            "name": "action.@type",
+                            "value": "=UpdateAction",
+                            "type": "string"
+                        },
+                        {
+                            "id": "16188092-a797-4d87-9efb-d87acf3cf0b9",
+                            "name": "action.object.@type",
+                            "value": "DigitalDocument",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0143c0a0-2318-4281-b965-5c27e6cb20ff",
+                            "name": "action.object.name",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "39657941-ea1a-45b9-b0fa-adfc54e307b2",
+                            "name": "action.object.text",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.content }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "10783509-af58-4167-8c15-d6dfafc4adef",
+                            "name": "",
+                            "value": "",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                500,
+                -255
+            ],
+            "id": "26cf1e98-e57d-4ea8-bf10-dd21555abef5",
+            "name": "Update action.object"
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "helperFunctions",
+                    "mode": "name"
+                },
+                "filePath": "={{ $json.action.object.name }}",
+                "asBinaryProperty": false,
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                760,
+                -300
+            ],
+            "id": "8ed18ef0-9e7b-40be-8824-5105ee3975ae",
+            "name": "GitHub Get file",
+            "webhookId": "dd1c31fc-e188-456d-bce2-b4daa702e899",
+            "credentials": {
+                "githubOAuth2Api": {
+                    "id": "c2fHIFgNoE3b3fN7",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "helperFunctions",
+                    "mode": "name"
+                },
+                "filePath": "={{ $json.action.object.name }}",
+                "fileContent": "={{ $json.action.object.text }}",
+                "commitMessage": "=Initial creation of {{ $json.action.object.name }} by n8n workflow"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                1200,
+                -140
+            ],
+            "id": "2223b7ce-9ae2-4cca-9eb4-fc4101d23f80",
+            "name": "GitHub Create file",
+            "webhookId": "281a12ea-a74b-4b76-9eab-194142c39434",
+            "credentials": {
+                "githubOAuth2Api": {
+                    "id": "c2fHIFgNoE3b3fN7",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "helperFunctions",
+                    "mode": "name"
+                },
+                "filePath": "={{ $('Update action.object').item.json.action.object.name }}",
+                "fileContent": "={{ $('Update action.object').item.json.action.object.text }}",
+                "commitMessage": "=Update of {{ $('Update action.object').item.json.action.object.name }} by n8n workflow"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                1180,
+                -380
+            ],
+            "id": "99c65a02-2c69-49a6-ab44-80d4b865ac27",
+            "name": "GitHub Edit file",
+            "webhookId": "ff70bd7f-8b63-45cf-8efa-5e119ca69ff0",
+            "credentials": {
+                "githubOAuth2Api": {
+                    "id": "c2fHIFgNoE3b3fN7",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "mode": "chooseBranch",
+                "useDataOfInput": 2
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                940,
+                -160
+            ],
+            "id": "616a766f-47e6-48f9-bd9d-208545071981",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "RIKjERUrQe1hlh4R",
+                    "mode": "list",
+                    "cachedResultName": "Action - Set Complete"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "action": "={{ $('Update action.object').item.json.action }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "action",
+                            "displayName": "action",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1600,
+                -260
+            ],
+            "id": "b1df7c3c-7dbb-48c3-943e-69125b1be310",
+            "name": "Set action complete"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "9a80e20a-47de-45af-be8c-1025cfe8e996",
+                            "name": "action.result",
+                            "value": "={{ $json.action.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1820,
+                -260
+            ],
+            "id": "446c6798-8efc-4fd1-9ca4-15b45f90e809",
+            "name": "Set action.result as object"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0d05d8a8-6e42-4730-a2dc-1c33f2cb1e1a",
+                            "name": "action.result.[\"@type\"]",
+                            "value": "=DigitalDocument",
+                            "type": "string"
+                        },
+                        {
+                            "id": "878b1bf4-0102-40a7-b3c6-63c49ba08ae0",
+                            "name": "action.result.name",
+                            "value": "={{ $json.action.object.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "55b90638-9d48-4175-b3f9-8bfbc29d28a5",
+                            "name": "action.result.url",
+                            "value": "={{ $('GitHub Edit file').item.json.content.url || $('GitHub Create file').item.json.content.url }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2040,
+                -260
+            ],
+            "id": "6843913e-003c-4fb8-b4cb-51a8c7a6777f",
+            "name": "Set action.result"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a34989c8-ca0e-4185-b933-244c916f6851",
+                            "name": "action.instrument",
+                            "value": "={{ $json.action.instrument }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                60,
+                -260
+            ],
+            "id": "bb857ca8-aefe-4818-85db-e46b5308bcb4",
+            "name": "Set action.instrument as object"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4eb2657c-33a7-4f18-952b-5effe75d6279",
+                            "name": "action.instrument.['@type']",
+                            "value": "=WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "75b5c1f3-4ba3-4f5b-9a86-524c9fa2a3e6",
+                            "name": "action.instrument.['@id']",
+                            "value": "https://tactik8.app.n8n.cloud/workflow/m83cJcKPf92gmPCK/878428",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9621471e-2203-48e8-a4d7-77b68c5e652a",
+                            "name": "action.instrument.name",
+                            "value": "Github - post",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ebb127c8-a146-4838-9c31-a3f95121ef13",
+                            "name": "",
+                            "value": "",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                280,
+                -260
+            ],
+            "id": "878428fc-0abb-4a90-a69f-e293b6c5d45b",
+            "name": "Edit Fields"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Init action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Init action": {
+            "main": [
+                [
+                    {
+                        "node": "Set action.instrument as object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update action.object": {
+            "main": [
+                [
+                    {
+                        "node": "GitHub Get file",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "GitHub Get file": {
+            "main": [
+                [
+                    {
+                        "node": "GitHub Edit file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GitHub Create file": {
+            "main": [
+                [
+                    {
+                        "node": "Set action complete",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GitHub Edit file": {
+            "main": [
+                [
+                    {
+                        "node": "Set action complete",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "GitHub Create file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set action complete": {
+            "main": [
+                [
+                    {
+                        "node": "Set action.result as object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set action.result as object": {
+            "main": [
+                [
+                    {
+                        "node": "Set action.result",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set action.instrument as object": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Update action.object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "name": "src/testfile/testfile.js",
+                    "content": "This is the content of the file"
+                }
+            }
+        ]
+    },
+    "versionId": "342b1827-aad6-43ba-a1b9-ff1ee485486c",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T11:34:29.825Z",
+            "updatedAt": "2025-07-02T11:34:29.825Z",
+            "role": "workflow:owner",
+            "workflowId": "m83cJcKPf92gmPCK",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T13:28:02.292Z",
+            "updatedAt": "2025-07-11T13:28:42.235Z",
+            "id": "3rL8Qyn8rFF80fMS",
+            "name": "id:github"
+        },
+        {
+            "createdAt": "2025-07-02T16:11:55.156Z",
+            "updatedAt": "2025-07-11T13:28:22.519Z",
+            "id": "IDoNgAgFMAqCrBi3",
+            "name": "type:api"
+        }
+    ]
+}
