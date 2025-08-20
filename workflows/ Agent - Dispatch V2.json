@@ -1,0 +1,245 @@
+{
+    "createdAt": "2025-08-08T16:45:30.269Z",
+    "updatedAt": "2025-08-08T18:43:00.000Z",
+    "id": "4QmlxznIBJwoeGA3",
+    "name": "Agent - Dispatch V2",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "public": true,
+                "options": {
+                    "allowFileUploads": true
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -1160,
+                -700
+            ],
+            "id": "e70faa0c-bd63-4c2d-8050-353f84f871d9",
+            "name": "When chat message received",
+            "webhookId": "28752f3e-c6c8-4b73-adab-592e0c16ce6d"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "pkOGjskQiPBMJCyI",
+                    "mode": "list",
+                    "cachedResultName": "API - Conversation Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "conversationID": "={{ $json.sessionId }}"
+                    },
+                    "matchingColumns": [
+                        "conversationID"
+                    ],
+                    "schema": [
+                        {
+                            "id": "conversationID",
+                            "displayName": "conversationID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -860,
+                -700
+            ],
+            "id": "bff5b877-99bd-479d-81e1-892a6ea66dea",
+            "name": "Get conversation"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "ff17662b-644f-425b-885c-644542f95e81",
+                            "leftValue": "={{ $json?.hasPart?.recipient?.['@id']  }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "exists",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                -560,
+                -700
+            ],
+            "id": "6c41ed84-3c00-4abb-b6d2-3a289d9162d8",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "mode": "id",
+                    "value": "G3j2EzobXCHJUrHJ"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "conversation": "={{ $json?.converation }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "conversation",
+                            "displayName": "conversation",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "promptID",
+                            "displayName": "promptID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -300,
+                -800
+            ],
+            "id": "6626b515-17c4-48f0-a730-5dd118b4010c",
+            "name": "Send to agent"
+        },
+        {
+            "parameters": {
+                "operation": "get",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "A80kx9xzUnGGhlcW",
+                    "mode": "list",
+                    "cachedResultName": "Agent - Company information extractor V0 (#A80kx9xzUnGGhlcW)"
+                },
+                "requestOptions": {}
+            },
+            "type": "n8n-nodes-base.n8n",
+            "typeVersion": 1,
+            "position": [
+                -940,
+                -500
+            ],
+            "id": "db743bbc-b7bd-40ee-9871-bdb77f3f7dac",
+            "name": "n8n",
+            "credentials": {
+                "n8nApi": {
+                    "id": "f0llQKVDDrQnurmq",
+                    "name": "n8n account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Get conversation",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "n8n",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get conversation": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Send to agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "a23f80b5-8d64-4a8d-af79-05af630af6b3",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "createdAt": "2025-08-08T16:45:30.274Z",
+            "updatedAt": "2025-08-08T16:45:30.274Z",
+            "role": "workflow:owner",
+            "workflowId": "4QmlxznIBJwoeGA3",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:19.644Z",
+            "updatedAt": "2025-07-11T13:29:39.556Z",
+            "id": "fsYQGx4UGwRejmSm",
+            "name": "type:agent"
+        }
+    ]
+}
