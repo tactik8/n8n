@@ -1,0 +1,71 @@
+{
+    "createdAt": "2025-07-10T16:32:30.056Z",
+    "updatedAt": "2025-07-11T13:43:34.000Z",
+    "id": "F1aCL5rVbvfYd5cV",
+    "name": "Datatype - tool JSON to record",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1900,
+                -40
+            ],
+            "id": "336fb6de-1b47-4fa8-9a44-46c88cc0486c",
+            "name": "Datatype - tool json to record",
+            "disabled": false,
+            "parameters": {
+                "mode": "runOnceForAllItems",
+                "language": "javaScript",
+                "jsCode": "\n\nfunction cleanJSON(value){\n\nconsole.log('v', value)\n  // If array\n  if(Array.isArray(value)){\n    return value.map(x => cleanJSON(x))\n  }\n\n  // If object\n  if(Object.prototype.toString.call(value) === '[object Object]'){\n    for(let k in value){\n      value[k] = cleanJSON(value[k])\n    }\n    return value\n  }\n\n  \n// Skip if not string\n  if(typeof value === \"string\"){\n  \n  \n    // Remove ```json if present\n    value = value.trim()\n    if(value.startsWith('```json')){\n      value = value.replace('```json', '')\n    } \n\n    value = value.trim()\n    if(value.startsWith('```')){\n      value = value.replaceAll('```', '')\n    } \n\n    value = value.trim()\n    if(value.endsWith('```')){\n      value = value.replaceAll('```', '')\n    } \n  \n  \n    // If starts with { or [, then is JSON\n    value = value.trim()\n    if(value.startsWith('{') || value.startsWith('[')){\n\n      // Remove next line\n      value=value.replaceAll('\\n', '')\n      value=value.replaceAll('\\r', '')\n      \n      \n      try{\n        value = JSON.parse(value)\n      } catch(err){\n        \n      } finally {}\n      \n    }\n  }\n  //\n  return value\n  \n}\n\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nlet results = []\nfor (const item of $input.all()) {\n\n  results.push(cleanJSON(item.json))\n  \n\n  \n}\n\nreturn results",
+                "notice": ""
+            }
+        },
+        {
+            "id": "120ab1a3-81e4-4298-bed8-7fc3e0ccbfe4",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                1680,
+                -40
+            ],
+            "parameters": {
+                "inputSource": "passthrough"
+            }
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Datatype - tool json to record",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": null,
+    "versionId": "8c8fff66-42c7-4884-ba50-2b2a2f9c3d84",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-10T16:32:30.060Z",
+            "updatedAt": "2025-07-10T16:32:30.060Z",
+            "role": "workflow:owner",
+            "workflowId": "F1aCL5rVbvfYd5cV",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
