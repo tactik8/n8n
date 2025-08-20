@@ -1,0 +1,1517 @@
+{
+    "createdAt": "2025-07-01T17:12:18.207Z",
+    "updatedAt": "2025-07-02T16:12:20.000Z",
+    "id": "JfSQIlkv0O3NKPxn",
+    "name": "Builder - JS Functions",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-preview-04-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                1820,
+                -5
+            ],
+            "id": "640be14f-a388-4722-90b1-4e34877866b1",
+            "name": "Google Gemini Chat Model1",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-preview-04-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                2636,
+                -5
+            ],
+            "id": "85404d82-e34e-46c2-8085-0d8855ef609d",
+            "name": "Google Gemini Chat Model2",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.action.result.code }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "Persona: You are a senior javascript QA developer that develops unit tests in Jest. \n\n\nContext: The function will be used within different js libraries. \n\n\nTask: Please take the provided js code and develop Jest unit tests, taking into account edge conditions.\n\nOutput format: Please provide your answer as a json with property unitTests for the unit tests the,selves. See example as follows:\n{\n\t\"unitTests\": \"function testFn(){}\"\n}\n\nConstraints:  Use ESM for imports. \n"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                4020,
+                -700
+            ],
+            "id": "61f631f7-72b2-4d85-ae7a-bc1dc4fee50e",
+            "name": "AI Agent Unit Tests",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\n\t\"code\": \"function testFn(){}\",\n\t\"name\": \"testFn\"\n}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                1940,
+                -5
+            ],
+            "id": "f17d9681-aff9-4da0-b036-bb896a85f457",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.action.result.code }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "Persona: You are a senior javascript developer. \nContext: The function will be used within different js libraries. \nTask: Please review the codes provided and test cases and provide a thorough analysis. \nOutput format: Please provide your answer as a json with property result as a bool for the outcome of the evaluation (true for good, false for bad) and property explanation for the explanation of the analysis. See this example: \n{ \"resultQA\": false, \"explanationQA\": \"Code doesn't handle edge cases\"}\nConstraints: None.\n\n"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                2608,
+                -225
+            ],
+            "id": "cb8ad09d-c8d4-47e2-87e0-8ef7662ca095",
+            "name": "AI Agent Code Review",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\"resultQA\": false, \"explanationQA\": \"Code doesn't handle edge cases\"}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                2756,
+                -5
+            ],
+            "id": "2804130d-ba25-4e49-aae2-a2cbcc9a72e2",
+            "name": "Structured Output Parser1"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-preview-04-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                188,
+                -5
+            ],
+            "id": "1b96771b-57bc-47f9-9dbb-a67214cb1acf",
+            "name": "Google Gemini Chat Model3",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=User request: {{ $json.action.object.text }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "Persona: You are a senior business analysts that converts user requests into specific technical requirements for programmers. \n\nContext: The user has provided some base requirements for a js function. This function will be used within libraries.  \n\nTask: Please take the user request and develop technical requirements from it with only the information the developers will require to successfully program this function.\n\nOutput format: Please provide your answer as a json with property originalRequirements for the original request of the user and property technicalRequirements for the requirements you defined based on originalRequirements. See example as follows:\n{\n\t\"originalRequirements\": \"Please develop a function that extracts urls.\",\n\t\"technicalRequirements\": \"**Technical Requirements:**\\n\\n1.  **Function Signature:**\\n    *   Name: `extractUrlsFromString`\\n    *   Parameter:\\n        *   `inputString`: Must be of type `string`.\\n    *   Return Value:\\n        *   An `Array` of `string` containing the extracted URLs.\\n\\n2.  **Behavior:**\\n    *   **Standard Case:** If the `inputString` is a valid string containing one or more URL patterns, the function must return an array containing all unique matching URL substrings found in the order they appear.\\n\"\n}\n\nConstraints: Avoid using external libraries (unless necessary). Use ESM for imports. Take into account edge conditions and error handling. \n"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                160,
+                -225
+            ],
+            "id": "43e64fa7-a874-45e2-9253-41bd347f38c4",
+            "name": "AI Agent Business Analyst",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\n\t\"originalRequirements\": \"Please develop a function that extracts urls.\",\n\t\"technicalRequirements\": \"**Technical Requirements:**\\n\\n1.  **Function Signature:**\\n    *   Name: `extractUrlsFromString`\\n    *   Parameter:\\n        *   `inputString`: Must be of type `string`.\\n    *   Return Value:\\n        *   An `Array` of `string` containing the extracted URLs.\\n\\n2.  **Behavior:**\\n    *   **Standard Case:** If the `inputString` is a valid string containing one or more URL patterns, the function must return an array containing all unique matching URL substrings found in the order they appear.\\n\"\n}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                308,
+                -5
+            ],
+            "id": "5c7e600b-a00f-44bd-91a6-b5b1aadd69c4",
+            "name": "Structured Output Parser2"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "d5e24932-0b86-43e0-85d0-45fe7138cb72",
+                            "leftValue": "={{ $json.resultQA }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "true",
+                                "singleValue": true
+                            }
+                        },
+                        {
+                            "id": "300e5036-5e56-4d54-aea4-a294c398bff0",
+                            "leftValue": "1",
+                            "rightValue": "1",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        }
+                    ],
+                    "combinator": "or"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                3424,
+                -200
+            ],
+            "id": "67dcead4-9848-4ebd-aa73-2b8eedfa494e",
+            "name": "If Pass code review"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-preview-04-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                1004,
+                -5
+            ],
+            "id": "1bee2d6b-5efa-40fc-84b1-dea1389e54d1",
+            "name": "Google Gemini Chat Model4",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\"resultBA\": false, \"explanationBA\": \"Code doesn't handle edge cases\"}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                1124,
+                -5
+            ],
+            "id": "c0150786-8853-4cb1-b5c6-24d6935e7563",
+            "name": "Structured Output Parser3"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=originalRequirements: {{ $json.action.result.originalRequirements }}\n\ntechnicalRequirements: {{ $json.action.result.technicalRequirements }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "Persona: You are a senior business analysts that reviews technical requirements developed by other analysts. \n\nContext: The user has provided some requirements for a js function and a business analyst has developed technical requirements. This function will be used within libraries.  \n\nTask: Please review the originalRequirements as well as the technicalRequirements to ensure they will meet the stated requirements and best practices. \n\nOutput format: Please provide your answer as a json with property result as a bool with true if the technical requirements are sufficiently good or false otherwise and property analysis for the explanation of the analysis.  See example as follows:\n{\"resultBA\": false, \"explanationBA\": \"Code doesn't handle edge cases\"}\n\n\nConstraints: Avoid using external libraries (unless necessary). Use ESM for imports. Take into account edge conditions and error handling. \n"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                976,
+                -225
+            ],
+            "id": "e3b98326-370a-4a93-8def-31572872836b",
+            "name": "AI Agent BA QA",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=technicalRequirements: \n{{ $json.action.result.technicalRequirements }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "Persona: You are a senior javascript developer. \n\nTask: Please take the technical requirements provided by the business analyst and develop a js function. \n\nContext: The function will be used within different js libraries. \n\nOutput format: Please provide your answer as a json with property code for the code itself and property name for the name of the functions. See example as follows for function testFn:\n{\n\t\"code\": \"function testFn(){}\",\n\t\"name\": \"testFn\"\n}\n\nConstraints: Includes comments in your code for the key elements. Add docStrings to the function, including @example. Avoid using external libraries (unless necessary). Use ESM for imports. Take into account edge conditions and error handling. Don't include carriage returns (\\n).\n"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                1792,
+                -225
+            ],
+            "id": "9298687e-47ae-46c0-8916-95090b2c6bf6",
+            "name": "AI Agent Dev",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-preview-04-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                4048,
+                -480
+            ],
+            "id": "ee4dbd71-d278-4f57-a78b-072804ed4029",
+            "name": "Google Gemini Chat Model5",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash-preview-04-17",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                3672,
+                70
+            ],
+            "id": "9d4cd633-a81e-4c5a-9b81-7265c24c5437",
+            "name": "Google Gemini Chat Model6",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\n\t\"unitTests\": \"function testFn(){}\"\n}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                4168,
+                -480
+            ],
+            "id": "062672c5-9424-4428-8dab-4c2e1b2c2235",
+            "name": "Structured Output Parser4"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=technicalRequirements:  {{ $json.technicalRequirements }}\n\nQA analyst comments: {{ $json.explanationQA }}\n\nOriginal code: \n{{ $json.code }}\n\n",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "Persona: You are a senior javascript developer that debugs or improve js functions. \n\nTask: Please take the technical requirements provided by the business analyst, the original code and the analysis performed by the QA analyst and rewrite the js function. To include the QA analyst comments. \n\n\nContext: The function will be used within different js libraries. \n\nOutput format: Please provide your answer as a json with property code for the code itself and property name for the name of the functions. See example as follows for function testFn:\n{\n\t\"revisedCode\": \"function testFn(){}\"\n}\n\nConstraints: Includes comments in your code for the key elements. Add docStrings to the function, including @example. Avoid using external libraries (unless necessary). Use ESM for imports. Take into account edge conditions and error handling. \n"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                3644,
+                -150
+            ],
+            "id": "65e15a2d-79b8-443d-b5e8-16fa858b8b67",
+            "name": "AI Agent Debug"
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\n\t\"revisedCode\": \"function testFn(){}\"\n}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.2,
+            "position": [
+                3792,
+                70
+            ],
+            "id": "986aaa0a-7cad-46d2-8486-7a135f28c2af",
+            "name": "Structured Output Parser5"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "m83cJcKPf92gmPCK",
+                    "mode": "list",
+                    "cachedResultName": "Github - Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "/code/js/{{ $json.name }}.test.js",
+                        "content": "{{ $json.unitTests }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4820,
+                -300
+            ],
+            "id": "73046b5a-d601-41f7-a62a-33ce6512a607",
+            "name": "Github - post tests",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "m83cJcKPf92gmPCK",
+                    "mode": "list",
+                    "cachedResultName": "Github - Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "/code/js/{{ $json.name }}.json",
+                        "content": "{{ $json}}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4820,
+                -100
+            ],
+            "id": "d4934b2b-d542-4f9f-a524-6c67af88d97c",
+            "name": "Github - post config",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                4616,
+                -500
+            ],
+            "id": "50c03acc-4a2e-4174-9433-92223816971f",
+            "name": "Merge Unit tests"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "3504b984-628b-4e9d-95a5-805bb8e195b2",
+                            "name": "action.result.resultQA",
+                            "value": "={{ $json.output.resultQA }}",
+                            "type": "boolean"
+                        },
+                        {
+                            "id": "175cbc74-c744-4a72-833e-623fbf72f5fb",
+                            "name": "action.result.explanationQA",
+                            "value": "={{ $json.output.explanationQA }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2980,
+                -220
+            ],
+            "id": "8e630fb0-ce35-43ff-9107-ac841139bd02",
+            "name": "Edit agent code review"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "37b57119-d78d-4463-9192-8f0138314597",
+                            "name": "action.result.code",
+                            "value": "={{ $json.output.code }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "24d1edf5-fa48-4370-b978-045a6ddf22e3",
+                            "name": "action.result.name",
+                            "value": "={{ $json.output.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2168,
+                -225
+            ],
+            "id": "5fb6552e-7122-4417-8d3e-d6281c4f84ee",
+            "name": "Edit agent dev"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                2388,
+                -350
+            ],
+            "id": "2bf0d99f-2da8-42af-9705-c4985d0cf44a",
+            "name": "Merge Agent dev"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                3204,
+                -350
+            ],
+            "id": "82ea8510-0aaf-4289-95fd-8fc070446013",
+            "name": "Merge Code review"
+        },
+        {
+            "parameters": {
+                "mode": "chooseBranch"
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                3722,
+                -500
+            ],
+            "id": "7168cf80-dc4e-4f48-b891-ccde84e2b1f8",
+            "name": "Merge If"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                4098,
+                -150
+            ],
+            "id": "6472c750-8d7c-47eb-a844-8b08a1970451",
+            "name": "Edit Debug"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "605b28e6-c7be-4e97-85ed-9cd0d013a237",
+                            "name": "action.result.unitTests",
+                            "value": "={{ $json.output.unitTests }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                4396,
+                -700
+            ],
+            "id": "8faf9156-5a46-4cc7-8c71-bb5054ce0469",
+            "name": "Edit Unit tests"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "75778707-a1b8-4b5d-b350-87cfcdbea43c",
+                            "name": "action.result.resultBA",
+                            "value": "={{ $json.output.resultBA }}",
+                            "type": "boolean"
+                        },
+                        {
+                            "id": "c0f5385c-ca83-4a43-8d75-4136102f8206",
+                            "name": "action.result.explanationBA",
+                            "value": "={{ $json.output.explanationBA }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1352,
+                -225
+            ],
+            "id": "b34ed6c7-de91-4130-8873-0f88d9c4ccb7",
+            "name": "Edit BA QA"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                1572,
+                -350
+            ],
+            "id": "c85c2395-afed-477b-a06b-5499895009af",
+            "name": "Merge BA QA"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "63db0edd-2368-453e-8269-232d39f1c560",
+                            "name": "action.result.originalRequirements",
+                            "value": "={{ $json.output.originalRequirements }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7742c4cf-d6c8-46a3-9068-893271624981",
+                            "name": "action.result.technicalRequirements",
+                            "value": "={{ $json.output.technicalRequirements }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                536,
+                -225
+            ],
+            "id": "6b3045f6-774e-429b-a05e-da6bbaa94187",
+            "name": "Edit BA"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "m83cJcKPf92gmPCK",
+                    "mode": "list",
+                    "cachedResultName": "Github - Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "/code/js/{{ $json.name }}.js",
+                        "content": "{{ $json.code }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                4820,
+                120
+            ],
+            "id": "a3d5f0f3-4acb-4cdb-91ce-f11466730b44",
+            "name": "Github - post code",
+            "retryOnFail": true
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "prompt"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -720,
+                -350
+            ],
+            "id": "63c5ec09-d301-4ac3-be1c-06e510be36a6",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "yTYwOjUDjMwy3pIC",
+                    "mode": "list",
+                    "cachedResultName": "Action - New"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "AI Builder JS Functions"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "type",
+                            "displayName": "type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "object",
+                            "displayName": "object",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "instrument",
+                            "displayName": "instrument",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "agent",
+                            "displayName": "agent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeStart",
+                            "displayName": "timeStart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeEnd",
+                            "displayName": "timeEnd",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -500,
+                -350
+            ],
+            "id": "9819855d-06ac-49a9-a6e2-eb7700583a57",
+            "name": "Init action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "646d9bdf-cb36-47fc-8a35-5958c21352aa",
+                            "name": "action.object.[\"@type']",
+                            "value": "=Prompt",
+                            "type": "string"
+                        },
+                        {
+                            "id": "60503ac0-b97b-4fd9-b78d-0e1265086b12",
+                            "name": "action.object.text",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.prompt }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -60,
+                -350
+            ],
+            "id": "fb308b7b-f0c6-4e3c-a359-515e5fa48d6b",
+            "name": "Set action.object"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2d7efec3-44d6-4fb3-98ae-1af9e3ae1c41",
+                            "name": "action.object",
+                            "value": "={{ $json.action.object }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -280,
+                -350
+            ],
+            "id": "9c684290-6b06-410e-bf49-3e6c6e3dbc71",
+            "name": "Init action.object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "RIKjERUrQe1hlh4R",
+                    "mode": "list",
+                    "cachedResultName": "Action - Set Complete"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "action": "={{ $json.action }}",
+                        "result": "={{ $json.action.result }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "action",
+                            "displayName": "action",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                5496,
+                -600
+            ],
+            "id": "2cd3b0da-4cfa-4c66-9cd9-e0dcb0b88425",
+            "name": "Set action complete"
+        },
+        {
+            "parameters": {
+                "mode": "chooseBranch",
+                "numberInputs": 4
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                5276,
+                -621
+            ],
+            "id": "2fedf3bf-299d-4ff5-98a8-17e45f3be333",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                756,
+                -350
+            ],
+            "id": "ee46e8d7-e526-47e3-99fd-aa8e7c23457b",
+            "name": "Merge BA"
+        }
+    ],
+    "connections": {
+        "Google Gemini Chat Model1": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent Dev",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model2": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent Code Review",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent Unit Tests": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Unit tests",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent Dev",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent Code Review": {
+            "main": [
+                [
+                    {
+                        "node": "Edit agent code review",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser1": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent Code Review",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model3": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent Business Analyst",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent Business Analyst": {
+            "main": [
+                [
+                    {
+                        "node": "Edit BA",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser2": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent Business Analyst",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model4": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent BA QA",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser3": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent BA QA",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent BA QA": {
+            "main": [
+                [
+                    {
+                        "node": "Edit BA QA",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent Dev": {
+            "main": [
+                [
+                    {
+                        "node": "Edit agent dev",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If Pass code review": {
+            "main": [
+                [
+                    {
+                        "node": "Merge If",
+                        "type": "main",
+                        "index": 1
+                    }
+                ],
+                [
+                    {
+                        "node": "AI Agent Debug",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model5": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent Unit Tests",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model6": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent Debug",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser4": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent Unit Tests",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser5": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent Debug",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent Debug": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Debug",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Github - post tests": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge Unit tests": {
+            "main": [
+                [
+                    {
+                        "node": "Github - post tests",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Github - post config",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Github - post code",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit agent code review": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Code review",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Edit agent dev": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Agent dev",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge Agent dev": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Code review",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "AI Agent Code Review",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge Code review": {
+            "main": [
+                [
+                    {
+                        "node": "If Pass code review",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge If": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent Unit Tests",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge Unit tests",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Unit tests": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Unit tests",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Edit BA QA": {
+            "main": [
+                [
+                    {
+                        "node": "Merge BA QA",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge BA QA": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent Dev",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge Agent dev",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit BA": {
+            "main": [
+                [
+                    {
+                        "node": "Merge BA",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Init action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Init action": {
+            "main": [
+                [
+                    {
+                        "node": "Init action.object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set action.object": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent Business Analyst",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge BA",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Init action.object": {
+            "main": [
+                [
+                    {
+                        "node": "Set action.object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Github - post config": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 2
+                    }
+                ]
+            ]
+        },
+        "Github - post code": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 3
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Set action complete",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge BA": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent BA QA",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge BA QA",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "prompt": "Please write a js function to extract emails from a string"
+                }
+            }
+        ]
+    },
+    "versionId": "93a83518-0b17-4f4f-9ba6-bcc107267bce",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "createdAt": "2025-07-01T17:12:18.218Z",
+            "updatedAt": "2025-07-01T17:12:18.218Z",
+            "role": "workflow:owner",
+            "workflowId": "JfSQIlkv0O3NKPxn",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:19.644Z",
+            "updatedAt": "2025-07-11T13:29:39.556Z",
+            "id": "fsYQGx4UGwRejmSm",
+            "name": "type:agent"
+        }
+    ]
+}
