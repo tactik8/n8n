@@ -1,0 +1,249 @@
+{
+    "createdAt": "2025-07-11T00:04:13.799Z",
+    "updatedAt": "2025-07-11T13:42:07.000Z",
+    "id": "fyt5PERckzv2YEjV",
+    "name": "API - Pexels get image",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "prompt"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -180,
+                0
+            ],
+            "id": "3fb616d7-3445-4855-968a-dc7b0fc9deb5",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Choose an expression based on which you will find a matching graphic in Pexels API.\nTopic:  {{ $json.prompt }}\nInstructions:\n- Choose one expression that will best match to find a graphic.\n- Use a general category to always match a graphic.\n- Do not use any HTML characters.\n- Return only a string containing the expression.\n- Do not use quotation marks. The only allowed special characters are \":\" and \",\".\n- Make each one unique so there are no 2 identical graphics.",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 2,
+            "position": [
+                40,
+                0
+            ],
+            "id": "de8c5035-3295-42b8-aaef-7c55d16a9e8e",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "modelName": "models/gemini-2.5-flash",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                128,
+                220
+            ],
+            "id": "b5f14eba-553d-41dc-895d-a6d4262aa47a",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "wVbFxDjeXzf3w3kv",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "=https://api.pexels.com/v1/search?query={{ encodeURIComponent( $json.output)}}&per_page=1",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "KLYF6wZth0T9iBPo3LWHHK1OlBXV0dcvCMaldaGxP6AxYPIMtnCXGZX1"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                416,
+                0
+            ],
+            "id": "25362ed8-0ce0-43c7-87ec-dd6efae59975",
+            "name": "Search pexels images"
+        },
+        {
+            "parameters": {
+                "url": "={{ $('Search pexels images').item.json.photos[0].src.large2x }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                636,
+                0
+            ],
+            "id": "3e5fda34-a840-4c9a-91cc-959830406984",
+            "name": "Download image"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "931THV5mo5mQDBRw",
+                    "mode": "list",
+                    "cachedResultName": "API - Google Cloud Post File2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filename": "={{ $json.photos[0].url }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                856,
+                0
+            ],
+            "id": "d24d4799-7561-4fb1-ab67-ad6911ff2c00",
+            "name": "Save file"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Search pexels images",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Search pexels images": {
+            "main": [
+                [
+                    {
+                        "node": "Download image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download image": {
+            "main": [
+                [
+                    {
+                        "node": "Save file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "prompt": "taking care of a puppy"
+                }
+            }
+        ]
+    },
+    "versionId": "ea325042-6407-4090-9560-8bb3abb033a6",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T00:04:13.803Z",
+            "updatedAt": "2025-07-11T00:04:13.803Z",
+            "role": "workflow:owner",
+            "workflowId": "fyt5PERckzv2YEjV",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:11:55.156Z",
+            "updatedAt": "2025-07-11T13:28:22.519Z",
+            "id": "IDoNgAgFMAqCrBi3",
+            "name": "type:api"
+        },
+        {
+            "createdAt": "2025-07-11T13:23:19.524Z",
+            "updatedAt": "2025-07-11T13:28:58.293Z",
+            "id": "s1em01bGbvurEnKG",
+            "name": "id:Pexels"
+        }
+    ]
+}
