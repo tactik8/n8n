@@ -1,0 +1,240 @@
+{
+    "createdAt": "2025-07-12T19:36:05.745Z",
+    "updatedAt": "2025-07-12T19:36:05.000Z",
+    "id": "7tDDTMKpULVPamte",
+    "name": "Schema WebPage Deprecated",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "_record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentObject",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentProperty"
+                        },
+                        {
+                            "name": "url"
+                        },
+                        {
+                            "name": "dateModified"
+                        },
+                        {
+                            "name": "text"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "aeb86bf0-a821-4571-b77e-7bb1a7f2382f",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "519b28a6-2400-4068-8da8-41b04858b97f",
+                            "name": "@type",
+                            "value": "=WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "be58eb05-2ee6-4e34-889b-b7e435496d04",
+                            "name": "@id",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                440,
+                0
+            ],
+            "id": "bde24ae6-d52c-4835-8016-88afea50667b",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "VAj8rS9DB096mWYk",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool merge record and properties"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "915dfa46-f017-4518-953b-513d89315ec8",
+            "name": "Merge record and properties"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Set id and clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                660,
+                0
+            ],
+            "id": "d3226b4d-e91e-4cfc-90ef-2858d2d827ac",
+            "name": "Set id"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Merge record and properties",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Set id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge record and properties": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set id": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "_record": {
+                        "@context": "https://schema.org/",
+                        "@type": "WebPage",
+                        "@id": "webpage_1",
+                        "name": "webpage_1",
+                        "url": "HTTPS://www.test.com/page1",
+                        "dateModified": "2022-01-01"
+                    },
+                    "url": null,
+                    "dateModified": null
+                }
+            },
+            {
+                "json": {
+                    "_record": null,
+                    "url": "https://www.test.com/page1",
+                    "dateModified": "2022-01-01"
+                }
+            }
+        ]
+    },
+    "versionId": "cd6a6b99-fa75-48ed-8ba5-3109eb4e37ea",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-12T19:36:05.750Z",
+            "updatedAt": "2025-07-12T19:36:05.750Z",
+            "role": "workflow:owner",
+            "workflowId": "7tDDTMKpULVPamte",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
