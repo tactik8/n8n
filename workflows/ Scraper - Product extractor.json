@@ -1,0 +1,423 @@
+{
+    "createdAt": "2025-06-20T14:14:17.045Z",
+    "updatedAt": "2025-06-20T18:17:36.000Z",
+    "id": "7TFdlvmMcefi5JlF",
+    "name": "Scraper - Product extractor",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "19348787-b453-499c-9b62-74a6332f2049",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1089905982,
+                    "mode": "list",
+                    "cachedResultName": "Content",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=1089905982"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                220,
+                0
+            ],
+            "id": "d80876ca-8010-432a-abba-76f0ac730d48",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f87ab25d-446d-40df-a4dd-200b9740aeaa",
+                            "name": "content",
+                            "value": "={{ $json.content.replace(/[\\n\\r]+/g, '').replace(/\\s{2,10}/g, ' ') }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                440,
+                0
+            ],
+            "id": "ede96662-22c5-44b9-a881-3407b5d39fda",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1_H_-JazvcS0gGEW-b4aF9KBzVHkl8nW6cpVCTKMIEO4",
+                    "mode": "list",
+                    "cachedResultName": "Price monitoring",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_H_-JazvcS0gGEW-b4aF9KBzVHkl8nW6cpVCTKMIEO4/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Sheet1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_H_-JazvcS0gGEW-b4aF9KBzVHkl8nW6cpVCTKMIEO4/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "autoMapInputData",
+                    "value": {
+                        "_type": "={{ $json._type }}",
+                        "_id": "={{ $json._id }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_type",
+                            "displayName": "_type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "_id",
+                            "displayName": "_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "date",
+                            "displayName": "date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "description",
+                            "displayName": "description",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "sku",
+                            "displayName": "sku",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "mpn",
+                            "displayName": "mpn",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "brand",
+                            "displayName": "brand",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "image",
+                            "displayName": "image",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "offerUrl",
+                            "displayName": "offerUrl",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "offers_price",
+                            "displayName": "offers_price",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "offers_priceCurrency",
+                            "displayName": "offers_priceCurrency",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "offers_availability",
+                            "displayName": "offers_availability",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "offers_url",
+                            "displayName": "offers_url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "manufacturer",
+                            "displayName": "manufacturer",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {
+                    "handlingExtraData": "insertInNewColumn",
+                    "useAppend": true
+                }
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                1320,
+                0
+            ],
+            "id": "f38585fe-f012-47fe-8bfd-6b49f16b048e",
+            "name": "Google Sheets1",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\nfunction removeArray(value){\n\n\n  if(Array.isArray(value)){\n    return value[0]\n  }\n\n  if(typeof value === \"object\"){\n    let newValue = {}\n    for(let k in value){\n      newValue[k] = removeArray(value[k])\n    }\n    return newValue\n  }\n  \n  return value\n}\n\nfor (const item of $input.all()) {\n\n  let products = []\n\n  let records = []\n  try{\n    records = JSON.parse(item.json.content)\n  } catch(error){\n    \n  }\n\n  \n  records = Array.isArray(records) ? records : [records]\n\n  for(let d of records){\n\n    let record_type = d?.[\"@type\"] || ''\n    record_type = record_type.toLowerCase()\n    if(record_type != 'product' ){\n      continue\n    }\n\n\n    d = removeArray(d)\n\n    \n    let record = {}\n      \n    record._type = d?.['@type'] || null\n    record._id = d?.['@id'] || null\n    record.name = d?.name  || null\n    record.description = d?.description || null\n    record.sku = d?.sku || null\n    record.mpn = d?.mpn || null\n    record.brand = d?.brand?.name || d?.brand || null\n    record.manufacturer = d?.manufacturer?.name || d?.manufacturer || null\n    record.image = d?.image?.url || d?.image  || null\n    record.offers_price = d?.offers?.price || null\n    record.offers_priceCurrency = d?.offers?.priceCurrency || null\n    record.offers_availability = d?.offers?.availability || null\n    record.offers_url = d.offers.url || null\n    \n    products.push(record)\n  }\n  item.json.products = products\n  \n}\n\nreturn $input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                660,
+                0
+            ],
+            "id": "cf35a11e-6160-42f2-9355-e658245b6a37",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "products",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                880,
+                0
+            ],
+            "id": "363e62cc-8e5c-4fb6-a20c-0cc4e694af6d",
+            "name": "Split Out"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "9e6473cc-15ea-47a0-89bf-472f0e995780",
+                            "name": "date",
+                            "value": "={{ $('Google Sheets').item.json.date }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e96639f3-bec0-44ef-ad6f-569060a72ce4",
+                            "name": "url",
+                            "value": "={{ $('Google Sheets').item.json.url }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1100,
+                0
+            ],
+            "id": "04e6f87e-e7a9-4e7d-8575-5b52ba91c461",
+            "name": "Edit Fields1"
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "4538119a-4b20-449e-856a-66ae58b0e2d5",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-06-20T14:14:17.051Z",
+            "updatedAt": "2025-06-20T14:14:17.051Z",
+            "role": "workflow:owner",
+            "workflowId": "7TFdlvmMcefi5JlF",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
