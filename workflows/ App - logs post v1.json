@@ -1,0 +1,220 @@
+{
+    "createdAt": "2025-07-11T13:47:36.030Z",
+    "updatedAt": "2025-07-11T14:03:32.000Z",
+    "id": "xY9VlwAGO8TWWvrH",
+    "name": "App - logs post v1",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "projectID"
+                        },
+                        {
+                            "name": "action",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "4e8c259d-b39e-45bf-a3e1-ea098e97b90e",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Set id and clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json.action }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "7c1bd951-4f0f-427c-bdd6-81fbeced5231",
+            "name": "Execute Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "H7E1XaJ0xtx8Je7t",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "projectID": "={{ $('When Executed by Another Workflow').item.json.projectID }}",
+                        "tenantID": "logs_v1",
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                440,
+                0
+            ],
+            "id": "de40c9b2-1fa3-43a8-9f21-8f7f0eb48f5e",
+            "name": "Post Log"
+        },
+        {
+            "parameters": {
+                "content": "## App Logs post\n\nManages logs for other apps"
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -580,
+                -240
+            ],
+            "typeVersion": 1,
+            "id": "bd0d247b-fd0f-49c0-82cd-113084c61ef9",
+            "name": "Sticky Note"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Post Log",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "projectID": "test_project_v1",
+                    "action": {
+                        "@type": "Action",
+                        "@id": "action_1",
+                        "name": "action_1",
+                        "actionStatus": "CompletedActionStatus",
+                        "startTime": "",
+                        "endTime": "",
+                        "object": "",
+                        "result": "",
+                        "instrument": ""
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "7cb360c2-51c6-41de-88e6-79ce14db3296",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T13:47:36.034Z",
+            "updatedAt": "2025-07-11T13:47:36.034Z",
+            "role": "workflow:owner",
+            "workflowId": "xY9VlwAGO8TWWvrH",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-11T13:27:12.728Z",
+            "updatedAt": "2025-07-11T13:28:29.033Z",
+            "id": "ZoyZr6DZSDRTzi0t",
+            "name": "type:app"
+        },
+        {
+            "createdAt": "2025-07-11T13:48:03.117Z",
+            "updatedAt": "2025-07-11T13:48:03.117Z",
+            "id": "qesXdAFv90aasTNB",
+            "name": "id:logs"
+        }
+    ]
+}
