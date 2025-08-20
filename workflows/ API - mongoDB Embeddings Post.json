@@ -1,0 +1,336 @@
+{
+    "createdAt": "2025-07-10T18:35:30.822Z",
+    "updatedAt": "2025-07-11T13:41:48.000Z",
+    "id": "73cQWFx406dloEba",
+    "name": "API - mongoDB Embeddings Post",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "75e8e9fc-826f-4363-a8a6-1996c2a0bb20",
+                            "name": "records",
+                            "value": "={{ Array.isArray($json.record) ? $json.record : [$json.record] }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "12c44d48-9862-40b9-8a43-cafc5970e596",
+                            "name": "collectionName",
+                            "value": "={{ $json?.collectionName || 'testCollection' }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -260,
+                20
+            ],
+            "id": "83d90219-bca4-4d71-8db0-f30eba7a860d",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nlet results = []\nfor (const item of $input.all()) {\n  for(let v of item.json.records){\n\n    if(!v){\n      continue\n    }\n    \n    \n    v['_c'] = item.json.collectionName\n    results.push(v)\n  }\n \n}\n\nreturn results"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -60,
+                20
+            ],
+            "id": "c40e375f-4f97-4640-b3bc-c34b42151926",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "collectionName"
+                        },
+                        {
+                            "name": "record",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -700,
+                20
+            ],
+            "id": "b69ec9f9-be26-4340-8b4e-dfda25ff5277",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "operation": "findOneAndReplace",
+                "collection": "={{ $json._c }}",
+                "updateKey": "@ref",
+                "fields": "={{ Object.keys($json).filter(x => !x.startsWith('_')).join(',') }}",
+                "upsert": true,
+                "options": {
+                    "dateFields": "={{ Object.keys($json).filter(x => x.toLowerCase().includes('date')).join(',') }}"
+                }
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                620,
+                20
+            ],
+            "id": "e7282b9a-7877-4c8b-a08c-d4d816a14b66",
+            "name": "MongoDB Post Records",
+            "credentials": {
+                "mongoDb": {
+                    "id": "AdtrxA5QvBiBDprC",
+                    "name": "MongoDB account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - Set id"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                160,
+                20
+            ],
+            "id": "588d59e4-81b4-4ae1-b7c4-4aec97ec057a",
+            "name": "Add ID"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "5fcd2764-aeda-411a-b7d7-942beadddbfe",
+                            "name": "@ref['@type']",
+                            "value": "={{ $json['@type'] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b1a0284a-4b5e-4e83-92e9-0259a84e12bd",
+                            "name": "@ref['@id']",
+                            "value": "={{ $json['@id'] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                380,
+                20
+            ],
+            "id": "c51e80ff-cd95-460d-9452-0a9cac705c72",
+            "name": "Add @ref"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d955608d-1059-4589-8ec0-20b8f1d3582b",
+                            "name": "record",
+                            "value": "={{ typeof $json.record == 'string' ? JSON.parse($json.record) : $json.record}}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -480,
+                20
+            ],
+            "id": "1ca7af6f-36ef-4856-92a4-6315a3eda019",
+            "name": "Parse JSON"
+        }
+    ],
+    "connections": {
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Add ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Parse JSON",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MongoDB Post Records": {
+            "main": [
+                [],
+                []
+            ]
+        },
+        "Add ID": {
+            "main": [
+                [
+                    {
+                        "node": "Add @ref",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add @ref": {
+            "main": [
+                [
+                    {
+                        "node": "MongoDB Post Records",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse JSON": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "collectionName": "testCollection",
+                    "record": {
+                        "@context": "https://schema.org/",
+                        "@type": "Thing",
+                        "@id": "thing1",
+                        "name": "thing1"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "collectionName": "testCollection",
+                    "record": [
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing2",
+                            "name": "thing2"
+                        },
+                        {
+                            "@context": "https://schema.org/",
+                            "@type": "Thing",
+                            "@id": "thing3",
+                            "name": "thing3"
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "versionId": "e1c6f1f9-f2e2-49e3-83c1-a2f5eca64083",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-10T18:35:30.824Z",
+            "updatedAt": "2025-07-10T18:35:30.824Z",
+            "role": "workflow:owner",
+            "workflowId": "73cQWFx406dloEba",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:11:55.156Z",
+            "updatedAt": "2025-07-11T13:28:22.519Z",
+            "id": "IDoNgAgFMAqCrBi3",
+            "name": "type:api"
+        }
+    ]
+}
