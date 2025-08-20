@@ -1,0 +1,109 @@
+{
+    "createdAt": "2025-07-08T16:30:02.003Z",
+    "updatedAt": "2025-07-11T13:30:15.000Z",
+    "id": "mvliSa5SYNAvzsQJ",
+    "name": "Insert a document in MongoDB",
+    "active": false,
+    "isArchived": true,
+    "nodes": [
+        {
+            "parameters": {},
+            "name": "On clicking 'execute'",
+            "type": "n8n-nodes-base.manualTrigger",
+            "position": [
+                380,
+                240
+            ],
+            "typeVersion": 1,
+            "id": "463193ab-b8dd-4011-a388-378c5a99e3d1"
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "record.my_key",
+                            "value": "my_value"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Set",
+            "type": "n8n-nodes-base.set",
+            "position": [
+                580,
+                240
+            ],
+            "typeVersion": 1,
+            "id": "cf8638a3-5371-4234-86cc-9c76fa48df04"
+        },
+        {
+            "parameters": {
+                "operation": "insert",
+                "collection": "n8n-collection",
+                "fields": "record.my_key",
+                "options": {}
+            },
+            "name": "MongoDB",
+            "type": "n8n-nodes-base.mongoDb",
+            "position": [
+                780,
+                240
+            ],
+            "typeVersion": 1,
+            "id": "bb7fae83-ad8c-43f6-99d2-30492ea5a581",
+            "credentials": {
+                "mongoDb": {
+                    "id": "AdtrxA5QvBiBDprC",
+                    "name": "MongoDB account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Set": {
+            "main": [
+                [
+                    {
+                        "node": "MongoDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "On clicking 'execute'": {
+            "main": [
+                [
+                    {
+                        "node": "Set",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateId": "503",
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "7ff177d7-f14a-4ddf-8d6e-540002c80433",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T16:30:02.007Z",
+            "updatedAt": "2025-07-08T16:30:02.007Z",
+            "role": "workflow:owner",
+            "workflowId": "mvliSa5SYNAvzsQJ",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
