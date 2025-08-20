@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-20T12:55:07.364Z",
-    "updatedAt": "2025-08-20T13:30:57.000Z",
+    "updatedAt": "2025-08-20T13:48:51.000Z",
     "id": "yIsNJe5MMDD5GdhR",
     "name": "API Github - Backup Workflows",
     "active": false,
@@ -731,7 +731,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "1f626ab0-4772-4144-9f2a-28c76f7806ba",
+    "versionId": "11743646-2ecb-4ee0-b5db-4efe10d4e5d0",
     "triggerCount": 0,
     "shared": [
         {
@@ -742,5 +742,18 @@
             "projectId": "q4hW5jXLU3axUty6"
         }
     ],
-    "tags": []
+    "tags": [
+        {
+            "createdAt": "2025-08-20T13:48:37.853Z",
+            "updatedAt": "2025-08-20T13:48:37.853Z",
+            "id": "w7LnN1S1KPFgXQ5c",
+            "name": "trigger:daily"
+        },
+        {
+            "createdAt": "2025-08-20T13:48:30.298Z",
+            "updatedAt": "2025-08-20T13:48:30.298Z",
+            "id": "zb8xcvCVuZMolHWr",
+            "name": "app: n8nBackup"
+        }
+    ]
 }
