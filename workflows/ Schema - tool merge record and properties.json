@@ -1,0 +1,157 @@
+{
+    "createdAt": "2025-07-09T15:54:15.157Z",
+    "updatedAt": "2025-08-08T16:44:23.000Z",
+    "id": "VAj8rS9DB096mWYk",
+    "name": "Schema - tool merge record and properties",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\nfunction setValue(record, fullPath, value) {\n\n  if(Array.isArray(record)){\n    return record.map(x => setValue(x, fullPath, value))\n  }\n\n  \n  let pathItems = fullPath.split('.')\n\n  // Get path item\n  let path = pathItems[0]\n  path = path.split('[')[0]\n  let pathItemsRemaining = pathItems.slice(1)\n\n\n  // Get path position\n  let pathPosition = pathItems[0].split('[')?.[1]\n  if (pathPosition) {\n    pathPosition = pathPosition.split(']')?.[0] || 0\n    try {\n      pathPosition = parseInt(pathPosition || 0)\n    } catch (error) {\n\n    }\n  } else {\n    pathPosition = 0\n  }\n\n\n  // Create values if missing items\n  let subRecords = record?.[path] || []\n  subRecords = Array.isArray(subRecords) ? subRecords : [subRecords]\n\n  // Add values is position less than length\n  while (subRecords.length < pathPosition + 1) {\n    subRecords.push({  })\n  }\n  record[path] = subRecords\n\n  // Set value\n  if (pathItemsRemaining && pathItemsRemaining.length > 0) {\n\n    let currentValue = record[path][pathPosition]\n    record[path][pathPosition] = setValue(currentValue, pathItemsRemaining.join('.'), value)\n\n  } else {\n    record[path][pathPosition] = value\n  }\n\n\n  // Clean up\n  if(record[path].length === 0){\n    record[path] = undefined\n  }\n  \n  if(record[path].length === 1){\n    record[path] = record[path][0]\n  }\n  \n  return record\n}\n\n\n\nfunction processRecord(value){\n//\n\n  let baseRecord = value\n  \n  let inputRecord = value?._record || {}\n\n  let jsonRecordString = value?._json || value?._jsonRecord || value?._jsonObject || \"\"\n\n  let parentObject = value?.['_parentObject'] || value?.['_parentRecord'] || {}\n  let parentProperty = value?.['_parentProperty'] || null\n\n  let newRecord = {}\n\n\n  // Transform JSON\nlet jsonRecord = {}\ntry { \n  jsonRecord = JSON.parse(jsonRecordString) \n} catch (error){\n  \n} finally {\n  console.log('tt')\n}\nconsole.log('pp')\n  // _record\n\n\n  for(let k in inputRecord){\n    \n    if(k.startsWith('_') === true){\n          continue\n        }\n    let value = inputRecord?.[k]\n    if(value !== undefined && value !== null){\n      newRecord = setValue(newRecord, k, value)\n    }\n  }\n\n\n  // JSON record\n  for(let k in jsonRecord){\n    \n    if(k.startsWith('_') === true){\n          continue\n        }\n    let value = jsonRecord?.[k]\n    if(value !== undefined && value !== null){\n      newRecord = setValue(newRecord, k, value)\n    }\n  }\n\n// Base record\n  for(let k in baseRecord){\n    \n    if(k.startsWith('_') === true){\n          continue\n        }\n    let value = baseRecord?.[k]\n    if(value !== undefined && value !== null){\n      newRecord = setValue(newRecord, k, value)\n    }\n  }\n\n\n\n  // add to parent object\n  \n  if(parentProperty && parentProperty != \"\"){\n\n    if(parentObject?.[parentProperty]){\n      parentObject[parentProperty] = Array.isArray(parentObject[parentProperty]) ? parentObject[parentProperty] : [parentObject[parentProperty]]\n        \n      parentObject[parentProperty].push(newRecord)\n         \n    } else {\n    parentObject[parentProperty] = newRecord\n    newRecord = parentObject\n    }\n  }\n \n\n  return newRecord\n}\n\n\n\n\n\n// Process all items\nlet results = []\nfor (let item of $input.all()){\n  item.json = processRecord(item.json?.content)\n}\n\nreturn  $input.all()\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -320,
+                0
+            ],
+            "id": "0978fb0d-a830-422a-9977-181b42828df3",
+            "name": "Merge record and properties"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "content",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "id": "d7d79e91-fe17-419c-a896-f9358676e9bd",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                -540,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "content": "# Merge record and properties\nTakes any input and adds the individual properties to the record property\n\n## Example: \n```\n{ \n    \"record\": {\n        \"@context\": \"https://schema.org/\",\n        \"@type\": \"Thing\",\n        \"@id\": \"thing1\",\n        \"name\": \"thing1\"\n    },\n    \"url\": \"https://www.test.com\",\n    \"result.url\": \"https://www.result.com\"\n}\n```\nInto\n```\n{\n    \"@context\": \"https://schema.org/\",\n    \"@type\": \"Thing\",\n    \"@id\": \"thing1\",\n    \"name\": \"thing1\",\n    \"url\": \"https://www.test.com\",\n    \"result\": {\n        \"url\": \"https://www.result.com\"\n    }\n}\n```",
+                "height": 740,
+                "width": 420
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -1260,
+                -320
+            ],
+            "typeVersion": 1,
+            "id": "be32b97e-928c-4ac7-8cfa-8467ed78ab01",
+            "name": "Sticky Note"
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Merge record and properties",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "content": {
+                        "_json": "{ \"name\": \"some name\"}"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "content": {
+                        "_record": {
+                            "@type": "Thing",
+                            "@id": "thing1",
+                            "name": "thing1"
+                        },
+                        "_parentRecord": {
+                            "@type": "Thing",
+                            "@id": "thingParent",
+                            "name": "thingParent"
+                        },
+                        "_parentProperty": "ppPro",
+                        "@type": "NewsArticle",
+                        "@id": "someid",
+                        "name": "some name",
+                        "url": "some url"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "content": {
+                        "_record": null,
+                        "_parentObject": null,
+                        "_parentProperty": null,
+                        "type": null,
+                        "id": null,
+                        "name": "Crawler - https://www.homesalive.ca  - 2025-07-11T14:58:36.012-04:00",
+                        "object": {
+                            "url": "https://www.homesalive.ca",
+                            "@type": "WebSite",
+                            "@id": "https://www.homesalive.ca"
+                        },
+                        "instrument": null,
+                        "result": null,
+                        "agent": null,
+                        "actionStatus": "FailedActionStatus",
+                        "timeStart": "2025-07-11T14:58:36.012-04:00",
+                        "timeEnd": "2025-07-11T14:58:36.011-04:00",
+                        "error": "Error retrieving robots.txt - Method not allowed - please check you are using the right HTTP method"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "b367d4dd-84e6-4e4f-b7d8-5a64154d4cf1",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-09T15:54:15.159Z",
+            "updatedAt": "2025-07-09T15:54:15.159Z",
+            "role": "workflow:owner",
+            "workflowId": "VAj8rS9DB096mWYk",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:24:58.354Z",
+            "updatedAt": "2025-07-11T13:29:26.063Z",
+            "id": "r2cvYyX9826F5fV6",
+            "name": "type:tool"
+        }
+    ]
+}
