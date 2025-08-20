@@ -1,0 +1,1582 @@
+{
+    "createdAt": "2025-06-19T17:01:48.297Z",
+    "updatedAt": "2025-07-12T12:18:29.000Z",
+    "id": "V26Tb92HmiOdJpi6",
+    "name": "Crawler - Crawl Website V2",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "WebSite"
+                        },
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                820,
+                940
+            ],
+            "id": "0dfb469c-73d9-40a1-9a31-d8239e7afb80",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "content": "## Crawler V2\nRetrieves all urls from sitemaps.\nStores them in google sheets\n\nInput: \nurl of a website\n\nOutput: \nna",
+                "height": 320,
+                "width": 600
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                1080,
+                140
+            ],
+            "typeVersion": 1,
+            "id": "dcec7b0a-7150-4194-bb59-75fb2f18417b",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ymBZhHFOWQtB1lx5",
+                    "mode": "list",
+                    "cachedResultName": "App - Crawler tool get urls from sitemaps v2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "WebPage": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "WebPage"
+                    ],
+                    "schema": [
+                        {
+                            "id": "WebPage",
+                            "displayName": "WebPage",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {
+                    "waitForSubWorkflow": true
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1560,
+                840
+            ],
+            "id": "5e2fb6fa-849d-4931-a77e-8cb11a36bcf9",
+            "name": "Get URLs from sitemap",
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "KoPfmAVaeSR1fq2r",
+                    "mode": "list",
+                    "cachedResultName": "Schema WebSite"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "WebSite": "={{ $json.WebSite }}",
+                        "url": "={{ $json.url }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "WebSite",
+                            "displayName": "WebSite",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1120,
+                940
+            ],
+            "id": "7433b012-2ff7-469e-8eb4-678188845c84",
+            "name": "Get WebSite object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "AB3HHrM4ZQtqagNS",
+                    "mode": "list",
+                    "cachedResultName": "App - Crawler tool get robots.txt V2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Action_object_url": "={{ $json.url }}"
+                    },
+                    "matchingColumns": [
+                        "Action_object_url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "Action_object_url",
+                            "displayName": "Action_object_url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1340,
+                940
+            ],
+            "name": "Call App - crawler get robots.txt",
+            "id": "98d10988-e77f-40cd-b0c4-42e9c9ac1bec",
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "afdbb568-ff04-4180-8dff-4ddf7cc3ca99",
+                            "name": "object",
+                            "value": "={{ $('Get WebSite object').item.json }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "cd870add-ce65-47cf-8035-5f693d096173",
+                            "name": "agent['@type']",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "75bc0c78-50e5-4fac-b9a6-ad7d9bfea8d7",
+                            "name": "agent['@id']",
+                            "value": "={{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6fe1b5e8-4dc5-457b-9626-9a9122a18a28",
+                            "name": "agent.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2000,
+                540
+            ],
+            "id": "05b13607-3c40-4498-89cf-fd4a57cee2c7",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "yTYwOjUDjMwy3pIC",
+                    "mode": "list",
+                    "cachedResultName": "Schema Action"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "object": "={{ $json.object }}",
+                        "result": "={{ $json.result }}",
+                        "actionStatus": "CompletedActionStatus",
+                        "timeEnd": "={{ $now }}",
+                        "timeStart": "={{ $now }}",
+                        "name": "=Crawler -  {{ $('Get WebSite object').item.json.url }} - {{ $now }}",
+                        "agent": "={{ $json.agent }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "type",
+                            "displayName": "type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "object",
+                            "displayName": "object",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "instrument",
+                            "displayName": "instrument",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "agent",
+                            "displayName": "agent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeStart",
+                            "displayName": "timeStart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeEnd",
+                            "displayName": "timeEnd",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2220,
+                540
+            ],
+            "id": "fda58331-eda1-4449-960a-521066487c0e",
+            "name": "To Action"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "destinationFieldName": "result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                1780,
+                540
+            ],
+            "id": "e4a55d59-3551-4859-9791-2b4787fa56e6",
+            "name": "Aggregate Result"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "H7E1XaJ0xtx8Je7t",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "crawler_v1",
+                        "projectID": "crawler_project_v1",
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2440,
+                440
+            ],
+            "id": "fd3389d4-0c4e-4c27-a2d4-b28512830f27",
+            "name": "Save Action Record"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "afdbb568-ff04-4180-8dff-4ddf7cc3ca99",
+                            "name": "object",
+                            "value": "={{ $('Get WebSite object').item.json }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "cd870add-ce65-47cf-8035-5f693d096173",
+                            "name": "agent['@type']",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "75bc0c78-50e5-4fac-b9a6-ad7d9bfea8d7",
+                            "name": "agent['@id']",
+                            "value": "={{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6fe1b5e8-4dc5-457b-9626-9a9122a18a28",
+                            "name": "agent.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1780,
+                940
+            ],
+            "id": "389761b4-0a5d-4e02-a7b4-b5e3a5995d17",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "yTYwOjUDjMwy3pIC",
+                    "mode": "list",
+                    "cachedResultName": "Schema Action"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "object": "={{ $json.object }}",
+                        "result": "={{ $json.result }}",
+                        "actionStatus": "FailedActionStatus",
+                        "timeEnd": "={{ $now }}",
+                        "timeStart": "={{ $now }}",
+                        "name": "=Crawler -  {{ $('Get WebSite object').item.json.url }} - {{ $now }}",
+                        "agent": "={{ $json.agent }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "type",
+                            "displayName": "type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "object",
+                            "displayName": "object",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "instrument",
+                            "displayName": "instrument",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "agent",
+                            "displayName": "agent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeStart",
+                            "displayName": "timeStart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeEnd",
+                            "displayName": "timeEnd",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2000,
+                940
+            ],
+            "id": "feadcfe7-6339-4937-8939-b98266aed825",
+            "name": "To Action1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "H7E1XaJ0xtx8Je7t",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "crawler_v1",
+                        "projectID": "crawler_project_v1",
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                2220,
+                740
+            ],
+            "id": "62c89172-0657-4638-8f80-daf911856cfc",
+            "name": "Save Action Record1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "yTYwOjUDjMwy3pIC",
+                    "mode": "list",
+                    "cachedResultName": "Schema Action"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "object": "={{ $('Get WebSite object').item.json }}",
+                        "actionStatus": "FailedActionStatus",
+                        "error": "=Error retrieving robots.txt - {{ $json.error }}",
+                        "timeEnd": "={{ $now }}",
+                        "timeStart": "={{ $now }}",
+                        "name": "=Crawler - {{ $json.url }}  - {{ String($now) }}",
+                        "type": "Action"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "type",
+                            "displayName": "type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "object",
+                            "displayName": "object",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "instrument",
+                            "displayName": "instrument",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "agent",
+                            "displayName": "agent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeStart",
+                            "displayName": "timeStart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "timeEnd",
+                            "displayName": "timeEnd",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "error",
+                            "displayName": "error",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                1560,
+                1040
+            ],
+            "id": "10be7f1b-436d-4242-9426-bf7b9f9505dc",
+            "name": "To Failed Action"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1801578977,
+                    "mode": "list",
+                    "cachedResultName": "Crawls",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=1801578977"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.object.url }}",
+                        "@type": "={{ $json['@type'] }}",
+                        "@id": "={{ $json['@id'] }}",
+                        "timeStart": "={{ $json.startTime }}",
+                        "timeEnd": "={{ $json.timeEnd }}",
+                        "actionStatus": "={{ $json.actionStatus }}",
+                        "result (n)": "={{ $json.result.length || 0 }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "timeStart",
+                            "displayName": "timeStart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "timeEnd",
+                            "displayName": "timeEnd",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "result (n)",
+                            "displayName": "result (n)",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "error",
+                            "displayName": "error",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                2440,
+                640
+            ],
+            "id": "d2032e94-f683-428d-9e06-df0df3a6ba47",
+            "name": "Sheets Add crawl",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Websites",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Latest Crawl Status": "={{ $json.actionStatus }}",
+                        "Latest Crawl No of pages found": "={{ $json.result.length || 0 }}",
+                        "Latest Crawl @type": "={{ $json['@type'] }}",
+                        "Latest Crawl @id": "={{ $json['@id'] }}",
+                        "Date latest crawl": "={{ $json.startTime }}",
+                        "url": "={{ $json.object.url }}",
+                        "Error": "={{ $json?.error }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Date first crawl",
+                            "displayName": "Date first crawl",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Date latest crawl",
+                            "displayName": "Date latest crawl",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Latest Crawl @type",
+                            "displayName": "Latest Crawl @type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Latest Crawl @id",
+                            "displayName": "Latest Crawl @id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Latest Crawl No of pages found",
+                            "displayName": "Latest Crawl No of pages found",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Latest Crawl Status",
+                            "displayName": "Latest Crawl Status",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Error",
+                            "displayName": "Error",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                2440,
+                840
+            ],
+            "id": "f8c767ca-de93-4569-8205-801e70b4fc21",
+            "name": "Sheets Update website",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1801578977,
+                    "mode": "list",
+                    "cachedResultName": "Crawls",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=1801578977"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.object.url }}",
+                        "@type": "={{ $json['@type'] }}",
+                        "@id": "={{ $json['@id'] }}",
+                        "timeStart": "={{ $json.startTime }}",
+                        "timeEnd": "={{ $json.timeEnd }}",
+                        "actionStatus": "={{ $json.actionStatus }}",
+                        "result (n)": "={{ $json.result.length || 0 }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "timeStart",
+                            "displayName": "timeStart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "timeEnd",
+                            "displayName": "timeEnd",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "actionStatus",
+                            "displayName": "actionStatus",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "result (n)",
+                            "displayName": "result (n)",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "error",
+                            "displayName": "error",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                2220,
+                940
+            ],
+            "id": "8c04784f-c9bc-4ab5-a028-ea62fbbdb19c",
+            "name": "Sheets Add crawl1",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "Websites",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Latest Crawl Status": "={{ $json.actionStatus }}",
+                        "Latest Crawl No of pages found": "={{ $json.result.length || 0 }}",
+                        "Latest Crawl @type": "={{ $json['@type'] }}",
+                        "Latest Crawl @id": "={{ $json['@id'] }}",
+                        "Date latest crawl": "={{ $json.startTime }}",
+                        "url": "={{ $json.object.url }}",
+                        "Error": "={{ $json?.error }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Date first crawl",
+                            "displayName": "Date first crawl",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Date latest crawl",
+                            "displayName": "Date latest crawl",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "projectID",
+                            "displayName": "projectID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Latest Crawl @type",
+                            "displayName": "Latest Crawl @type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Latest Crawl @id",
+                            "displayName": "Latest Crawl @id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Latest Crawl No of pages found",
+                            "displayName": "Latest Crawl No of pages found",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Latest Crawl Status",
+                            "displayName": "Latest Crawl Status",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "Error",
+                            "displayName": "Error",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                2220,
+                1140
+            ],
+            "id": "bfcb8be6-e5c8-4d3b-9240-a4c5959fd921",
+            "name": "Sheets Update website1",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Get WebSite object",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get URLs from sitemap": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate Result",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get WebSite object": {
+            "main": [
+                [
+                    {
+                        "node": "Call App - crawler get robots.txt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call App - crawler get robots.txt": {
+            "main": [
+                [
+                    {
+                        "node": "Get URLs from sitemap",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "To Failed Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "To Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate Result": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "To Action": {
+            "main": [
+                [
+                    {
+                        "node": "Save Action Record",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Sheets Add crawl",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Sheets Update website",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "To Action1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "To Action1": {
+            "main": [
+                [
+                    {
+                        "node": "Save Action Record1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Sheets Add crawl1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Sheets Update website1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save Action Record": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateId": "4671",
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "WebSite": null,
+                    "url": "https://www.mondou.com"
+                }
+            }
+        ]
+    },
+    "versionId": "b061e32d-0398-4df8-9f1d-84b865a02e9b",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-06-19T17:01:48.302Z",
+            "updatedAt": "2025-06-19T17:01:48.302Z",
+            "role": "workflow:owner",
+            "workflowId": "V26Tb92HmiOdJpi6",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
