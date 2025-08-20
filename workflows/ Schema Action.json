@@ -1,0 +1,296 @@
+{
+    "createdAt": "2025-07-02T11:46:25.712Z",
+    "updatedAt": "2025-07-14T14:23:21.000Z",
+    "id": "yTYwOjUDjMwy3pIC",
+    "name": "Schema Action",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "_record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentObject",
+                            "type": "object"
+                        },
+                        {
+                            "name": "_parentProperty"
+                        },
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "name"
+                        },
+                        {
+                            "name": "object",
+                            "type": "any"
+                        },
+                        {
+                            "name": "instrument",
+                            "type": "any"
+                        },
+                        {
+                            "name": "agent",
+                            "type": "any"
+                        },
+                        {
+                            "name": "result",
+                            "type": "any"
+                        },
+                        {
+                            "name": "actionStatus"
+                        },
+                        {
+                            "name": "startTime"
+                        },
+                        {
+                            "name": "endTime"
+                        },
+                        {
+                            "name": "error"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -460,
+                0
+            ],
+            "id": "e74c56f6-3178-4966-af40-439a84a222da",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c1a812fb-2c2b-4d96-a220-23d7bee06c63",
+                            "name": "['@type']",
+                            "value": "={{ $json?.['@type'] || \"Action\" }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7a20701f-935c-46a7-b60f-ebfc7d591179",
+                            "name": "actionStatus",
+                            "value": "={{ $json.actionStatus || \"ActiveActionStatus\" }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "bd5da67f-4296-45ca-9b29-6319de34a96d",
+                            "name": "startTime",
+                            "value": "={{ $json.startTime ||  $now }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                220,
+                0
+            ],
+            "id": "87df9ece-476d-4d58-8933-f7da33d19e27",
+            "name": "Set default values"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                640,
+                0
+            ],
+            "id": "31775260-7ab1-4d0c-8384-560f1c15b81e",
+            "name": "Set ID"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "UHVbnm4d896IS4aO",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool make Dynamic Thing"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json }}",
+                        "@type": "Action"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -240,
+                0
+            ],
+            "id": "0a5dcf86-3642-48a8-b734-424293d4d1ac",
+            "name": "Execute Workflow"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set default values": {
+            "main": [
+                [
+                    {
+                        "node": "Set ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set ID": {
+            "main": [
+                []
+            ]
+        },
+        "Execute Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Set default values",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "_record": null,
+                    "_parentObject": null,
+                    "_parentProperty": null,
+                    "type": null,
+                    "id": null,
+                    "name": "Crawler - https://www.homesalive.ca  - 2025-07-11T15:12:25.910-04:00",
+                    "object": {
+                        "url": "https://www.homesalive.ca",
+                        "@type": "WebSite",
+                        "@id": "https://www.homesalive.ca"
+                    },
+                    "instrument": null,
+                    "result": null,
+                    "agent": null,
+                    "actionStatus": "FailedActionStatus",
+                    "timeStart": "2025-07-11T15:12:25.910-04:00",
+                    "timeEnd": "2025-07-11T15:12:25.910-04:00",
+                    "error": "Error retrieving robots.txt - Method not allowed - please check you are using the right HTTP method"
+                }
+            }
+        ]
+    },
+    "versionId": "a7f647f1-f1ca-416e-9b5f-70bf8fb5c244",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-02T11:46:25.715Z",
+            "updatedAt": "2025-07-02T11:46:25.715Z",
+            "role": "workflow:owner",
+            "workflowId": "yTYwOjUDjMwy3pIC",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
