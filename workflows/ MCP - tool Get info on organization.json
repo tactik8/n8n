@@ -1,0 +1,209 @@
+{
+    "createdAt": "2025-07-10T16:45:17.240Z",
+    "updatedAt": "2025-07-11T13:43:50.000Z",
+    "id": "PXTyABRlkFGAuVyE",
+    "name": "MCP - tool Get info on organization",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "organizationID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "90fbf697-f0b1-4c59-afbe-945537468dd8",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ",
+                    "mode": "list",
+                    "cachedResultName": "Cie Strategy DB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GUQNjtagUz6Sch-b_AxKfPpgR4ePlVFIFeEMwEbNwpQ/edit#gid=0"
+                },
+                "filtersUI": {
+                    "values": [
+                        {
+                            "lookupColumn": "about.@id",
+                            "lookupValue": "={{ $json.organizationID }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                260,
+                0
+            ],
+            "id": "e50087e3-8449-4d77-afe6-5e322176e47d",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                540,
+                0
+            ],
+            "id": "6fca970f-79de-4d0f-8251-14c83f72ed65",
+            "name": "HTTP Request",
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6bc4053a-ec15-4159-88d4-58aee6d6130c",
+                            "name": "=text",
+                            "value": "={{ $json.data }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "642a5731-fca0-4585-a3a4-c92a16cf9804",
+                            "name": "record",
+                            "value": "={{ $('Google Sheets').item.json }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                880,
+                0
+            ],
+            "id": "a6c5db56-7577-403b-bcb3-793c8ae8255c",
+            "name": "Combine"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                1160,
+                0
+            ],
+            "id": "383fd69c-b20a-4501-bf21-080e1a49a293",
+            "name": "Aggregate1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Combine",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Combine": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate1": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "organizationID": "https://www.mondou.com"
+                }
+            }
+        ]
+    },
+    "versionId": "4c304764-3757-4fd7-ab44-247d0edd273a",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-10T16:45:17.244Z",
+            "updatedAt": "2025-07-10T16:45:17.244Z",
+            "role": "workflow:owner",
+            "workflowId": "PXTyABRlkFGAuVyE",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
