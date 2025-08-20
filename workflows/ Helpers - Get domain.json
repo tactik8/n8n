@@ -1,0 +1,81 @@
+{
+    "createdAt": "2025-07-11T17:11:34.907Z",
+    "updatedAt": "2025-07-11T17:14:56.000Z",
+    "id": "HrzLRZKVMpTvE2xX",
+    "name": "Helpers - Get domain",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfunction standardizeURL(urlString) {\n\n            if(!urlString){\n              return urlString\n            }\n  \n            let urlStr = urlString.trim();\n            // 1. Ensure a protocol exists, defaulting to http.\n            if (!/^(?:f|ht)tps?:\\/\\//i.test(urlStr)) {\n                urlStr = 'http://' + urlStr;\n            }\n\n            try {\n                // Manually parse the URL using a regular expression.\n                // Groups: 1:protocol, 2:hostname, 3:port, 4:pathname, 5:query, 6:hash\n                const urlRegex = /^((?:https?|ftp):)\\/\\/([^:\\/\\?#]+)(?::(\\d+))?(\\/[^?#]*)?(\\?[^#]*)?(#.*)?$/i;\n                const matches = urlStr.match(urlRegex);\n\n                if (!matches) {\n                    throw new Error(\"Invalid URL structure\");\n                }\n\n                let protocol = matches[1].toLowerCase();\n                let hostname = matches[2].toLowerCase();\n                let port = matches[3] || '';\n                let pathname = matches[4] || '/';\n                let query = matches[5] || '';\n                // Hash (matches[6]) is ignored intentionally.\n\n                // 3. Remove default ports.\n                if ((protocol === 'http:' && port === '80') ||\n                    (protocol === 'https:' && port === '443')) {\n                    port = '';\n                }\n\n                // 5. Remove trailing slash from the pathname if it's not just \"/\".\n                if (pathname.length > 1 && pathname.endsWith('/')) {\n                    pathname = pathname.slice(0, -1);\n                }\n                \n                // 7. Decode pathname to normalize encoding (e.g., %2D -> -), then re-encode.\n                pathname = encodeURI(decodeURIComponent(pathname));\n\n                // 6. Sort query parameters alphabetically.\n                if (query) {\n                    // Remove leading '?' to get the search string\n                    const searchString = query.substring(1);\n\n                    if (searchString) {\n                        const params = searchString.split('&')\n                            .map(p => {\n                                const parts = p.split('=');\n                                // Decode key and value, handling cases like \"?a\" where value is missing\n                                const key = decodeURIComponent(parts[0] || '');\n                                const value = decodeURIComponent(parts.slice(1).join('=') || '');\n                                return { key, value };\n                            })\n                            .filter(p => p.key); // Ensure key is not empty\n\n                        // Sort by key\n                        params.sort((a, b) => a.key.localeCompare(b.key));\n\n                        // Rebuild the query string, re-encoding components\n                        query = '?' + params\n                            .map(p => `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`)\n                            .join('&');\n                    } else {\n                        query = ''; // Handle cases like \"example.com?\"\n                    }\n                }\n\n                // Reassemble the URL string\n                let finalUrl = `${protocol}//${hostname}`;\n                if (port) {\n                    //finalUrl += `:${port}`;\n                }\n                //finalUrl += pathname;\n                if (query) {\n                    //finalUrl += query;\n                }\n\n                return finalUrl;\n\n            } catch(error) {\n                return null; // Return null for invalid URLs\n            }\n        }\n\n\nfor (const item of $input.all()) {\n  item.json.domain = standardizeURL(item.json.url);\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                440,
+                0
+            ],
+            "id": "79998e11-7521-4392-a0ba-9eb9d477fe2f",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "id": "e1fbe6a6-04df-44d7-ae14-0083e1f23645",
+            "typeVersion": 1.1,
+            "name": "Start",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "position": [
+                220,
+                0
+            ]
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "Start": [
+            {
+                "json": {
+                    "url": "https://www.test.com/page1.html"
+                }
+            }
+        ]
+    },
+    "versionId": "a9518762-f103-4b7b-8365-654cbf4b5a16",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-11T17:11:34.912Z",
+            "updatedAt": "2025-07-11T17:11:34.912Z",
+            "role": "workflow:owner",
+            "workflowId": "HrzLRZKVMpTvE2xX",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
