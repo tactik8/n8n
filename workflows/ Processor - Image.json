@@ -1,0 +1,50 @@
+{
+    "createdAt": "2025-08-08T18:43:12.301Z",
+    "updatedAt": "2025-08-09T12:09:12.000Z",
+    "id": "k3hZAPOeIJgC5hQR",
+    "name": "Processor - Image",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "73194455-7dae-469a-bdc3-70cbad7e1f90",
+            "name": "When Executed by Another Workflow"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "2913796c-537e-4e25-bdda-36ea3f639068",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-08-08T18:43:12.304Z",
+            "updatedAt": "2025-08-08T18:43:12.304Z",
+            "role": "workflow:owner",
+            "workflowId": "k3hZAPOeIJgC5hQR",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
