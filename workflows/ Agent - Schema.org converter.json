@@ -1,0 +1,591 @@
+{
+    "createdAt": "2025-07-09T18:42:25.970Z",
+    "updatedAt": "2025-07-11T13:45:06.000Z",
+    "id": "yWPXpUDE6Ca7iyWt",
+    "name": "Agent - Schema.org converter",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Go.",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -940,
+                -140
+            ],
+            "id": "652ebaa2-2a21-4521-ae76-7fd962715ad6",
+            "name": "When chat message received",
+            "webhookId": "14234e3f-c593-49b7-8fac-8048cfc78326"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8f6de7fb-2d3c-4eed-a25f-3d40de544938",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -280,
+                -40
+            ],
+            "id": "fe3daeee-5a18-4656-821b-6158e3f46d52",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "mode": "chooseBranch",
+                "numberInputs": 3,
+                "useDataOfInput": 2
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                -60,
+                -140
+            ],
+            "id": "d26f6e8c-923e-4097-8b75-3b9f10816d3d",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "20lcP6IYp6JpopKg",
+                    "mode": "list",
+                    "cachedResultName": "Schema Conversation"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@id": "={{ $('When chat message received').item.json.sessionId }}",
+                        "hasPart[0].sender.@type": "Person",
+                        "hasPart[0].recipient.@type": "WebAPI",
+                        "hasPart[1].recipient.@id": "=",
+                        "hasPart[1].sender.@type": "WebAPI",
+                        "hasPart[1].sender.@id": "={{ $workflow.id }}",
+                        "hasPart[1].recipient.@type": "Person",
+                        "hasPart[1].sender.name": "={{ $workflow.name }}",
+                        "hasPart[0].recipient.name": "={{ $workflow.name }}",
+                        "hasPart[0].recipient.@id": "={{ $workflow.id }}",
+                        "hasPart[0].datePublished": "={{ $now }}",
+                        "hasPart[1].datePublished": "={{ $now }}",
+                        "hasPart[0].text": "={{ $('When chat message received').item.json.chatInput }}",
+                        "hasPart[1].text": "={{ $json.output }}",
+                        "name": "=AI Agent Conversation - agent: {{ $workflow.name }} - id:{{ $('When chat message received').item.json.sessionId }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "_parentObject",
+                            "displayName": "_parentObject",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "_parentProperty",
+                            "displayName": "_parentProperty",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "_record",
+                            "displayName": "_record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "hasPart",
+                            "displayName": "hasPart",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "hasPart[0].sender.@type",
+                            "displayName": "hasPart[0].sender.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].sender.@id",
+                            "displayName": "hasPart[0].sender.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].sender.name",
+                            "displayName": "hasPart[0].sender.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].sender.url",
+                            "displayName": "hasPart[0].sender.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].recipient.@type",
+                            "displayName": "hasPart[0].recipient.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].recipient.@id",
+                            "displayName": "hasPart[0].recipient.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].recipient.name",
+                            "displayName": "hasPart[0].recipient.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].recipient.url",
+                            "displayName": "hasPart[0].recipient.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender.@type",
+                            "displayName": "hasPart[1].sender.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender.@id",
+                            "displayName": "hasPart[1].sender.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender.name",
+                            "displayName": "hasPart[1].sender.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender.url",
+                            "displayName": "hasPart[1].sender.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient.@type",
+                            "displayName": "hasPart[1].recipient.@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient.@id",
+                            "displayName": "hasPart[1].recipient.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient.name",
+                            "displayName": "hasPart[1].recipient.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient.url",
+                            "displayName": "hasPart[1].recipient.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].sender",
+                            "displayName": "hasPart[0].sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart.recipient",
+                            "displayName": "hasPart.recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].sender",
+                            "displayName": "hasPart[1].sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].recipient",
+                            "displayName": "hasPart[1].recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].text",
+                            "displayName": "hasPart[0].text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].text",
+                            "displayName": "hasPart[1].text",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[0].datePublished",
+                            "displayName": "hasPart[0].datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "hasPart[1].datePublished",
+                            "displayName": "hasPart[1].datePublished",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -500,
+                -240
+            ],
+            "id": "9f08a3f3-68c2-4daa-a7f1-e9aa036e0907",
+            "name": "Get conversation object"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ZQXI2h49GnfoJO3R",
+                    "mode": "list",
+                    "cachedResultName": "API - mongoDB Update"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "collectionName": "=agent_api_{{ ($workflow.name).replaceAll(' ', '_').replaceAll('-', '_') }}",
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "collectionName",
+                            "displayName": "collectionName",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -280,
+                -240
+            ],
+            "id": "8eacd229-6ad9-46d4-9a7e-d367fbe00a68",
+            "name": "Update MongoDB"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ymdyROLI6rktishU",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool AI schema.org converter"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "prompt": "={{ $json.chatInput }}",
+                        "sessionID": "={{ $json.sessionId }}"
+                    },
+                    "matchingColumns": [
+                        "chatInput",
+                        "sessionId"
+                    ],
+                    "schema": [
+                        {
+                            "id": "prompt",
+                            "displayName": "prompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "sessionID",
+                            "displayName": "sessionID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                -720,
+                -140
+            ],
+            "name": "Call Schema - tool AI schema.org converter",
+            "id": "1c4931c8-91ab-4371-ab23-608bd975cb24"
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Call Schema - tool AI schema.org converter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Get conversation object": {
+            "main": [
+                [
+                    {
+                        "node": "Update MongoDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update MongoDB": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call Schema - tool AI schema.org converter": {
+            "main": [
+                [
+                    {
+                        "node": "Get conversation object",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "dfb28764-ddc7-4943-bc49-aa0f92a98910",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "createdAt": "2025-07-09T18:42:25.976Z",
+            "updatedAt": "2025-07-09T18:42:25.976Z",
+            "role": "workflow:owner",
+            "workflowId": "yWPXpUDE6Ca7iyWt",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-02T16:12:19.644Z",
+            "updatedAt": "2025-07-11T13:29:39.556Z",
+            "id": "fsYQGx4UGwRejmSm",
+            "name": "type:agent"
+        }
+    ]
+}
