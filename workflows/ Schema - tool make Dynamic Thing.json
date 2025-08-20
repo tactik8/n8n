@@ -1,0 +1,290 @@
+{
+    "createdAt": "2025-07-12T18:18:58.643Z",
+    "updatedAt": "2025-07-13T16:00:36.000Z",
+    "id": "UHVbnm4d896IS4aO",
+    "name": "Schema - tool make Dynamic Thing",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "@type"
+                        },
+                        {
+                            "name": "content",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "279193b0-a785-4d1f-a6e8-39bd8642d507",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "VAj8rS9DB096mWYk",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool merge record and properties"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json.content }}"
+                    },
+                    "matchingColumns": [
+                        "content"
+                    ],
+                    "schema": [
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                440,
+                0
+            ],
+            "id": "b5dacc99-2bb3-4019-b81b-b90f71b35052",
+            "name": "Merge record and properties"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - tool Set id and clean record"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                880,
+                0
+            ],
+            "id": "225b39e5-746c-4068-bd94-83ed3811cdce",
+            "name": "Set id"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "04878a05-4d0a-4c1d-9e6c-44863eca3add",
+                            "name": "content['@type']",
+                            "value": "={{ $json?.['@type'] ||$json.content?.['@type']  }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                220,
+                0
+            ],
+            "id": "8948c82e-7768-479e-b8bf-5d7c2070a0c2",
+            "name": "Set type override"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "519b28a6-2400-4068-8da8-41b04858b97f",
+                            "name": "@type",
+                            "value": "={{ $json['@type'] || \"Thing\" }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                660,
+                0
+            ],
+            "id": "3b9a9450-f79a-4554-80d6-0b308b3c74da",
+            "name": "Set as type Thing by default"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Set type override",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge record and properties": {
+            "main": [
+                [
+                    {
+                        "node": "Set as type Thing by default",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set id": {
+            "main": [
+                []
+            ]
+        },
+        "Set type override": {
+            "main": [
+                [
+                    {
+                        "node": "Merge record and properties",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set as type Thing by default": {
+            "main": [
+                [
+                    {
+                        "node": "Set id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "@type": "Action",
+                    "content": null
+                }
+            },
+            {
+                "json": {
+                    "@type": null,
+                    "content": {
+                        "_json": "{ \"name\": \"some name\"}"
+                    }
+                }
+            },
+            {
+                "json": {
+                    "@type": null,
+                    "content": {
+                        "_record": {
+                            "@context": "https://schema.org/",
+                            "@type": "WebPage",
+                            "@id": "webpage_1",
+                            "name": "webpage_1",
+                            "url": "HTTPS://www.test.com/page1",
+                            "dateModified": "2022-01-01"
+                        },
+                        "url": null,
+                        "dateModified": null
+                    }
+                }
+            },
+            {
+                "json": {
+                    "@type": null,
+                    "content": {
+                        "_record": null,
+                        "url": "https://www.test.com/page1",
+                        "dateModified": "2022-01-01"
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "5536c161-bf32-45fc-9390-28ab9621e38a",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-12T18:18:58.649Z",
+            "updatedAt": "2025-07-12T18:18:58.649Z",
+            "role": "workflow:owner",
+            "workflowId": "UHVbnm4d896IS4aO",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
