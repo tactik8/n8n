@@ -1,0 +1,137 @@
+{
+    "createdAt": "2025-07-13T16:27:18.839Z",
+    "updatedAt": "2025-07-13T16:57:43.000Z",
+    "id": "hixXDtNZQqNvJn72",
+    "name": "Schema - tool JSONLD Flatten",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "content",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "cc22e988-f523-4b05-a065-9718297110ad",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "function generateUUID() {\n  let d = new Date().getTime(); // Timestamp\n  let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0; // High-res timestamp\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {\n    let r = Math.random() * 16; // Random number between 0 and 16\n    if (d > 0) { // Use timestamp until it's consumed\n      r = (d + r) % 16 | 0;\n      d = Math.floor(d / 16);\n    } else { // Use high-res timestamp if available\n      r = (d2 + r) % 16 | 0;\n      d2 = Math.floor(d2 / 16);\n    }\n    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);\n  });\n}\nfunction assignUUIDsToJsonLd(jsonLdObject) {\n  // If the input is not an object or array, return it as is.\n  if (typeof jsonLdObject !== 'object' || jsonLdObject === null) {\n    return jsonLdObject;\n  }\n\n  // If it's an array, iterate over its elements and process each.\n  if (Array.isArray(jsonLdObject)) {\n    return jsonLdObject.map(item => assignUUIDsToJsonLd(item));\n  }\n\n  // If it's an object, process its properties.\n  const processedObject = { ...jsonLdObject };\n\n  // Check if the current object has an '@id' property.\n  // If not, assign a new UUID.\n  if (typeof processedObject['@id'] === 'undefined' || processedObject['@id'] === null || processedObject['@id'] === '') {\n    processedObject['@id'] = generateUUID();\n  }\n\n  // Recursively process all other properties of the object.\n  for (const key in processedObject) {\n    if (Object.prototype.hasOwnProperty.call(processedObject, key)) {\n      processedObject[key] = assignUUIDsToJsonLd(processedObject[key]);\n    }\n  }\n\n  return processedObject;\n}\nfunction extractNestedRecords(jsonLd, extractedRecords = []) {\n            // Ensure the input is an object and not null\n            if (typeof jsonLd !== 'object' || jsonLd === null) {\n                return extractedRecords;\n            }\n\n            // If it's an array, iterate over its elements\n            if (Array.isArray(jsonLd)) {\n                jsonLd.forEach(item => {\n                    // Recursively call for each item in the array\n                    extractNestedRecords(item, extractedRecords);\n                });\n            } else {\n                // It's an object, so it's a potential record\n                // Add the current object to the list of extracted records\n                extractedRecords.push(jsonLd);\n\n                // Iterate over its properties\n                for (const key in jsonLd) {\n                    // Ensure the property belongs to the object itself and is not inherited\n                    if (Object.prototype.hasOwnProperty.call(jsonLd, key)) {\n                        const value = jsonLd[key];\n\n                        // If the value is an object (and not null) or an array, recurse\n                        if (typeof value === 'object' && value !== null) {\n                            extractNestedRecords(value, extractedRecords);\n                        }\n                    }\n                }\n            }\n            return extractedRecords;\n        }\n\n\nfunction convertToRefs(value, level=0){\n  if(Array.isArray(value)){\n      value = value.map(x => convertToRefs(x, level))\n      return value\n    }\n\n    if(typeof value === 'object' && value !== null){\n\n      let keys = Object.keys(value)\n\n      if(level > 0){\n\n        return {\n          \"@type\": value?.[\"@type\"],\n          \"@id\": value?.['@id']\n        }\n        \n      }\n      \n      for(let k of keys){\n\n        value[k] = convertToRefs(value?.[k], level + 1)\n\n      }\n\n      return value\n    }\n\n\n  // if value\n    return value\n\n  \n}\n\n\n\nfunction flatten(value){\n\n\n  value = assignUUIDsToJsonLd(value)\n\n\n  value = extractNestedRecords(value)\n\n  value = convertToRefs(value)\n  \n  return value\n  \n}\n\n\n\n// Process all items\nfor (let item of $input.all()){\n  item.json = { \"output\": flatten( item.json)}\n}\n\nreturn  $input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "4d583136-95ce-48a2-a278-89b41bba022e",
+            "name": "Flatten"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Flatten",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "@context": "http://schema.org",
+                    "@type": "Book",
+                    "name": "The Great Adventure",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Jane Doe",
+                        "affiliation": {
+                            "@type": "Organization",
+                            "name": "Adventure Writers Guild"
+                        },
+                        "contact": {
+                            "email": "jane.doe@example.com",
+                            "phone": "555-1234"
+                        }
+                    },
+                    "isbn": "978-0321765723",
+                    "keywords": [
+                        "adventure",
+                        "fantasy",
+                        "journey"
+                    ],
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "Epic Books Inc.",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": "123 Story Lane",
+                            "addressLocality": "Imagination City",
+                            "addressRegion": "Dreamland",
+                            "postalCode": "98765",
+                            "addressCountry": "USA"
+                        }
+                    },
+                    "reviews": [
+                        {
+                            "@type": "Review",
+                            "author": "Bookworm Bob",
+                            "reviewRating": {
+                                "@type": "Rating",
+                                "ratingValue": "5",
+                                "bestRating": "5"
+                            },
+                            "reviewBody": "An absolutely captivating read!"
+                        },
+                        {
+                            "@type": "Review",
+                            "author": "Literary Liz",
+                            "reviewRating": {
+                                "@type": "Rating",
+                                "ratingValue": "4",
+                                "bestRating": "5"
+                            },
+                            "reviewBody": "Great plot, slightly slow start."
+                        }
+                    ],
+                    "publicationDate": "2023-01-15"
+                }
+            }
+        ]
+    },
+    "versionId": "87a60ce3-fba4-4568-b6b6-439dcc070ea2",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-13T16:27:18.843Z",
+            "updatedAt": "2025-07-13T16:27:18.843Z",
+            "role": "workflow:owner",
+            "workflowId": "hixXDtNZQqNvJn72",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
