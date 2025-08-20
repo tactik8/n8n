@@ -1,0 +1,296 @@
+{
+    "createdAt": "2025-06-19T18:40:51.022Z",
+    "updatedAt": "2025-06-20T16:00:03.000Z",
+    "id": "uGXPoIeFYJQIvotq",
+    "name": "Scraper - Pipeline",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                -180
+            ],
+            "id": "613a3d86-8709-49a4-adb2-b4881d1e36da",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1241369337,
+                    "mode": "list",
+                    "cachedResultName": "Webpages",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=1241369337"
+                },
+                "filtersUI": {
+                    "values": [
+                        {
+                            "lookupColumn": "lastmodDate",
+                            "lookupValue": "={{ DateTime.fromISO($now).toFormat('yyyy-MM-dd')}}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                220,
+                -180
+            ],
+            "id": "9ae668f5-a344-4160-8c74-65f3872942d9",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE",
+                    "mode": "list",
+                    "cachedResultName": "Web Crawler v1",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 1089905982,
+                    "mode": "list",
+                    "cachedResultName": "Content",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17S0JmYb44pIwN_uyY0D_XhZA_hS6Hm0COzgdrjBiwGE/edit#gid=1089905982"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json.schema }}",
+                        "url": "={{ $json.URL }}",
+                        "date": "={{ $json.date }}",
+                        "title": "={{ $json.title }}",
+                        "lang": "={{ $json.lang }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "date",
+                            "displayName": "date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "title",
+                            "displayName": "title",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "lang",
+                            "displayName": "lang",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {
+                    "useAppend": true
+                }
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                1200,
+                -140
+            ],
+            "id": "2b8646c3-e913-47cb-a1dd-c41edc32534b",
+            "name": "Google Sheets2",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "aH3Qumf6iWxqPpd6",
+                    "mode": "list",
+                    "cachedResultName": "Scraper - Scrape url"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "URL": "={{ $json.URL }}"
+                    },
+                    "matchingColumns": [
+                        "URL"
+                    ],
+                    "schema": [
+                        {
+                            "id": "URL",
+                            "displayName": "URL",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                960,
+                -160
+            ],
+            "id": "cc4116e6-83fd-4653-95bc-c868b73ba69d",
+            "name": "Execute Workflow",
+            "retryOnFail": true,
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "batchSize": 50,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                660,
+                -180
+            ],
+            "id": "0c334261-c003-42f9-9fe4-8b76b94a7716",
+            "name": "Loop Over Items"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Execute Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop Over Items": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets2": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "3ee6a22a-6ced-4209-b82f-1a5fc06ee5e5",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-06-19T18:40:51.025Z",
+            "updatedAt": "2025-06-19T18:40:51.025Z",
+            "role": "workflow:owner",
+            "workflowId": "uGXPoIeFYJQIvotq",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
