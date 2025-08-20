@@ -1,0 +1,212 @@
+{
+    "createdAt": "2025-07-08T14:00:36.731Z",
+    "updatedAt": "2025-07-11T13:39:04.000Z",
+    "id": "dTtuEO5G7o8dKs5S",
+    "name": "Schema Claim",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "name"
+                        },
+                        {
+                            "name": "abstract"
+                        },
+                        {
+                            "name": "author.@type"
+                        },
+                        {
+                            "name": "author.name"
+                        },
+                        {
+                            "name": "datePublished"
+                        },
+                        {
+                            "name": "appareance.@type"
+                        },
+                        {
+                            "name": "appareance.url"
+                        },
+                        {
+                            "name": "appareance.name"
+                        },
+                        {
+                            "name": "appareance.datePublished"
+                        },
+                        {
+                            "name": "appareance.author.@type"
+                        },
+                        {
+                            "name": "appareance.author.name"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "15690099-063d-464a-bb93-7b4e5d2f1d09",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "98dee526-286b-4dd8-bf43-3d77b2c92ca8",
+                            "name": "@type",
+                            "value": "=Claim",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                260,
+                0
+            ],
+            "id": "4cb6edb6-72ff-4960-a122-0ec9013aa947",
+            "name": "Set default values"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "61jWR7Ht2kytIaFb",
+                    "mode": "list",
+                    "cachedResultName": "Schema - Set id"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "record": "={{ $json }}"
+                    },
+                    "matchingColumns": [
+                        "record"
+                    ],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.2,
+            "position": [
+                500,
+                0
+            ],
+            "id": "26b11a9c-a288-4916-b4a1-b001681bced1",
+            "name": "Set ID",
+            "alwaysOutputData": true
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Set default values",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set default values": {
+            "main": [
+                [
+                    {
+                        "node": "Set ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set ID": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "@type": "Claim",
+                    "abstract": "The claim is this",
+                    "name": "The name of the claim",
+                    "author": {
+                        "@type": "Organization",
+                        "name": "Square World Society",
+                        "sameAs": "https://example.flatworlders.com/we-know-that-the-world-is-flat"
+                    },
+                    "datePublished": "2016-06-20",
+                    "appearance": {
+                        "@type": "NewsArticle",
+                        "url": "http://skeptical.example.net/news/a122121",
+                        "name": "Square Earth - Flat earthers for the Internet age",
+                        "datePublished": "2016-06-22",
+                        "author": {
+                            "@type": "Person",
+                            "name": "T. Tellar"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    "versionId": "15a1d914-17ca-41e4-8b31-9bfef44be542",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-07-08T14:00:36.734Z",
+            "updatedAt": "2025-07-08T14:00:36.734Z",
+            "role": "workflow:owner",
+            "workflowId": "dTtuEO5G7o8dKs5S",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": [
+        {
+            "createdAt": "2025-07-08T15:37:37.291Z",
+            "updatedAt": "2025-07-11T13:35:29.296Z",
+            "id": "0cBEjDnsKLUDYokS",
+            "name": "schema:schema.org"
+        },
+        {
+            "createdAt": "2025-07-11T13:25:25.803Z",
+            "updatedAt": "2025-07-11T13:28:34.740Z",
+            "id": "3D9SEPsO3xI4CiTI",
+            "name": "type:classObject"
+        }
+    ]
+}
