@@ -1,0 +1,355 @@
+{
+    "createdAt": "2025-08-08T13:22:23.136Z",
+    "updatedAt": "2025-08-08T16:34:27.000Z",
+    "id": "sksIBVI8kIgKYYoc",
+    "name": "PromptDB - Create agent",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "name"
+                        },
+                        {
+                            "name": "promptID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "5413870b-3648-46a7-a520-4e790a162813",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "operation": "get",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ENUK7kIB8QgJXYDA",
+                    "mode": "list",
+                    "cachedResultName": "templateAgent V2 (#ENUK7kIB8QgJXYDA)"
+                },
+                "requestOptions": {}
+            },
+            "type": "n8n-nodes-base.n8n",
+            "typeVersion": 1,
+            "position": [
+                220,
+                0
+            ],
+            "id": "a30cb1b3-34ff-4a04-b179-a0aa3082ec2c",
+            "name": "n8n GetTemplate Workflow",
+            "credentials": {
+                "n8nApi": {
+                    "id": "f0llQKVDDrQnurmq",
+                    "name": "n8n account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "create",
+                "workflowObject": "={{ $json.config }}",
+                "requestOptions": {}
+            },
+            "type": "n8n-nodes-base.n8n",
+            "typeVersion": 1,
+            "position": [
+                1100,
+                0
+            ],
+            "id": "0e0eb3c9-a9ab-42c3-b4e9-346271488b44",
+            "name": "n8n - Create Workflow",
+            "credentials": {
+                "n8nApi": {
+                    "id": "f0llQKVDDrQnurmq",
+                    "name": "n8n account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c2cb8151-7ada-4d25-ac18-b9516c2334ad",
+                            "name": "name",
+                            "value": "=Agent - {{ $('When Executed by Another Workflow').item.json.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "include": "except",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                440,
+                0
+            ],
+            "id": "7bbf0107-0623-4f73-a811-caa153db5a0c",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1-TFWHX80RNOBBliwRquBMoilFjGiWUZUmvpKiMrlXww",
+                    "mode": "list",
+                    "cachedResultName": "AgentDB",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-TFWHX80RNOBBliwRquBMoilFjGiWUZUmvpKiMrlXww/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list",
+                    "cachedResultName": "data",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-TFWHX80RNOBBliwRquBMoilFjGiWUZUmvpKiMrlXww/edit#gid=0"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ $json.name }}",
+                        "createdDate": "={{ $json.createdAt }}",
+                        "@id": "={{ $json.id }}",
+                        "@type": "WebAPI",
+                        "url": "=https://tactik8.app.n8n.cloud/workflow/{{ $json.id }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@type",
+                            "displayName": "@type",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "description",
+                            "displayName": "description",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "createdDate",
+                            "displayName": "createdDate",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                1320,
+                0
+            ],
+            "id": "e98fa5d1-c91b-48b5-b429-f72ce5ef160e",
+            "name": "Google Sheets",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "VkQTbcwd2N4YvXUY",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b70a7c9c-d373-49bf-8180-4d29bc3bbdeb",
+                            "name": "config",
+                            "value": "={{ JSON.stringify($json, null, 4) }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                660,
+                0
+            ],
+            "id": "a62e906d-a019-4560-a8dd-6843f5134032",
+            "name": "to JSON"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "75d93510-8a23-4760-be42-9b338bdd2292",
+                            "name": "config",
+                            "value": "={{ $json.config.replace('__default_prompt_id__', $('When Executed by Another Workflow').item.json.promptID)}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                880,
+                0
+            ],
+            "id": "3dfcdd2a-08d1-4465-93a4-30b27ef23f35",
+            "name": "Replace promptID"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "n8n GetTemplate Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "n8n GetTemplate Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "to JSON",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "n8n - Create Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Sheets": {
+            "main": [
+                []
+            ]
+        },
+        "to JSON": {
+            "main": [
+                [
+                    {
+                        "node": "Replace promptID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Replace promptID": {
+            "main": [
+                [
+                    {
+                        "node": "n8n - Create Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "name": "name",
+                    "promptID": "somePrompt"
+                }
+            }
+        ]
+    },
+    "versionId": "a560b0b7-dd4d-4b6d-a670-0e2c80965f07",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-08-08T13:22:23.140Z",
+            "updatedAt": "2025-08-08T13:22:23.140Z",
+            "role": "workflow:owner",
+            "workflowId": "sksIBVI8kIgKYYoc",
+            "projectId": "q4hW5jXLU3axUty6"
+        }
+    ],
+    "tags": []
+}
