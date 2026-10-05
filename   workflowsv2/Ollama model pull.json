@@ -1,0 +1,145 @@
+{
+    "id": "rNuGpRGTXz5Zqstn",
+    "name": "Ollama model pull",
+    "active": true,
+    "activeVersionId": "6a69228f-e195-49a6-b1c7-9fed44eea024",
+    "createdAt": "2026-04-13T20:24:19.560Z",
+    "updatedAt": "2026-07-09T13:57:58.143Z",
+    "isArchived": false,
+    "versionId": "357df20f-1254-4541-aefb-5ec59b28aaf2",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "e53ab070-a39d-4e2f-8ced-73c6bf536854",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://ollama.tactik8.com/api/pull",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "model",
+                            "value": "nomic-embed-text:latest"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                240,
+                0
+            ],
+            "id": "91a6809b-d895-4671-8765-af0d4bc30571",
+            "name": "Download model"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Download model",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "rNuGpRGTXz5Zqstn",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-13T20:24:19.560Z",
+            "updatedAt": "2026-04-13T20:24:19.560Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "6a69228f-e195-49a6-b1c7-9fed44eea024",
+        "workflowId": "rNuGpRGTXz5Zqstn",
+        "nodes": [
+            {
+                "parameters": {
+                    "inputSource": "passthrough"
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "e53ab070-a39d-4e2f-8ced-73c6bf536854",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "https://ollama.tactik8.com/api/pull",
+                    "sendBody": true,
+                    "bodyParameters": {
+                        "parameters": [
+                            {
+                                "name": "model",
+                                "value": "granite4.1:8b"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    240,
+                    0
+                ],
+                "id": "91a6809b-d895-4671-8765-af0d4bc30571",
+                "name": "Download model"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Download model",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 6a69228f",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-12T12:40:44.493Z",
+        "updatedAt": "2026-06-12T12:40:49.349Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
