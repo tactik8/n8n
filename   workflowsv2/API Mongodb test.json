@@ -1,0 +1,220 @@
+{
+    "id": "V6263YuaDGzFZ1V4",
+    "name": "API Mongodb test",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-09-03T12:27:32.930Z",
+    "updatedAt": "2026-09-03T14:04:22.616Z",
+    "isArchived": false,
+    "versionId": "b5e5584c-eff6-423d-abc6-615fdb118d43",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "c16da209-ea31-4db3-8a96-7fab5685dedf",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "url": "https://n8n.tactik8.com/webhook-test/47568665-079f-4673-b34d-b3815fe5614b/47568665-079f-4673-b34d-b3815fe5614b/testTenant/someid",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                512,
+                208
+            ],
+            "id": "b536b89f-03a4-4b51-af42-54a3c1d41d19",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.config.test.apiurl }}/{{ $json.config.tenantID }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                528,
+                -432
+            ],
+            "id": "ebf0cc04-84d6-474b-9b51-ebf64d895b91",
+            "name": "Get - Search dev"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.config.prod.apiurl }}/{{ $json.config.tenantID }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                528,
+                -192
+            ],
+            "id": "fb66efe5-3a0c-4d3b-b199-2d4986fefe68",
+            "name": "Get - Search prod"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "11cb5055-89d5-47b9-b725-f20662a8e969",
+                            "name": "config.tenantID",
+                            "value": "testTenant2",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4f250f2a-2247-4da2-91a0-f53301dd1bf6",
+                            "name": "config.test.apiurl",
+                            "value": "https://n8n.tactik8.com/webhook-test/47568665-079f-4673-b34d-b3815fe5614b/47568665-079f-4673-b34d-b3815fe5614b",
+                            "type": "string"
+                        },
+                        {
+                            "id": "61acdb8a-1b23-43de-9a85-d4a9c3a3a73d",
+                            "name": "config.prod.apiurl",
+                            "value": "https://krknapi.com.com/api",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8164a1e5-f5c9-4cda-93d2-ce7de5f5a1bb",
+                            "name": "config.record_id",
+                            "value": "https://www.test.com/Thing0",
+                            "type": "string"
+                        },
+                        {
+                            "id": "780f13c6-656b-442d-8864-7a3ef032b394",
+                            "name": "config.prod.apiurl2",
+                            "value": "https://n8n.tactik8.com/webhook/47568665-079f-4673-b34d-b3815fe5614b/47568665-079f-4673-b34d-b3815fe5614b",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                0
+            ],
+            "id": "13b3d041-eb59-486d-bb2b-f6ef395a3082",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.config.prod.apiurl }}/{{ $json.config.tenantID }}",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "record_id",
+                            "value": "={{ $json.config.record_id }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                528,
+                0
+            ],
+            "id": "1e2c1c28-86cd-4d5a-899e-fcfcaeed6ddd",
+            "name": "Get - Get single prod"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.test.apiurl }}/{{ $json.config.tenantID }}",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "{\n  \"@type\": \"Thing\",\n  \"@id\": \"test post\",\n  \"name\": \"test post\"\n\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                512,
+                416
+            ],
+            "id": "265d2a4b-c551-4412-a9d6-e2493e0a9dfd",
+            "name": "Post dev /"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get - Search prod",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get - Search dev",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get - Get single prod",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Post dev /",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "V6263YuaDGzFZ1V4",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-03T12:27:32.930Z",
+            "updatedAt": "2026-09-03T12:27:32.930Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
