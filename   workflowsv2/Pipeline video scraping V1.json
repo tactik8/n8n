@@ -1,0 +1,687 @@
+{
+    "id": "WJclkHUQmybgZHYK",
+    "name": "Pipeline video scraping V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-10T11:43:32.938Z",
+    "updatedAt": "2026-07-10T12:05:25.207Z",
+    "isArchived": false,
+    "versionId": "6947b6dd-03a8-43ac-9284-7146dde2ff67",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "02868961-fe40-4ed6-b4dc-86a00d6b6e29",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                224,
+                0
+            ],
+            "id": "196a3cb0-f473-4722-be1a-3e701dfa7894",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d3380efa-683e-47e9-be99-e3dc56ad8d3d",
+                            "name": "config.metube",
+                            "value": "{}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                448,
+                0
+            ],
+            "id": "7ea530dc-b963-4aff-a8a7-4676b2fc2bcb",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "FYW8XSYXi2BNBlTy",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/FYW8XSYXi2BNBlTy",
+                    "cachedResultName": "metube api get v2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.action.object.url }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1376,
+                0
+            ],
+            "id": "3863b88c-680f-4ed2-942d-e2b98405695c",
+            "name": "Check if already scraped in metube"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "IccAaaXtgdnv0AYl",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/IccAaaXtgdnv0AYl",
+                    "cachedResultName": "stash api scenes get by url V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.action.object.url }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                688,
+                0
+            ],
+            "id": "26fda9ea-26d2-4f09-a8ca-f9736c4ee080",
+            "name": "Check if already in stash"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "034efe9c-2bb8-4376-b759-7d08a8378a0e",
+                            "leftValue": "={{ $json.output.result }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "array",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                896,
+                0
+            ],
+            "id": "1de5dff9-9ecd-4921-8e79-16550861a0de",
+            "name": "If not in stash"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "45b01297-ca53-4a18-92ee-f6ea98b99b65",
+                            "name": "action.result",
+                            "value": "={{ $('Check if already in stash').item.json.output.result }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1104,
+                272
+            ],
+            "id": "0fa25c00-51b6-4ba5-a294-369ea794e784",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1360,
+                272
+            ],
+            "id": "fb14a551-843d-49c7-b514-67b8bf4c9742",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "41184e29-cb4e-4093-ac63-6fd3d1ba93d4",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "925c369c-270a-41e6-9d9f-f012ca0afa65",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1104,
+                0
+            ],
+            "id": "6978aa51-f3db-451c-89b3-12962e84687f",
+            "name": "Config2"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "e396a524-deba-47a5-918e-fd50d0a78bbd",
+                            "leftValue": "={{ $json.config.metube }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "object",
+                                "operation": "notExists",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1888,
+                0
+            ],
+            "id": "103de47b-aea0-4d04-ac5e-85e660d68e0d",
+            "name": "Is not in metube"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "IZHOzJgxPsN37YE8",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/IZHOzJgxPsN37YE8",
+                    "cachedResultName": "metube api post v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.output.object.url }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                2192,
+                -176
+            ],
+            "id": "2cfd2183-35eb-4347-9b27-d7cf2131b425",
+            "name": "Send to metube"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "11cd9db7-3442-4a66-8cc8-3041fc410734",
+                            "name": "action",
+                            "value": "={{ $('Config2').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "ff554db6-ee2d-46d6-ba3a-60d16540df20",
+                            "name": "config",
+                            "value": "={{ $('Config2').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "59034ff4-f1b1-40cc-bed7-893193cb7263",
+                            "name": "config.metube",
+                            "value": "={{ $json.output.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2368,
+                -176
+            ],
+            "id": "480516f9-5b58-45a7-bb4a-506b3b61f34e",
+            "name": "Config 3-1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f17fec51-22ee-4223-9a4f-bc20ce6708ff",
+                            "name": "action",
+                            "value": "={{ $('Config2').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "7c988572-9ba5-42e9-94cb-8fd645408f93",
+                            "name": "config",
+                            "value": "={{ $('Config2').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "ae8aba89-c3ad-46d1-a734-747ec7d5f7e1",
+                            "name": "config.metube",
+                            "value": "={{ $json.output.result.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1616,
+                0
+            ],
+            "id": "521011f7-6104-46b0-ad3a-e5a9d5ee0331",
+            "name": "Config3"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                2640,
+                -80
+            ],
+            "id": "706d4174-0911-41e2-8552-42af4a6a8e27",
+            "name": "Execute Workflow"
+        }
+    ],
+    "connections": {
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Check if already in stash",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check if already in stash": {
+            "main": [
+                [
+                    {
+                        "node": "If not in stash",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If not in stash": {
+            "main": [
+                [
+                    {
+                        "node": "Config2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config2": {
+            "main": [
+                [
+                    {
+                        "node": "Check if already scraped in metube",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check if already scraped in metube": {
+            "main": [
+                [
+                    {
+                        "node": "Config3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is not in metube": {
+            "main": [
+                [
+                    {
+                        "node": "Send to metube",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        },
+        "Send to metube": {
+            "main": [
+                [
+                    {
+                        "node": "Config 3-1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config3": {
+            "main": [
+                [
+                    {
+                        "node": "Is not in metube",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config 3-1": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://xhamster.com/videos/lucky-stepsis-gets-a-massage-then-takes-stepbros-cock-deep-inside-her-xhX7S9U"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "WJclkHUQmybgZHYK",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-10T11:43:32.938Z",
+            "updatedAt": "2026-07-10T11:43:32.938Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
