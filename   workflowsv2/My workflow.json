@@ -1,0 +1,79 @@
+{
+    "id": "Mf6eGZG7zyz7V5PW",
+    "name": "My workflow",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-03-29T16:23:23.720Z",
+    "updatedAt": "2026-05-02T19:00:54.046Z",
+    "isArchived": true,
+    "versionId": "f01024f9-2c8b-4fb8-bff9-b9cd6cb9eee1",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "23456a57-8660-42d9-a5d9-eb703d16bffd",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "operation": "insert",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                208,
+                0
+            ],
+            "id": "f626d6bb-a8e5-40d5-b6a1-2a178f3d317f",
+            "name": "Insert documents",
+            "credentials": {
+                "mongoDb": {
+                    "id": "dHeEVtBeWey2f4lB",
+                    "name": "MongoDB account 2"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Insert documents",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "Mf6eGZG7zyz7V5PW",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-03-29T16:23:23.720Z",
+            "updatedAt": "2026-03-29T16:23:23.720Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
