@@ -1,0 +1,333 @@
+{
+    "id": "D32S08DNGQmLRQAF",
+    "name": "user account form post v1",
+    "active": true,
+    "activeVersionId": "a177b50d-2774-421f-b096-780eb3fe8481",
+    "createdAt": "2026-09-09T11:59:12.790Z",
+    "updatedAt": "2026-09-09T12:10:17.631Z",
+    "isArchived": false,
+    "versionId": "a177b50d-2774-421f-b096-780eb3fe8481",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "formTitle": "Post new user account",
+                "formDescription": "Post credentials for user account",
+                "formFields": {
+                    "values": [
+                        {
+                            "fieldLabel": "system.url"
+                        },
+                        {
+                            "fieldLabel": "user.email"
+                        },
+                        {
+                            "fieldLabel": "accountID"
+                        },
+                        {
+                            "fieldLabel": "credential.token"
+                        },
+                        {
+                            "fieldLabel": "credential.name"
+                        }
+                    ]
+                },
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.formTrigger",
+            "typeVersion": 2.6,
+            "position": [
+                0,
+                0
+            ],
+            "id": "516313ce-1ff4-4130-8631-9cc9a03c98b2",
+            "name": "On form submission",
+            "webhookId": "d495d5c7-e13a-4f63-9241-550bb1273318"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "715iexszDJThWuWf",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/715iexszDJThWuWf",
+                    "cachedResultName": "user account post v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "system.url": "={{ $json['system.url'] }}",
+                        "user.email": "={{ $json['user.email'] }}",
+                        "accountID": "={{ $json.accountID }}",
+                        "credential.token": "={{ $json['credential.token'] }}",
+                        "credential.name": "={{ $json['credential.name'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "system.url",
+                            "displayName": "system.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "user.email",
+                            "displayName": "user.email",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "accountID",
+                            "displayName": "accountID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "credential.token",
+                            "displayName": "credential.token",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "credential.name",
+                            "displayName": "credential.name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                224,
+                0
+            ],
+            "id": "1c247e0c-1664-47f8-baa9-3eb45cb5de5a",
+            "name": "Call 'user account post v1'"
+        }
+    ],
+    "connections": {
+        "On form submission": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'user account post v1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "D32S08DNGQmLRQAF",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-09T11:59:12.790Z",
+            "updatedAt": "2026-09-09T11:59:12.790Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "a177b50d-2774-421f-b096-780eb3fe8481",
+        "workflowId": "D32S08DNGQmLRQAF",
+        "nodes": [
+            {
+                "parameters": {
+                    "formTitle": "Post new user account",
+                    "formDescription": "Post credentials for user account",
+                    "formFields": {
+                        "values": [
+                            {
+                                "fieldLabel": "system.url"
+                            },
+                            {
+                                "fieldLabel": "user.email"
+                            },
+                            {
+                                "fieldLabel": "accountID"
+                            },
+                            {
+                                "fieldLabel": "credential.token"
+                            },
+                            {
+                                "fieldLabel": "credential.name"
+                            }
+                        ]
+                    },
+                    "responseMode": "lastNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.formTrigger",
+                "typeVersion": 2.6,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "516313ce-1ff4-4130-8631-9cc9a03c98b2",
+                "name": "On form submission",
+                "webhookId": "d495d5c7-e13a-4f63-9241-550bb1273318"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "715iexszDJThWuWf",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/715iexszDJThWuWf",
+                        "cachedResultName": "user account post v1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "system.url": "={{ $json['system.url'] }}",
+                            "user.email": "={{ $json['user.email'] }}",
+                            "accountID": "={{ $json.accountID }}",
+                            "credential.token": "={{ $json['credential.token'] }}",
+                            "credential.name": "={{ $json['credential.name'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "system.url",
+                                "displayName": "system.url",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "user.email",
+                                "displayName": "user.email",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "accountID",
+                                "displayName": "accountID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "credential.token",
+                                "displayName": "credential.token",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "credential.name",
+                                "displayName": "credential.name",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    224,
+                    0
+                ],
+                "id": "1c247e0c-1664-47f8-baa9-3eb45cb5de5a",
+                "name": "Call 'user account post v1'"
+            }
+        ],
+        "connections": {
+            "On form submission": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'user account post v1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version a177b50d",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-09-09T12:10:17.632Z",
+        "updatedAt": "2026-09-09T12:10:19.890Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
