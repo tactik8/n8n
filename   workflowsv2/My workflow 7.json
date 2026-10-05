@@ -1,0 +1,265 @@
+{
+    "id": "MzxwC6kqdOwKt8rb",
+    "name": "My workflow 7",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-05-05T15:08:59.262Z",
+    "updatedAt": "2026-05-05T15:35:26.285Z",
+    "isArchived": false,
+    "versionId": "90a35e70-3ca9-465d-8f08-c56b6ce2e8d3",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "326b7f94-e26a-4f0d-8104-155c58797357",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "eaf5ecae-3f58-4765-afd9-89ca84916b3e",
+                            "name": "schema.",
+                            "value": "",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                224,
+                0
+            ],
+            "id": "f29d9cd0-8232-47b1-9529-c0c03701ef71",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                448,
+                0
+            ],
+            "id": "dfdc767c-3899-4feb-bf31-37607c20f50a",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "74832169-7738-40e2-afd3-ec27dc3d38d0",
+                            "name": "url",
+                            "value": "={{ $('Edit Fields').item.json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3a25b047-26f4-4c4e-b296-88e7b291c85d",
+                            "name": "schema",
+                            "value": "={{ $('Edit Fields').item.json.schema }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "dfabcf61-60ef-4612-960f-a8a9755bbd5c",
+                            "name": "html",
+                            "value": "={{ $json.data }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                672,
+                0
+            ],
+            "id": "41586805-f381-4004-b42f-ac4ef956512c",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "jsCode": "const cheerio = require('cheerio');\n\n/**\n * Extracts text from HTML using Cheerio\n * @param {string} html \n * @param {string} selector \n */\nfunction getValueFromHTML(html, schema) {\n\n  function _getValue(c, schema){\n\n    let result = {}\n\n    for(let k of Object.keys(schema)){\n      \n      let selector = schema[k]\n      if(typeof selector != \"string\"){\n        result[k] = _getValue(html, selector)\n      } else {\n        result[k] =  c(selector).text().trim();\n      }\n        \n    }\n\n  \n    return result\n\n\n  }\n  \n  \n  const c = cheerio.load(html);\n  \n  return _getValue(c, schema)\n\n  \n}\n\n\n\n\n\nfor (const item of $input.all()) {\n  item.json.result= getValueFromHTML(item.json.html, item.json.schema)\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                896,
+                0
+            ],
+            "id": "710ec7d2-9ea9-4a2d-91fc-e860c9d4e12d",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "command": "npm i jsdom\n"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                288,
+                -160
+            ],
+            "id": "183bebd9-f069-4c98-b9ff-ceff1ca372d1",
+            "name": "Execute Command"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Add JSDOM to your n8n environment variables if self-hosted:\n// NODE_FUNCTION_ALLOW_EXTERNAL=jsdom\nconst { JSDOM } = require('jsdom');\n\nfunction getValueFromHTML(html, schema) {\n  console.log('s')\n  const dom = new JSDOM(html);\n  const doc = dom.window.document;\n\n  function parseSchema(currentSchema) {\n    let result = {};\n\n    for (let k of Object.keys(currentSchema)) {\n      console.log('k', k)\n      let selector = currentSchema[k];\n\n      if (typeof selector === 'object' && selector !== null && !Array.isArray(selector)) {\n        // Recurse for nested objects (brand, offers, etc.)\n        result[k] = parseSchema(selector);\n      } else if (typeof selector === 'string') {\n        // Standard DOM selection\n        const element = doc.querySelector(selector);\n        result[k] = element ? element.textContent.trim() : null;\n      }\n    }\n    return result;\n  }\n\n  return parseSchema(schema);\n}\n\n// n8n processing loop\nfor (const item of $input.all()) {\n  try {\n    const html = item.json.html || \"\";\n    const schema = item.json.schema || {};\n    item.json.result = getValueFromHTML(html, schema);\n  } catch (error) {\n    item.json.error = error.message;\n  }\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                896,
+                208
+            ],
+            "id": "deda0ce8-fd90-4dd8-99bd-4193320e0a18",
+            "name": "Code in JavaScript1"
+        },
+        {
+            "parameters": {
+                "jsCode": "const cheerio = require('cheerio');\n\nfunction get(html){\n// Get the HTML string from the previous node\n\n// Load the HTML into cheerio\nconst $ = cheerio.load(html);\n\n// Use CSS selectors to extract data\nconst pageTitle = $('h1').text();\nconst links = [];\n\n$('a').each((i, el) => {\n  links.push($(el).attr('href'));\n});\n\n// Return the parsed data to the workflow\nreturn [{\n  json: {\n    title: pageTitle,\n    links: links\n  }\n}];\n\n}\nfor (const item of $input.all()) {\n  item.json.result=get(item.json.html) \n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                912,
+                416
+            ],
+            "id": "2d28f53b-05c8-46bf-808d-395a1a6aba08",
+            "name": "Code in JavaScript2"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Code in JavaScript1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Code in JavaScript2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.mondou.com/fr-CA/nourriture-seche-perfect-weight-pour-chats-adultes-680-kg-1032220.html",
+                    "schema": {
+                        "@context": "https://schema.org/",
+                        "@type": "Product",
+                        "name": "h1.product-name",
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "a.product-brand"
+                        },
+                        "sku": "span.product-id",
+                        "image": "img.primary-image",
+                        "description": "div.description-and-detail",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": ".prices .price .value",
+                            "priceCurrency": ".prices .price .value[content]",
+                            "availability": "div.availability-msg",
+                            "url": "link[rel='canonical']"
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "span.rating-number",
+                            "reviewCount": "span.review-count"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "MzxwC6kqdOwKt8rb",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-05T15:08:59.262Z",
+            "updatedAt": "2026-05-05T15:08:59.262Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
