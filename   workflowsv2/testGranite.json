@@ -1,0 +1,356 @@
+{
+    "id": "yqQev9lRehmzzEoe",
+    "name": "testGranite",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-26T14:19:52.165Z",
+    "updatedAt": "2026-07-26T14:28:10.763Z",
+    "isArchived": false,
+    "versionId": "956577fc-e55c-4a82-8fad-c69d0abeabb7",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -160,
+                -192
+            ],
+            "id": "d29cd5a4-3e38-43ce-99f1-816441b0a2b2",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d8cda0c5-7517-49af-988e-28df229afdc9",
+                            "name": "systemPrompt",
+                            "value": "You are an expert whose responsibility is to help with automatic tagging for a read-it-later/bookmarking app. \n\nAnalyze the web page of the provided URL and suggest relevant tags that describe its key themes, topics, and main ideas. \n\nThe rules are: \n- Aim for a variety of tags, including broad categories, specific keywords, and potential sub-genres. \n- The tags must be in english. \n- If the tag is not generic enough, don't include it. \n- Do NOT generate tags related to:     \n- An error page (404, 403, blocked, not found, dns errors)     \n- Boilerplate content (cookie consent, login walls, GDPR notices) \n- Aim for 3-5 tags. - If there are no good tags, leave the array empty.  \n- Use title case with spaces between words (e.g., 'Machine Learning', 'Web Development')   \n\n You must respond in JSON with the key \"tags\" and the value is an array of string tags.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6b38402d-365e-4c38-8ab0-6f6ebfc240c0",
+                            "name": "url",
+                            "value": "https://xhamster.com/videos/fucking-ass-double-angle-xhEIIxH",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                48,
+                -192
+            ],
+            "id": "ab62a29d-e1d0-4982-a2ed-39125ccd1432",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                416,
+                0
+            ],
+            "id": "daa197fe-d7aa-47d8-9cbc-631a9b0196fc",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "model": "granite4:3b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                288,
+                208
+            ],
+            "id": "3b7b614d-5753-409b-a049-97ece76cac7b",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}",
+                "maxLength": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Max_Response_Characters', ``, 'number') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.4,
+            "position": [
+                576,
+                208
+            ],
+            "id": "c246d2bf-92c7-4453-832a-d64e9e966182",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": []
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                768,
+                0
+            ],
+            "id": "3848b76c-11cb-48cf-b9f1-ff04d824abe7",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                464,
+                -240
+            ],
+            "id": "ce26d5ea-3654-44c0-960b-fb8aee13bc60",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "22de0f7f-7e8b-4e82-bd71-90203ffa1acb",
+                            "name": "systemPrompt",
+                            "value": "={{ $json.systemPrompt }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "af8f7875-d456-4c9c-b084-a1ecc493eb03",
+                            "name": "url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "742597be-8da5-428a-8c02-c71815e9ac40",
+                            "name": "userPrompt",
+                            "value": "=url:  {{ $json.url }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                -144
+            ],
+            "id": "ad2e0207-6441-424c-8df0-e07724ee91de",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "html": "={{ $json.data }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.markdown",
+            "typeVersion": 1,
+            "position": [
+                672,
+                -240
+            ],
+            "id": "4dd26199-c72b-46a1-91aa-e6b9c83701d4",
+            "name": "Markdown"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "BOU6I8HES7OGPCAF",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/BOU6I8HES7OGPCAF",
+                    "cachedResultName": "Html - Extract V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "html": "={{ $json.data }}",
+                        "url": "={{ $('Edit Fields2').item.json.url }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "html",
+                            "displayName": "html",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                688,
+                -432
+            ],
+            "id": "ff28e320-7247-44fe-9ebd-742d26340b85",
+            "name": "Call 'Html - Extract V1'"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request1": {
+            "main": [
+                [
+                    {
+                        "node": "Markdown",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Call 'Html - Extract V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "yqQev9lRehmzzEoe",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-26T14:19:52.165Z",
+            "updatedAt": "2026-07-26T14:19:52.165Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
