@@ -1,0 +1,1298 @@
+{
+    "id": "enhsUbpA0NeXCosL",
+    "name": "API MongoDB jsonld Get V1",
+    "active": true,
+    "activeVersionId": "d5db64b7-2be8-4b4d-877b-12001ab0f3fe",
+    "createdAt": "2026-05-11T13:04:57.760Z",
+    "updatedAt": "2026-09-03T12:31:47.485Z",
+    "isArchived": false,
+    "versionId": "f274f6b3-2e1a-4775-94a2-c555b5ad3c4b",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "tenantID"
+                        },
+                        {
+                            "name": "recordID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -288,
+                304
+            ],
+            "id": "6b536bad-d7e6-4419-af2a-fd50940867b3",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "0105264f-9db7-40ce-8a58-74b87aff6bc0",
+                            "name": "config.databaseID",
+                            "value": "n8n",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.tenantID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.tenantID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d4db0ef5-cbca-4c53-b862-b2ea42cb637c",
+                            "name": "config.errorCount",
+                            "value": "0",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                192,
+                192
+            ],
+            "id": "b194e6ac-0ea8-47c6-96a0-1210809f765e",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.@id",
+                            "value": "={{ $json.recordID }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -32,
+                192
+            ],
+            "id": "e781979e-8f07-4894-8688-a83ba305ebcd",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "command": "npm install  github:tactik8/helpers_jsonld;\nnpm install github:tactik8/helpers_mongodb "
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                1072,
+                560
+            ],
+            "id": "89d4277e-5a22-4895-8e0b-decbf765acaf",
+            "name": "Install libraries"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "abea6854-2a78-44fe-8bfa-0d83e5e9263e",
+                            "leftValue": "",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                800,
+                512
+            ],
+            "id": "ddb8543c-d33b-4e01-a34e-d5bec2310702",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                720,
+                176
+            ],
+            "id": "1c5b16b7-de9d-41fd-9a86-8d7348406b74",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                944,
+                176
+            ],
+            "id": "1996b7b1-c10f-4e6e-bc43-dc91c3231151",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "jsCode": "\nlet fetch = this.helpers.request\n\n\n\n// index.js\nconst { helpers } = require('/home/node/node_modules/helpers_jsonld')\n\nconst { MongoDB } = require ('/home/node/node_modules/helpers_mongodb')\n\n\nlet URI = 'mongodb://tactik8:Temp4now@192.168.2.243:27017/?authMechanism=DEFAULT'\n\n\n\n\n\n\nfor (const item of $input.all()) {\n\n  let db = new MongoDB()\n  db.uri = URI\n\n  db.databaseID = item.json.config.databaseID\n  db.tenantID = item.json.config.tenantID\n\n  let a_init = await db.init()\n  if(a_init.isCompleted == false){\n          return a_init.record\n      }\n\n\n  let a = await db.get(item.json.action.object?.[\"@id\"])\n\n  \n  \n   item.json.action.result = helpers.simplify(a?.result)\n  \n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                432,
+                192
+            ],
+            "id": "38f0320f-57d7-41c4-9855-20767996a676",
+            "name": "Get record",
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "enhsUbpA0NeXCosL",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/enhsUbpA0NeXCosL",
+                    "cachedResultName": "API MongoDB jsonld Get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "recordID": "={{ $json.config.filter['@id'] }}",
+                        "tenantID": "={{ $json.config.tenantID }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "recordID",
+                            "displayName": "recordID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                384,
+                -192
+            ],
+            "id": "c88f2236-6e3b-4da1-a1ff-3725a096760b",
+            "name": "Call 'API MongoDB jsonld Get V1'"
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json.output.result?.[0] || $json.output.result }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                816,
+                -240
+            ],
+            "id": "bee9dd2b-38e3-48f0-87ea-16e2be64a362",
+            "name": "Respond to Webhook"
+        },
+        {
+            "parameters": {
+                "command": "npm install  github:tactik8/helpers_jsonld --ignore-scripts;\nnpm install github:tactik8/helpers_mongodb --ignore-scripts;"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                144,
+                576
+            ],
+            "id": "0df5a8c1-6b22-4534-a82f-1c47ec11a5cc",
+            "name": "Install libraries1"
+        },
+        {
+            "parameters": {
+                "command": "\nnpm install github:tactik8/helpers_mongodb "
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                80,
+                736
+            ],
+            "id": "dfc0a940-47d1-420f-a3f3-f40e601adc63",
+            "name": "Install libraries2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6f3e5c1b-1280-4c62-85f9-166d7164a3b5",
+                            "name": "config.@id",
+                            "value": "={{ $json.query?.['@id'] || $json.params?.record_id}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "05b799fd-f99d-443d-88bb-cb77e1565ee2",
+                            "name": "config.tenantID",
+                            "value": "={{ $json.params.tenantID }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -64,
+                -192
+            ],
+            "id": "627e83f3-94cb-4301-8a00-ccdfa96f36af",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "f2f3e854-e35c-4bca-b0ba-cc621f7dde78",
+                            "leftValue": "={{ $json.output.actionStatus }}",
+                            "rightValue": "CompletedActionStatus",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                560,
+                -160
+            ],
+            "id": "b9820737-148a-4531-94a6-fb9b2f05cc23",
+            "name": "If1"
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "=",
+                "options": {
+                    "responseCode": 401
+                }
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                816,
+                -64
+            ],
+            "id": "0f6ec629-12d3-4600-bcf3-9bf3c062fdd1",
+            "name": "Respond to Webhook1"
+        },
+        {
+            "parameters": {
+                "jsCode": "\nlet fetch = this.helpers.request\n\n\n\n// index.js\nconst helpers = require('/home/node/node_modules/helpers_jsonld')\n\nconst { MongoDB } = require ('/home/node/node_modules/helpers_mongodb')\n\n\nlet URI = 'mongodb://tactik8:Temp4now@192.168.2.243:27017/?authMechanism=DEFAULT'\n\n\n\n\n\n\nfor (const item of $input.all()) {\n\n  let db = new MongoDB()\n  db.uri = URI\n\n  db.databaseID = item.json.config.databaseID\n  db.tenantID = item.json.config.tenantID\n\n  let a_init = await db.init()\n  if(a_init.isCompleted == false){\n          return a_init.record\n      }\n\n\n  let a = await db.get(item.json.action.object?.[\"@id\"])\n\n  \n  \n  item.json.action.result = helpers.simplify(a.record.result)\n    \n  \n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                480,
+                464
+            ],
+            "id": "9098e784-b31e-4af7-8a30-e66b85686867",
+            "name": "Get record1",
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "path": "47568665-079f-4673-b34d-b3815fe5614b/:tenantID",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                -336,
+                -288
+            ],
+            "id": "72c9f0d6-f358-4c25-8a2c-d60bce7bdef5",
+            "name": "Webhook",
+            "webhookId": "47568665-079f-4673-b34d-b3815fe5614b"
+        },
+        {
+            "parameters": {
+                "path": "47568665-079f-4673-b34d-b3815fe5614b/:tenantID/:record_id",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                -336,
+                -80
+            ],
+            "id": "1f8ff8fe-2f7d-4d36-811b-a7a706831a87",
+            "name": "Webhook1",
+            "webhookId": "47568665-079f-4673-b34d-b3815fe5614b"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Get record",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Install libraries",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Install libraries",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Install libraries": {
+            "main": [
+                [
+                    {
+                        "node": "Get record",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get record": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'API MongoDB jsonld Get V1'": {
+            "main": [
+                [
+                    {
+                        "node": "If1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'API MongoDB jsonld Get V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If1": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Respond to Webhook1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "tenantID": "tenantTest",
+                    "recordID": "https://www.test.com/thing1"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "enhsUbpA0NeXCosL",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-11T13:04:57.760Z",
+            "updatedAt": "2026-05-11T13:04:57.760Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "d5db64b7-2be8-4b4d-877b-12001ab0f3fe",
+        "workflowId": "enhsUbpA0NeXCosL",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "tenantID"
+                            },
+                            {
+                                "name": "recordID"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -288,
+                    304
+                ],
+                "id": "6b536bad-d7e6-4419-af2a-fd50940867b3",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "0105264f-9db7-40ce-8a58-74b87aff6bc0",
+                                "name": "config.databaseID",
+                                "value": "n8n",
+                                "type": "string"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.tenantID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.tenantID }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d4db0ef5-cbca-4c53-b862-b2ea42cb637c",
+                                "name": "config.errorCount",
+                                "value": "0",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    192,
+                    192
+                ],
+                "id": "b194e6ac-0ea8-47c6-96a0-1210809f765e",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.@id",
+                                "value": "={{ $json.recordID }}",
+                                "type": "array"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -32,
+                    192
+                ],
+                "id": "e781979e-8f07-4894-8688-a83ba305ebcd",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "command": "npm install  github:tactik8/helpers_jsonld;\nnpm install github:tactik8/helpers_mongodb "
+                },
+                "type": "n8n-nodes-base.executeCommand",
+                "typeVersion": 1,
+                "position": [
+                    1072,
+                    560
+                ],
+                "id": "89d4277e-5a22-4895-8e0b-decbf765acaf",
+                "name": "Install libraries"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "abea6854-2a78-44fe-8bfa-0d83e5e9263e",
+                                "leftValue": "",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "equals",
+                                    "name": "filter.operator.equals"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    800,
+                    512
+                ],
+                "id": "ddb8543c-d33b-4e01-a34e-d5bec2310702",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    720,
+                    176
+                ],
+                "id": "1c5b16b7-de9d-41fd-9a86-8d7348406b74",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    944,
+                    176
+                ],
+                "id": "1996b7b1-c10f-4e6e-bc43-dc91c3231151",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "jsCode": "\nlet fetch = this.helpers.request\n\n\n\n// index.js\nconst { helpers } = require('/home/node/node_modules/helpers_jsonld')\n\nconst { MongoDB } = require ('/home/node/node_modules/helpers_mongodb')\n\n\nlet URI = 'mongodb://tactik8:Temp4now@192.168.2.243:27017/?authMechanism=DEFAULT'\n\n\n\n\n\n\nfor (const item of $input.all()) {\n\n  let db = new MongoDB()\n  db.uri = URI\n\n  db.databaseID = item.json.config.databaseID\n  db.tenantID = item.json.config.tenantID\n\n  let a_init = await db.init()\n  if(a_init.isCompleted == false){\n          return a_init.record\n      }\n\n\n  let a = await db.get(item.json.action.object?.[\"@id\"])\n\n  \n  \n   item.json.action.result = helpers.simplify(a?.result)\n  \n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    432,
+                    192
+                ],
+                "id": "38f0320f-57d7-41c4-9855-20767996a676",
+                "name": "Get record",
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "path": "app/mongodb",
+                    "responseMode": "responseNode",
+                    "options": {
+                        "allowedOrigins": "*"
+                    }
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    -288,
+                    -176
+                ],
+                "id": "f76d3799-5a52-4a13-b19b-c21fc94ca599",
+                "name": "Webhook",
+                "webhookId": "64d53027-a9db-4d96-9ca8-e1c34bb643d3"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "enhsUbpA0NeXCosL",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/enhsUbpA0NeXCosL",
+                        "cachedResultName": "API MongoDB jsonld Get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "recordID": "={{ $json.config.filter['@id'] }}",
+                            "tenantID": "={{ $json.config.tenantID }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "recordID",
+                                "displayName": "recordID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    160,
+                    -160
+                ],
+                "id": "c88f2236-6e3b-4da1-a1ff-3725a096760b",
+                "name": "Call 'API MongoDB jsonld Get V1'"
+            },
+            {
+                "parameters": {
+                    "respondWith": "json",
+                    "responseBody": "={{ $json.output.result?.[0] || $json.output.result }}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    624,
+                    -240
+                ],
+                "id": "bee9dd2b-38e3-48f0-87ea-16e2be64a362",
+                "name": "Respond to Webhook"
+            },
+            {
+                "parameters": {
+                    "command": "npm install  github:tactik8/helpers_jsonld --ignore-scripts;\nnpm install github:tactik8/helpers_mongodb --ignore-scripts;"
+                },
+                "type": "n8n-nodes-base.executeCommand",
+                "typeVersion": 1,
+                "position": [
+                    144,
+                    576
+                ],
+                "id": "0df5a8c1-6b22-4534-a82f-1c47ec11a5cc",
+                "name": "Install libraries1"
+            },
+            {
+                "parameters": {
+                    "command": "\nnpm install github:tactik8/helpers_mongodb "
+                },
+                "type": "n8n-nodes-base.executeCommand",
+                "typeVersion": 1,
+                "position": [
+                    80,
+                    736
+                ],
+                "id": "dfc0a940-47d1-420f-a3f3-f40e601adc63",
+                "name": "Install libraries2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6f3e5c1b-1280-4c62-85f9-166d7164a3b5",
+                                "name": "config.filter.@id",
+                                "value": "={{ $json.query['@id'] }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "05b799fd-f99d-443d-88bb-cb77e1565ee2",
+                                "name": "config.tenantID",
+                                "value": "={{ $json.query['tenantID'] }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -80,
+                    -176
+                ],
+                "id": "627e83f3-94cb-4301-8a00-ccdfa96f36af",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "f2f3e854-e35c-4bca-b0ba-cc621f7dde78",
+                                "leftValue": "={{ $json.output.actionStatus }}",
+                                "rightValue": "CompletedActionStatus",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "equals"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    368,
+                    -160
+                ],
+                "id": "b9820737-148a-4531-94a6-fb9b2f05cc23",
+                "name": "If1"
+            },
+            {
+                "parameters": {
+                    "respondWith": "json",
+                    "responseBody": "=",
+                    "options": {
+                        "responseCode": 401
+                    }
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    624,
+                    -64
+                ],
+                "id": "0f6ec629-12d3-4600-bcf3-9bf3c062fdd1",
+                "name": "Respond to Webhook1"
+            },
+            {
+                "parameters": {
+                    "jsCode": "\nlet fetch = this.helpers.request\n\n\n\n// index.js\nconst helpers = require('/home/node/node_modules/helpers_jsonld')\n\nconst { MongoDB } = require ('/home/node/node_modules/helpers_mongodb')\n\n\nlet URI = 'mongodb://tactik8:Temp4now@192.168.2.243:27017/?authMechanism=DEFAULT'\n\n\n\n\n\n\nfor (const item of $input.all()) {\n\n  let db = new MongoDB()\n  db.uri = URI\n\n  db.databaseID = item.json.config.databaseID\n  db.tenantID = item.json.config.tenantID\n\n  let a_init = await db.init()\n  if(a_init.isCompleted == false){\n          return a_init.record\n      }\n\n\n  let a = await db.get(item.json.action.object?.[\"@id\"])\n\n  \n  \n  item.json.action.result = helpers.simplify(a.record.result)\n    \n  \n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    480,
+                    464
+                ],
+                "id": "9098e784-b31e-4af7-8a30-e66b85686867",
+                "name": "Get record1",
+                "onError": "continueErrorOutput"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Get record",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Install libraries",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Install libraries",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Install libraries": {
+                "main": [
+                    [
+                        {
+                            "node": "Get record",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get record": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'API MongoDB jsonld Get V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "If1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'API MongoDB jsonld Get V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If1": {
+                "main": [
+                    [
+                        {
+                            "node": "Respond to Webhook",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Respond to Webhook1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version d5db64b7",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-09-02T20:36:29.131Z",
+        "updatedAt": "2026-09-02T20:36:39.893Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
