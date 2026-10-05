@@ -1,0 +1,276 @@
+{
+    "id": "6kpKUfoksbWxilG9",
+    "name": "Biz Process - HR Job description V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-06-11T15:05:56.163Z",
+    "updatedAt": "2026-06-11T15:18:48.774Z",
+    "isArchived": false,
+    "versionId": "b72e927b-413d-40f0-a56c-efe1dc57b300",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -464,
+                -16
+            ],
+            "id": "64273381-3d80-40c8-b1eb-66a9c2b5736e",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ad0157d2-fcf9-4a12-92fd-1a72d77bdfc6",
+                            "name": "userPrompt",
+                            "value": "A job description for an enterprise architect for a small pharmaceutical manufacturing company.  The position will also include system and network administration duties. Understanding of traditional on premise systems as well as cloud. Strong focus on security. Bilingual. ",
+                            "type": "string"
+                        },
+                        {
+                            "id": "16ce6d6e-c5e2-43a9-a0e3-0c4523fa5a06",
+                            "name": "systemPrompt",
+                            "value": "# Role and Objective  You are an expert Technical Recruiter and Talent Acquisition Specialist. Your sole task is to take a set of raw, unformatted job requirements from the user and transform them into a professional, compelling, and well-structured Job Description.  ---  # Output Format Guidelines  You must output the final job description using **Markdown**. Do not include any conversational filler, intro text, or outro text (e.g., do not say \"Here is your job description:\"). Start directly with the job title.  Use the following standard template for the output:  ```markdown # [Job Title]  ## Role Overview [A brief, engaging 3-4 sentence summary of the role, the team, and the impact this person will have on the organization.]  ---  ## Key Responsibilities *   **[Area of Focus]:** [Detailed responsibility description]. *   **[Area of Focus]:** [Detailed responsibility description]. *   **[Area of Focus]:** [Detailed responsibility description]. *   [Add additional bullet points as needed based on user input]  ---  ## Required Skills & Qualifications *   **Education/Experience:** [e.g., Bachelor's degree in X, or Y years of equivalent experience]. *   **Technical Proficiency:** [List specific tools, software, languages, or hard skills required]. *   **Core Competencies:** [List crucial soft skills or methodologies, e.g., Agile, communication]. *   [Add additional qualifications based on user input]  ---  ## Preferred Qualifications (Nice-to-Have) *   [List optional but beneficial skills, certifications, or experience here]. *   [If the user did not provide any, infer 2-3 logical \"plus\" skills based on the role].  ---  ## What We Offer *   [Competitive salary and compensation packages]. *   [Health, dental, and vision insurance options]. *   [Remote/hybrid work flexibility, PTO, and professional development]. *   [Adjust this section if the user provided specific benefits].  ```  ---  # Execution Instructions  1. **Analyze and Enrich:** Review the user's input. Clean up any grammatical errors, typos, or fragmented thoughts. Expand on vague requirements to make them sound professional and industry-standard without changing the core meaning. 2. **Tone:** Maintain an authoritative, welcoming, and professional tone that attracts top-tier talent. 3. **Strict Constraints:** * Output *only* the Markdown text. * Never include meta-commentary, explanations, or questions for the user. * If the user's input is missing key details (like benefits), use standard, realistic placeholders as shown in the template.",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -256,
+                -16
+            ],
+            "id": "5acdb7b5-5704-4d60-a64c-10bdd568d4d5",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                -48,
+                -16
+            ],
+            "id": "2318e501-07c8-4182-8426-f5f132dd96f7",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                -192,
+                192
+            ],
+            "id": "e4c382bd-e95d-4882-b311-d6d8f55aa444",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.4,
+            "position": [
+                112,
+                192
+            ],
+            "id": "bde378eb-1c50-48ba-9d71-b37ce1df0a25",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b3e16ba8-e358-41f5-b631-fed5386fc5c7",
+                            "name": "content",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                304,
+                -16
+            ],
+            "id": "9317cdff-d7c7-4dc1-9a07-9ee23aa3860e",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "47REy4WzFyEJyF9L",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/47REy4WzFyEJyF9L",
+                    "cachedResultName": "Generate word file from markdown"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "markdownContent": "={{ $json.content }}",
+                        "filename": "job_description"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "markdownContent",
+                            "displayName": "markdownContent",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "filename",
+                            "displayName": "filename",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                512,
+                -16
+            ],
+            "id": "02188a2f-bd70-467e-b8a0-5130e63725d9",
+            "name": "Call 'Generate word file from markdown'"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'Generate word file from markdown'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "6kpKUfoksbWxilG9",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-11T15:05:56.163Z",
+            "updatedAt": "2026-06-11T15:05:56.163Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
