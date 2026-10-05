@@ -1,0 +1,205 @@
+{
+    "id": "sog2yZLIB18Vlu2Q",
+    "name": "HR Competency evaluation V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-04-10T17:09:09.073Z",
+    "updatedAt": "2026-04-13T19:51:55.271Z",
+    "isArchived": false,
+    "versionId": "9330a9b2-2926-41aa-a5b0-791eadfbaaf2",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "resume"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "ab1bac1d-3de7-4d7b-8aea-1bfa6c701252",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "dbe75a71-ce9b-4347-a210-e4f5d87a2794",
+                            "name": "resume",
+                            "value": "=# Candidate Profile: Marco Nascimento\n\n## 1. Contact Information\n*   **Email:** Marco.Nascimento@gmail.com\n*   **Phone:** +1 (514) 909 4552\n*   **Location:** Canada (Inferred from phone number and language)\n*   **LinkedIn/Portfolio:** https://www.linkedin.com/in/marco-nascimento-88051a1a/\n\n## 2. Professional Summary\n> A seasoned IT leader with over 20 years of experience optimizing operational excellence in large-scale environments, specializing in managing multidisciplinary teams (up to 50 FTEs) and delivering complex IT Service Management (ITSM) initiatives across finance, consulting, and transportation sectors. Certified ITIL and Agile Product Owner (CSPO), Marco possesses deep expertise in service design, incident management, and automation using tools like ServiceNow and SailPoint. He excels at translating business needs into concrete IT strategies to enhance SLAs, mitigate risks, and generate measurable ROI.\n\n## 3. Technical Skills\n*   **Languages/Tools:** ServiceNow, SailPoint, Auth0, Dynatrace, Genesys, Cisco Call Manager, VoIP, SQL (implied by data focus)\n*   **Frameworks/Libraries:** ITIL (Foundation V3), Agile (Scrum, CSPO), Six Sigma (Green Belt)\n*   **Soft Skills:** Leadership, Strategic Planning, Project Management, Team Management (up to 50 FTEs), Stakeholder Management, Vendor Governance, Client Relationship Management, Escalation Management, Operational Excellence, Risk Management, Performance Monitoring (KPI/SLA), Continuous Service Improvement, Bilingual (English, French)\n\n## 4. Work Experience\n\n### Senior Customer Service Manager | Spordle (Contractuel)\n**Dates:** 01/2025 – Present\n*   Currently engaged in a senior customer service management role, leveraging extensive IT and operational expertise to drive service excellence.\n\n### IT Service Offering Manager | CN\n**Dates:** 01/2023 – 01/2025\n*   Standardized identity protocols across multiple business sectors using Auth0, enhancing security and providing seamless Single Sign-On (SSO) for over 10,000 global users.\n*   Designed and deployed key ServiceNow modules (Incident, Problem, Change, Service Request), reducing average SLA response time by 30%.\n\n### Principal Manager, Solutions Delivery | Deloitte Canada\n**Dates:** 01/2022 – 01/2023\n*   Directed the roadmap and architectural design for an AI solutions suite, focused on automating workflows to simplify complex manual tasks.\n*   Automated the full employee lifecycle management (onboarding, offboarding, transitions) through SailPoint integration, reducing manual provisioning time by 40% and ensuring audit compliance.\n\n### Manager, IT Infrastructure and Operations | Randstad Canada\n**Dates:** 01/2021 – 01/2022\n*   Directed the migration of disparate regional infrastructures to a single global domain, enabling real-time collaboration across all international business units.\n\n### Manager, Insurance Claims Applications | Banque TD\n**Dates:** 01/2019 – 01/2021\n*   Managed application development and operations within the insurance claims sector, ensuring stability and performance.\n\n### Unit Manager, IT Service Center | Intact\n**Dates:** 01/2018 – 01/2019\n*   Created a high-performing functional support team, including designing operational workflows and scalable support structures for the entire organization.\n\n### Team Manager, IT Operations | Banque TD\n**Dates:** 01/2014 – 01/2018\n*   Managed IT operations teams, focusing on performance monitoring and adherence to service level agreements.\n\n### Major Incident Coordinator | TD Assurance\n**Dates:** 01/2011 – 01/2014\n*   Coordinated responses to major IT incidents, minimizing business impact and driving resolution.\n\n## 5. Education\n*   *Education details were not explicitly provided in the resume text.*\n\n## 6. Certifications & Projects\n*   ITIL Foundation V3 - AXELOS\n*   Certified Scrum Product Owner (CSPO) - Scrum Alliance\n*   Six Sigma Green Belt - [Issuing Organization Not Specified]\n*   A+ Certification - CompTIA\n*   Helpdesk Certification - [Issuing Organization Not Specified]\n*   ServiceNow CSA (Certified System Administrator) - In Progress",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "777d5f11-e033-4359-90ec-cbf436f06d87",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=here is the resume: \n{{ $json.resume }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "# Role:\nYou are a recruiting expert. \n\n# Task: \nEvaluate the provided resume on these 25 competencies using a scale of 1 to 5. \nFocus on the work experiences that demonstrate the competencies.\nDon't consider affirmations not related to a specific experience. \nWe want a factual analysis, not the opinion of someone. \n\n## Evaluation scale\n1 - Needs Improvement/Below Expectations: Employee consistently fails to meet standards.\n2 - Developing/Approaching Expectations: Employee shows progress but requires more training or experience.\n3 - Meets Expectations/Competent: Employee meets the requirements of the role efficiently.\n4 - Exceeds Expectations/Skilled: Employee frequently goes above requirements.\n5 - Expert/Role Model: Employee consistently sets new standards and acts as a mentor.\n\n## Evaluation criteria\nTechnical\n-Understanding existing systems and technology\n-Designing and developing applications\n-Applying procedures, tools and methods\n-Integrating systems\n-Designing technical architecture\n-Understanding emerging technologies\nBusiness\n-Understanding business practices and processes\n-Understanding business organization, politics and culture\n-Behaving commercially\n-Understanding and analyzing competitive situation\n-Managing projects\n-Managing change from IT applications\n-Planning prioritising and administering work\n-Communicating, listening and gathering information\n-Focusing on customer\nBehavioral\n-Leading, inspiring and building trust\n-Thinking creatively and innvoating\n-Focusing on results\n-Thinking strategically\n-Coaching, delegating and developing\n-Building relationships, team working\n-Influencing and persuading\n-Principled negotiating\n-Resolving conflicts and problems\n-Being adaptable\n\n\n# output format\nprovide a json record with \n- category: the competency category (technical, business, behavioral)\n- competency: the competency name\n- evaluation: the score from 1 to 5 \n- comment: a brief explanation for the score\n\n# constraints\nIf a competency cannot be evaluated, leave blank"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                416,
+                0
+            ],
+            "id": "e1f24947-6628-4eb4-930a-51a1bb190b88",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                336,
+                208
+            ],
+            "id": "8732c9e6-d2c4-4be9-a44d-3e0f58b1e2ab",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "schemaType": "manual",
+                "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Generated schema for Root\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"evaluation\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"category\": {\n            \"type\": \"string\"\n          },\n          \"competency\": {\n            \"type\": \"string\"\n          },\n          \"evaluation\": {\n            \"type\": \"number\"\n          },\n          \"comment\": {\n            \"type\": \"string\"\n          }\n        },\n        \"required\": [\n          \"category\",\n          \"competency\",\n          \"comment\"\n        ]\n      }\n    }\n  },\n  \"required\": [\n    \"evaluation\"\n  ]\n}",
+                "autoFix": true
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.3,
+            "position": [
+                592,
+                208
+            ],
+            "id": "6ec434a1-989a-4982-8a62-26cd63ce5ddb",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                528,
+                416
+            ],
+            "id": "6125f0f9-71dd-4b53-a421-059e68e8a26b",
+            "name": "Google Gemini Chat Model1",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model1": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Structured Output Parser",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "sog2yZLIB18Vlu2Q",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-10T17:09:09.073Z",
+            "updatedAt": "2026-04-10T17:09:09.073Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
