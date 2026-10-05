@@ -1,0 +1,90 @@
+{
+    "id": "8Ln5zOHB0NvSAI47",
+    "name": "My workflow 12",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-06-12T16:08:47.668Z",
+    "updatedAt": "2026-06-12T17:13:14.467Z",
+    "isArchived": false,
+    "versionId": "fe26f188-1459-4796-95f3-23c75fba781f",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "728671de-d643-4711-b9f3-c7065e29e822",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "command": "npm install github:tactik8/js_functions;\n\n\n"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                208,
+                0
+            ],
+            "id": "e228557e-3f51-4690-ab31-0004ee9174c9",
+            "name": "Execute Command"
+        },
+        {
+            "parameters": {
+                "jsCode": "\nconst { jsFunctions } = require('/home/node/node_modules/jsFunctions')\n\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                224,
+                192
+            ],
+            "id": "ae0e2d83-7156-4867-bbb7-f28695891b53",
+            "name": "Code in JavaScript"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Command",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "8Ln5zOHB0NvSAI47",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-12T16:08:47.668Z",
+            "updatedAt": "2026-06-12T16:08:47.668Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
