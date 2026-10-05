@@ -1,0 +1,790 @@
+{
+    "id": "dCIpSDYGWcwgJJiH",
+    "name": "artillery task get V1",
+    "active": true,
+    "activeVersionId": "bd8848f2-8315-4c6e-878f-63222be132dd",
+    "createdAt": "2026-07-14T11:15:48.787Z",
+    "updatedAt": "2026-07-14T12:26:23.956Z",
+    "isArchived": false,
+    "versionId": "55fca642-32bb-4db2-aa06-126144844efa",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "taskID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -224,
+                0
+            ],
+            "id": "29f25eb0-041a-403b-9139-4fde7cabe6eb",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                0,
+                -16
+            ],
+            "id": "3e70afbc-d45f-40eb-bae3-a39781618985",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                            "name": "config.ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                            "name": "config.apiUrl",
+                            "value": "http://192.168.2.243:9999/graphql",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7aa4c3e1-9332-4bfb-a32c-b4154ae664e5",
+                            "name": "config.taskID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.taskID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2e8ee011-7a12-4046-9ccc-5d2206ad8e26",
+                            "name": "config.apiUrl",
+                            "value": "http://192.168.2.243:18088",
+                            "type": "string"
+                        },
+                        {
+                            "id": "5147469a-20c2-4136-bad9-84e3017cdbbf",
+                            "name": "config.apiUrlTask",
+                            "value": "http://192.168.2.243:18088/api/tasks",
+                            "type": "string"
+                        },
+                        {
+                            "id": "371d7ad0-a7f1-43c8-97ae-f11c527d005c",
+                            "name": "",
+                            "value": "",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                224,
+                -16
+            ],
+            "id": "89026e66-1cec-4e55-8e64-be6ff327f8aa",
+            "name": "Config1"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "3e3234e3-1912-4b94-a639-f4740cd19d5b",
+                            "leftValue": "={{ $json.config.taskID }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                432,
+                -16
+            ],
+            "id": "90e0507a-42a6-4075-8106-c92ed5d2bfc5",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.config.apiUrlTask }}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "fullResponse": true
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                704,
+                80
+            ],
+            "id": "77e46321-c03e-4185-8708-3d18e618d007",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "jsCode": "\nfunction sampleRecord(){\n  return {\n    \"has_archive\": false,\n    \"has_cookies\": false,\n    \"id\": \"httpswwwlezcutiescomenpornstarviewrenata-fox42469\",\n    \"last_run\": \"2026-07-13T20:04:21.035248Z\",\n    \"name\": \"https://www.lezcuties.com/en/pornstar/view/Renata-Fox/42469\",\n    \"next_run\": null,\n    \"schedule\": null,\n    \"slug\": \"httpswwwlezcutiescomenpornstarviewrenata-fox42469\",\n    \"status\": \"error\"\n  }\n}\n\n\nfunction artilleryTaskToAction(apiUrl, record){\n\n  if(Array.isArray(record)){\n    return record.map(x => artilleryTaskToAction(apiUrl, x))\n  }\n\n  \n  if(!record || !record?.id){\n    return undefined\n  }\n  \n  let actionStatusMapping = {\n    \"error\": \"FailedActionStatus\",\n    \"idle\": \"PotentialActionStatus\",\n    \"running\": \"ActiveActionStatus\"\n  }\n\n  let actionStatus = actionStatusMapping?.[record?.status]\n\n  if(actionStatus == \"PotentialActionStatus\" || record?.last_run){\n    actionStatus = \"CompletedActionStatus\"\n  }\n  \n  let action = {\n\n    \"@type\": \"Action\",\n    \"@id\": apiUrl + \"/task/\" + record?.id,\n    \"actionStatus\": actionStatus,\n    \"endTime\": record?.last_run,\n    \"object\": {\n      \"@type\": \"WebPage\",\n      \"@id\": record?.name + \"#webpage\",\n      \"url\": record?.name\n    },\n    \"instrument\": {\n      \"@type\": \"WebAPI\",\n      \"@id\": apiUrl + \"#webapi\",\n      \"url\": apiUrl\n    }\n  }\n  return action\n  \n}\n\n\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let apiUrl = $('Config1').first().json.config.apiUrl\n  item.json = {\"result\": artilleryTaskToAction(apiUrl, item.json.body)}\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1024,
+                80
+            ],
+            "id": "ac2bdf8b-7020-4d53-8dfc-bdd15e5aa136",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                            "name": "action",
+                            "value": "={{ $('Config1').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.result",
+                            "value": "={{ $json.result }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1296,
+                80
+            ],
+            "id": "f1c09bb0-cf64-4f9c-87a5-a602ac390dc0",
+            "name": "Action close1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1520,
+                80
+            ],
+            "id": "9f02924b-71c4-4e13-a855-7d63462cd099",
+            "name": "Output1"
+        }
+    ],
+    "connections": {
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config1": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action close1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Action close1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "dCIpSDYGWcwgJJiH",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-14T11:15:48.787Z",
+            "updatedAt": "2026-07-14T11:15:48.787Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "bd8848f2-8315-4c6e-878f-63222be132dd",
+        "workflowId": "dCIpSDYGWcwgJJiH",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "taskID"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    -224,
+                    0
+                ],
+                "id": "29f25eb0-041a-403b-9139-4fde7cabe6eb",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "WebPage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.url",
+                                "value": "={{ $json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    0,
+                    -16
+                ],
+                "id": "3e70afbc-d45f-40eb-bae3-a39781618985",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                                "name": "config.ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                                "name": "config.apiUrl",
+                                "value": "http://192.168.2.243:9999/graphql",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7aa4c3e1-9332-4bfb-a32c-b4154ae664e5",
+                                "name": "config.taskID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.taskID }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "2e8ee011-7a12-4046-9ccc-5d2206ad8e26",
+                                "name": "config.apiUrl",
+                                "value": "http://192.168.2.243:18088",
+                                "type": "string"
+                            },
+                            {
+                                "id": "5147469a-20c2-4136-bad9-84e3017cdbbf",
+                                "name": "config.apiUrlTask",
+                                "value": "http://192.168.2.243:18088/api/tasks",
+                                "type": "string"
+                            },
+                            {
+                                "id": "371d7ad0-a7f1-43c8-97ae-f11c527d005c",
+                                "name": "",
+                                "value": "",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    224,
+                    -16
+                ],
+                "id": "89026e66-1cec-4e55-8e64-be6ff327f8aa",
+                "name": "Config1"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "3e3234e3-1912-4b94-a639-f4740cd19d5b",
+                                "leftValue": "={{ $json.config.taskID }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notEmpty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    432,
+                    -16
+                ],
+                "id": "90e0507a-42a6-4075-8106-c92ed5d2bfc5",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "url": "={{ $json.config.apiUrlTask }}",
+                    "options": {
+                        "response": {
+                            "response": {
+                                "fullResponse": true
+                            }
+                        }
+                    }
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    640,
+                    80
+                ],
+                "id": "77e46321-c03e-4185-8708-3d18e618d007",
+                "name": "HTTP Request"
+            },
+            {
+                "parameters": {
+                    "jsCode": "\nfunction sampleRecord(){\n  return {\n    \"has_archive\": false,\n    \"has_cookies\": false,\n    \"id\": \"httpswwwlezcutiescomenpornstarviewrenata-fox42469\",\n    \"last_run\": \"2026-07-13T20:04:21.035248Z\",\n    \"name\": \"https://www.lezcuties.com/en/pornstar/view/Renata-Fox/42469\",\n    \"next_run\": null,\n    \"schedule\": null,\n    \"slug\": \"httpswwwlezcutiescomenpornstarviewrenata-fox42469\",\n    \"status\": \"error\"\n  }\n}\n\n\nfunction artilleryTaskToAction(apiUrl, record){\n\n  if(Array.isArray(record)){\n    return record.map(x => artilleryTaskToAction(apiUrl, x))\n  }\n\n  \n  if(!record || !record?.id){\n    return undefined\n  }\n  \n  let actionStatusMapping = {\n    \"error\": \"FailedActionStatus\",\n    \"idle\": \"PotentialActionStatus\",\n    \"running\": \"ActiveActionStatus\"\n  }\n\n  let actionStatus = actionStatusMapping?.[record?.status]\n\n  if(actionStatus == \"PotentialActionStatus\" || record?.last_run){\n    actionStatus = \"CompletedActionStatus\"\n  }\n  \n  let action = {\n\n    \"@type\": \"Action\",\n    \"@id\": apiUrl + \"/task/\" + record?.id,\n    \"actionStatus\": actionStatus,\n    \"endTime\": record?.last_run,\n    \"object\": {\n      \"@type\": \"WebPage\",\n      \"@id\": record?.name + \"#webpage\",\n      \"url\": record?.name\n    },\n    \"instrument\": {\n      \"@type\": \"WebAPI\",\n      \"@id\": apiUrl + \"#webapi\",\n      \"url\": apiUrl\n    }\n  }\n  return action\n  \n}\n\n\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let apiUrl = $('Config1').first().json.config.apiUrl\n  item.json = {\"result\": artilleryTaskToAction(apiUrl, item.json.body)}\n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    1024,
+                    80
+                ],
+                "id": "ac2bdf8b-7020-4d53-8dfc-bdd15e5aa136",
+                "name": "Code in JavaScript"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                                "name": "action",
+                                "value": "={{ $('Config1').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                                "name": "action.result",
+                                "value": "={{ $json.result }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1296,
+                    80
+                ],
+                "id": "f1c09bb0-cf64-4f9c-87a5-a602ac390dc0",
+                "name": "Action close1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1520,
+                    80
+                ],
+                "id": "9f02924b-71c4-4e13-a855-7d63462cd099",
+                "name": "Output1"
+            }
+        ],
+        "connections": {
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config1": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [],
+                    [
+                        {
+                            "node": "HTTP Request",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request": {
+                "main": [
+                    [
+                        {
+                            "node": "Code in JavaScript",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action close1": {
+                "main": [
+                    [
+                        {
+                            "node": "Output1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Code in JavaScript": {
+                "main": [
+                    [
+                        {
+                            "node": "Action close1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version bd8848f2",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-07-14T12:23:28.985Z",
+        "updatedAt": "2026-07-14T12:23:40.585Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
