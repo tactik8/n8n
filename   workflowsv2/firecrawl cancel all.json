@@ -1,0 +1,259 @@
+{
+    "id": "tiwDqCr80foTPucu",
+    "name": "firecrawl cancel all",
+    "active": true,
+    "activeVersionId": "62f33749-6bc3-4070-bd1a-8bae3ac34ced",
+    "createdAt": "2026-05-09T15:12:04.721Z",
+    "updatedAt": "2026-05-09T15:13:25.278Z",
+    "isArchived": false,
+    "versionId": "62f33749-6bc3-4070-bd1a-8bae3ac34ced",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "d68e7370-d1cc-4aea-bd10-f35740d743d2",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "resource": "Crawling",
+                "operation": "crawlActive",
+                "requestOptions": {}
+            },
+            "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+            "typeVersion": 1,
+            "position": [
+                208,
+                0
+            ],
+            "id": "12ae7478-be6b-42bf-844d-79b1d1b1b837",
+            "name": "List active crawls",
+            "credentials": {
+                "firecrawlApi": {
+                    "id": "Do4yFXPrjCzsA3GM",
+                    "name": "Firecrawl account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "=crawls",
+                "include": "=",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                416,
+                0
+            ],
+            "id": "14274607-9639-4ca6-b4fb-36fe730ae45f",
+            "name": "Split Out"
+        },
+        {
+            "parameters": {
+                "resource": "Crawling",
+                "operation": "cancelCrawl",
+                "crawlId": "={{ $json }}",
+                "requestOptions": {}
+            },
+            "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+            "typeVersion": 1,
+            "position": [
+                624,
+                0
+            ],
+            "id": "5c0522d0-22d1-4c37-a341-1c40606c2004",
+            "name": "Cancel a crawl job",
+            "credentials": {
+                "firecrawlApi": {
+                    "id": "Do4yFXPrjCzsA3GM",
+                    "name": "Firecrawl account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "List active crawls",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "List active crawls": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out": {
+            "main": [
+                [
+                    {
+                        "node": "Cancel a crawl job",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "tiwDqCr80foTPucu",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-09T15:12:04.721Z",
+            "updatedAt": "2026-05-09T15:12:04.721Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "62f33749-6bc3-4070-bd1a-8bae3ac34ced",
+        "workflowId": "tiwDqCr80foTPucu",
+        "nodes": [
+            {
+                "parameters": {
+                    "inputSource": "passthrough"
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "d68e7370-d1cc-4aea-bd10-f35740d743d2",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "resource": "Crawling",
+                    "operation": "crawlActive",
+                    "requestOptions": {}
+                },
+                "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+                "typeVersion": 1,
+                "position": [
+                    208,
+                    0
+                ],
+                "id": "12ae7478-be6b-42bf-844d-79b1d1b1b837",
+                "name": "List active crawls",
+                "credentials": {
+                    "firecrawlApi": {
+                        "id": "Do4yFXPrjCzsA3GM",
+                        "name": "Firecrawl account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "fieldToSplitOut": "=crawls",
+                    "include": "=",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.splitOut",
+                "typeVersion": 1,
+                "position": [
+                    416,
+                    0
+                ],
+                "id": "14274607-9639-4ca6-b4fb-36fe730ae45f",
+                "name": "Split Out"
+            },
+            {
+                "parameters": {
+                    "resource": "Crawling",
+                    "operation": "cancelCrawl",
+                    "crawlId": "={{ $json }}",
+                    "requestOptions": {}
+                },
+                "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+                "typeVersion": 1,
+                "position": [
+                    624,
+                    0
+                ],
+                "id": "5c0522d0-22d1-4c37-a341-1c40606c2004",
+                "name": "Cancel a crawl job",
+                "credentials": {
+                    "firecrawlApi": {
+                        "id": "Do4yFXPrjCzsA3GM",
+                        "name": "Firecrawl account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "List active crawls",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "List active crawls": {
+                "main": [
+                    [
+                        {
+                            "node": "Split Out",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Split Out": {
+                "main": [
+                    [
+                        {
+                            "node": "Cancel a crawl job",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 62f33749",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-05-09T15:13:14.156Z",
+        "updatedAt": "2026-05-09T15:13:44.883Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
