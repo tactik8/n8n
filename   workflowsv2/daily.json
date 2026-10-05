@@ -1,0 +1,206 @@
+{
+    "id": "KRq5tqF879Vlp68b",
+    "name": "daily",
+    "active": true,
+    "activeVersionId": "ea4a39ec-f0db-4912-8730-acf8bf522a1b",
+    "createdAt": "2026-05-09T15:09:59.619Z",
+    "updatedAt": "2026-05-09T15:14:28.170Z",
+    "isArchived": false,
+    "versionId": "ea4a39ec-f0db-4912-8730-acf8bf522a1b",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "triggerAtHour": 2
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                0,
+                0
+            ],
+            "id": "af628c79-836c-427d-8378-8ac8352b02a5",
+            "name": "Schedule Trigger"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ORqk2BEEdMTUBfMX",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/ORqk2BEEdMTUBfMX",
+                    "cachedResultName": "Post crawl job V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "https://www.mondou.com"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                208,
+                0
+            ],
+            "id": "4ee55ae0-5596-40d9-9f32-98b8cbccbeec",
+            "name": "Call 'Post crawl job V1'"
+        }
+    ],
+    "connections": {
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'Post crawl job V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": {
+        "node:Schedule Trigger": {
+            "recurrenceRules": [
+                null
+            ],
+            "recurrenceRuleSignatures": [
+                null
+            ]
+        }
+    },
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "KRq5tqF879Vlp68b",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-09T15:09:59.619Z",
+            "updatedAt": "2026-05-09T15:09:59.619Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "ea4a39ec-f0db-4912-8730-acf8bf522a1b",
+        "workflowId": "KRq5tqF879Vlp68b",
+        "nodes": [
+            {
+                "parameters": {
+                    "rule": {
+                        "interval": [
+                            {
+                                "triggerAtHour": 2
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.scheduleTrigger",
+                "typeVersion": 1.3,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "af628c79-836c-427d-8378-8ac8352b02a5",
+                "name": "Schedule Trigger"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "ORqk2BEEdMTUBfMX",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/ORqk2BEEdMTUBfMX",
+                        "cachedResultName": "Post crawl job V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "url": "https://www.mondou.com"
+                        },
+                        "matchingColumns": [
+                            "url"
+                        ],
+                        "schema": [
+                            {
+                                "id": "url",
+                                "displayName": "url",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "mode": "each",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    208,
+                    0
+                ],
+                "id": "4ee55ae0-5596-40d9-9f32-98b8cbccbeec",
+                "name": "Call 'Post crawl job V1'"
+            }
+        ],
+        "connections": {
+            "Schedule Trigger": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'Post crawl job V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version ea4a39ec",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-05-09T15:14:28.191Z",
+        "updatedAt": "2026-05-09T15:14:31.892Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
