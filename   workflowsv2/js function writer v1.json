@@ -1,0 +1,3682 @@
+{
+    "id": "aXM3agjI6U6qFuBd",
+    "name": "js function writer v1",
+    "active": true,
+    "activeVersionId": "3354d170-f0a0-4ddf-ac57-4d9cd6e9c141",
+    "createdAt": "2026-06-12T15:02:48.748Z",
+    "updatedAt": "2026-06-12T16:07:03.242Z",
+    "isArchived": false,
+    "versionId": "a3c295f4-a9fc-4399-861a-4ed663f8a8bc",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "content"
+                        },
+                        {
+                            "name": "discussionID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                608
+            ],
+            "id": "2a6d80c4-ca91-4399-a0d7-7e9ee6ac66f9",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{ $json.output }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1696,
+                608
+            ],
+            "id": "3a87a73c-18bc-492b-bd1e-343f811cd50a",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1920,
+                704
+            ],
+            "id": "842de64a-59a1-4c83-85cc-d06596ed6ea8",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2144,
+                704
+            ],
+            "id": "578c58aa-2293-4ca9-be5d-afc896086982",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "cf4e383f-53bd-4cbd-92b9-80a2e14c5b92",
+                            "name": "config.userPrompt",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.content }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "43b34ecd-6ebe-42f9-ae4a-86c5ce8c3674",
+                            "name": "config.discussionID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.discussionID }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                448,
+                608
+            ],
+            "id": "4eb60310-1f42-40ed-809d-4184c488e1a3",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                224,
+                608
+            ],
+            "id": "d36639e0-e0f5-4563-8200-1342b13eb88e",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                224,
+                1216
+            ],
+            "id": "0b4fbbad-1a3f-47ad-a6a6-13356c69c6f2",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6b21cd81-49b9-4682-84a0-4a58bf3823a8",
+                            "name": "action.error",
+                            "value": "error",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                0,
+                1216
+            ],
+            "id": "1ecb5012-7f5c-432f-922b-dab0cfc1362a",
+            "name": "Action Failed"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/prompts",
+                    "mode": "url"
+                },
+                "filePath": "src/JavaScript Function Generator.md",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                672,
+                608
+            ],
+            "id": "afc09b3a-7068-4cd2-a77d-1c1ae54712d3",
+            "name": "Get a file",
+            "webhookId": "6d6d3e00-e460-4cc5-8ca5-cf1545de070c",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "destinationKey": "systemPrompt",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.1,
+            "position": [
+                896,
+                608
+            ],
+            "id": "2ab0dfd9-2c54-4fc4-8cb2-288ca9cf4fe9",
+            "name": "Extract from File"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d1b3f193-f40c-4446-bf1b-6ea434695fc2",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4f26ed2b-3f18-4031-8079-8ea04ea24127",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "557d5bcd-4a35-4988-bcca-46c107c39a17",
+                            "name": "config.systemPrompt",
+                            "value": "={{ $json.systemPrompt }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1120,
+                608
+            ],
+            "id": "1a4485d8-bc90-4221-801c-1825f0a18a56",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.config.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.config.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                1344,
+                608
+            ],
+            "id": "a1950699-767e-4762-b764-d9c337fa6e8d",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                1352,
+                832
+            ],
+            "id": "8fb89ac5-7bfd-45c8-bdca-117c8c716d87",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "={{ $('Config').item.json.config.discussionID }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.4,
+            "position": [
+                1480,
+                832
+            ],
+            "id": "2f1817b1-9e70-4d10-8047-0fd112a18111",
+            "name": "Simple Memory"
+        },
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Fn builder. Go. ",
+                "options": {
+                    "responseMode": "responseNodes"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.4,
+            "position": [
+                0,
+                -480
+            ],
+            "id": "57fb0e36-dc9f-4bc7-a06a-12a28f424d36",
+            "name": "When chat message received",
+            "webhookId": "b398c684-bcf8-47e4-bf8a-a4a6dbde0e31"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "aXM3agjI6U6qFuBd",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/aXM3agjI6U6qFuBd",
+                    "cachedResultName": "js function writer v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json.chatInput }}",
+                        "discussionID": "={{ $json.sessionId }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "discussionID",
+                            "displayName": "discussionID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                224,
+                -480
+            ],
+            "id": "4fb76591-e5b7-4124-8cd0-9bd5980852f9",
+            "name": "Call 'js function writer v1'"
+        },
+        {
+            "parameters": {
+                "message": "={{ $json.output.result.questions.join('\\n') }}",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chat",
+            "typeVersion": 1.3,
+            "position": [
+                672,
+                -576
+            ],
+            "id": "58017b1e-32d8-487f-8b43-13d0b13a5091",
+            "name": "Chat",
+            "webhookId": "087f16b0-8727-4e52-a5af-ce59e97a6941"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "264d5de3-e10c-4338-8ebd-c58b1997ad22",
+                            "leftValue": "={{ $json.output.result.status }}",
+                            "rightValue": "active",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                448,
+                -480
+            ],
+            "id": "4a9eaf6a-c495-4d9f-89c3-b818992a17a1",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "message": "={{ $('Call \\'js function writer v1\\'').item.json.output.result.src }}",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chat",
+            "typeVersion": 1.3,
+            "position": [
+                672,
+                -384
+            ],
+            "id": "f9d70e67-d3af-4292-95d3-a5938fad517d",
+            "name": "Chat1",
+            "webhookId": "087f16b0-8727-4e52-a5af-ce59e97a6941"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $json.filename }}.js",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3040,
+                -160
+            ],
+            "id": "bc55f207-380b-4a2e-b5e2-73ec6aa331e5",
+            "name": "Get a file1",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "34033209-d86e-45f7-ba13-20b527e236a6",
+                            "leftValue": "={{ $json.action.result.status }}",
+                            "rightValue": "completed",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1920,
+                512
+            ],
+            "id": "3f06e591-47f0-473d-9d14-75943f10e8a4",
+            "name": "If1"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $('Input save').item.json.filename }}.js",
+                "fileContent": "={{ $('Input save').item.json.action.result.src }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3264,
+                -160
+            ],
+            "id": "d6c68030-4895-481d-8acd-091ef434a7fe",
+            "name": "Edit a file",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $('Input save').item.json.filename }}.js",
+                "fileContent": "={{ $('Input save').item.json.action.result.src }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3264,
+                32
+            ],
+            "id": "3611e26f-1441-48dc-bdf8-84a5b8f8dc3d",
+            "name": "Create a file",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": []
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2816,
+                512
+            ],
+            "id": "37e45003-c6d3-4eb0-8589-50ec8629d428",
+            "name": "Input save"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "fae866ab-1f6b-4940-879e-411b82114186",
+                            "name": "filename",
+                            "value": "={{ $json.action.result.name.replaceAll(' ', '') }}/{{ $json.action.result.name.replaceAll(' ', '') }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2144,
+                512
+            ],
+            "id": "eccf632d-6be9-4351-99bd-436118480ea4",
+            "name": "Define name"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8ad6f5e9-49c5-4c73-a850-1666acf234a8",
+                            "name": "filename",
+                            "value": "={{ $json.filename }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d7c5912d-18e0-4a63-ad0d-fead60bd7934",
+                            "name": "action.result",
+                            "value": "={{ $json.action.result }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d4f0abc0-e442-43ea-ade3-1e28dc19a914",
+                            "name": "commitMessage",
+                            "value": "={{ $('Config').item.json.config.userPrompt }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2368,
+                512
+            ],
+            "id": "5fb47e9f-5fa4-4ec0-8921-648409902192",
+            "name": "Input save1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "616ff023-f11b-4342-8354-46459a439584",
+                            "name": "action.result.src",
+                            "value": "={{ $json.action.result.src.includes('export') ? $json.action.result.src : \"export \" + $json.action.result.src }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2592,
+                512
+            ],
+            "id": "ac953f33-dfb2-485c-80bc-cb68f8a67fbb",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $json.filename }}.js",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                1920
+            ],
+            "id": "aabf9fbe-7b9e-4f4f-83ad-8b4fd05b3756",
+            "name": "Get a file2",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $('Input save').item.json.filename }}.js",
+                "fileContent": "={{ $('Input save').item.json.action.result.src }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                224,
+                1440
+            ],
+            "id": "2d60a567-6874-479a-9896-7e97e4b1f27a",
+            "name": "Edit a file3",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $('Input save').item.json.filename }}.json",
+                "fileContent": "={{ JSON.stringify($('Input save').item.json.action.result, null, 4) }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                224,
+                1824
+            ],
+            "id": "c9eb7c4e-a9fd-41cf-a687-e661f276e634",
+            "name": "Edit a file4",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $('Input save').item.json.filename }}.js",
+                "fileContent": "={{ $('Input save').item.json.action.result.src }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                224,
+                2016
+            ],
+            "id": "a5dc424f-1ed9-431e-b76f-3c9b79b78fd1",
+            "name": "Create a file3",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $('Input save').item.json.filename }}.json",
+                "fileContent": "={{ JSON.stringify($('Input save').item.json.action.result, null, 4) }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                224,
+                2400
+            ],
+            "id": "dd2e0974-ac07-48eb-8c83-c5442591c4a8",
+            "name": "Create a file4",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=tests/{{ $('Input save').item.json.filename }}.test.js",
+                "fileContent": "={{ $('Input save').item.json.action.result.tests }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                224,
+                1632
+            ],
+            "id": "6d24064a-1f89-4791-bb84-f5ea9248e5dd",
+            "name": "Edit a file5",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=tests/{{ $('Input save').item.json.filename }}.test.js",
+                "fileContent": "={{ $('Input save').item.json.action.result.tests }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                224,
+                2208
+            ],
+            "id": "a82309c5-ff40-4104-bd8b-f3fcd67fad9e",
+            "name": "Create a file5",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=tests/{{ $json.filename }}.test.js",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3040,
+                224
+            ],
+            "id": "97a92b77-acb7-42bd-aad2-8a5e2a6290d9",
+            "name": "Get a file3",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=tests/{{ $('Input save').item.json.filename }}.test.js",
+                "fileContent": "={{ $('Input save').item.json.action.result.tests }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3264,
+                224
+            ],
+            "id": "10166f43-1be5-4f4d-8a62-1fe9cda52aa1",
+            "name": "Edit a file8",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=tests/{{ $('Input save').item.json.filename }}.test.js",
+                "fileContent": "={{ $('Input save').item.json.action.result.tests }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3264,
+                416
+            ],
+            "id": "b8735db6-c6db-4af4-ab2d-93f520577c99",
+            "name": "Create a file8",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $json.filename }}.json",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3040,
+                608
+            ],
+            "id": "d49bb146-e8bf-4aaa-9bc1-5eb4829b8092",
+            "name": "Get a file4",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $('Input save').item.json.filename }}.json",
+                "fileContent": "={{ JSON.stringify($('Input save').item.json.action.result, null, 4) }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3264,
+                608
+            ],
+            "id": "9610f26b-4561-4e22-beb3-89f831a47e18",
+            "name": "Edit a file7",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $('Input save').item.json.filename }}.json",
+                "fileContent": "={{ JSON.stringify($('Input save').item.json.action.result, null, 4) }}",
+                "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3264,
+                800
+            ],
+            "id": "c4b3cdad-a5a1-4881-bebc-dcd2f5281358",
+            "name": "Create a file7",
+            "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "src/index.js",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                3040,
+                992
+            ],
+            "id": "0ec93fd3-c64e-4c6f-8a68-df6694950252",
+            "name": "Get a file5",
+            "webhookId": "7b304edf-721d-407f-88ad-84da16aa0bed",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "destinationKey": "src",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.1,
+            "position": [
+                3264,
+                992
+            ],
+            "id": "d2653568-2e03-40e7-b817-0e38017bf94b",
+            "name": "Extract from File1"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "d1c8b851-c9e3-49b3-913a-fe157ca17733",
+                            "leftValue": "={{ $json.src }}",
+                            "rightValue": "={{ $json.importStatement }}",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notContains"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                3712,
+                992
+            ],
+            "id": "58de336f-7379-4296-9693-a145d915e547",
+            "name": "If2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "e8597abf-0bf9-4d64-aaa2-ec5aec95d426",
+                            "name": "filename",
+                            "value": "={{ $('Input save').item.json.filename }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3d105cc9-599e-4970-9cc2-bf9106fb614d",
+                            "name": "action",
+                            "value": "={{ $('Input save').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "8545cb38-bdf2-4175-9d0a-3036e200e2cb",
+                            "name": "src",
+                            "value": "={{ $json.src }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c76d408-1e31-4a89-88db-463612b2b325",
+                            "name": "importStatement",
+                            "value": "=import * as {{ $('Edit Fields1').item.json.action.result.name }} from './{{ $('Edit Fields1').item.json.action.result.name }}/{{ $('Edit Fields1').item.json.action.result.name }}.js'",
+                            "type": "string"
+                        },
+                        {
+                            "id": "de491264-80d6-4788-9df8-719068c34954",
+                            "name": "=exportStatement",
+                            "value": "=export * from './{{ $('Edit Fields1').item.json.action.result.name }}/{{ $('Edit Fields1').item.json.action.result.name }}.js'",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                3488,
+                992
+            ],
+            "id": "09d49361-f1e2-4e58-ac66-2e7e56cc4d9a",
+            "name": "import statements"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "25ee5f2a-fecb-48f4-967f-d78ccae27488",
+                            "name": "src",
+                            "value": "={{ $json.src  + '\\n' + $json.importStatement + '\\n' +$json.exportStatement + '\\n' }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                3936,
+                992
+            ],
+            "id": "8c0dab4e-f7c3-4287-8732-113121fb6baa",
+            "name": "add import to src"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/js_functions",
+                    "mode": "url"
+                },
+                "filePath": "src/index.js",
+                "fileContent": "={{ $json.src }}",
+                "commitMessage": "=Adding  {{ $json.action.result.name }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                4160,
+                992
+            ],
+            "id": "60b79f96-40b2-4f1a-a252-8dfc068213b9",
+            "name": "Edit a file1",
+            "webhookId": "7b304edf-721d-407f-88ad-84da16aa0bed",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "If1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Get a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Failed": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'js function writer v1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'js function writer v1'": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Chat",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Chat1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If1": {
+            "main": [
+                [
+                    {
+                        "node": "Define name",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Create a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Input save": {
+            "main": [
+                [
+                    {
+                        "node": "Get a file1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get a file3",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get a file4",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get a file5",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Define name": {
+            "main": [
+                [
+                    {
+                        "node": "Input save1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Input save1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Input save",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file2": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file3",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Edit a file4",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Edit a file5",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Create a file3",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Create a file4",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Create a file5",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file3": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file8",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Create a file8",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file4": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file7",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Create a file7",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file5": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File1": {
+            "main": [
+                [
+                    {
+                        "node": "import statements",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "import statements": {
+            "main": [
+                [
+                    {
+                        "node": "If2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If2": {
+            "main": [
+                [
+                    {
+                        "node": "add import to src",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "add import to src": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "content": "A function that adds two numbers",
+                    "discussionID": "abc123"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "aXM3agjI6U6qFuBd",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-12T15:02:48.748Z",
+            "updatedAt": "2026-06-12T15:02:48.748Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "3354d170-f0a0-4ddf-ac57-4d9cd6e9c141",
+        "workflowId": "aXM3agjI6U6qFuBd",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "content"
+                            },
+                            {
+                                "name": "discussionID"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    416
+                ],
+                "id": "2a6d80c4-ca91-4399-a0d7-7e9ee6ac66f9",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{ $json.output }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1696,
+                    416
+                ],
+                "id": "3a87a73c-18bc-492b-bd1e-343f811cd50a",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1920,
+                    512
+                ],
+                "id": "842de64a-59a1-4c83-85cc-d06596ed6ea8",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    2144,
+                    512
+                ],
+                "id": "578c58aa-2293-4ca9-be5d-afc896086982",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "cf4e383f-53bd-4cbd-92b9-80a2e14c5b92",
+                                "name": "config.userPrompt",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.content }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "43b34ecd-6ebe-42f9-ae4a-86c5ce8c3674",
+                                "name": "config.discussionID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.discussionID }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    448,
+                    416
+                ],
+                "id": "4eb60310-1f42-40ed-809d-4184c488e1a3",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "WebPage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.url",
+                                "value": "={{ $json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    224,
+                    416
+                ],
+                "id": "d36639e0-e0f5-4563-8200-1342b13eb88e",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    224,
+                    1024
+                ],
+                "id": "0b4fbbad-1a3f-47ad-a6a6-13356c69c6f2",
+                "name": "Output1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "FailedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "6b21cd81-49b9-4682-84a0-4a58bf3823a8",
+                                "name": "action.error",
+                                "value": "error",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    0,
+                    1024
+                ],
+                "id": "1ecb5012-7f5c-432f-922b-dab0cfc1362a",
+                "name": "Action Failed"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/prompts",
+                        "mode": "url"
+                    },
+                    "filePath": "src/JavaScript Function Generator.md",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    672,
+                    416
+                ],
+                "id": "afc09b3a-7068-4cd2-a77d-1c1ae54712d3",
+                "name": "Get a file",
+                "webhookId": "6d6d3e00-e460-4cc5-8ca5-cf1545de070c",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "operation": "text",
+                    "destinationKey": "systemPrompt",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.extractFromFile",
+                "typeVersion": 1.1,
+                "position": [
+                    896,
+                    416
+                ],
+                "id": "2ab0dfd9-2c54-4fc4-8cb2-288ca9cf4fe9",
+                "name": "Extract from File"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "d1b3f193-f40c-4446-bf1b-6ea434695fc2",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4f26ed2b-3f18-4031-8079-8ea04ea24127",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "557d5bcd-4a35-4988-bcca-46c107c39a17",
+                                "name": "config.systemPrompt",
+                                "value": "={{ $json.systemPrompt }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1120,
+                    416
+                ],
+                "id": "1a4485d8-bc90-4221-801c-1825f0a18a56",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "={{ $json.config.userPrompt }}",
+                    "options": {
+                        "systemMessage": "={{ $json.config.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    1344,
+                    416
+                ],
+                "id": "a1950699-767e-4762-b764-d9c337fa6e8d",
+                "name": "AI Agent"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+                "typeVersion": 1.1,
+                "position": [
+                    1360,
+                    640
+                ],
+                "id": "8fb89ac5-7bfd-45c8-bdca-117c8c716d87",
+                "name": "Google Gemini Chat Model",
+                "credentials": {
+                    "googlePalmApi": {
+                        "id": "zwRaxgOUTF4g2xjR",
+                        "name": "Google Gemini(PaLM) Api account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "sessionIdType": "customKey",
+                    "sessionKey": "={{ $('Config').item.json.config.discussionID }}"
+                },
+                "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+                "typeVersion": 1.4,
+                "position": [
+                    1488,
+                    640
+                ],
+                "id": "2f1817b1-9e70-4d10-8047-0fd112a18111",
+                "name": "Simple Memory"
+            },
+            {
+                "parameters": {
+                    "public": true,
+                    "initialMessages": "Fn builder. Go. ",
+                    "options": {
+                        "responseMode": "responseNodes"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+                "typeVersion": 1.4,
+                "position": [
+                    0,
+                    -480
+                ],
+                "id": "57fb0e36-dc9f-4bc7-a06a-12a28f424d36",
+                "name": "When chat message received",
+                "webhookId": "b398c684-bcf8-47e4-bf8a-a4a6dbde0e31"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "aXM3agjI6U6qFuBd",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/aXM3agjI6U6qFuBd",
+                        "cachedResultName": "js function writer v1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "content": "={{ $json.chatInput }}",
+                            "discussionID": "={{ $json.sessionId }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "content",
+                                "displayName": "content",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "discussionID",
+                                "displayName": "discussionID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    224,
+                    -480
+                ],
+                "id": "4fb76591-e5b7-4124-8cd0-9bd5980852f9",
+                "name": "Call 'js function writer v1'"
+            },
+            {
+                "parameters": {
+                    "message": "={{ $json.output.result.questions.join('\\n') }}",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.chat",
+                "typeVersion": 1.3,
+                "position": [
+                    672,
+                    -576
+                ],
+                "id": "58017b1e-32d8-487f-8b43-13d0b13a5091",
+                "name": "Chat",
+                "webhookId": "087f16b0-8727-4e52-a5af-ce59e97a6941"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "264d5de3-e10c-4338-8ebd-c58b1997ad22",
+                                "leftValue": "={{ $json.output.result.status }}",
+                                "rightValue": "active",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "equals",
+                                    "name": "filter.operator.equals"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    448,
+                    -480
+                ],
+                "id": "4a9eaf6a-c495-4d9f-89c3-b818992a17a1",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "message": "={{ $('Call \\'js function writer v1\\'').item.json.output.result.src }}",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.chat",
+                "typeVersion": 1.3,
+                "position": [
+                    672,
+                    -384
+                ],
+                "id": "f9d70e67-d3af-4292-95d3-a5938fad517d",
+                "name": "Chat1",
+                "webhookId": "087f16b0-8727-4e52-a5af-ce59e97a6941"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $json.filename }}.js",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3344,
+                    -224
+                ],
+                "id": "bc55f207-380b-4a2e-b5e2-73ec6aa331e5",
+                "name": "Get a file1",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                },
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "34033209-d86e-45f7-ba13-20b527e236a6",
+                                "leftValue": "={{ $json.action.result.status }}",
+                                "rightValue": "completed",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "equals"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    1920,
+                    320
+                ],
+                "id": "3f06e591-47f0-473d-9d14-75943f10e8a4",
+                "name": "If1"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $('Input save').item.json.filename }}.js",
+                    "fileContent": "={{ $('Input save').item.json.action.result.src }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3568,
+                    -224
+                ],
+                "id": "d6c68030-4895-481d-8acd-091ef434a7fe",
+                "name": "Edit a file",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $('Input save').item.json.filename }}.js",
+                    "fileContent": "={{ $('Input save').item.json.action.result.src }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3568,
+                    -32
+                ],
+                "id": "3611e26f-1441-48dc-bdf8-84a5b8f8dc3d",
+                "name": "Create a file",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": []
+                    },
+                    "includeOtherFields": true,
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    2816,
+                    320
+                ],
+                "id": "37e45003-c6d3-4eb0-8589-50ec8629d428",
+                "name": "Input save"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "fae866ab-1f6b-4940-879e-411b82114186",
+                                "name": "filename",
+                                "value": "={{ $json.action.result.name.replaceAll(' ', '') }}/{{ $json.action.result.name.replaceAll(' ', '') }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "includeOtherFields": true,
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    2144,
+                    320
+                ],
+                "id": "eccf632d-6be9-4351-99bd-436118480ea4",
+                "name": "Define name"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "8ad6f5e9-49c5-4c73-a850-1666acf234a8",
+                                "name": "filename",
+                                "value": "={{ $json.filename }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d7c5912d-18e0-4a63-ad0d-fead60bd7934",
+                                "name": "action.result",
+                                "value": "={{ $json.action.result }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d4f0abc0-e442-43ea-ade3-1e28dc19a914",
+                                "name": "commitMessage",
+                                "value": "={{ $('Config').item.json.config.userPrompt }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    2368,
+                    320
+                ],
+                "id": "5fb47e9f-5fa4-4ec0-8921-648409902192",
+                "name": "Input save1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "616ff023-f11b-4342-8354-46459a439584",
+                                "name": "action.result.src",
+                                "value": "={{ $json.action.result.src.includes('export') ? $json.action.result.src : \"export \" + $json.action.result.src }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "includeOtherFields": true,
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    2592,
+                    320
+                ],
+                "id": "ac953f33-dfb2-485c-80bc-cb68f8a67fbb",
+                "name": "Edit Fields1"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $json.filename }}.js",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    1728
+                ],
+                "id": "aabf9fbe-7b9e-4f4f-83ad-8b4fd05b3756",
+                "name": "Get a file2",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                },
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $('Input save').item.json.filename }}.js",
+                    "fileContent": "={{ $('Input save').item.json.action.result.src }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    224,
+                    1248
+                ],
+                "id": "2d60a567-6874-479a-9896-7e97e4b1f27a",
+                "name": "Edit a file3",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $('Input save').item.json.filename }}.json",
+                    "fileContent": "={{ JSON.stringify($('Input save').item.json.action.result, null, 4) }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    224,
+                    1632
+                ],
+                "id": "c9eb7c4e-a9fd-41cf-a687-e661f276e634",
+                "name": "Edit a file4",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $('Input save').item.json.filename }}.js",
+                    "fileContent": "={{ $('Input save').item.json.action.result.src }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    224,
+                    1824
+                ],
+                "id": "a5dc424f-1ed9-431e-b76f-3c9b79b78fd1",
+                "name": "Create a file3",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $('Input save').item.json.filename }}.json",
+                    "fileContent": "={{ JSON.stringify($('Input save').item.json.action.result, null, 4) }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    224,
+                    2208
+                ],
+                "id": "dd2e0974-ac07-48eb-8c83-c5442591c4a8",
+                "name": "Create a file4",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=tests/{{ $('Input save').item.json.filename }}.test.js",
+                    "fileContent": "={{ $('Input save').item.json.action.result.tests }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    224,
+                    1440
+                ],
+                "id": "6d24064a-1f89-4791-bb84-f5ea9248e5dd",
+                "name": "Edit a file5",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=tests/{{ $('Input save').item.json.filename }}.test.js",
+                    "fileContent": "={{ $('Input save').item.json.action.result.tests }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    224,
+                    2016
+                ],
+                "id": "a82309c5-ff40-4104-bd8b-f3fcd67fad9e",
+                "name": "Create a file5",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=tests/{{ $json.filename }}.test.js",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3344,
+                    160
+                ],
+                "id": "97a92b77-acb7-42bd-aad2-8a5e2a6290d9",
+                "name": "Get a file3",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                },
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=tests/{{ $('Input save').item.json.filename }}.test.js",
+                    "fileContent": "={{ $('Input save').item.json.action.result.tests }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3568,
+                    160
+                ],
+                "id": "10166f43-1be5-4f4d-8a62-1fe9cda52aa1",
+                "name": "Edit a file8",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=tests/{{ $('Input save').item.json.filename }}.test.js",
+                    "fileContent": "={{ $('Input save').item.json.action.result.tests }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3568,
+                    352
+                ],
+                "id": "b8735db6-c6db-4af4-ab2d-93f520577c99",
+                "name": "Create a file8",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $json.filename }}.json",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3344,
+                    544
+                ],
+                "id": "d49bb146-e8bf-4aaa-9bc1-5eb4829b8092",
+                "name": "Get a file4",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                },
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $('Input save').item.json.filename }}.json",
+                    "fileContent": "={{ JSON.stringify($('Input save').item.json.action.result, null, 4) }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3568,
+                    544
+                ],
+                "id": "9610f26b-4561-4e22-beb3-89f831a47e18",
+                "name": "Edit a file7",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $('Input save').item.json.filename }}.json",
+                    "fileContent": "={{ JSON.stringify($('Input save').item.json.action.result, null, 4) }}",
+                    "commitMessage": "={{ $('Input save').item.json.commitMessage }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3568,
+                    736
+                ],
+                "id": "c4b3cdad-a5a1-4881-bebc-dcd2f5281358",
+                "name": "Create a file7",
+                "webhookId": "36bcb0af-1fa3-44cf-b7a0-e0cbd6b3f449",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "src/index.js",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    3216,
+                    1040
+                ],
+                "id": "0ec93fd3-c64e-4c6f-8a68-df6694950252",
+                "name": "Get a file5",
+                "webhookId": "7b304edf-721d-407f-88ad-84da16aa0bed",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "operation": "text",
+                    "destinationKey": "src",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.extractFromFile",
+                "typeVersion": 1.1,
+                "position": [
+                    3424,
+                    1040
+                ],
+                "id": "d2653568-2e03-40e7-b817-0e38017bf94b",
+                "name": "Extract from File1"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "d1c8b851-c9e3-49b3-913a-fe157ca17733",
+                                "leftValue": "={{ $json.src }}",
+                                "rightValue": "={{ $json.importStatement }}",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notContains"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    3840,
+                    1040
+                ],
+                "id": "58de336f-7379-4296-9693-a145d915e547",
+                "name": "If2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "e8597abf-0bf9-4d64-aaa2-ec5aec95d426",
+                                "name": "filename",
+                                "value": "={{ $('Input save').item.json.filename }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "3d105cc9-599e-4970-9cc2-bf9106fb614d",
+                                "name": "action",
+                                "value": "={{ $('Input save').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "8545cb38-bdf2-4175-9d0a-3036e200e2cb",
+                                "name": "src",
+                                "value": "={{ $json.src }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c76d408-1e31-4a89-88db-463612b2b325",
+                                "name": "importStatement",
+                                "value": "=import * as {{ $('Edit Fields1').item.json.action.result.name }} from './{{ $('Edit Fields1').item.json.action.result.name }}/{{ $('Edit Fields1').item.json.action.result.name }}.js'",
+                                "type": "string"
+                            },
+                            {
+                                "id": "de491264-80d6-4788-9df8-719068c34954",
+                                "name": "=exportStatement",
+                                "value": "=export * from './{{ $('Edit Fields1').item.json.action.result.name }}/{{ $('Edit Fields1').item.json.action.result.name }}.js'",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    3632,
+                    1040
+                ],
+                "id": "09d49361-f1e2-4e58-ac66-2e7e56cc4d9a",
+                "name": "import statements"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "25ee5f2a-fecb-48f4-967f-d78ccae27488",
+                                "name": "src",
+                                "value": "={{ $json.src  + '\\n' + $json.importStatement + '\\n' +$json.exportStatement + '\\n' }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "includeOtherFields": true,
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    4048,
+                    944
+                ],
+                "id": "8c0dab4e-f7c3-4287-8732-113121fb6baa",
+                "name": "add import to src"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/js_functions",
+                        "mode": "url"
+                    },
+                    "filePath": "src/index.js",
+                    "fileContent": "={{ $json.src }}",
+                    "commitMessage": "=Adding  {{ $json.action.result.name }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    4256,
+                    944
+                ],
+                "id": "60b79f96-40b2-4f1a-a252-8dfc068213b9",
+                "name": "Edit a file1",
+                "webhookId": "7b304edf-721d-407f-88ad-84da16aa0bed",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "If1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Get a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Failed": {
+                "main": [
+                    [
+                        {
+                            "node": "Output1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file": {
+                "main": [
+                    [
+                        {
+                            "node": "Extract from File",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Extract from File": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Google Gemini Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Simple Memory": {
+                "ai_memory": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_memory",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When chat message received": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'js function writer v1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'js function writer v1'": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Chat",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Chat1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If1": {
+                "main": [
+                    [
+                        {
+                            "node": "Define name",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file1": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Create a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Input save": {
+                "main": [
+                    [
+                        {
+                            "node": "Get a file1",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Get a file3",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Get a file4",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Get a file5",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Define name": {
+                "main": [
+                    [
+                        {
+                            "node": "Input save1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Input save1": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields1": {
+                "main": [
+                    [
+                        {
+                            "node": "Input save",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file2": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit a file3",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Edit a file4",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Edit a file5",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Create a file3",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Create a file4",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Create a file5",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file3": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit a file8",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Create a file8",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file4": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit a file7",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Create a file7",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file5": {
+                "main": [
+                    [
+                        {
+                            "node": "Extract from File1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Extract from File1": {
+                "main": [
+                    [
+                        {
+                            "node": "import statements",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "import statements": {
+                "main": [
+                    [
+                        {
+                            "node": "If2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If2": {
+                "main": [
+                    [
+                        {
+                            "node": "add import to src",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "add import to src": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit a file1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 3354d170",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-12T15:59:19.907Z",
+        "updatedAt": "2026-06-12T15:59:24.745Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
