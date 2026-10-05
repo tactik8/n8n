@@ -1,0 +1,785 @@
+{
+    "id": "evbUZUXyeL0bVAmv",
+    "name": "BrandVoiceExtractor V1",
+    "active": true,
+    "activeVersionId": "ae601efe-b3b8-4f9f-b370-49292aad1fc5",
+    "createdAt": "2026-06-29T19:07:58.092Z",
+    "updatedAt": "2026-09-04T16:45:05.898Z",
+    "isArchived": false,
+    "versionId": "8f219abe-676e-47c6-bb9b-1d85296a83d4",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "2e8361a7-5bd3-41f7-bc6b-a0098cb86afe",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "af650b1b-d4e3-4d08-8160-4325a9640d61",
+                            "name": "config.userPrompt",
+                            "value": "=url: {{ $('When Executed by Another Workflow').item.json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.systemPrompt",
+                            "value": "# Role You are an expert Brand Strategist and Linguistic Analyst. Your sole purpose is to analyze the text, messaging, and overall copy of a provided website and extract its core identity and brand voice.  # Objective Analyze the provided website content and generate a highly accurate profile of the brand's voice, mission, archetypes, and tonal dimensions. Your output must strictly adhere to the requested JSON schema. Do not include any introductory text, conversational filler, or explanations outside of the JSON object.  # Guidelines for Extraction  1. **Strategic Intent vs. Literal Copy:** Look past generic marketing filler to identify the true core mission and vision. If the website doesn't explicitly state its \"brand story,\" synthesize it based on their history, founders' notes, or the problem they claim to solve. 2. **Archetype Alignment:** Choose the Primary and Secondary archetypes strictly from this allowed list: `Innocent`, `Orphan/Regular Guy/Gal`, `Hero`, `Caregiver`, `Explorer`, `Rebel/Outlaw`, `Lover`, `Creator`, `Jester`, `Sage`, `Magician`, `Ruler`. 3. **Tonal Metrics (1 to 5 Scales):** Carefully calibrate the integer values based on linguistic markers:     * **toneHumor:** 1 = purely sober/serious; 3 = balanced/neutral; 5 = heavy use of puns, jokes, or playfulness.     * **toneEnthusiasm:** 1 = dry, clinical, matter-of-fact; 3 = professional/neutral; 5 = high-energy, exclamation points, emotional hype.     * **toneFormality:** 1 = highly casual, slang, heavy contractions; 3 = conversational/neutral; 5 = academic, strictly proper, distant.     * **toneRespectfulness:** 1 = bold, edgy, norm-challenging, irreverent; 3 = polite/neutral; 5 = highly traditional, deferential, deeply respectful.  # Output Format Respond ONLY with a valid JSON object matching this exact structure:  {   \"@type\": \"BrandVoice\",   \"brandVision\": \"String - The long-term aspirational impact.\",   \"brandMission\": \"String - What they do, for whom, and why.\",   \"brandCoreValues\": \"String - The fundamental, non-negotiable principles/standards.\",   \"brandStory\": \"String - The narrative connecting history, purpose, and audience journey.\",   \"brandPersonality\": \"String - Human traits expressed (e.g., trustworthy, witty).\",   \"primaryArchetype\": \"String - Dominant archetype from the allowed list.\",   \"secondaryeArchetype\": \"String - Supporting archetype from the allowed list. Note the exact spelling of this key.\",   \"toneHumor\": 3,   \"toneEnthusiasm\": 3,   \"toneFormality\": 3,   \"toneRespectfulness\": 3 }  # Constraints * Ensure all integer values are strictly between 1 and 5. * Do not invent or add fields outside of this schema. * Pay attention to the explicit key spelling: \"secondaryeArchetype\". * Ensure the JSON is completely valid and properly escaped.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b90a9278-7989-4441-b706-864fd10fc618",
+                            "name": "config.jsonSchema",
+                            "value": "{   \"$schema\": \"http://json-schema.org/draft-04/schema#\",   \"type\": \"object\",   \"properties\": {     \"@type\": {       \"type\": \"string\",       \"description\": \"The type of object, which is 'BrandVoice'.\"     },     \"brandVision\": {       \"type\": \"string\",        \"title\": \"The Aspiration\",       \"description\": \"A clear, inspiring statement describing the future you are working to create; it defines the long-term impact and ultimate success of the brand. (e.g., \\\"A world where every person has access to clean energy.\\\")\"     },     \"brandMission\": {       \"type\": \"string\",       \"title\": \"The Business\",       \"description\": \"A concise statement explaining what the brand does, who it does it for, and why it does it. It is an action-oriented explanation of the current business goals.\"     },     \"brandCoreValues\": {       \"type\": \"string\",        \"title\": \"The Principles\",       \"description\": \"The fundamental beliefs and guiding principles that dictate the brand's behavior, decision-making, and culture. They are non-negotiable standards. (e.g., Integrity, Innovation, Customer Focus).\"     },     \"brandStory\": {       \"type\": \"string\",        \"title\": \"The Narrative\",       \"description\": \"The overarching, compelling narrative that connects the brand's history, purpose, values, and vision into a cohesive, emotional journey for the audience.\"     },     \"brandPersonality\": {       \"type\": \"string\",        \"title\": \"The Character\",       \"description\": \"A set of human characteristics and traits that the brand consistently expresses through its voice and visual identity. It dictates how the brand speaks and acts. (e.g., trustworthy, witty, rebellious, sincere).\"     },     \"primaryArchetype\": {       \"type\": \"string\", \"title\": \"The Main Identity\",  \"description\": \"The dominant, universally recognizable symbolic pattern (e.g., The Hero, The Creator, The Innocent) that shapes the brand's deepest meaning and serves as the core of its personality.Archetypes: Innocent, Orphan/Regular Guy/Gal, Hero, Caregiver, Explorer, Rebel/Outlaw, Lover, Creator, Jester, Sage, Magician, Ruler.\"     },     \"secondaryeArchetype\": {       \"type\": \"string\", \"title\": \"The Supporting Role\",  \"description\": \"A second, less dominant archetype that adds complexity and nuance to the brand's personality, helping it to be more distinctive and avoid being a cliché. Archetypes: Innocent, Orphan/Regular Guy/Gal, Hero, Caregiver, Explorer, Rebel/Outlaw, Lover, Creator, Jester, Sage, Magician, Ruler.\"     },     \"toneHumor\": {       \"type\": \"integer\",       \"title\": \"Humorous vs. Serious\",       \"description\": \"The use of lightheartedness, jokes, or playfulness (humorous) versus a direct, earnest, or sober manner (serious). 1. Serious, 3. Neutral 5. Humoristic\",       \"minimum\": \"1\",       \"maximum\": 5     },     \"toneEnthusiasm\": {      \"type\": \"integer\",      \"title\": \"Enthusiastic vs. Matter-of-fact\",       \"description\": \"The level of emotion or excitement conveyed. Does the brand use exclamation points and hype (enthusiastic), or does it stick to plain, objective statements (matter-of-fact)? 1. Matter-of-fact, 3.Neutral, 5. Enthusiastic\",       \"minimum\": \"1\",       \"maximum\": 5     },     \"toneFormality\": {      \"type\": \"integer\",      \"title\": \"Formal vs. Casual\",       \"description\": \"The level of professionalism in language. Does the brand use contractions, slang, and an approachable style (casual), or proper grammar and a more distant approach (formal)? 1. Casual, 3.Neutral, 5. Formal \",       \"minimum\": \"1\",       \"maximum\": 5     },     \"toneRespectfulness\": {       \"type\": \"integer\",        \"title\": \"Respectful vs. Irreverent\",       \"description\": \"The deference shown to conventions, authority, or subjects. Is the brand polite and mindful of tradition (respectful), or does it challenge norms and use bold, unexpected language (irreverent)? 1. Irreverent, 3. Neutral, 5. Respectful\",       \"minimum\": \"1\",       \"maximum\": 5     }   },   \"required\": [     \"@type\",     \"brandVision\",     \"brandMission\",     \"brandCoreValues\",     \"brandStory\",     \"brandPersonality\",     \"primaryArchetype\",     \"secondaryeArchetype\",     \"toneHumor\",     \"toneEnthusiasm\",     \"toneFormality\",     \"toneRespectfulness\"   ] }",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                496,
+                0
+            ],
+            "id": "fbd5d0ca-0518-4883-858e-e7e452b6aac2",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                272,
+                0
+            ],
+            "id": "1009f0d7-2400-4b41-b531-72de6fed9cf4",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.config.userPrompt }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "={{ $json.config.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                704,
+                0
+            ],
+            "id": "655dfdbd-8c21-4d17-98a3-5ae1fb754f04",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                576,
+                208
+            ],
+            "id": "63fddf75-6bc7-4e6c-a391-1962dcc5c6fc",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.4,
+            "position": [
+                752,
+                224
+            ],
+            "id": "21b2ddeb-f308-458a-a315-df4e1f271fb1",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "schemaType": "manual",
+                "inputSchema": "={{ $json.config.jsonSchema }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.3,
+            "position": [
+                880,
+                208
+            ],
+            "id": "07c1e124-c1b3-43c5-b6a8-2a02d2ae3e97",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "304ffa37-e891-4be5-b80b-3604ddb301c3",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "ee654373-b98e-48c2-adba-921ab35fd0e1",
+                            "name": "action.result",
+                            "value": "={{ $json.output }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1056,
+                0
+            ],
+            "id": "f9adb5ae-2212-4861-af9f-34ffdfb6fd70",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1312,
+                -32
+            ],
+            "id": "f6c949ea-6752-4b5b-bf04-3eda7168537d",
+            "name": "Edit Fields1"
+        }
+    ],
+    "connections": {
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.duchesnay.com/en"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "evbUZUXyeL0bVAmv",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-29T19:07:58.092Z",
+            "updatedAt": "2026-06-29T19:07:58.092Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "ae601efe-b3b8-4f9f-b370-49292aad1fc5",
+        "workflowId": "evbUZUXyeL0bVAmv",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "url"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "2e8361a7-5bd3-41f7-bc6b-a0098cb86afe",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "af650b1b-d4e3-4d08-8160-4325a9640d61",
+                                "name": "config.userPrompt",
+                                "value": "=url: {{ $('When Executed by Another Workflow').item.json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.systemPrompt",
+                                "value": "# Role You are an expert Brand Strategist and Linguistic Analyst. Your sole purpose is to analyze the text, messaging, and overall copy of a provided website and extract its core identity and brand voice.  # Objective Analyze the provided website content and generate a highly accurate profile of the brand's voice, mission, archetypes, and tonal dimensions. Your output must strictly adhere to the requested JSON schema. Do not include any introductory text, conversational filler, or explanations outside of the JSON object.  # Guidelines for Extraction  1. **Strategic Intent vs. Literal Copy:** Look past generic marketing filler to identify the true core mission and vision. If the website doesn't explicitly state its \"brand story,\" synthesize it based on their history, founders' notes, or the problem they claim to solve. 2. **Archetype Alignment:** Choose the Primary and Secondary archetypes strictly from this allowed list: `Innocent`, `Orphan/Regular Guy/Gal`, `Hero`, `Caregiver`, `Explorer`, `Rebel/Outlaw`, `Lover`, `Creator`, `Jester`, `Sage`, `Magician`, `Ruler`. 3. **Tonal Metrics (1 to 5 Scales):** Carefully calibrate the integer values based on linguistic markers:     * **toneHumor:** 1 = purely sober/serious; 3 = balanced/neutral; 5 = heavy use of puns, jokes, or playfulness.     * **toneEnthusiasm:** 1 = dry, clinical, matter-of-fact; 3 = professional/neutral; 5 = high-energy, exclamation points, emotional hype.     * **toneFormality:** 1 = highly casual, slang, heavy contractions; 3 = conversational/neutral; 5 = academic, strictly proper, distant.     * **toneRespectfulness:** 1 = bold, edgy, norm-challenging, irreverent; 3 = polite/neutral; 5 = highly traditional, deferential, deeply respectful.  # Output Format Respond ONLY with a valid JSON object matching this exact structure:  {   \"@type\": \"BrandVoice\",   \"brandVision\": \"String - The long-term aspirational impact.\",   \"brandMission\": \"String - What they do, for whom, and why.\",   \"brandCoreValues\": \"String - The fundamental, non-negotiable principles/standards.\",   \"brandStory\": \"String - The narrative connecting history, purpose, and audience journey.\",   \"brandPersonality\": \"String - Human traits expressed (e.g., trustworthy, witty).\",   \"primaryArchetype\": \"String - Dominant archetype from the allowed list.\",   \"secondaryeArchetype\": \"String - Supporting archetype from the allowed list. Note the exact spelling of this key.\",   \"toneHumor\": 3,   \"toneEnthusiasm\": 3,   \"toneFormality\": 3,   \"toneRespectfulness\": 3 }  # Constraints * Ensure all integer values are strictly between 1 and 5. * Do not invent or add fields outside of this schema. * Pay attention to the explicit key spelling: \"secondaryeArchetype\". * Ensure the JSON is completely valid and properly escaped.",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b90a9278-7989-4441-b706-864fd10fc618",
+                                "name": "config.jsonSchema",
+                                "value": "{   \"$schema\": \"http://json-schema.org/draft-04/schema#\",   \"type\": \"object\",   \"properties\": {     \"@type\": {       \"type\": \"string\",       \"description\": \"The type of object, which is 'BrandVoice'.\"     },     \"brandVision\": {       \"type\": \"string\",        \"title\": \"The Aspiration\",       \"description\": \"A clear, inspiring statement describing the future you are working to create; it defines the long-term impact and ultimate success of the brand. (e.g., \\\"A world where every person has access to clean energy.\\\")\"     },     \"brandMission\": {       \"type\": \"string\",       \"title\": \"The Business\",       \"description\": \"A concise statement explaining what the brand does, who it does it for, and why it does it. It is an action-oriented explanation of the current business goals.\"     },     \"brandCoreValues\": {       \"type\": \"string\",        \"title\": \"The Principles\",       \"description\": \"The fundamental beliefs and guiding principles that dictate the brand's behavior, decision-making, and culture. They are non-negotiable standards. (e.g., Integrity, Innovation, Customer Focus).\"     },     \"brandStory\": {       \"type\": \"string\",        \"title\": \"The Narrative\",       \"description\": \"The overarching, compelling narrative that connects the brand's history, purpose, values, and vision into a cohesive, emotional journey for the audience.\"     },     \"brandPersonality\": {       \"type\": \"string\",        \"title\": \"The Character\",       \"description\": \"A set of human characteristics and traits that the brand consistently expresses through its voice and visual identity. It dictates how the brand speaks and acts. (e.g., trustworthy, witty, rebellious, sincere).\"     },     \"primaryArchetype\": {       \"type\": \"string\", \"title\": \"The Main Identity\",  \"description\": \"The dominant, universally recognizable symbolic pattern (e.g., The Hero, The Creator, The Innocent) that shapes the brand's deepest meaning and serves as the core of its personality.Archetypes: Innocent, Orphan/Regular Guy/Gal, Hero, Caregiver, Explorer, Rebel/Outlaw, Lover, Creator, Jester, Sage, Magician, Ruler.\"     },     \"secondaryeArchetype\": {       \"type\": \"string\", \"title\": \"The Supporting Role\",  \"description\": \"A second, less dominant archetype that adds complexity and nuance to the brand's personality, helping it to be more distinctive and avoid being a cliché. Archetypes: Innocent, Orphan/Regular Guy/Gal, Hero, Caregiver, Explorer, Rebel/Outlaw, Lover, Creator, Jester, Sage, Magician, Ruler.\"     },     \"toneHumor\": {       \"type\": \"integer\",       \"title\": \"Humorous vs. Serious\",       \"description\": \"The use of lightheartedness, jokes, or playfulness (humorous) versus a direct, earnest, or sober manner (serious). 1. Serious, 3. Neutral 5. Humoristic\",       \"minimum\": \"1\",       \"maximum\": 5     },     \"toneEnthusiasm\": {      \"type\": \"integer\",      \"title\": \"Enthusiastic vs. Matter-of-fact\",       \"description\": \"The level of emotion or excitement conveyed. Does the brand use exclamation points and hype (enthusiastic), or does it stick to plain, objective statements (matter-of-fact)? 1. Matter-of-fact, 3.Neutral, 5. Enthusiastic\",       \"minimum\": \"1\",       \"maximum\": 5     },     \"toneFormality\": {      \"type\": \"integer\",      \"title\": \"Formal vs. Casual\",       \"description\": \"The level of professionalism in language. Does the brand use contractions, slang, and an approachable style (casual), or proper grammar and a more distant approach (formal)? 1. Casual, 3.Neutral, 5. Formal \",       \"minimum\": \"1\",       \"maximum\": 5     },     \"toneRespectfulness\": {       \"type\": \"integer\",        \"title\": \"Respectful vs. Irreverent\",       \"description\": \"The deference shown to conventions, authority, or subjects. Is the brand polite and mindful of tradition (respectful), or does it challenge norms and use bold, unexpected language (irreverent)? 1. Irreverent, 3. Neutral, 5. Respectful\",       \"minimum\": \"1\",       \"maximum\": 5     }   },   \"required\": [     \"@type\",     \"brandVision\",     \"brandMission\",     \"brandCoreValues\",     \"brandStory\",     \"brandPersonality\",     \"primaryArchetype\",     \"secondaryeArchetype\",     \"toneHumor\",     \"toneEnthusiasm\",     \"toneFormality\",     \"toneRespectfulness\"   ] }",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    496,
+                    0
+                ],
+                "id": "fbd5d0ca-0518-4883-858e-e7e452b6aac2",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "WebPage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.url",
+                                "value": "={{ $json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    272,
+                    0
+                ],
+                "id": "1009f0d7-2400-4b41-b531-72de6fed9cf4",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "={{ $json.config.userPrompt }}",
+                    "hasOutputParser": true,
+                    "options": {
+                        "systemMessage": "={{ $json.config.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    704,
+                    0
+                ],
+                "id": "655dfdbd-8c21-4d17-98a3-5ae1fb754f04",
+                "name": "AI Agent"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+                "typeVersion": 1.1,
+                "position": [
+                    576,
+                    208
+                ],
+                "id": "63fddf75-6bc7-4e6c-a391-1962dcc5c6fc",
+                "name": "Google Gemini Chat Model",
+                "credentials": {
+                    "googlePalmApi": {
+                        "id": "zwRaxgOUTF4g2xjR",
+                        "name": "Google Gemini(PaLM) Api account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                    "options": {},
+                    "optimizeResponse": true,
+                    "responseType": "html",
+                    "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                    "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                    "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+                },
+                "type": "n8n-nodes-base.httpRequestTool",
+                "typeVersion": 4.4,
+                "position": [
+                    752,
+                    224
+                ],
+                "id": "21b2ddeb-f308-458a-a315-df4e1f271fb1",
+                "name": "HTTP Request"
+            },
+            {
+                "parameters": {
+                    "schemaType": "manual",
+                    "inputSchema": "={{ $json.config.jsonSchema }}"
+                },
+                "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+                "typeVersion": 1.3,
+                "position": [
+                    880,
+                    208
+                ],
+                "id": "07c1e124-c1b3-43c5-b6a8-2a02d2ae3e97",
+                "name": "Structured Output Parser"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "304ffa37-e891-4be5-b80b-3604ddb301c3",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "ee654373-b98e-48c2-adba-921ab35fd0e1",
+                                "name": "action.result",
+                                "value": "={{ $json.output }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1056,
+                    0
+                ],
+                "id": "f9adb5ae-2212-4861-af9f-34ffdfb6fd70",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/ref_brands",
+                        "mode": "url"
+                    },
+                    "filePath": "=brands/{{ $('When Executed by Another Workflow').item.json.url.extractDomain().replaceAll('www.', '').replace('.', '_') }}/BrandVoice.json",
+                    "fileContent": "={{ JSON.stringify($json.action.result, null, 4) }}",
+                    "commitMessage": "go"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    1312,
+                    -176
+                ],
+                "id": "a14773d4-bfbb-4737-bb8f-7b0a7f31d45a",
+                "name": "Create a file",
+                "webhookId": "50d1b414-25a7-45ca-ac1f-fe7af1929785",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "includeOtherFields": true,
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1312,
+                    96
+                ],
+                "id": "f6c949ea-6752-4b5b-bf04-3eda7168537d",
+                "name": "Edit Fields1"
+            }
+        ],
+        "connections": {
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Google Gemini Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Structured Output Parser": {
+                "ai_outputParser": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_outputParser",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Create a file",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version ae601efe",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-29T19:20:42.935Z",
+        "updatedAt": "2026-06-29T19:20:45.963Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
