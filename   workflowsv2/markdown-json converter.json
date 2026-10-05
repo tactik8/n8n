@@ -1,0 +1,168 @@
+{
+    "id": "U2JMesIKLT0xyEJ4",
+    "name": "markdown-json converter",
+    "active": true,
+    "activeVersionId": "0a336cc2-9008-4949-93cc-2a1a288e416b",
+    "createdAt": "2026-05-05T12:51:31.112Z",
+    "updatedAt": "2026-05-05T13:03:09.657Z",
+    "isArchived": false,
+    "versionId": "0a336cc2-9008-4949-93cc-2a1a288e416b",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "jsonValue",
+                            "type": "object"
+                        },
+                        {
+                            "name": "markdownValue"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "81ec2b51-2f4c-4cfd-8c9a-ad0a50dfe830",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "function markdownListToJson(md) {\n  const lines = md.split('\\n');\n  const result = {};\n  const stack = [{ obj: result, indent: -1 }];\n\n  lines.forEach(line => {\n    // 1. Clean the line and skip if empty\n    if (!line.trim()) return;\n\n    // 2. Determine indentation and content\n    const indent = line.search(/\\S/);\n    const content = line.trim().replace(/^[\\*\\-\\+]\\s+/, ''); // Remove bullet (*, -, +)\n    \n    // 3. Split into Key and Value\n    let [key, ...valParts] = content.split(':');\n    key = key.replace(/\\*\\*/g, '').trim(); // Remove bold formatting from keys\n    let value = valParts.join(':').trim();\n\n    // 4. Determine Value Type\n    if (value === 'true') value = true;\n    else if (value === 'false') value = false;\n    else if (value !== '' && !isNaN(value)) value = Number(value);\n\n    // 5. Manage stack based on indentation\n    while (stack.length > 1 && indent <= stack[stack.length - 1].indent) {\n      stack.pop();\n    }\n\n    const currentParent = stack[stack.length - 1].obj;\n\n    if (value === '') {\n      // It's a nested object or array\n      // We'll assume object for now; if we find bullets without keys later, \n      // a more complex parser would convert this to an array.\n      currentParent[key] = {};\n      stack.push({ obj: currentParent[key], indent: indent });\n    } else {\n      // It's a leaf node\n      currentParent[key] = value;\n    }\n  });\n\n  return result;\n}\n\nfunction jsonToMarkdownList(obj, indent = 0) {\n  let markdown = '';\n  const spacing = '  '.repeat(indent);\n\n  for (const key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      const value = obj[key];\n\n      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {\n        // Nested Object\n        markdown += `${spacing}* **${key}**:\\n${jsonToMarkdownList(value, indent + 1)}`;\n      } else if (Array.isArray(value)) {\n        // Array\n        markdown += `${spacing}* **${key}**:\\n`;\n        value.forEach(item => {\n          if (typeof item === 'object') {\n            markdown += jsonToMarkdownList(item, indent + 1);\n          } else {\n            markdown += `${spacing}  * ${item}\\n`;\n          }\n        });\n      } else {\n        // Primitive value\n        markdown += `${spacing}* **${key}**: ${value}\\n`;\n      }\n    }\n  }\n  return markdown;\n}\n\n\n\nfor (const item of $input.all()) {\n  if(item.json.jsonValue){\n    item.json.markdownValue = jsonToMarkdownList(item.json.jsonValue)\n  } else if(item.json.markdownValue){\n    item.json.jsonValue = markdownListToJson(item.json.markdownValue)\n  }\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                224,
+                0
+            ],
+            "id": "40677036-52b7-4e8d-9e74-1d5fae0b0f98",
+            "name": "Code in JavaScript"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "jsonValue": {
+                        "title": "The Great Gatsby",
+                        "author": "F. Scott Fitzgerald",
+                        "details": {
+                            "pages": 180,
+                            "genre": "Classic"
+                        },
+                        "tags": [
+                            "fiction",
+                            "1920s",
+                            "tragedy"
+                        ]
+                    }
+                }
+            },
+            {
+                "json": {
+                    "markdownValue": "* **title**: The Great Gatsby\n* **author**: F. Scott Fitzgerald\n* **details**:\n  * **pages**: 180\n  * **genre**: Classic\n"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "U2JMesIKLT0xyEJ4",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-05T12:51:31.112Z",
+            "updatedAt": "2026-05-05T12:51:31.112Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "0a336cc2-9008-4949-93cc-2a1a288e416b",
+        "workflowId": "U2JMesIKLT0xyEJ4",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "jsonValue",
+                                "type": "object"
+                            },
+                            {
+                                "name": "markdownValue"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "81ec2b51-2f4c-4cfd-8c9a-ad0a50dfe830",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "jsCode": "function markdownListToJson(md) {\n  const lines = md.split('\\n');\n  const result = {};\n  const stack = [{ obj: result, indent: -1 }];\n\n  lines.forEach(line => {\n    // 1. Clean the line and skip if empty\n    if (!line.trim()) return;\n\n    // 2. Determine indentation and content\n    const indent = line.search(/\\S/);\n    const content = line.trim().replace(/^[\\*\\-\\+]\\s+/, ''); // Remove bullet (*, -, +)\n    \n    // 3. Split into Key and Value\n    let [key, ...valParts] = content.split(':');\n    key = key.replace(/\\*\\*/g, '').trim(); // Remove bold formatting from keys\n    let value = valParts.join(':').trim();\n\n    // 4. Determine Value Type\n    if (value === 'true') value = true;\n    else if (value === 'false') value = false;\n    else if (value !== '' && !isNaN(value)) value = Number(value);\n\n    // 5. Manage stack based on indentation\n    while (stack.length > 1 && indent <= stack[stack.length - 1].indent) {\n      stack.pop();\n    }\n\n    const currentParent = stack[stack.length - 1].obj;\n\n    if (value === '') {\n      // It's a nested object or array\n      // We'll assume object for now; if we find bullets without keys later, \n      // a more complex parser would convert this to an array.\n      currentParent[key] = {};\n      stack.push({ obj: currentParent[key], indent: indent });\n    } else {\n      // It's a leaf node\n      currentParent[key] = value;\n    }\n  });\n\n  return result;\n}\n\nfunction jsonToMarkdownList(obj, indent = 0) {\n  let markdown = '';\n  const spacing = '  '.repeat(indent);\n\n  for (const key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      const value = obj[key];\n\n      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {\n        // Nested Object\n        markdown += `${spacing}* **${key}**:\\n${jsonToMarkdownList(value, indent + 1)}`;\n      } else if (Array.isArray(value)) {\n        // Array\n        markdown += `${spacing}* **${key}**:\\n`;\n        value.forEach(item => {\n          if (typeof item === 'object') {\n            markdown += jsonToMarkdownList(item, indent + 1);\n          } else {\n            markdown += `${spacing}  * ${item}\\n`;\n          }\n        });\n      } else {\n        // Primitive value\n        markdown += `${spacing}* **${key}**: ${value}\\n`;\n      }\n    }\n  }\n  return markdown;\n}\n\n\n\nfor (const item of $input.all()) {\n  if(item.json.jsonValue){\n    item.json.markdownValue = jsonToMarkdownList(item.json.jsonValue)\n  } else if(item.json.markdownValue){\n    item.json.jsonValue = markdownListToJson(item.json.markdownValue)\n  }\n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    224,
+                    0
+                ],
+                "id": "40677036-52b7-4e8d-9e74-1d5fae0b0f98",
+                "name": "Code in JavaScript"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Code in JavaScript",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 0a336cc2",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-05-05T13:03:09.659Z",
+        "updatedAt": "2026-05-05T13:03:16.165Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
