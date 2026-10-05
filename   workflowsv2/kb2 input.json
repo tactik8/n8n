@@ -1,0 +1,868 @@
+{
+    "id": "pNjDqlBshrHWPv2f",
+    "name": "kb2 input",
+    "active": true,
+    "activeVersionId": "fcc55fc0-9411-463d-8c6a-6caf3df30296",
+    "createdAt": "2026-06-11T20:11:44.489Z",
+    "updatedAt": "2026-06-11T20:19:48.743Z",
+    "isArchived": false,
+    "versionId": "fcc55fc0-9411-463d-8c6a-6caf3df30296",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "content"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -112,
+                0
+            ],
+            "id": "e354a758-cefa-43dc-8a67-133597745831",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d156b6fa-a1ca-4a4a-94a3-71d8b91858e8",
+                            "name": "userPrompt",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.content }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "09077065-2782-4295-bb60-8d1776d75bb8",
+                            "name": "systemPrompt",
+                            "value": "# SYSTEM PROMPT: JSON-LD KNOWLEDGE BASE CURATOR  You are an expert Data Architect and Knowledge Management AI Agent. Your sole responsibility is to ingest new information, evaluate it against an existing knowledge base (KB) formatted as a JSON-LD array, and output a single, flawlessly integrated, and updated JSON-LD array of nested Schema.org records.  ## Core Objectives 1. **Integrate & Update:** Merge new relevant information into the existing JSON-LD knowledge graph. 2. **De-duplicate:** Identify overlapping concepts and merge their properties. Do not repeat nodes or entities. 3. **Maintain Succinctness:** Ensure text strings within properties (like `description` or `value`) are concise, dense with information, and free of conversational filler. 4. **Enforce JSON-LD Structure:** Maintain valid, strictly structured nesting using official Schema.org types and properties.  ---  ## Input Format The user will provide two inputs in the following format: * **[EXISTING KNOWLEDGE BASE]:** A JSON array containing the current JSON-LD Schema.org objects. * **[NEW CONTENT]:** The fresh information, notes, or data to be integrated.  ---  ## Curation & Schema.org Integration Rules  ### 1. Data Schema & Architecture * **Valid JSON-LD:** Every object in the root array must include `\"@context\": \"https://schema.org\"` and a valid `\"@type\"`. * **Schema Selection:** Map information to appropriate Schema.org types.    * Use `AboutPage` or `ItemPage` for general knowledge sections.   * Use `DefinedTermMap` or `DefinedTerm` for glossaries, concepts, and definitions.   * Use `PropertyValue` or `Property` for specific key-value facts.   * Use `HowTo` and `HowToStep` for sequential processes. * **Nesting:** Utilize properties like `hasPart`, `itemListElement`, or `subjectOf` to nest deeply related sub-concepts instead of creating flat, disjointed objects.  ### 2. Information Processing & Succinctness * **Relevance Check:** Only integrate information from [NEW CONTENT] that adds genuine value, context, or updates. Discard redundancies. * **Conflict Resolution:** If [NEW CONTENT] contradicts the existing KB, overwrite older property values with the updated data. * **Succinct Strings:** Keep all `description`, `name`, and `text` values hyper-focused. Use short sentences and crisp definitions. Never include introductory or transitional phrases.  ---  ## Output Requirements * **Output ONLY a valid JSON array of the updated JSON-LD records.** * **Do NOT wrapping the JSON in markdown code blocks unless explicitly requested, and do NOT include conversational filler, greetings, or meta-commentary.**  * The output must begin exactly with `[` and end exactly with `]`. It must pass strict JSON parsing verification.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "451021b1-0e77-4e32-bd3e-6cdd3124a687",
+                            "name": "knowledgeBase",
+                            "value": "={{ JSON.parse($json.data || [])}}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                656,
+                0
+            ],
+            "id": "1c1c292f-a4bd-4eb8-bc74-bc91791ff37e",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.1,
+            "position": [
+                416,
+                0
+            ],
+            "id": "2cbd0b88-e36f-474d-868c-4be3f03cc0b5",
+            "name": "Extract from File",
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=content: {{ $json.userPrompt }}\nknowledge base: \n```\n{{ JSON.stringify($json.knowledgeBase, null, 4) }}\n```",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                864,
+                0
+            ],
+            "id": "ba3c780f-61ec-4ff8-8aaa-e4be4e601c88",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                736,
+                208
+            ],
+            "id": "e69c3963-5ee2-4c4a-8ab1-af6b70fd9e7a",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "263d07bd-fce2-4bf6-8dbe-b079660c9859",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1216,
+                0
+            ],
+            "id": "7110ab9b-f89b-4d67-b7f7-7a7f0a622c41",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/kb",
+                    "mode": "url"
+                },
+                "filePath": "src/kb2.json",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                128,
+                0
+            ],
+            "id": "39b70daa-78ca-4311-bf0e-05e9e4cb781d",
+            "name": "Get a file",
+            "webhookId": "5c82a3a6-3c76-43d5-a7ae-b0f9e8ea6fb1",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/kb",
+                    "mode": "url"
+                },
+                "filePath": "src/kb2.json",
+                "fileContent": "={{ JSON.stringify($json.output, null, 4) }}",
+                "commitMessage": "Knowledge added from n8n"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                1424,
+                0
+            ],
+            "id": "af46f7e2-9e29-435f-9429-5d55b5472409",
+            "name": "Edit a file",
+            "webhookId": "3db16c11-9327-48b5-96f0-22bf31787343",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "036b273a-f1ae-4fb2-a28f-536d30411ff8",
+                            "name": "output",
+                            "value": "={{ $('Edit Fields1').item.json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1632,
+                0
+            ],
+            "id": "faf3f8e1-ed16-4b95-af42-657cb18943ba",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Kb. Go. ",
+                "options": {
+                    "responseMode": "responseNodes"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.4,
+            "position": [
+                -96,
+                -416
+            ],
+            "id": "f87e0515-7042-45e4-8b2a-cb61e4a25467",
+            "name": "When chat message received",
+            "webhookId": "85ce1c89-fa39-4977-b941-f0c8c88649b5"
+        },
+        {
+            "parameters": {
+                "message": "={{ $json.output }}",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chat",
+            "typeVersion": 1.3,
+            "position": [
+                320,
+                -416
+            ],
+            "id": "478b7ee2-3e62-4950-9059-6b2e66d918ab",
+            "name": "Chat",
+            "webhookId": "d74c9393-5d77-4cf3-a606-69efffe4d542"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "pNjDqlBshrHWPv2f",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/pNjDqlBshrHWPv2f",
+                    "cachedResultName": "kb2 input"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json.chatInput }}"
+                    },
+                    "matchingColumns": [
+                        "content"
+                    ],
+                    "schema": [
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                112,
+                -416
+            ],
+            "id": "f3eac0f9-e8d6-4e1f-92ec-e9d98a3fffe7",
+            "name": "Call 'kb2 input'"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Get a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit a file": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'kb2 input'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'kb2 input'": {
+            "main": [
+                [
+                    {
+                        "node": "Chat",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "content": "Duchesnay is a pharmaceutical company in Quebec."
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "pNjDqlBshrHWPv2f",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-11T20:11:44.489Z",
+            "updatedAt": "2026-06-11T20:11:44.489Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "fcc55fc0-9411-463d-8c6a-6caf3df30296",
+        "workflowId": "pNjDqlBshrHWPv2f",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "content"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -112,
+                    0
+                ],
+                "id": "e354a758-cefa-43dc-8a67-133597745831",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "d156b6fa-a1ca-4a4a-94a3-71d8b91858e8",
+                                "name": "userPrompt",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.content }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "09077065-2782-4295-bb60-8d1776d75bb8",
+                                "name": "systemPrompt",
+                                "value": "# SYSTEM PROMPT: JSON-LD KNOWLEDGE BASE CURATOR  You are an expert Data Architect and Knowledge Management AI Agent. Your sole responsibility is to ingest new information, evaluate it against an existing knowledge base (KB) formatted as a JSON-LD array, and output a single, flawlessly integrated, and updated JSON-LD array of nested Schema.org records.  ## Core Objectives 1. **Integrate & Update:** Merge new relevant information into the existing JSON-LD knowledge graph. 2. **De-duplicate:** Identify overlapping concepts and merge their properties. Do not repeat nodes or entities. 3. **Maintain Succinctness:** Ensure text strings within properties (like `description` or `value`) are concise, dense with information, and free of conversational filler. 4. **Enforce JSON-LD Structure:** Maintain valid, strictly structured nesting using official Schema.org types and properties.  ---  ## Input Format The user will provide two inputs in the following format: * **[EXISTING KNOWLEDGE BASE]:** A JSON array containing the current JSON-LD Schema.org objects. * **[NEW CONTENT]:** The fresh information, notes, or data to be integrated.  ---  ## Curation & Schema.org Integration Rules  ### 1. Data Schema & Architecture * **Valid JSON-LD:** Every object in the root array must include `\"@context\": \"https://schema.org\"` and a valid `\"@type\"`. * **Schema Selection:** Map information to appropriate Schema.org types.    * Use `AboutPage` or `ItemPage` for general knowledge sections.   * Use `DefinedTermMap` or `DefinedTerm` for glossaries, concepts, and definitions.   * Use `PropertyValue` or `Property` for specific key-value facts.   * Use `HowTo` and `HowToStep` for sequential processes. * **Nesting:** Utilize properties like `hasPart`, `itemListElement`, or `subjectOf` to nest deeply related sub-concepts instead of creating flat, disjointed objects.  ### 2. Information Processing & Succinctness * **Relevance Check:** Only integrate information from [NEW CONTENT] that adds genuine value, context, or updates. Discard redundancies. * **Conflict Resolution:** If [NEW CONTENT] contradicts the existing KB, overwrite older property values with the updated data. * **Succinct Strings:** Keep all `description`, `name`, and `text` values hyper-focused. Use short sentences and crisp definitions. Never include introductory or transitional phrases.  ---  ## Output Requirements * **Output ONLY a valid JSON array of the updated JSON-LD records.** * **Do NOT wrapping the JSON in markdown code blocks unless explicitly requested, and do NOT include conversational filler, greetings, or meta-commentary.**  * The output must begin exactly with `[` and end exactly with `]`. It must pass strict JSON parsing verification.",
+                                "type": "string"
+                            },
+                            {
+                                "id": "451021b1-0e77-4e32-bd3e-6cdd3124a687",
+                                "name": "knowledgeBase",
+                                "value": "={{ JSON.parse($json.data || [])}}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    656,
+                    0
+                ],
+                "id": "1c1c292f-a4bd-4eb8-bc74-bc91791ff37e",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "operation": "text",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.extractFromFile",
+                "typeVersion": 1.1,
+                "position": [
+                    416,
+                    0
+                ],
+                "id": "2cbd0b88-e36f-474d-868c-4be3f03cc0b5",
+                "name": "Extract from File",
+                "onError": "continueRegularOutput"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "=content: {{ $json.userPrompt }}\nknowledge base: \n```\n{{ JSON.stringify($json.knowledgeBase, null, 4) }}\n```",
+                    "options": {
+                        "systemMessage": "={{ $json.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    864,
+                    0
+                ],
+                "id": "ba3c780f-61ec-4ff8-8aaa-e4be4e601c88",
+                "name": "AI Agent"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+                "typeVersion": 1.1,
+                "position": [
+                    736,
+                    208
+                ],
+                "id": "e69c3963-5ee2-4c4a-8ab1-af6b70fd9e7a",
+                "name": "Google Gemini Chat Model",
+                "credentials": {
+                    "googlePalmApi": {
+                        "id": "zwRaxgOUTF4g2xjR",
+                        "name": "Google Gemini(PaLM) Api account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "263d07bd-fce2-4bf6-8dbe-b079660c9859",
+                                "name": "output",
+                                "value": "={{ $json.output }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1216,
+                    0
+                ],
+                "id": "7110ab9b-f89b-4d67-b7f7-7a7f0a622c41",
+                "name": "Edit Fields1"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/kb",
+                        "mode": "url"
+                    },
+                    "filePath": "src/kb2.json",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    128,
+                    0
+                ],
+                "id": "39b70daa-78ca-4311-bf0e-05e9e4cb781d",
+                "name": "Get a file",
+                "webhookId": "5c82a3a6-3c76-43d5-a7ae-b0f9e8ea6fb1",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/kb",
+                        "mode": "url"
+                    },
+                    "filePath": "src/kb2.json",
+                    "fileContent": "={{ JSON.stringify($json.output, null, 4) }}",
+                    "commitMessage": "Knowledge added from n8n"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    1424,
+                    0
+                ],
+                "id": "af46f7e2-9e29-435f-9429-5d55b5472409",
+                "name": "Edit a file",
+                "webhookId": "3db16c11-9327-48b5-96f0-22bf31787343",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "036b273a-f1ae-4fb2-a28f-536d30411ff8",
+                                "name": "output",
+                                "value": "={{ $('Edit Fields1').item.json.output }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1632,
+                    0
+                ],
+                "id": "faf3f8e1-ed16-4b95-af42-657cb18943ba",
+                "name": "Edit Fields2"
+            },
+            {
+                "parameters": {
+                    "public": true,
+                    "initialMessages": "Kb. Go. ",
+                    "options": {
+                        "responseMode": "responseNodes"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+                "typeVersion": 1.4,
+                "position": [
+                    -96,
+                    -416
+                ],
+                "id": "f87e0515-7042-45e4-8b2a-cb61e4a25467",
+                "name": "When chat message received",
+                "webhookId": "85ce1c89-fa39-4977-b941-f0c8c88649b5"
+            },
+            {
+                "parameters": {
+                    "message": "={{ $json.output }}",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.chat",
+                "typeVersion": 1.3,
+                "position": [
+                    320,
+                    -416
+                ],
+                "id": "478b7ee2-3e62-4950-9059-6b2e66d918ab",
+                "name": "Chat",
+                "webhookId": "d74c9393-5d77-4cf3-a606-69efffe4d542"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "pNjDqlBshrHWPv2f",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/pNjDqlBshrHWPv2f",
+                        "cachedResultName": "kb2 input"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "content": "={{ $json.chatInput }}"
+                        },
+                        "matchingColumns": [
+                            "content"
+                        ],
+                        "schema": [
+                            {
+                                "id": "content",
+                                "displayName": "content",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    112,
+                    -416
+                ],
+                "id": "f3eac0f9-e8d6-4e1f-92ec-e9d98a3fffe7",
+                "name": "Call 'kb2 input'"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Get a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Extract from File": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Google Gemini Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields1": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file": {
+                "main": [
+                    [
+                        {
+                            "node": "Extract from File",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit a file": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When chat message received": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'kb2 input'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'kb2 input'": {
+                "main": [
+                    [
+                        {
+                            "node": "Chat",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version fcc55fc0",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-11T20:19:48.746Z",
+        "updatedAt": "2026-06-11T20:19:51.868Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
