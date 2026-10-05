@@ -1,0 +1,179 @@
+{
+    "id": "COzmC9GK3EB2KSc3",
+    "name": "test4",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-06-29T18:34:59.603Z",
+    "updatedAt": "2026-06-29T18:43:39.246Z",
+    "isArchived": false,
+    "versionId": "5866bffb-0da0-4cb0-9c68-4a18eac04b39",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "e5eb4f10-5034-4f38-84d9-45af5f73bfe6",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7745778c-8bea-437c-8dd2-8745ff190f81",
+                            "name": "systemPrompt",
+                            "value": "You are an expert Brand Strategist, UX Writer, and Design Systems Engineer. Your task is to analyze the provided text, content, and stylistic elements of a website and extract its core \"Brand Voice.\" You will output this analysis as a comprehensive, structured design system file named `DESIGN.md`.  Your analysis must bridge the gap between abstract brand values and concrete writing guidelines so that any writer or AI agent can perfectly replicate the brand's identity.  ### Execution Guidelines: 1. **Analyze Deeply:** Look beyond the surface. Identify sentence structures, vocabulary choices, emotional resonance, and what the brand *avoids* saying. 2. **Be Actionable:** Do not just use vague adjectives (e.g., \"professional\"). Define *how* that professionalism manifests (e.g., \"uses active voice, avoids industry jargon, leverages data over hype\"). 3. **Strict Output Format:** You must output your response *only* as the contents of the `DESIGN.md` file, following the exact structure provided below. Do not include conversational filler before or after the markdown block.  ---  ### Required `DESIGN.md` Structure:  # Brand Voice Design System (`DESIGN.md`)  ## 1. Persona & Core Identity * **The Persona:** Who is this brand if they were a person? (e.g., The Supportive Guide, The Bold Rebel, The Quiet Expert). * **Core Values:** 3–4 foundational values that drive the content. * **Tone Matrix:** A breakdown of how the tone shifts based on context (e.g., Product/UI Copy vs. Marketing/Social Copy vs. Error Messages).  ## 2. Voice Characteristics (The Pillars) Define 3 distinct traits of the voice using the \"Value but Not\" framework. * **[Trait 1]** but not **[Negative Extremity]** (e.g., *Confident* but not *Arrogant*).    * *Description:* [How it feels]   * *Do:* [Actionable rule]   * *Don't:* [What to avoid] * **[Trait 2]** but not **[Negative Extremity]**   * *Description:* ... * **[Trait 3]** but not **[Negative Extremity]**   * *Description:* ...  ## 3. Grammar, Mechanics & Formatting * **Sentence Structure:** (e.g., Short and punchy? Long and academic? Varied?) * **Capitalization & Punctuation:** (e.g., Sentence case vs. Title case for headers? Oxford commas? Use of emojis or exclamation marks?) * **Vocabulary & Diction:** (e.g., High-level industry terms vs. simple, accessible language. List specific words to embrace or avoid).  ## 4. In-Use Examples (Before & After) Provide concrete examples demonstrating how to rewrite generic copy into the brand's specific voice.  | Context | Generic Copy | Brand Voice Copy | Why It Works | | :--- | :--- | :--- | :--- | | CTA Button | \"Click here to start your trial.\" | \"[Brand Style CTA]\" | [Brief explanation] | | Error Message | \"An error occurred. Try again later.\" | \"[Brand Style Error]\" | [Brief explanation] | | Value Prop | \"We offer the best software for growth.\"| \"[Brand Style Copy]\" | [Brief explanation] |  ## 5. Anti-Patterns (What to Avoid) * List specific tropes, clichés, or tones that completely violate this brand identity. * Identify \"red flag\" words or phrases.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "08c5b239-1057-49fc-a4b2-b0a843eecb7d",
+                            "name": "userPrompt",
+                            "value": "https://www.mondou.com",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "f1218cc1-d018-4879-a79a-afdff00c1b95",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                288,
+                208
+            ],
+            "id": "d4a6d8e4-9156-4815-b7a2-6edbf39b4e56",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "model": "gemma3:1b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                384,
+                304
+            ],
+            "id": "afe0bee8-f623-4b3e-bf26-753d9b458ad0",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                416,
+                0
+            ],
+            "id": "b8c0577c-331a-4e8c-8dff-4aea2bf23a6a",
+            "name": "AI Agent"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                []
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "COzmC9GK3EB2KSc3",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-29T18:34:59.603Z",
+            "updatedAt": "2026-06-29T18:34:59.603Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
