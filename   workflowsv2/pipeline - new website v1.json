@@ -1,0 +1,767 @@
+{
+    "id": "Ml3P3I0Zu6vwvW3O",
+    "name": "pipeline - new website v1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-09-09T16:22:36.357Z",
+    "updatedAt": "2026-09-20T18:40:49.408Z",
+    "isArchived": false,
+    "versionId": "a8cb9fbc-ae4d-4c7b-94d0-54bafcd3ddae",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -640,
+                96
+            ],
+            "id": "b6782b9f-812f-4a2c-a425-a7cc62d86951",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebSite",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8ce15c98-22ef-44a8-be4e-2a2e82527764",
+                            "name": "action.object.@id",
+                            "value": "=https://{{ $json.url.extractDomain() }}#website",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "=https://{{ $json.url.extractDomain() }}#website",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -416,
+                96
+            ],
+            "id": "d813a19b-59e4-4da0-8f11-5e6eb4301676",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "4bbdebb9-3b8c-4201-8fc2-ea5a22f319ce",
+                            "leftValue": "={{ $json.config.previouslyRun }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "true",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                448,
+                96
+            ],
+            "id": "0b899165-b625-4380-8b92-ec3959e0985f",
+            "name": "Skip if already processed"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "r0iPZkb7BWNPAbdn",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                    "cachedResultName": "api_db post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "dwv1",
+                        "tenantID": "website",
+                        "record": "={{ $json.action.object }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                736,
+                208
+            ],
+            "id": "5e5112ed-5d3b-4c53-b9d1-dcbbda2c05e7",
+            "name": "Add website to dwv1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "unPPWfmwfUALelKk",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/unPPWfmwfUALelKk",
+                    "cachedResultName": "Pipeline Already executed V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "instrument.@id": "={{ $json.action.instrument['@id'] }}",
+                        "object.@id": "={{ $json.action.object['@id'] }}",
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "object.@id",
+                            "displayName": "object.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "instrument.@id",
+                            "displayName": "instrument.@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                0,
+                96
+            ],
+            "id": "71c820a7-8156-42fb-8ae5-884fc92aaf19",
+            "name": "Call 'Pipeline Already executed V1'"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "645339ae-b95c-40a1-aefb-7418cb8e35f8",
+                            "name": "config.databaseID",
+                            "value": "pipelines",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1ae143c3-7a60-4b01-b44c-a9e88ab2ba81",
+                            "name": "config.tenantID",
+                            "value": "pipeline_runs1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -208,
+                96
+            ],
+            "id": "afaa6497-55ab-47e4-84cd-b8122f196b7c",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dk7ROHZ4gCIiMsmI",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dk7ROHZ4gCIiMsmI",
+                    "cachedResultName": "Action set Completed V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $('input').item.json.config.databaseID }}",
+                        "tenantID": "={{ $('input').item.json.config.tenantID }}",
+                        "record": "={{ $('input').item.json.action }}",
+                        "description": "Workflow previously run."
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "description",
+                            "displayName": "description",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                752,
+                -64
+            ],
+            "id": "25c66b85-13db-4e61-86ba-4b2034b3485a",
+            "name": "Call 'Action set Completed V1'"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "20ce5eb4-da9c-4b69-bf5c-ee1cb33f9560",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "370411f6-bf17-4eea-a62b-33bfce4e8e70",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "76cbe1ec-a7fd-4708-8bc4-caec152e5a7b",
+                            "name": "config.previouslyRun",
+                            "value": "={{ $json.output.result }}",
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                96
+            ],
+            "id": "1083018c-1da6-445a-94ff-15b6b0bf6436",
+            "name": "input"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.output.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1472,
+                208
+            ],
+            "id": "06e2a1f6-e68c-4652-a28a-c8cc07e01fe0",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dk7ROHZ4gCIiMsmI",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dk7ROHZ4gCIiMsmI",
+                    "cachedResultName": "Action set Completed V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $('input').item.json.config.databaseID }}",
+                        "tenantID": "={{ $('input').item.json.config.tenantID }}",
+                        "record": "={{ $json.action }}",
+                        "result": "={{ $json.action.object }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "description",
+                            "displayName": "description",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1168,
+                208
+            ],
+            "id": "ea59ac34-42b4-4fde-aeca-0d1fdcb56762",
+            "name": "Call 'Action set Completed V1'1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4ef7ce99-d485-450a-8c02-99dfda8a2d28",
+                            "name": "action",
+                            "value": "={{ $('input').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "0c9f9d76-d200-4e6c-816f-2bf42f7c52a9",
+                            "name": "config",
+                            "value": "={{ $('input').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                960,
+                208
+            ],
+            "id": "e1a52fd0-0c79-41af-bc37-3e07f5951679",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.output.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1008,
+                -64
+            ],
+            "id": "f2126b6e-5c4a-4aa6-bfaa-2f6caf915f1a",
+            "name": "Output1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Skip if already processed": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'Action set Completed V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Add website to dwv1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add website to dwv1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'Pipeline Already executed V1'": {
+            "main": [
+                [
+                    {
+                        "node": "input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'Pipeline Already executed V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "input": {
+            "main": [
+                [
+                    {
+                        "node": "Skip if already processed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'Action set Completed V1'1": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'Action set Completed V1'1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'Action set Completed V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.duchesnay.com/en"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "Ml3P3I0Zu6vwvW3O",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-09T16:22:36.357Z",
+            "updatedAt": "2026-09-09T16:22:36.357Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
