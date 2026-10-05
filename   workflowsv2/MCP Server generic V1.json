@@ -1,0 +1,179 @@
+{
+    "id": "J8QCLjPiShm0DpeU",
+    "name": "MCP Server generic V1",
+    "active": true,
+    "activeVersionId": "8f8f6ecf-dce2-463c-82a3-4b32ccc92970",
+    "createdAt": "2026-03-29T20:58:23.272Z",
+    "updatedAt": "2026-05-02T19:01:21.118Z",
+    "isArchived": false,
+    "versionId": "8f8f6ecf-dce2-463c-82a3-4b32ccc92970",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "path": "f4e52f38-02f9-4682-af8f-17d0ffff005d"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+            "typeVersion": 2,
+            "position": [
+                -128,
+                -160
+            ],
+            "id": "d9659477-3c46-429d-9f4b-7f71c5bd92ca",
+            "name": "MCP Server Trigger",
+            "webhookId": "f4e52f38-02f9-4682-af8f-17d0ffff005d"
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {
+                    "proxy": "http://192.168.2.243:8888"
+                }
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.4,
+            "position": [
+                -128,
+                48
+            ],
+            "id": "943314f5-00c4-46bd-9ec7-6f5d69e9afa6",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.dateTimeTool",
+            "typeVersion": 2,
+            "position": [
+                32,
+                48
+            ],
+            "id": "5d8c0c11-ca6b-4926-8e24-d1486585e89a",
+            "name": "Get current date and time"
+        }
+    ],
+    "connections": {
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get current date and time": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "J8QCLjPiShm0DpeU",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-03-29T20:58:23.272Z",
+            "updatedAt": "2026-03-29T20:58:23.272Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "8f8f6ecf-dce2-463c-82a3-4b32ccc92970",
+        "workflowId": "J8QCLjPiShm0DpeU",
+        "nodes": [
+            {
+                "parameters": {
+                    "path": "f4e52f38-02f9-4682-af8f-17d0ffff005d"
+                },
+                "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+                "typeVersion": 2,
+                "position": [
+                    -128,
+                    -160
+                ],
+                "id": "d9659477-3c46-429d-9f4b-7f71c5bd92ca",
+                "name": "MCP Server Trigger",
+                "webhookId": "f4e52f38-02f9-4682-af8f-17d0ffff005d"
+            },
+            {
+                "parameters": {
+                    "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                    "options": {
+                        "proxy": "http://192.168.2.243:8888"
+                    }
+                },
+                "type": "n8n-nodes-base.httpRequestTool",
+                "typeVersion": 4.4,
+                "position": [
+                    -128,
+                    48
+                ],
+                "id": "943314f5-00c4-46bd-9ec7-6f5d69e9afa6",
+                "name": "HTTP Request"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.dateTimeTool",
+                "typeVersion": 2,
+                "position": [
+                    32,
+                    48
+                ],
+                "id": "5d8c0c11-ca6b-4926-8e24-d1486585e89a",
+                "name": "Get current date and time"
+            }
+        ],
+        "connections": {
+            "HTTP Request": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "MCP Server Trigger",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get current date and time": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "MCP Server Trigger",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 8f8f6ecf",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-03-29T21:02:33.599Z",
+        "updatedAt": "2026-03-29T21:02:58.992Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
