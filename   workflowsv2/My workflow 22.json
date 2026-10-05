@@ -1,0 +1,176 @@
+{
+    "id": "IwoBOjEEqD8Grafk",
+    "name": "My workflow 22",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-10-03T17:15:42.852Z",
+    "updatedAt": "2026-10-04T14:55:19.282Z",
+    "isArchived": false,
+    "versionId": "1727b0b8-6ae8-4968-ab0c-f769c65afee9",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.5,
+            "position": [
+                -80,
+                -64
+            ],
+            "id": "83cc360f-bf3b-4f11-8f8d-dba17b8a6b4e",
+            "name": "When chat message received",
+            "webhookId": "48bd4d3e-7460-4260-aee6-383ba78c781b"
+        },
+        {
+            "parameters": {
+                "options": {
+                    "systemMessage": "You are a helpful assistant"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                224,
+                0
+            ],
+            "id": "8712851c-145b-439b-ade0-3b6582770acf",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "model": "qwen2.5vl:7b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                96,
+                208
+            ],
+            "id": "f502bfe8-4615-4859-b289-06bd06ab0b3d",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.4,
+            "position": [
+                240,
+                208
+            ],
+            "id": "84998eb6-4a6d-4530-aa5b-8fe668cad8c5",
+            "name": "Simple Memory"
+        },
+        {
+            "parameters": {
+                "endpointUrl": "http://192.168.2.243:41184/mcp?token=5d161036a02cdd34028e073ac8f4fbdfef1c498fe2eb937a12f0c75274faee6beae67efbcdb7ebaf8097bc861b09710c4ce404aea8c2549a97a83cf2a103ba28",
+                "authentication": "headerAuth",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1.4,
+            "position": [
+                416,
+                240
+            ],
+            "id": "4ec79543-7a49-4b7b-8754-96d666e167e3",
+            "name": "MCP Client",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "J1oWm6yIJTVUQPiq",
+                    "name": "Header Auth account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "http://192.168.2.243:41184/notes?token=5d161036a02cdd34028e073ac8f4fbdfef1c498fe2eb937a12f0c75274faee6beae67efbcdb7ebaf8097bc861b09710c4ce404aea8c2549a97a83cf2a103ba28",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                256,
+                -304
+            ],
+            "id": "cf55e7ae-9275-4fb8-9918-523e02f9e1fd",
+            "name": "HTTP Request"
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MCP Client": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "IwoBOjEEqD8Grafk",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-03T17:15:42.852Z",
+            "updatedAt": "2026-10-03T17:15:42.852Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
