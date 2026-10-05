@@ -1,0 +1,87 @@
+{
+    "id": "cLlWCMy2teWxy8Yv",
+    "name": "My workflow 16",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-09T12:44:21.285Z",
+    "updatedAt": "2026-07-09T14:32:44.994Z",
+    "isArchived": false,
+    "versionId": "6ea202a2-3d7c-43ff-80fd-c566d64fc7a2",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "05ca948e-830f-4111-b75f-5d9dae6beebd",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "url": "https://n8n.tactik8.com/webhook-test/app/mongodb",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "@id",
+                            "value": "https://www.test.com#brand"
+                        },
+                        {
+                            "name": "tenantID",
+                            "value": "BrandBuilderV1"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "edda831e-b0e8-4fd7-9d0e-8b23e9a53b38",
+            "name": "HTTP Request"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "cLlWCMy2teWxy8Yv",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-09T12:44:21.285Z",
+            "updatedAt": "2026-07-09T12:44:21.285Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
