@@ -1,0 +1,209 @@
+{
+    "id": "2T0EHds8Z14XOR3H",
+    "name": "My workflow 15",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-06T15:19:24.002Z",
+    "updatedAt": "2026-07-06T15:26:50.591Z",
+    "isArchived": false,
+    "versionId": "5f8e2c70-baa2-4e2a-bf49-23321bad667e",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -352,
+                -32
+            ],
+            "id": "c732fd8a-a97f-482f-aab2-3a0fd042db02",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c8c88f2d-800a-4aa7-a915-7cd306977828",
+                            "name": "systemPrompt",
+                            "value": "## role\nYou are a knowledge extractor. \n\n## task\nYou extract knowledge from documents or webpages and return a list of the knowledge extracted. \n\n\n## output format\nFor each items: return the following:\n- knowledge item (simplified, direct)\n- citation\n- citation location\n- source (url)\n- confidence (from 0 to 1)\n-propertyID (based on schema.org if available)\n- value: (based on schema.org if available)",
+                            "type": "string"
+                        },
+                        {
+                            "id": "544beeff-098a-456b-b39d-c8201b4597a1",
+                            "name": "userPrompt",
+                            "value": "https://www.duchesnay.com/en",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7de85952-68b4-4726-87d0-76f39da96a35",
+                            "name": "url",
+                            "value": "https://www.duchesnay.com/en",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -144,
+                -32
+            ],
+            "id": "055b4dbf-d9e6-4df7-9611-5bf49d537c2a",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                80,
+                -32
+            ],
+            "id": "d8e67392-96a7-4b96-914f-0eefd67dc7cd",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                -80,
+                176
+            ],
+            "id": "d5dc6b6a-bf5b-446c-bc79-84b1490a38a9",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.4,
+            "position": [
+                224,
+                176
+            ],
+            "id": "b4b76afc-ad6b-4728-8f01-24a6808ce931",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                416,
+                -32
+            ],
+            "id": "84047a7d-0609-487f-ba7a-f720691067ce",
+            "name": "Edit Fields1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "2T0EHds8Z14XOR3H",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-06T15:19:24.002Z",
+            "updatedAt": "2026-07-06T15:19:24.002Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
