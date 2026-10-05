@@ -1,0 +1,171 @@
+{
+    "id": "mwHhyOIvPmDtIXbs",
+    "name": "My workflow 13",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-06-18T15:59:06.013Z",
+    "updatedAt": "2026-06-18T16:01:14.022Z",
+    "isArchived": false,
+    "versionId": "4f576447-5f77-4e99-a60e-16085c8a12ac",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "216b337c-7ab7-477a-b1f6-28a77190c446",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "authentication": "nocoDbApiToken",
+                "operation": "getAll",
+                "workspaceId": "wbpv4776",
+                "projectId": "pwul1r0bx0mprjt",
+                "table": "mdrc9b6te1ygcaq",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.nocoDb",
+            "typeVersion": 3,
+            "position": [
+                432,
+                160
+            ],
+            "id": "c976218e-f60b-42cc-8895-5ba25e2eb31a",
+            "name": "Get many rows",
+            "credentials": {
+                "nocoDbApiToken": {
+                    "id": "N64PwSe1Zq6jl7uU",
+                    "name": "NocoDB Token account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b346a976-5e64-4cc0-af0a-6bf6c5036309",
+                            "name": "test.@type",
+                            "value": "Thing",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d8a16f9b-3237-4f15-a185-52a3993c60e6",
+                            "name": "test.@id",
+                            "value": "http://www.test.com/thing1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2742a9ae-ad96-47c2-8979-f69d60be8f09",
+                            "name": "test.name",
+                            "value": "thing1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "768a54df-242d-4cac-a372-8c459c69491a",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "authentication": "nocoDbApiToken",
+                "operation": "create",
+                "workspaceId": "wbpv4776",
+                "projectId": "pwul1r0bx0mprjt",
+                "table": "mdrc9b6te1ygcaq",
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldName": "@id",
+                            "fieldValue": "={{ $json.test['@id'] }}"
+                        },
+                        {
+                            "fieldName": "data",
+                            "fieldValue": "={{ $json.test }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.nocoDb",
+            "typeVersion": 3,
+            "position": [
+                416,
+                -96
+            ],
+            "id": "365e5cf1-1ae4-44b5-bf4c-002955d3a324",
+            "name": "Create a row",
+            "credentials": {
+                "nocoDbApiToken": {
+                    "id": "N64PwSe1Zq6jl7uU",
+                    "name": "NocoDB Token account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Get many rows",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Create a row",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "mwHhyOIvPmDtIXbs",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-18T15:59:06.013Z",
+            "updatedAt": "2026-06-18T15:59:06.013Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
