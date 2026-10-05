@@ -1,0 +1,2858 @@
+{
+    "id": "ORqk2BEEdMTUBfMX",
+    "name": "Post crawl job V1",
+    "active": true,
+    "activeVersionId": "5e1d04dd-2332-435f-a247-979cb5e5e029",
+    "createdAt": "2026-05-07T16:59:26.046Z",
+    "updatedAt": "2026-07-08T19:14:52.707Z",
+    "isArchived": false,
+    "versionId": "064188f7-f853-441e-9da3-f87648d81e28",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -416,
+                -736
+            ],
+            "id": "f8bb6f8a-9eb3-4053-ba71-c894d9d45cfe",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.systemPrompt",
+                            "value": "# role: \nextract action items from text. \n\n# output format: \njsonld schema.org action record",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ae511e8d-7e2a-44d5-8b25-42db20d578c7",
+                            "name": "config.webhookUrl",
+                            "value": "=http://192.168.2.243:5678/webhook/firecrawl",
+                            "type": "string"
+                        },
+                        {
+                            "id": "189173e7-5f0b-4220-895f-7cdf249bfa7a",
+                            "name": "config.tenantID",
+                            "value": "scraperv1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                32,
+                -736
+            ],
+            "id": "dd3ca59b-7f52-4523-bfcf-45a28d5e2ffd",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebSite",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -192,
+                -736
+            ],
+            "id": "d49826c4-f7f5-4c2e-b3b7-bd114c41e7c1",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "multipleMethods": true,
+                "httpMethod": [
+                    "POST"
+                ],
+                "path": "firecrawl",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                -416,
+                64
+            ],
+            "id": "ea2a2c6e-e064-419f-88db-21b8c40ae154",
+            "name": "Webhook",
+            "webhookId": "0d49b78c-9968-4686-abce-b4e508fc67e0"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0638efa3-0005-44c2-88ef-9071db8ce0e0",
+                            "name": "config.tenantID",
+                            "value": "scraperv1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2d7d49b2-7b6e-4197-83bc-ae38b306cc35",
+                            "name": "body",
+                            "value": "={{ $json.body }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -192,
+                64
+            ],
+            "id": "11899c6d-670e-47b9-a51a-4688f9f74ae5",
+            "name": "Format2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b40153ec-bef7-47b5-bc9b-30294302a47e",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "089ddab7-2b4a-439c-9f41-176f4c003356",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "6f78a4df-7def-483b-8213-daef0a13613f",
+                            "name": "action.result.object",
+                            "value": "={{ $json.action.object }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "87a7c227-c02f-4cf8-b515-f4adb5f25f52",
+                            "name": "action.result.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04d9b0fa-847b-43ce-ae35-4a7c44c3832d",
+                            "name": "action.result.@id",
+                            "value": "=https://krknapi.com/{{ $json.uuid }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7d37bf3c-41a1-486e-8c32-e6347d815258",
+                            "name": "action.result.name",
+                            "value": "Scrape Job",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ec10cce6-e72c-4355-b017-5515de5c2a97",
+                            "name": "action.result.startTime",
+                            "value": "={{ $now.toISO() }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "63bf8f34-4d16-42ae-b663-03380c4129fa",
+                            "name": "action.result.actionStatus",
+                            "value": "PotentialActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a329e6c2-498b-4d4c-a5c7-d899813240e4",
+                            "name": "action.result.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6645cf6b-8feb-4e28-928d-88ca6b5db649",
+                            "name": "action.result.instrument.@id",
+                            "value": "https://firecrawl.tactik8.com#webapi",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6c5ba7ab-dc6f-4b76-bf1d-6ed82d26b0c1",
+                            "name": "action.result.instrument.name",
+                            "value": "Firecrawl",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                480,
+                -736
+            ],
+            "id": "2941b157-b004-4af0-9bb6-b9290cefba4a",
+            "name": "Config scrape action"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "0WwZ74ImuHAGVHCE",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/0WwZ74ImuHAGVHCE",
+                    "cachedResultName": "api s3 post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $('Config scrape action').item.json.config.tenantID }}",
+                        "record": "={{ $json.action.result }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "metadata",
+                            "displayName": "metadata",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1152,
+                -640
+            ],
+            "id": "258c50fb-a68d-46da-a825-a0c5420fd744",
+            "name": "Save Scrape action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $('Config scrape action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "=CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1376,
+                -640
+            ],
+            "id": "bc2fe467-d244-4903-8f74-bce183a4bffe",
+            "name": "Action Close1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1600,
+                -640
+            ],
+            "id": "19245424-b9a3-4a68-b229-d54adf20a1bf",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "083a2036-46ec-4aac-b418-69df56cc1ad8",
+                            "name": "action",
+                            "value": "={{ $('Config scrape action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "168aaec0-e11e-4aa3-bdfb-a91e98c15fd8",
+                            "name": "action.result.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "183311c1-7de5-42c3-a20b-f23038b87b83",
+                            "name": "action.result.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                928,
+                -640
+            ],
+            "id": "d80bfe90-9569-4332-9642-55a55aa26bd4",
+            "name": "Set scrape action active"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "083a2036-46ec-4aac-b418-69df56cc1ad8",
+                            "name": "action",
+                            "value": "={{ $('Config scrape action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "168aaec0-e11e-4aa3-bdfb-a91e98c15fd8",
+                            "name": "action.result.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "183311c1-7de5-42c3-a20b-f23038b87b83",
+                            "name": "action.result.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b545c8ec-5bcb-455d-9fe6-70d88809099b",
+                            "name": "action.result.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                928,
+                -448
+            ],
+            "id": "c3b6d68e-9bd8-4fa8-aa75-f3073d396f6c",
+            "name": "Set scrape action failed"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "0WwZ74ImuHAGVHCE",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/0WwZ74ImuHAGVHCE",
+                    "cachedResultName": "api s3 post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $('Config scrape action').item.json.config.tenantID }}",
+                        "record": "={{ $json.action.result }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "metadata",
+                            "displayName": "metadata",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1152,
+                -448
+            ],
+            "id": "18cb7540-7b49-49dc-a5bc-2f71128e8a1d",
+            "name": "Save Scrape action1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $('Config scrape action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "=FailedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1376,
+                -448
+            ],
+            "id": "31a7a34f-a142-4e60-bd95-0b63fcf38797",
+            "name": "Action Close2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1600,
+                -448
+            ],
+            "id": "7515b686-6980-4d83-8664-b761666bb065",
+            "name": "Output2"
+        },
+        {
+            "parameters": {
+                "action": "generate",
+                "dataPropertyName": "uuid"
+            },
+            "type": "n8n-nodes-base.crypto",
+            "typeVersion": 2,
+            "position": [
+                256,
+                -736
+            ],
+            "id": "58803d31-a653-4165-9c40-c770c5862b03",
+            "name": "Crypto"
+        },
+        {
+            "parameters": {
+                "resource": "Crawling",
+                "operation": "crawl",
+                "url": "=https://{{ $json.action.object.url.extractDomain() }}",
+                "additionalFields": {},
+                "useCustomBody": true,
+                "customBody": "={\n  \"url\": \"{{ $json.action.object.url }}\",\n  \"limit\": 20000,\n  \"webhook\": {\n    \"url\": \"{{ $json.config.webhookUrl }}\",\n    \"events\": [\"completed\", \"page\", \"failed\", \"started\"],\n    \"metadata\": {\n    \"@id\": \"{{ $json.action.result['@id'] }}\"\n    }\n  },\n  \"maxDiscoveryDepth\": 123,\n  \"maxConcurrency\": 1,\n  \"sitemap\": \"include\",\n  \"crawlEntireDomain\": true,\n  \"allowSubdomains\": true,\n  \"scrapeOptions\": {\n    \"formats\": [\n        \"rawHtml\"\n    ]\n  }\n}\n\n\n",
+                "requestOptions": {}
+            },
+            "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+            "typeVersion": 1,
+            "position": [
+                704,
+                -736
+            ],
+            "id": "8ec5446c-8ccb-4ed2-a4dd-edd2475d7e2a",
+            "name": "Crawl a website and scrape all pages",
+            "credentials": {
+                "firecrawlApi": {
+                    "id": "Do4yFXPrjCzsA3GM",
+                    "name": "Firecrawl account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "resource": "Crawling",
+                "operation": "getCrawlStatus",
+                "crawlId": "={{ $json.id }}",
+                "requestOptions": {}
+            },
+            "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+            "typeVersion": 1,
+            "position": [
+                928,
+                -1024
+            ],
+            "id": "0ceebffb-6d76-4fb6-a13d-501f523e0ae6",
+            "name": "Get crawl status",
+            "credentials": {
+                "firecrawlApi": {
+                    "id": "Do4yFXPrjCzsA3GM",
+                    "name": "Firecrawl account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "Crawling",
+                "operation": "getCrawlErrors",
+                "crawlId": "={{ $json.id }}",
+                "requestOptions": {}
+            },
+            "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+            "typeVersion": 1,
+            "position": [
+                1152,
+                -992
+            ],
+            "id": "7787d371-8385-494d-bf02-ac7b87520e92",
+            "name": "Get crawl errors",
+            "credentials": {
+                "firecrawlApi": {
+                    "id": "Do4yFXPrjCzsA3GM",
+                    "name": "Firecrawl account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "## Webhook for response from firecrawl",
+                "height": 80,
+                "width": 800
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -416,
+                -176
+            ],
+            "typeVersion": 1,
+            "id": "56e97d47-600c-44a7-b9b7-ca189270ea53",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.body.type }}",
+                                        "rightValue": "crawl.started",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        },
+                                        "id": "c8fe5947-8f75-4956-9cf1-c55cfb04d10d"
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "batchStatus"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "d7334c00-558d-4c8a-bc8f-d178a1f660be",
+                                        "leftValue": "={{ $json.body.type }}",
+                                        "rightValue": "crawl.page",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "pageResult"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "cec2c1bf-fbb9-4a44-a43a-4c790bd4568b",
+                                        "leftValue": "={{ $json.body.type }}",
+                                        "rightValue": "crawl.completed",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "completed"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.4,
+            "position": [
+                32,
+                48
+            ],
+            "id": "cc623b7e-302e-46c7-a5c2-d7d1e8b2fc66",
+            "name": "Switch1"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\nfunction getPV(propertyID, value){\n\n    let pv = {\n       \"@type\": \"PropertyValue\",\n      \"propertyID\": propertyID,\n      \"value\": value\n    }\n  return pv\n}\n\n\n\nfor (const item of $input.all()) {\n  let r = item.json.body.data?.[0] || item.json.body.data\n  \n  \n  let newAction = {\n    \"@type\": \"Action\",\n    \"@id\": item.json.body.metadata['@id'] + \"/hasPart/\" + item.json.body.id,\n    \"timeStart\": new Date().toISOString(),\n    \"timeEnd\": new Date().toISOString(),\n    \"name\": \"Scrape webpage\",\n    \"actionStatus\": \"CompletedActionStatus\"\n    \n  }\n  \n\n  let record = {\n    \"@type\": \"WebPage\",\n    \"@id\": (r.metadata.sourceURL || \"\") + \"#webpage\",\n    \"url\": r.metadata?.sourceURL,\n    \"additionalProperty\": []\n  }\n\n  for(let k of Object.keys(r)){\n    record.additionalProperty.push(getPV(k, r?.[k]))\n  }\n\n  newAction.result = record\n\n  let parentAction = {\n    \"@type\": \"Action\",\n    \"@id\": item.json.body.metadata['@id'],\n    \"hasPart\": newAction\n  }\n\n\n  \n  item.json = {}\n  item.json.action = parentAction\n\n\n  \n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                256,
+                -32
+            ],
+            "id": "1e579c56-9470-43f7-bdd3-1248942f5d36",
+            "name": "Schema conversion1"
+        },
+        {
+            "parameters": {
+                "resource": "bucket",
+                "name": "crawlresults",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                928,
+                -32
+            ],
+            "id": "8ea71b94-c67b-4f4f-b733-ee5602cc598c",
+            "name": "Create a bucket1",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            },
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "=crawlresults",
+                "fileName": "={{ $('F4').item.json.config.path }}/{{ $('F4').item.json.config.filename }}",
+                "binaryData": false,
+                "fileContent": "={{ JSON.stringify($('F4').item.json.config.record, null, 4) }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1152,
+                -32
+            ],
+            "id": "761500a4-cb72-438c-bf90-fc1b0f5b0a42",
+            "name": "Upload a file1",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "864b42aa-6f95-4cdb-91d3-b82a50a923d4",
+                            "name": "config.record",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "fd11c6dc-543e-4b2d-b24c-c21a728c7fe5",
+                            "name": "config.domain",
+                            "value": "={{ $json.action.hasPart.result.url.extractDomain().replaceAll('www.', '') }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "42155114-6923-44e2-b104-8c07faad1941",
+                            "name": "config.url",
+                            "value": "={{ $json.action.hasPart.result.url.extractDomain().replaceAll('www.', '') }}{{ $json.action.hasPart.result.url.extractUrlPath() }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                480,
+                -32
+            ],
+            "id": "289a51c6-2265-427d-9ae5-b7638ac4a263",
+            "name": "F"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7a2fb1bd-fe73-4aba-a528-6c1928bce059",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "337487b0-e6bc-49fc-97e1-18d124753d17",
+                            "name": "config.filename",
+                            "value": "={{ $json.config.url.replaceAll('/', '___') }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "bc489fa7-2b5b-48bd-842e-15bb58e5b1a8",
+                            "name": "config.path",
+                            "value": "={{ $json.config.domain }}/{{ $json.config.record['@id'].replaceAll('https://', '').replaceAll('http://', '').replaceAll('/', '___') }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                704,
+                -32
+            ],
+            "id": "a1700688-c444-4e8d-8e66-72f320e183be",
+            "name": "F4"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "0kP6vTNozGqvD3PZ",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/0kP6vTNozGqvD3PZ",
+                    "cachedResultName": "api s3 get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "record_id": "={{ $json.body.metadata['@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                256,
+                160
+            ],
+            "id": "9a0f70c6-8584-4356-a98a-adc791cb9f93",
+            "name": "Call 'api s3 get V1'1",
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "db356634-1912-40e1-86ac-7ea99638053c",
+                            "name": "action",
+                            "value": "={{ $json.output.result }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "2a7dd226-8f1c-436c-8e7e-f120fc1e7246",
+                            "name": "config",
+                            "value": "={{ $('Format2').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "6e991d66-cd7c-4b41-8b78-7b4f12dcae68",
+                            "name": "body",
+                            "value": "={{ $('Format2').item.json.body }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                480,
+                160
+            ],
+            "id": "9e9a4f23-9d6f-44f4-b9cc-a579653b4a3c",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "41cf7192-4928-4ff1-a603-0b0fea8a56ad",
+                            "name": "action",
+                            "value": "={{ $('Edit Fields').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "0041b6f1-b153-4e3b-a124-1658dea12bd8",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2f0b260d-f6e8-4c6b-951d-1d1bed02d13d",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                704,
+                160
+            ],
+            "id": "d4d13b39-3d11-4b0d-a555-bfe29963347b",
+            "name": "Edit Fields3"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "0WwZ74ImuHAGVHCE",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/0WwZ74ImuHAGVHCE",
+                    "cachedResultName": "api s3 post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $('Format2').item.json.config.tenantID }}",
+                        "record": "={{ $json.action }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "metadata",
+                            "displayName": "metadata",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                928,
+                160
+            ],
+            "id": "27f5078e-298d-49ec-82a1-cbfe938b737c",
+            "name": "Call 'api s3 post V1'1"
+        },
+        {
+            "parameters": {
+                "resource": "Crawling",
+                "operation": "cancelCrawl",
+                "crawlId": "=019e0d41-372b-707a-bf1e-30fb4f95ecc4",
+                "requestOptions": {}
+            },
+            "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+            "typeVersion": 1,
+            "position": [
+                1312,
+                -848
+            ],
+            "id": "2c76e94b-027d-4189-a210-3b0e34edb424",
+            "name": "Cancel a crawl job",
+            "credentials": {
+                "firecrawlApi": {
+                    "id": "Do4yFXPrjCzsA3GM",
+                    "name": "Firecrawl account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Crypto",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Format2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        },
+        "Format2": {
+            "main": [
+                [
+                    {
+                        "node": "Switch1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save Scrape action": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config scrape action": {
+            "main": [
+                [
+                    {
+                        "node": "Crawl a website and scrape all pages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set scrape action active": {
+            "main": [
+                [
+                    {
+                        "node": "Save Scrape action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set scrape action failed": {
+            "main": [
+                [
+                    {
+                        "node": "Save Scrape action1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save Scrape action1": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close2": {
+            "main": [
+                [
+                    {
+                        "node": "Output2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Crypto": {
+            "main": [
+                [
+                    {
+                        "node": "Config scrape action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Crawl a website and scrape all pages": {
+            "main": [
+                [
+                    {
+                        "node": "Set scrape action active",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get crawl status",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get crawl errors",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Set scrape action failed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schema conversion1": {
+            "main": [
+                [
+                    {
+                        "node": "F",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create a bucket1": {
+            "main": [
+                [
+                    {
+                        "node": "Upload a file1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "F": {
+            "main": [
+                [
+                    {
+                        "node": "F4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "F4": {
+            "main": [
+                [
+                    {
+                        "node": "Create a bucket1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch1": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Schema conversion1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Call 'api s3 get V1'1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api s3 get V1'1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields3": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api s3 post V1'1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.duchesnay.com"
+                }
+            }
+        ],
+        "Webhook": [
+            {
+                "json": {
+                    "headers": {
+                        "host": "192.168.2.243:5678",
+                        "connection": "keep-alive",
+                        "content-type": "application/json",
+                        "accept": "*/*",
+                        "accept-language": "*",
+                        "sec-fetch-mode": "cors",
+                        "user-agent": "undici",
+                        "accept-encoding": "gzip, deflate",
+                        "content-length": "224"
+                    },
+                    "params": {},
+                    "query": {},
+                    "body": {
+                        "success": true,
+                        "type": "crawl.completed",
+                        "id": "019e0d19-25c1-749b-841c-42cf650433d6",
+                        "webhookId": "d16158dc-3e32-46ee-8bd5-a2384b433fde",
+                        "data": [],
+                        "metadata": {
+                            "@id": "https://krknapi.com/20345107-2ff9-4146-a3d3-b5b315ce038e"
+                        }
+                    },
+                    "webhookUrl": "https://n8n.tactik8.com/webhook/firecrawl",
+                    "executionMode": "production"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "ORqk2BEEdMTUBfMX",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-07T16:59:26.046Z",
+            "updatedAt": "2026-05-07T16:59:26.046Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "5e1d04dd-2332-435f-a247-979cb5e5e029",
+        "workflowId": "ORqk2BEEdMTUBfMX",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "url"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -416,
+                    -736
+                ],
+                "id": "f8bb6f8a-9eb3-4053-ba71-c894d9d45cfe",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.systemPrompt",
+                                "value": "# role: \nextract action items from text. \n\n# output format: \njsonld schema.org action record",
+                                "type": "string"
+                            },
+                            {
+                                "id": "ae511e8d-7e2a-44d5-8b25-42db20d578c7",
+                                "name": "config.webhookUrl",
+                                "value": "=http://192.168.2.243:5678/webhook/firecrawl",
+                                "type": "string"
+                            },
+                            {
+                                "id": "189173e7-5f0b-4220-895f-7cdf249bfa7a",
+                                "name": "config.tenantID",
+                                "value": "scraperv1",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    32,
+                    -736
+                ],
+                "id": "dd3ca59b-7f52-4523-bfcf-45a28d5e2ffd",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "WebSite",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.url",
+                                "value": "={{ $json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -192,
+                    -736
+                ],
+                "id": "d49826c4-f7f5-4c2e-b3b7-bd114c41e7c1",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "multipleMethods": true,
+                    "httpMethod": [
+                        "POST"
+                    ],
+                    "path": "firecrawl",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    -416,
+                    64
+                ],
+                "id": "ea2a2c6e-e064-419f-88db-21b8c40ae154",
+                "name": "Webhook",
+                "webhookId": "0d49b78c-9968-4686-abce-b4e508fc67e0"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "0638efa3-0005-44c2-88ef-9071db8ce0e0",
+                                "name": "config.tenantID",
+                                "value": "scraperv1",
+                                "type": "string"
+                            },
+                            {
+                                "id": "2d7d49b2-7b6e-4197-83bc-ae38b306cc35",
+                                "name": "body",
+                                "value": "={{ $json.body }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -192,
+                    64
+                ],
+                "id": "11899c6d-670e-47b9-a51a-4688f9f74ae5",
+                "name": "Format2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "b40153ec-bef7-47b5-bc9b-30294302a47e",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "089ddab7-2b4a-439c-9f41-176f4c003356",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "6f78a4df-7def-483b-8213-daef0a13613f",
+                                "name": "action.result.object",
+                                "value": "={{ $json.action.object }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "87a7c227-c02f-4cf8-b515-f4adb5f25f52",
+                                "name": "action.result.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04d9b0fa-847b-43ce-ae35-4a7c44c3832d",
+                                "name": "action.result.@id",
+                                "value": "=https://krknapi.com/{{ $json.uuid }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7d37bf3c-41a1-486e-8c32-e6347d815258",
+                                "name": "action.result.name",
+                                "value": "Scrape Job",
+                                "type": "string"
+                            },
+                            {
+                                "id": "ec10cce6-e72c-4355-b017-5515de5c2a97",
+                                "name": "action.result.startTime",
+                                "value": "={{ $now.toISO() }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "63bf8f34-4d16-42ae-b663-03380c4129fa",
+                                "name": "action.result.actionStatus",
+                                "value": "PotentialActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "a329e6c2-498b-4d4c-a5c7-d899813240e4",
+                                "name": "action.result.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "6645cf6b-8feb-4e28-928d-88ca6b5db649",
+                                "name": "action.result.instrument.@id",
+                                "value": "https://firecrawl.tactik8.com#webapi",
+                                "type": "string"
+                            },
+                            {
+                                "id": "6c5ba7ab-dc6f-4b76-bf1d-6ed82d26b0c1",
+                                "name": "action.result.instrument.name",
+                                "value": "Firecrawl",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    480,
+                    -736
+                ],
+                "id": "2941b157-b004-4af0-9bb6-b9290cefba4a",
+                "name": "Config scrape action"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "0WwZ74ImuHAGVHCE",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/0WwZ74ImuHAGVHCE",
+                        "cachedResultName": "api s3 post V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "tenantID": "={{ $('Config scrape action').item.json.config.tenantID }}",
+                            "record": "={{ $json.action.result }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "metadata",
+                                "displayName": "metadata",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    1152,
+                    -640
+                ],
+                "id": "258c50fb-a68d-46da-a825-a0c5420fd744",
+                "name": "Save Scrape action"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $('Config scrape action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "=CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1376,
+                    -640
+                ],
+                "id": "bc2fe467-d244-4903-8f74-bce183a4bffe",
+                "name": "Action Close1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1600,
+                    -640
+                ],
+                "id": "19245424-b9a3-4a68-b229-d54adf20a1bf",
+                "name": "Output1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "083a2036-46ec-4aac-b418-69df56cc1ad8",
+                                "name": "action",
+                                "value": "={{ $('Config scrape action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "168aaec0-e11e-4aa3-bdfb-a91e98c15fd8",
+                                "name": "action.result.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "183311c1-7de5-42c3-a20b-f23038b87b83",
+                                "name": "action.result.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    928,
+                    -640
+                ],
+                "id": "d80bfe90-9569-4332-9642-55a55aa26bd4",
+                "name": "Set scrape action active"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "083a2036-46ec-4aac-b418-69df56cc1ad8",
+                                "name": "action",
+                                "value": "={{ $('Config scrape action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "168aaec0-e11e-4aa3-bdfb-a91e98c15fd8",
+                                "name": "action.result.actionStatus",
+                                "value": "FailedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "183311c1-7de5-42c3-a20b-f23038b87b83",
+                                "name": "action.result.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b545c8ec-5bcb-455d-9fe6-70d88809099b",
+                                "name": "action.result.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    928,
+                    -448
+                ],
+                "id": "c3b6d68e-9bd8-4fa8-aa75-f3073d396f6c",
+                "name": "Set scrape action failed"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "0WwZ74ImuHAGVHCE",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/0WwZ74ImuHAGVHCE",
+                        "cachedResultName": "api s3 post V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "tenantID": "={{ $('Config scrape action').item.json.config.tenantID }}",
+                            "record": "={{ $json.action.result }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "metadata",
+                                "displayName": "metadata",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    1152,
+                    -448
+                ],
+                "id": "18cb7540-7b49-49dc-a5bc-2f71128e8a1d",
+                "name": "Save Scrape action1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $('Config scrape action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "=FailedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1376,
+                    -448
+                ],
+                "id": "31a7a34f-a142-4e60-bd95-0b63fcf38797",
+                "name": "Action Close2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1600,
+                    -448
+                ],
+                "id": "7515b686-6980-4d83-8664-b761666bb065",
+                "name": "Output2"
+            },
+            {
+                "parameters": {
+                    "action": "generate",
+                    "dataPropertyName": "uuid"
+                },
+                "type": "n8n-nodes-base.crypto",
+                "typeVersion": 2,
+                "position": [
+                    256,
+                    -736
+                ],
+                "id": "58803d31-a653-4165-9c40-c770c5862b03",
+                "name": "Crypto"
+            },
+            {
+                "parameters": {
+                    "resource": "Crawling",
+                    "operation": "crawl",
+                    "url": "=https://{{ $json.action.object.url.extractDomain() }}",
+                    "additionalFields": {},
+                    "useCustomBody": true,
+                    "customBody": "={\n  \"url\": \"{{ $json.action.object.url }}\",\n  \"limit\": 20000,\n  \"webhook\": {\n    \"url\": \"{{ $json.config.webhookUrl }}\",\n    \"events\": [\"completed\", \"page\", \"failed\", \"started\"],\n    \"metadata\": {\n    \"@id\": \"{{ $json.action.result['@id'] }}\"\n    }\n  },\n  \"maxDiscoveryDepth\": 123,\n  \"maxConcurrency\": 1,\n  \"sitemap\": \"include\",\n  \"crawlEntireDomain\": true,\n  \"allowSubdomains\": true,\n  \"scrapeOptions\": {\n    \"formats\": [\n        \"rawHtml\"\n    ]\n  }\n}\n\n\n",
+                    "requestOptions": {}
+                },
+                "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+                "typeVersion": 1,
+                "position": [
+                    704,
+                    -736
+                ],
+                "id": "8ec5446c-8ccb-4ed2-a4dd-edd2475d7e2a",
+                "name": "Crawl a website and scrape all pages",
+                "credentials": {
+                    "firecrawlApi": {
+                        "id": "Do4yFXPrjCzsA3GM",
+                        "name": "Firecrawl account"
+                    }
+                },
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "resource": "Crawling",
+                    "operation": "getCrawlStatus",
+                    "crawlId": "={{ $json.id }}",
+                    "requestOptions": {}
+                },
+                "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+                "typeVersion": 1,
+                "position": [
+                    928,
+                    -1024
+                ],
+                "id": "0ceebffb-6d76-4fb6-a13d-501f523e0ae6",
+                "name": "Get crawl status",
+                "credentials": {
+                    "firecrawlApi": {
+                        "id": "Do4yFXPrjCzsA3GM",
+                        "name": "Firecrawl account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "Crawling",
+                    "operation": "getCrawlErrors",
+                    "crawlId": "={{ $json.id }}",
+                    "requestOptions": {}
+                },
+                "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+                "typeVersion": 1,
+                "position": [
+                    1152,
+                    -992
+                ],
+                "id": "7787d371-8385-494d-bf02-ac7b87520e92",
+                "name": "Get crawl errors",
+                "credentials": {
+                    "firecrawlApi": {
+                        "id": "Do4yFXPrjCzsA3GM",
+                        "name": "Firecrawl account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "content": "## Webhook for response from firecrawl",
+                    "height": 80,
+                    "width": 800
+                },
+                "type": "n8n-nodes-base.stickyNote",
+                "position": [
+                    -416,
+                    -176
+                ],
+                "typeVersion": 1,
+                "id": "56e97d47-600c-44a7-b9b7-ca189270ea53",
+                "name": "Sticky Note"
+            },
+            {
+                "parameters": {
+                    "rules": {
+                        "values": [
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "leftValue": "={{ $json.body.type }}",
+                                            "rightValue": "crawl.started",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "equals"
+                                            },
+                                            "id": "c8fe5947-8f75-4956-9cf1-c55cfb04d10d"
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "batchStatus"
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "d7334c00-558d-4c8a-bc8f-d178a1f660be",
+                                            "leftValue": "={{ $json.body.type }}",
+                                            "rightValue": "crawl.page",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "equals"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "pageResult"
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "cec2c1bf-fbb9-4a44-a43a-4c790bd4568b",
+                                            "leftValue": "={{ $json.body.type }}",
+                                            "rightValue": "crawl.completed",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "equals",
+                                                "name": "filter.operator.equals"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "completed"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.switch",
+                "typeVersion": 3.4,
+                "position": [
+                    32,
+                    48
+                ],
+                "id": "cc623b7e-302e-46c7-a5c2-d7d1e8b2fc66",
+                "name": "Switch1"
+            },
+            {
+                "parameters": {
+                    "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\nfunction getPV(propertyID, value){\n\n    let pv = {\n       \"@type\": \"PropertyValue\",\n      \"propertyID\": propertyID,\n      \"value\": value\n    }\n  return pv\n}\n\n\n\nfor (const item of $input.all()) {\n  let r = item.json.body.data?.[0] || item.json.body.data\n  \n  \n  let newAction = {\n    \"@type\": \"Action\",\n    \"@id\": item.json.body.metadata['@id'] + \"/hasPart/\" + item.json.body.id,\n    \"timeStart\": new Date().toISOString(),\n    \"timeEnd\": new Date().toISOString(),\n    \"name\": \"Scrape webpage\",\n    \"actionStatus\": \"CompletedActionStatus\"\n    \n  }\n  \n\n  let record = {\n    \"@type\": \"WebPage\",\n    \"@id\": (r.metadata.sourceURL || \"\") + \"#webpage\",\n    \"url\": r.metadata?.sourceURL,\n    \"additionalProperty\": []\n  }\n\n  for(let k of Object.keys(r)){\n    record.additionalProperty.push(getPV(k, r?.[k]))\n  }\n\n  newAction.result = record\n\n  let parentAction = {\n    \"@type\": \"Action\",\n    \"@id\": item.json.body.metadata['@id'],\n    \"hasPart\": newAction\n  }\n\n\n  \n  item.json = {}\n  item.json.action = parentAction\n\n\n  \n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    256,
+                    -32
+                ],
+                "id": "1e579c56-9470-43f7-bdd3-1248942f5d36",
+                "name": "Schema conversion1"
+            },
+            {
+                "parameters": {
+                    "resource": "bucket",
+                    "name": "crawlresults",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    928,
+                    -32
+                ],
+                "id": "8ea71b94-c67b-4f4f-b733-ee5602cc598c",
+                "name": "Create a bucket1",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                },
+                "onError": "continueRegularOutput"
+            },
+            {
+                "parameters": {
+                    "operation": "upload",
+                    "bucketName": "=crawlresults",
+                    "fileName": "={{ $('F4').item.json.config.path }}/{{ $('F4').item.json.config.filename }}",
+                    "binaryData": false,
+                    "fileContent": "={{ JSON.stringify($('F4').item.json.config.record, null, 4) }}",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    1152,
+                    -32
+                ],
+                "id": "761500a4-cb72-438c-bf90-fc1b0f5b0a42",
+                "name": "Upload a file1",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "864b42aa-6f95-4cdb-91d3-b82a50a923d4",
+                                "name": "config.record",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "fd11c6dc-543e-4b2d-b24c-c21a728c7fe5",
+                                "name": "config.domain",
+                                "value": "={{ $json.action.hasPart.result.url.extractDomain().replaceAll('www.', '') }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "42155114-6923-44e2-b104-8c07faad1941",
+                                "name": "config.url",
+                                "value": "={{ $json.action.hasPart.result.url.extractDomain().replaceAll('www.', '') }}{{ $json.action.hasPart.result.url.extractUrlPath() }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    480,
+                    -32
+                ],
+                "id": "289a51c6-2265-427d-9ae5-b7638ac4a263",
+                "name": "F"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7a2fb1bd-fe73-4aba-a528-6c1928bce059",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "337487b0-e6bc-49fc-97e1-18d124753d17",
+                                "name": "config.filename",
+                                "value": "={{ $json.config.url.replaceAll('/', '___') }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "bc489fa7-2b5b-48bd-842e-15bb58e5b1a8",
+                                "name": "config.path",
+                                "value": "={{ $json.config.domain }}/{{ $json.config.record['@id'].replaceAll('https://', '').replaceAll('http://', '').replaceAll('/', '___') }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    704,
+                    -32
+                ],
+                "id": "a1700688-c444-4e8d-8e66-72f320e183be",
+                "name": "F4"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "0kP6vTNozGqvD3PZ",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/0kP6vTNozGqvD3PZ",
+                        "cachedResultName": "api s3 get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "record_id": "={{ $json.body.metadata['@id'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    256,
+                    160
+                ],
+                "id": "9a0f70c6-8584-4356-a98a-adc791cb9f93",
+                "name": "Call 'api s3 get V1'1",
+                "onError": "continueRegularOutput"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "db356634-1912-40e1-86ac-7ea99638053c",
+                                "name": "action",
+                                "value": "={{ $json.output.result }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "2a7dd226-8f1c-436c-8e7e-f120fc1e7246",
+                                "name": "config",
+                                "value": "={{ $('Format2').item.json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "6e991d66-cd7c-4b41-8b78-7b4f12dcae68",
+                                "name": "body",
+                                "value": "={{ $('Format2').item.json.body }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    480,
+                    160
+                ],
+                "id": "9e9a4f23-9d6f-44f4-b9cc-a579653b4a3c",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "41cf7192-4928-4ff1-a603-0b0fea8a56ad",
+                                "name": "action",
+                                "value": "={{ $('Edit Fields').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "0041b6f1-b153-4e3b-a124-1658dea12bd8",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "2f0b260d-f6e8-4c6b-951d-1d1bed02d13d",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    704,
+                    160
+                ],
+                "id": "d4d13b39-3d11-4b0d-a555-bfe29963347b",
+                "name": "Edit Fields3"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "0WwZ74ImuHAGVHCE",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/0WwZ74ImuHAGVHCE",
+                        "cachedResultName": "api s3 post V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "tenantID": "={{ $('Format2').item.json.config.tenantID }}",
+                            "record": "={{ $json.action }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "metadata",
+                                "displayName": "metadata",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    928,
+                    160
+                ],
+                "id": "27f5078e-298d-49ec-82a1-cbfe938b737c",
+                "name": "Call 'api s3 post V1'1"
+            },
+            {
+                "parameters": {
+                    "resource": "Crawling",
+                    "operation": "cancelCrawl",
+                    "crawlId": "=019e0d41-372b-707a-bf1e-30fb4f95ecc4",
+                    "requestOptions": {}
+                },
+                "type": "@mendable/n8n-nodes-firecrawl.firecrawl",
+                "typeVersion": 1,
+                "position": [
+                    1312,
+                    -848
+                ],
+                "id": "2c76e94b-027d-4189-a210-3b0e34edb424",
+                "name": "Cancel a crawl job",
+                "credentials": {
+                    "firecrawlApi": {
+                        "id": "Do4yFXPrjCzsA3GM",
+                        "name": "Firecrawl account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Crypto",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook": {
+                "main": [
+                    [
+                        {
+                            "node": "Format2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    []
+                ]
+            },
+            "Format2": {
+                "main": [
+                    [
+                        {
+                            "node": "Switch1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Save Scrape action": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config scrape action": {
+                "main": [
+                    [
+                        {
+                            "node": "Crawl a website and scrape all pages",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close1": {
+                "main": [
+                    [
+                        {
+                            "node": "Output1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Set scrape action active": {
+                "main": [
+                    [
+                        {
+                            "node": "Save Scrape action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Set scrape action failed": {
+                "main": [
+                    [
+                        {
+                            "node": "Save Scrape action1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Save Scrape action1": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close2": {
+                "main": [
+                    [
+                        {
+                            "node": "Output2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Crypto": {
+                "main": [
+                    [
+                        {
+                            "node": "Config scrape action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Crawl a website and scrape all pages": {
+                "main": [
+                    [
+                        {
+                            "node": "Set scrape action active",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Get crawl status",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Get crawl errors",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Set scrape action failed",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Schema conversion1": {
+                "main": [
+                    [
+                        {
+                            "node": "F",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Create a bucket1": {
+                "main": [
+                    [
+                        {
+                            "node": "Upload a file1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "F": {
+                "main": [
+                    [
+                        {
+                            "node": "F4",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "F4": {
+                "main": [
+                    [
+                        {
+                            "node": "Create a bucket1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Switch1": {
+                "main": [
+                    [],
+                    [
+                        {
+                            "node": "Schema conversion1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Call 'api s3 get V1'1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api s3 get V1'1": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields3": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api s3 post V1'1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 5e1d04dd",
+        "description": "",
+        "autosaved": false,
+        "createdAt": "2026-05-09T15:09:20.821Z",
+        "updatedAt": "2026-05-09T15:09:28.068Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
