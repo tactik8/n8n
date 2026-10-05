@@ -1,0 +1,230 @@
+{
+    "id": "P8KHt5f8VB3DbqA0",
+    "name": "My workflow 8",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-05-05T16:15:01.090Z",
+    "updatedAt": "2026-05-05T16:47:55.301Z",
+    "isArchived": false,
+    "versionId": "447df837-14ad-471c-8722-bc8f912283f9",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "formTitle": "File",
+                "formFields": {
+                    "values": [
+                        {
+                            "fieldLabel": "File",
+                            "fieldType": "file"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.formTrigger",
+            "typeVersion": 2.5,
+            "position": [
+                0,
+                -16
+            ],
+            "id": "42b03b60-9a99-49e1-8d05-74051ae88bfb",
+            "name": "On form submission",
+            "webhookId": "dab37f33-a3ff-4b8d-8e3f-022c4321b576"
+        },
+        {
+            "parameters": {
+                "operation": "pdf",
+                "binaryPropertyName": "File",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.1,
+            "position": [
+                224,
+                -16
+            ],
+            "id": "29c50802-ed6a-45c0-8e97-1d4084ea0766",
+            "name": "Extract from File"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Here is the file content: {{ $json.text }}",
+                "options": {
+                    "systemMessage": "# role\nYou are a recruiter specializing in analyzing resumes and extracting the essential information, without florish or buzzwords. Just the facts. \n\n\n## task\nPlease extract the information from this resume and provide a markdown with the following structure:\n\n# Candidate Profile: [Full Name]\n\n## 1. Contact Information\n* **Email:** [Email Address]\n* **Phone:** [Phone Number]\n* **Location:** [City, State/Country]\n* **LinkedIn/Portfolio:** [URLs]\n\n## 2. Professional Summary\n> [2-3 sentence overview of their career identity]\n\n## 3. Technical Skills\n* **Languages/Tools:** [e.g., Python, SQL, AWS]\n* **Frameworks/Libraries:** [e.g., React, PyTorch]\n* **Soft Skills:** [e.g., Project Management, Leadership]\n\n## 4. Work Experience\n### [Job Title] | [Company Name]\n**Dates:** [MM/YYYY – MM/YYYY or Present]\n* **Key Achievement 1:** [Action verb] + [Task] + [Measurable Result]\n* **Key Achievement 2:** ...\n\n### [Job Title] | [Company Name]\n**Dates:** [MM/YYYY – MM/YYYY]\n* **Key Achievement 1:** ...\n\n## 5. Education\n* **Degree:** [e.g., B.S. in Computer Science]\n* **Institution:** [University Name]\n* **Graduation Date:** [MM/YYYY]\n\n## 6. Certifications & Projects\n* [Name of Cert/Project] - [Issuing Org/Brief Description]"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                448,
+                -16
+            ],
+            "id": "d6d4db54-bd2e-4670-bd51-19bf50e45524",
+            "name": "AI Agent2"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                520,
+                208
+            ],
+            "id": "1a820023-c9e3-4e8f-b950-2ecabdf225cf",
+            "name": "Google Gemini Chat Model2",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "723110d0-b656-4ead-a235-882836b355c9",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                800,
+                -16
+            ],
+            "id": "da0de0ac-0200-4687-82c5-a568200ffc56",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "mode": "markdownToHtml",
+                "markdown": "={{ $json.output }}",
+                "destinationKey": "html",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.markdown",
+            "typeVersion": 1,
+            "position": [
+                1024,
+                -16
+            ],
+            "id": "90e9ae7f-4126-4ae1-8789-d42622dc4c2f",
+            "name": "Markdown"
+        },
+        {
+            "parameters": {
+                "operation": "completion",
+                "respondWith": "showText",
+                "responseText": "={{ $json.html }}"
+            },
+            "type": "n8n-nodes-base.form",
+            "typeVersion": 2.5,
+            "position": [
+                1248,
+                -16
+            ],
+            "id": "826f7f06-7383-4928-acb9-17c17db67e92",
+            "name": "Form",
+            "webhookId": "b4c1b27e-a504-474e-9b0d-c0767c18034b"
+        }
+    ],
+    "connections": {
+        "On form submission": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model2": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Markdown",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Markdown": {
+            "main": [
+                [
+                    {
+                        "node": "Form",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent2": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "P8KHt5f8VB3DbqA0",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-05T16:15:01.090Z",
+            "updatedAt": "2026-05-05T16:15:01.090Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
