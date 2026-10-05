@@ -1,0 +1,449 @@
+{
+    "id": "7HUaQMFibv2YrzG8",
+    "name": "dropbox",
+    "active": true,
+    "activeVersionId": "9a31da6c-0ac8-4969-88c5-0eeb43230c90",
+    "createdAt": "2026-06-21T18:08:00.799Z",
+    "updatedAt": "2026-06-21T19:06:27.365Z",
+    "isArchived": false,
+    "versionId": "1e07a23a-3a2a-4a83-b5f9-d259ccee9d53",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                160
+            ],
+            "id": "7bd12a36-1964-42b8-ae0b-8733677474b0",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "multipleMethods": true,
+                "path": "dropbox",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                16,
+                -160
+            ],
+            "id": "b347b5e9-ed3c-48dc-93f1-7f880731fbfa",
+            "name": "Webhook",
+            "webhookId": "076be577-4f7a-442d-ad6f-acbcc2fb5956"
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "folder",
+                "operation": "list",
+                "filters": {}
+            },
+            "type": "n8n-nodes-base.dropbox",
+            "typeVersion": 1,
+            "position": [
+                224,
+                288
+            ],
+            "id": "5acd8186-aa7c-450e-898f-f28204d74d5e",
+            "name": "List a folder",
+            "credentials": {
+                "dropboxOAuth2Api": {
+                    "id": "xLWgq6UuPU3cQwvr",
+                    "name": "Dropbox account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "respondWith": "text",
+                "responseBody": "={{ $json.query.challenge }}",
+                "options": {
+                    "responseHeaders": {
+                        "entries": [
+                            {
+                                "name": "Content-Type",
+                                "value": "text/plain"
+                            },
+                            {
+                                "name": "X-Content-Type-Options",
+                                "value": "nosniff"
+                            }
+                        ]
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                368,
+                -256
+            ],
+            "id": "c59864a6-0b6b-4342-b0a3-369c3ec72a9e",
+            "name": "registration challenge"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6b478857-de31-4b62-9f71-3ac2d7bacb55",
+                            "name": "config.user",
+                            "value": "={{ $json.body.delta.users[0] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f6d019ba-4a82-471b-935f-039821b35755",
+                            "name": "config.acount",
+                            "value": "={{ $json.body.list_folder.accounts[0] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                384,
+                -112
+            ],
+            "id": "a15d24b6-bdae-4029-98ea-283005e40f2d",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "respondWith": "noData",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                640,
+                -208
+            ],
+            "id": "3e9c69b3-f9e1-4c34-bd27-0d35c7ecaf9d",
+            "name": "Respond to Webhook"
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "folder",
+                "operation": "list",
+                "path": "/_triggers",
+                "limit": 20,
+                "filters": {
+                    "recursive": true
+                }
+            },
+            "type": "n8n-nodes-base.dropbox",
+            "typeVersion": 1,
+            "position": [
+                208,
+                32
+            ],
+            "id": "d64bdb2d-a209-424d-9d53-f8d3970210ed",
+            "name": "List a folder1",
+            "credentials": {
+                "dropboxOAuth2Api": {
+                    "id": "xLWgq6UuPU3cQwvr",
+                    "name": "Dropbox account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "List a folder",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "List a folder1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "registration challenge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "Webhook": [
+            {
+                "json": {
+                    "headers": {
+                        "host": "n8n.tactik8.com",
+                        "user-agent": "DropboxWebhooks/1.0",
+                        "content-length": "106",
+                        "accept": "*/*",
+                        "accept-encoding": "gzip, br",
+                        "cdn-loop": "cloudflare; loops=1",
+                        "cf-connecting-ip": "34.225.110.50",
+                        "cf-ipcountry": "US",
+                        "cf-ray": "a0f536bf18168b8b-IAD",
+                        "cf-visitor": "{\"scheme\":\"https\"}",
+                        "cf-warp-tag-id": "94aa5f17-1131-4744-9f68-b80df7e22e3c",
+                        "connection": "keep-alive",
+                        "content-type": "application/json",
+                        "x-dropbox-signature": "888cee4917bad289ead162429a3554e3560177d024b59cb0c1d830a145aa8a0c",
+                        "x-forwarded-for": "34.225.110.50",
+                        "x-forwarded-proto": "https"
+                    },
+                    "params": {},
+                    "query": {},
+                    "body": {
+                        "delta": {
+                            "users": [
+                                3812336
+                            ]
+                        },
+                        "list_folder": {
+                            "accounts": [
+                                "dbid:AAACozRDpYzWUa-mtQMW9URug2Vq0LyE4ps"
+                            ]
+                        }
+                    },
+                    "webhookUrl": "https://n8n.tactik8.com/webhook/dropbox",
+                    "executionMode": "production"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "7HUaQMFibv2YrzG8",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-21T18:08:00.799Z",
+            "updatedAt": "2026-06-21T18:08:00.799Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "9a31da6c-0ac8-4969-88c5-0eeb43230c90",
+        "workflowId": "7HUaQMFibv2YrzG8",
+        "nodes": [
+            {
+                "parameters": {
+                    "inputSource": "passthrough"
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "7bd12a36-1964-42b8-ae0b-8733677474b0",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "multipleMethods": true,
+                    "path": "dropbox",
+                    "responseMode": "responseNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    16,
+                    -160
+                ],
+                "id": "b347b5e9-ed3c-48dc-93f1-7f880731fbfa",
+                "name": "Webhook",
+                "webhookId": "076be577-4f7a-442d-ad6f-acbcc2fb5956"
+            },
+            {
+                "parameters": {
+                    "authentication": "oAuth2",
+                    "resource": "folder",
+                    "operation": "list",
+                    "filters": {}
+                },
+                "type": "n8n-nodes-base.dropbox",
+                "typeVersion": 1,
+                "position": [
+                    208,
+                    0
+                ],
+                "id": "5acd8186-aa7c-450e-898f-f28204d74d5e",
+                "name": "List a folder",
+                "credentials": {
+                    "dropboxOAuth2Api": {
+                        "id": "xLWgq6UuPU3cQwvr",
+                        "name": "Dropbox account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "respondWith": "text",
+                    "responseBody": "={{ $json.query.challenge }}",
+                    "options": {
+                        "responseHeaders": {
+                            "entries": [
+                                {
+                                    "name": "Content-Type",
+                                    "value": "text/plain"
+                                },
+                                {
+                                    "name": "X-Content-Type-Options",
+                                    "value": "nosniff"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    368,
+                    -256
+                ],
+                "id": "c59864a6-0b6b-4342-b0a3-369c3ec72a9e",
+                "name": "registration challenge"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6b478857-de31-4b62-9f71-3ac2d7bacb55",
+                                "name": "config.user",
+                                "value": "={{ $json.body.delta.users[0] }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f6d019ba-4a82-471b-935f-039821b35755",
+                                "name": "config.acount",
+                                "value": "={{ $json.body.list_folder.accounts[0] }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    384,
+                    -112
+                ],
+                "id": "a15d24b6-bdae-4029-98ea-283005e40f2d",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "respondWith": "noData",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    592,
+                    -112
+                ],
+                "id": "3e9c69b3-f9e1-4c34-bd27-0d35c7ecaf9d",
+                "name": "Respond to Webhook"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "List a folder",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook": {
+                "main": [
+                    [
+                        {
+                            "node": "registration challenge",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Respond to Webhook",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 9a31da6c",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-21T18:56:37.364Z",
+        "updatedAt": "2026-06-21T18:56:40.310Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
