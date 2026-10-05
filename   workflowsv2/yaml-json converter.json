@@ -1,0 +1,162 @@
+{
+    "id": "BMPBRxrUb5tGNxyU",
+    "name": "yaml-json converter",
+    "active": true,
+    "activeVersionId": "acaf8c49-a4f4-421c-a184-4e1c3b31ea5d",
+    "createdAt": "2026-05-05T12:35:05.047Z",
+    "updatedAt": "2026-05-05T13:03:34.123Z",
+    "isArchived": false,
+    "versionId": "acaf8c49-a4f4-421c-a184-4e1c3b31ea5d",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "yamlValue"
+                        },
+                        {
+                            "name": "jsonValue",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "38c11cdf-11dc-47a1-a4fa-c7dbc2655ef9",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "function jsonToYaml(obj, indent = 0) {\n  const spacing = '  '.repeat(indent);\n  let yaml = '';\n\n  for (const key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      const value = obj[key];\n      const type = typeof value;\n\n      if (value !== null && type === 'object' && !Array.isArray(value)) {\n        // Handle Nested Objects\n        yaml += `${spacing}${key}:\\n${jsonToYaml(value, indent + 1)}`;\n      } else if (Array.isArray(value)) {\n        // Handle Arrays\n        yaml += `${spacing}${key}:\\n`;\n        value.forEach(item => {\n          if (typeof item === 'object') {\n            // Array of objects\n            const entries = Object.entries(item);\n            entries.forEach(([subKey, subVal], i) => {\n              const prefix = i === 0 ? '- ' : '  ';\n              yaml += `${spacing}  ${prefix}${subKey}: ${subVal}\\n`;\n            });\n          } else {\n            // Simple array\n            yaml += `${spacing}  - ${item}\\n`;\n          }\n        });\n      } else {\n        // Handle Primitive Values (string, number, boolean)\n        yaml += `${spacing}${key}: ${value}\\n`;\n      }\n    }\n  }\n  return yaml;\n}\n\nfunction yamlToJson(yamlString) {\n  const lines = yamlString.split('\\n');\n  const result = {};\n  const stack = [result];\n  const indentStack = [-1];\n\n  lines.forEach(line => {\n    // Skip empty lines or comments\n    if (!line.trim() || line.trim().startsWith('#')) return;\n\n    const indent = line.search(/\\S/);\n    const [key, ...valParts] = line.trim().split(':');\n    let value = valParts.join(':').trim();\n\n    // Handle basic types\n    if (value === 'true') value = true;\n    else if (value === 'false') value = false;\n    else if (!isNaN(value) && value !== '') value = Number(value);\n\n    // Pop the stack if we are moving back out of indentation\n    while (indent <= indentStack[indentStack.length - 1]) {\n      stack.pop();\n      indentStack.pop();\n    }\n\n    const currentObj = stack[stack.length - 1];\n\n    if (value === '') {\n      // It's a nested object\n      currentObj[key] = {};\n      stack.push(currentObj[key]);\n      indentStack.push(indent);\n    } else {\n      // It's a leaf node\n      currentObj[key] = value;\n    }\n  });\n\n  return JSON.stringify(result, null, 2);\n}\n\n\nfor (const item of $input.all()) {\n\n  if(item.jsonValue?.yaml){\n    item.json.jsonValue = JSON.parse(yamlToJson(item.json.yamlValue))\n  } else if( item.json?.json){\n    item.json.yamlValue = JSON.parse(jsonToYaml(item.json.jsonValue))\n  }\n  \n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                208,
+                0
+            ],
+            "id": "1d5be7c6-0661-465f-bb05-aae6533a1e94",
+            "name": "Code in JavaScript"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "yamlValue": "server:\n  port: 8080\n  enabled: true\ndatabase:\n  user: admin\n  name: main_db"
+                }
+            },
+            {
+                "json": {
+                    "jsonValue": {
+                        "@type": "Thing",
+                        "@id": "Some ID",
+                        "other": {
+                            "name": "Some name"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "BMPBRxrUb5tGNxyU",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-05T12:35:05.047Z",
+            "updatedAt": "2026-05-05T12:35:05.047Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "acaf8c49-a4f4-421c-a184-4e1c3b31ea5d",
+        "workflowId": "BMPBRxrUb5tGNxyU",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "yamlValue"
+                            },
+                            {
+                                "name": "jsonValue",
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "38c11cdf-11dc-47a1-a4fa-c7dbc2655ef9",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "jsCode": "function jsonToYaml(obj, indent = 0) {\n  const spacing = '  '.repeat(indent);\n  let yaml = '';\n\n  for (const key in obj) {\n    if (Object.prototype.hasOwnProperty.call(obj, key)) {\n      const value = obj[key];\n      const type = typeof value;\n\n      if (value !== null && type === 'object' && !Array.isArray(value)) {\n        // Handle Nested Objects\n        yaml += `${spacing}${key}:\\n${jsonToYaml(value, indent + 1)}`;\n      } else if (Array.isArray(value)) {\n        // Handle Arrays\n        yaml += `${spacing}${key}:\\n`;\n        value.forEach(item => {\n          if (typeof item === 'object') {\n            // Array of objects\n            const entries = Object.entries(item);\n            entries.forEach(([subKey, subVal], i) => {\n              const prefix = i === 0 ? '- ' : '  ';\n              yaml += `${spacing}  ${prefix}${subKey}: ${subVal}\\n`;\n            });\n          } else {\n            // Simple array\n            yaml += `${spacing}  - ${item}\\n`;\n          }\n        });\n      } else {\n        // Handle Primitive Values (string, number, boolean)\n        yaml += `${spacing}${key}: ${value}\\n`;\n      }\n    }\n  }\n  return yaml;\n}\n\nfunction yamlToJson(yamlString) {\n  const lines = yamlString.split('\\n');\n  const result = {};\n  const stack = [result];\n  const indentStack = [-1];\n\n  lines.forEach(line => {\n    // Skip empty lines or comments\n    if (!line.trim() || line.trim().startsWith('#')) return;\n\n    const indent = line.search(/\\S/);\n    const [key, ...valParts] = line.trim().split(':');\n    let value = valParts.join(':').trim();\n\n    // Handle basic types\n    if (value === 'true') value = true;\n    else if (value === 'false') value = false;\n    else if (!isNaN(value) && value !== '') value = Number(value);\n\n    // Pop the stack if we are moving back out of indentation\n    while (indent <= indentStack[indentStack.length - 1]) {\n      stack.pop();\n      indentStack.pop();\n    }\n\n    const currentObj = stack[stack.length - 1];\n\n    if (value === '') {\n      // It's a nested object\n      currentObj[key] = {};\n      stack.push(currentObj[key]);\n      indentStack.push(indent);\n    } else {\n      // It's a leaf node\n      currentObj[key] = value;\n    }\n  });\n\n  return JSON.stringify(result, null, 2);\n}\n\n\nfor (const item of $input.all()) {\n\n  if(item.jsonValue?.yaml){\n    item.json.jsonValue = JSON.parse(yamlToJson(item.json.yamlValue))\n  } else if( item.json?.json){\n    item.json.yamlValue = JSON.parse(jsonToYaml(item.json.jsonValue))\n  }\n  \n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    208,
+                    0
+                ],
+                "id": "1d5be7c6-0661-465f-bb05-aae6533a1e94",
+                "name": "Code in JavaScript"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Code in JavaScript",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version acaf8c49",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-05-05T13:03:34.125Z",
+        "updatedAt": "2026-05-05T13:03:36.049Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
