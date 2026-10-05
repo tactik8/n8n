@@ -1,0 +1,434 @@
+{
+    "id": "Aj1rvS7J8toGdjMB",
+    "name": "Test agent html form",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-10-04T18:53:06.409Z",
+    "updatedAt": "2026-10-04T18:54:20.022Z",
+    "isArchived": false,
+    "versionId": "f463f69e-9839-4851-b72f-2ed9f29bc03f",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dIAkYGJZamb3Rksb",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dIAkYGJZamb3Rksb",
+                    "cachedResultName": "agent generic V2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "testConversation",
+                        "tenantID": "textConversation1",
+                        "systemPrompt": "={{ $json.systemPrompt }}",
+                        "userPrompt": "={{ $json.message }}",
+                        "conversationID": "={{ $json.conversationID }}csagent",
+                        "sender": "={{ { \"@id\": \"https://www.test.com/csagent#person\"} }}",
+                        "recipient": "={{ { \"@id\": \"https://www.test.com/client#person\"} }}",
+                        "testMode": "={{ $('input').item.json.config.testMode }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "conversationID",
+                            "displayName": "conversationID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "systemPrompt",
+                            "displayName": "systemPrompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "userPrompt",
+                            "displayName": "userPrompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "sender",
+                            "displayName": "sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "recipient",
+                            "displayName": "recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "testMode",
+                            "displayName": "testMode",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "boolean",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                112,
+                -32
+            ],
+            "id": "fd4d1ed0-918a-4737-ae05-0ff38ba79e6c",
+            "name": "Call 'agent generic V2'1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "21b5b4a2-8587-4310-8e5c-281c8cae512e",
+                            "name": "conversationID",
+                            "value": "={{ $('input').item.json.conversationID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "db4ae1c9-5b7c-4509-97d3-826969b4360f",
+                            "name": "sender",
+                            "value": "={{ $('input').item.json.sender }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d2f1bf03-0a1a-429c-86ba-697098375862",
+                            "name": "message",
+                            "value": "={{ $json.message }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "817fb77e-335d-4f47-82fc-91f4e2ee654f",
+                            "name": "systemPrompt",
+                            "value": "You are a highly skilled Frontend Engineer and UI/UX Expert specializing in generating accessible, modern, and robust HTML forms based on user requirements. \n\nYour objective is to output clean, semantic HTML5, well-structured CSS (or a specified utility framework like Tailwind CSS), and necessary JavaScript for client-side validation.\n\n### 🛠️ Technical Requirements\n1. Semantic HTML5: Use appropriate form elements (<form>, <input>, <select>, <textarea>, <button>, <fieldset>, <legend>).\n2. Accessibility (a11y): \n   - Every input must have a corresponding, explicitly linked <label> using the `for` and `id` attributes.\n   - Use `aria-describedby` for error messages or helper text.\n   - Ensure high color contrast and keyboard navigability.\n3. Validation: Include HTML5 native validation attributes (`required`, `minlength`, `maxlength`, `pattern`, `min`, `max`) based on the field type.\n4. Responsive Design: Ensure the form looks great on mobile, tablet, and desktop screens.\n\n### 🎨 Design & Layout Defaults (Unless Specified Otherwise)\n- Use a clean, modern, minimalist aesthetic.\n- Group related fields together using logical sections or card layouts.\n- Input fields should have clear focus states (e.g., a colored outline).\n- Buttons must have clear hover and active states.\n\n### 📥 Input Processing\nAnalyze the user's request for:\n- Field names and types (e.g., Text, Email, Password, Date, Dropdown, Radio, Checkbox).\n- Constraints (e.g., \"Must be 18+ years old\", \"Password needs a special character\").\n- Styling preferences (e.g., \"Tailwind CSS\", \"Vanilla CSS\", \"Dark mode\").\n- Layout structure (e.g., \"Multi-step form\", \"Two-column layout\").\n\n### 📤 Output Format\nProvide only the code requested. Organize your output into distinct sections if necessary (HTML, CSS, JS) or deliver a single, self-contained HTML file. Wrap all code in appropriate markdown blocks. Include short, concise comments explaining complex validation or layout logic if needed.\n",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -112,
+                -32
+            ],
+            "id": "9c960f0c-f8a2-4cf4-b6e4-058fe407753d",
+            "name": "set cs agent"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "afa6a2f7-8e31-494a-925a-2612213fdca3",
+                            "name": "conversationID",
+                            "value": "={{ $json.conversationID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ec1a7ddf-2afb-4058-a845-30ac9acf2ae9",
+                            "name": "sender",
+                            "value": "=person",
+                            "type": "string"
+                        },
+                        {
+                            "id": "646be572-7aef-4696-be0a-6dd790d22720",
+                            "name": "message",
+                            "value": "={{ $('When chat message received').item.json.chatInput }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8af2e508-0a5c-43dd-b5a2-89a9201307e7",
+                            "name": "config.testMode",
+                            "value": "={{ $json.config.testMode }}",
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -336,
+                -32
+            ],
+            "id": "8602ea43-8b6c-44f7-aa76-8a0167d34c72",
+            "name": "input"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                560,
+                -32
+            ],
+            "id": "da3d8522-b1b9-4d60-9920-9ee92ec4aaa1",
+            "name": "output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "10ff4c42-630f-455e-ad0b-1460a099e2fa",
+                            "name": "conversationID",
+                            "value": "={{ $('input').item.json.conversationID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4c0c8b6f-3b4f-45a6-9593-db35d10f13fc",
+                            "name": "sender",
+                            "value": "=csagent",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9fceff51-5299-4b53-97f8-25140ed469ad",
+                            "name": "message",
+                            "value": "={{ $json.output.result.hasPart.sort((a,b)=> DateTime.fromISO(b.dateSent) - DateTime.fromISO(a.dateSent))[0].text }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4f156790-a402-41e0-b23a-86ce2e0dfabd",
+                            "name": "config",
+                            "value": "={{ $('input').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                336,
+                -32
+            ],
+            "id": "700437e9-a204-46c1-987d-a78f45c73557",
+            "name": "Edit Fields3"
+        },
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Go.",
+                "options": {
+                    "responseMode": "responseNodes"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.5,
+            "position": [
+                -784,
+                -32
+            ],
+            "id": "f633c76b-9fb8-4c51-b417-71338cca3ac4",
+            "name": "When chat message received",
+            "webhookId": "ae10b4bc-4a7d-4c39-a6d9-fdb589aa227a"
+        },
+        {
+            "parameters": {
+                "message": "={{  $json.message }}",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chat",
+            "typeVersion": 1.3,
+            "position": [
+                784,
+                -32
+            ],
+            "id": "e338d0ba-bf30-4a60-a4d4-8d3adeff8edd",
+            "name": "Chat",
+            "webhookId": "df248e06-50d4-4691-a87e-b92d4cd32baa"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "5d665809-1767-4d12-90c2-05a02a7f8ab3",
+                            "name": "conversationID",
+                            "value": "=https://www.test.com/conversation1#conversation{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "20b44777-6dfd-4c07-9faf-e06124e71f9d",
+                            "name": "config.testMode",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -560,
+                -32
+            ],
+            "id": "ea050c54-62b0-498d-a5ed-d0881d5f7610",
+            "name": "start"
+        }
+    ],
+    "connections": {
+        "Call 'agent generic V2'1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "set cs agent": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'agent generic V2'1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "input": {
+            "main": [
+                [
+                    {
+                        "node": "set cs agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "output": {
+            "main": [
+                [
+                    {
+                        "node": "Chat",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields3": {
+            "main": [
+                [
+                    {
+                        "node": "output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "start",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Chat": {
+            "main": [
+                []
+            ]
+        },
+        "start": {
+            "main": [
+                [
+                    {
+                        "node": "input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "Aj1rvS7J8toGdjMB",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-04T18:53:06.409Z",
+            "updatedAt": "2026-10-04T18:53:06.409Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
