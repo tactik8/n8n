@@ -1,0 +1,1561 @@
+{
+    "id": "L7OLOfbvHgCCEOKM",
+    "name": "System prompt engineer V1",
+    "active": true,
+    "activeVersionId": "8674dcdc-1475-4901-9fe0-435882596f4e",
+    "createdAt": "2026-06-12T13:27:35.177Z",
+    "updatedAt": "2026-09-18T12:10:13.133Z",
+    "isArchived": false,
+    "versionId": "f313f7bf-ef38-4fbc-a534-582f55112026",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "content"
+                        },
+                        {
+                            "name": "outputJsonSchema"
+                        },
+                        {
+                            "name": "conversationID"
+                        },
+                        {
+                            "name": "outputFormat"
+                        },
+                        {
+                            "name": "ambiguityHandling"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                176
+            ],
+            "id": "6f912cd7-6ee6-435a-bf62-b104b0e80c50",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{ JSON.parse($json.output) }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1024,
+                176
+            ],
+            "id": "e540a6dc-1a65-41bf-83e8-48b12e91b497",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1248,
+                272
+            ],
+            "id": "9eff65cb-9fb9-4c41-b6c2-9a674fff0de8",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1472,
+                272
+            ],
+            "id": "716880df-1637-4ee6-8581-c93a8a408081",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.systemPrompt",
+                            "value": "## System Prompt: AI Meta-Prompt Engineer\n\nYou are an expert AI Meta-Prompt Engineer. Your sole purpose is to design, iterate, and optimize highly effective system prompts for other AI agents based on user requirements. \n\nYour objective is to deeply understand the desired agent's persona, goals, constraints, formatting preferences, and edge cases, then synthesize this into a world-class system prompt.\n\n### JSON Output Schema\nYou must respond **strictly** with a single, valid JSON object. Do not include any conversational text, markdown wrappers (like ```json), or explanations outside of the JSON. The JSON must follow this exact structure:\n\n{\n  \"name\": \"string\", // The name of the prompt. Once assigned, it should never change.\n  \"status\": \"string\", // Must be exactly \"active\" or \"completed\"\n  \"questions\": [\"string\"], // An array of clarifying questions. Empty array if status is \"completed\".\n  \"result\": \"string\" // The draft or final system prompt. Can be empty on the very first turn if you need basic info first.\n}\n\n### Operational Guidelines\n\n1. **Information Gathering (Status: \"active\")**\n   - If the user's initial request is vague or missing crucial context, set `\"status\": \"active\"`.\n   - Use the `\"questions\"` array to ask targeted, high-leverage questions (e.g., about persona, constraints, input/output formats, or handling errors).\n   - Provide a preliminary draft in the `\"result\"` field based on what you *do* know, labeling it clearly as a draft.\n   - Provide a name for the prompt, using the following structure: Predicate Object Subject (if available), for example Url Extraction from String. Once set, the name should not change.  \n\n2. **Finalization (Status: \"completed\")**\n   - Once you have sufficient information to build a comprehensive, production-ready system prompt, set `\"status\": \"completed\"`.\n   - The `\"questions\"` array must be empty `[]`.\n   - The `\"result\"` field must contain the final, polished system prompt.\n\n3. **Prompt Design Best Practices**\n   - When generating the prompt in the `\"result\"` field, ensure it includes:\n     - **Role & Persona:** Who the agent is and its tone.\n     - **Objective:** What the agent is trying to achieve.\n     - **Constraints & Guardrails:** What the agent *must not* do.\n     - **Formatting/Style Guidelines:** How the output should be structured.\n     - **Few-Shot Examples:** (If applicable) To guide the agent's behavior.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0893d121-e304-4811-ae49-825af078c7bb",
+                            "name": "config.userPrompt",
+                            "value": "={{ $json.action.object.text }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4f704b7b-571d-43f0-a0c6-79dd657ef972",
+                            "name": "config.conversationID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.conversationID }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                448,
+                176
+            ],
+            "id": "6a5d8f7e-008e-4e64-b453-4858d57b14fa",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.text",
+                            "value": "={{ $json.content }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                224,
+                176
+            ],
+            "id": "dd3dfe85-3502-4a01-b566-3b8c6038d46a",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.config.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.config.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                672,
+                176
+            ],
+            "id": "3ab3a97a-e7e6-4857-97b2-2732d4aa06d8",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                688,
+                400
+            ],
+            "id": "98d12431-4a41-4dad-af92-e2ababd68d51",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "={{ $json.config.conversationID }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.4,
+            "position": [
+                816,
+                400
+            ],
+            "id": "92c1efa4-67b6-4a65-9108-81a4a0681c5b",
+            "name": "Simple Memory"
+        },
+        {
+            "parameters": {
+                "message": "={{ $('Call \\'System prompt engineer V1\\'').item.json.output.result.questions.join('\\n') }}",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chat",
+            "typeVersion": 1.3,
+            "position": [
+                672,
+                -432
+            ],
+            "id": "ebcd3b3e-a41a-42b2-bdd8-91c6ca455d06",
+            "name": "Chat",
+            "webhookId": "d74c9393-5d77-4cf3-a606-69efffe4d542"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "L7OLOfbvHgCCEOKM",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/L7OLOfbvHgCCEOKM",
+                    "cachedResultName": "System prompt engineer V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json.chatInput }}",
+                        "conversationID": "={{ $json.sessionId }}"
+                    },
+                    "matchingColumns": [
+                        "content"
+                    ],
+                    "schema": [
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "outputJsonSchema",
+                            "displayName": "outputJsonSchema",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "conversationID",
+                            "displayName": "conversationID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "outputFormat",
+                            "displayName": "outputFormat",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": true
+                        },
+                        {
+                            "id": "ambiguityHandling",
+                            "displayName": "ambiguityHandling",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                224,
+                -336
+            ],
+            "id": "73489542-b08c-40cc-be48-ee29e4c168f1",
+            "name": "Call 'System prompt engineer V1'"
+        },
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Prompt engineer. go.",
+                "options": {
+                    "responseMode": "responseNodes"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.4,
+            "position": [
+                0,
+                -336
+            ],
+            "id": "c64e3998-ca5f-4e01-b03d-d335b31db0ca",
+            "name": "When chat message received",
+            "webhookId": "833cf1e3-9cfe-4e8d-b8e1-5ab2d96bb214"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "03a5c27c-6866-44a2-bef3-4a882822182d",
+                            "leftValue": "={{ $json.output.result.status }}",
+                            "rightValue": "active",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                448,
+                -336
+            ],
+            "id": "37d1a9e5-1bb7-4691-8f0b-25dd71c73c47",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "message": "={{ $('Call \\'System prompt engineer V1\\'').item.json.output.result.result }}",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chat",
+            "typeVersion": 1.3,
+            "position": [
+                672,
+                -240
+            ],
+            "id": "df54d7aa-d9f8-411c-bb83-7ab64854eea4",
+            "name": "Chat1",
+            "webhookId": "d74c9393-5d77-4cf3-a606-69efffe4d542"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "58bfe1b3-c722-4796-a297-cb46795966a5",
+                            "leftValue": "={{ $json.action.result.status }}",
+                            "rightValue": "active",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEquals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1216,
+                -160
+            ],
+            "id": "ec43b2c7-b4fa-4ef6-8eec-50edfb6fbd12",
+            "name": "If1"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/prompts",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $json.action.result.name }}.md",
+                "fileContent": "={{ $json.action.result.result }}",
+                "commitMessage": "{{ $('Config').item.json.action.object.text }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                1664,
+                -64
+            ],
+            "id": "4c60adea-ea75-41c8-a435-7ec9190f1626",
+            "name": "Create a file2",
+            "webhookId": "5c2968ca-8bb1-486a-9c3d-2cb56f7d0b52",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/prompts",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $json.action.result.name }}.md",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                1440,
+                -160
+            ],
+            "id": "c3a9f21d-4732-4097-8e67-cabf5fb425e4",
+            "name": "Get a file",
+            "webhookId": "5c2968ca-8bb1-486a-9c3d-2cb56f7d0b52",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/prompts",
+                    "mode": "url"
+                },
+                "filePath": "=src/{{ $json.action.result.name }}.md",
+                "fileContent": "={{ $json.action.result.result }}",
+                "commitMessage": "={{ $('Config').item.json.action.object.text }}"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                1664,
+                -256
+            ],
+            "id": "1d17272a-5ec2-4a87-ae3e-24c260ef982c",
+            "name": "Edit a file",
+            "webhookId": "5c2968ca-8bb1-486a-9c3d-2cb56f7d0b52",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'System prompt engineer V1'": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'System prompt engineer V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Chat",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Chat1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If1": {
+            "main": [
+                [
+                    {
+                        "node": "Get a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Create a file2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "content": "An agent that extract values and units from a string.",
+                    "outputJsonSchema": null,
+                    "conversationID": "abc123"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "L7OLOfbvHgCCEOKM",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-12T13:27:35.177Z",
+            "updatedAt": "2026-06-12T13:27:35.177Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "8674dcdc-1475-4901-9fe0-435882596f4e",
+        "workflowId": "L7OLOfbvHgCCEOKM",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "content"
+                            },
+                            {
+                                "name": "outputJsonSchema"
+                            },
+                            {
+                                "name": "conversationID"
+                            },
+                            {
+                                "name": "outputFormat"
+                            },
+                            {
+                                "name": "ambiguityHandling"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    176
+                ],
+                "id": "6f912cd7-6ee6-435a-bf62-b104b0e80c50",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{ JSON.parse($json.output) }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1024,
+                    176
+                ],
+                "id": "e540a6dc-1a65-41bf-83e8-48b12e91b497",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1248,
+                    272
+                ],
+                "id": "9eff65cb-9fb9-4c41-b6c2-9a674fff0de8",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1472,
+                    272
+                ],
+                "id": "716880df-1637-4ee6-8581-c93a8a408081",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.systemPrompt",
+                                "value": "## System Prompt: AI Meta-Prompt Engineer\n\nYou are an expert AI Meta-Prompt Engineer. Your sole purpose is to design, iterate, and optimize highly effective system prompts for other AI agents based on user requirements. \n\nYour objective is to deeply understand the desired agent's persona, goals, constraints, formatting preferences, and edge cases, then synthesize this into a world-class system prompt.\n\n### JSON Output Schema\nYou must respond **strictly** with a single, valid JSON object. Do not include any conversational text, markdown wrappers (like ```json), or explanations outside of the JSON. The JSON must follow this exact structure:\n\n{\n  \"name\": \"string\", // The name of the prompt. Once assigned, it should never change.\n  \"status\": \"string\", // Must be exactly \"active\" or \"completed\"\n  \"questions\": [\"string\"], // An array of clarifying questions. Empty array if status is \"completed\".\n  \"result\": \"string\" // The draft or final system prompt. Can be empty on the very first turn if you need basic info first.\n}\n\n### Operational Guidelines\n\n1. **Information Gathering (Status: \"active\")**\n   - If the user's initial request is vague or missing crucial context, set `\"status\": \"active\"`.\n   - Use the `\"questions\"` array to ask targeted, high-leverage questions (e.g., about persona, constraints, input/output formats, or handling errors).\n   - Provide a preliminary draft in the `\"result\"` field based on what you *do* know, labeling it clearly as a draft.\n   - Provide a name for the prompt, using the following structure: Predicate Object Subject (if available), for example Url Extraction from String. Once set, the name should not change.  \n\n2. **Finalization (Status: \"completed\")**\n   - Once you have sufficient information to build a comprehensive, production-ready system prompt, set `\"status\": \"completed\"`.\n   - The `\"questions\"` array must be empty `[]`.\n   - The `\"result\"` field must contain the final, polished system prompt.\n\n3. **Prompt Design Best Practices**\n   - When generating the prompt in the `\"result\"` field, ensure it includes:\n     - **Role & Persona:** Who the agent is and its tone.\n     - **Objective:** What the agent is trying to achieve.\n     - **Constraints & Guardrails:** What the agent *must not* do.\n     - **Formatting/Style Guidelines:** How the output should be structured.\n     - **Few-Shot Examples:** (If applicable) To guide the agent's behavior.",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0893d121-e304-4811-ae49-825af078c7bb",
+                                "name": "config.userPrompt",
+                                "value": "={{ $json.action.object.text }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "4f704b7b-571d-43f0-a0c6-79dd657ef972",
+                                "name": "config.conversationID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.conversationID }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    448,
+                    176
+                ],
+                "id": "6a5d8f7e-008e-4e64-b453-4858d57b14fa",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "WebPage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.text",
+                                "value": "={{ $json.content }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    224,
+                    176
+                ],
+                "id": "dd3dfe85-3502-4a01-b566-3b8c6038d46a",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "={{ $json.config.userPrompt }}",
+                    "options": {
+                        "systemMessage": "={{ $json.config.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    672,
+                    176
+                ],
+                "id": "3ab3a97a-e7e6-4857-97b2-2732d4aa06d8",
+                "name": "AI Agent"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+                "typeVersion": 1.1,
+                "position": [
+                    688,
+                    400
+                ],
+                "id": "98d12431-4a41-4dad-af92-e2ababd68d51",
+                "name": "Google Gemini Chat Model",
+                "credentials": {
+                    "googlePalmApi": {
+                        "id": "zwRaxgOUTF4g2xjR",
+                        "name": "Google Gemini(PaLM) Api account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "sessionIdType": "customKey",
+                    "sessionKey": "={{ $json.config.conversationID }}"
+                },
+                "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+                "typeVersion": 1.4,
+                "position": [
+                    816,
+                    400
+                ],
+                "id": "92c1efa4-67b6-4a65-9108-81a4a0681c5b",
+                "name": "Simple Memory"
+            },
+            {
+                "parameters": {
+                    "message": "={{ $('Call \\'System prompt engineer V1\\'').item.json.output.result.questions.join('\\n') }}",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.chat",
+                "typeVersion": 1.3,
+                "position": [
+                    672,
+                    -432
+                ],
+                "id": "ebcd3b3e-a41a-42b2-bdd8-91c6ca455d06",
+                "name": "Chat",
+                "webhookId": "d74c9393-5d77-4cf3-a606-69efffe4d542"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "L7OLOfbvHgCCEOKM",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/L7OLOfbvHgCCEOKM",
+                        "cachedResultName": "System prompt engineer V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "content": "={{ $json.chatInput }}",
+                            "conversationID": "={{ $json.sessionId }}"
+                        },
+                        "matchingColumns": [
+                            "content"
+                        ],
+                        "schema": [
+                            {
+                                "id": "content",
+                                "displayName": "content",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "outputJsonSchema",
+                                "displayName": "outputJsonSchema",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "conversationID",
+                                "displayName": "conversationID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "outputFormat",
+                                "displayName": "outputFormat",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": true
+                            },
+                            {
+                                "id": "ambiguityHandling",
+                                "displayName": "ambiguityHandling",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": true
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    224,
+                    -336
+                ],
+                "id": "73489542-b08c-40cc-be48-ee29e4c168f1",
+                "name": "Call 'System prompt engineer V1'"
+            },
+            {
+                "parameters": {
+                    "public": true,
+                    "initialMessages": "Prompt engineer. go.",
+                    "options": {
+                        "responseMode": "responseNodes"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+                "typeVersion": 1.4,
+                "position": [
+                    0,
+                    -336
+                ],
+                "id": "c64e3998-ca5f-4e01-b03d-d335b31db0ca",
+                "name": "When chat message received",
+                "webhookId": "833cf1e3-9cfe-4e8d-b8e1-5ab2d96bb214"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "03a5c27c-6866-44a2-bef3-4a882822182d",
+                                "leftValue": "={{ $json.output.result.status }}",
+                                "rightValue": "active",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "equals"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    448,
+                    -336
+                ],
+                "id": "37d1a9e5-1bb7-4691-8f0b-25dd71c73c47",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "message": "={{ $('Call \\'System prompt engineer V1\\'').item.json.output.result.result }}",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.chat",
+                "typeVersion": 1.3,
+                "position": [
+                    672,
+                    -240
+                ],
+                "id": "df54d7aa-d9f8-411c-bb83-7ab64854eea4",
+                "name": "Chat1",
+                "webhookId": "d74c9393-5d77-4cf3-a606-69efffe4d542"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "58bfe1b3-c722-4796-a297-cb46795966a5",
+                                "leftValue": "={{ $json.action.result.status }}",
+                                "rightValue": "active",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notEquals"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    1248,
+                    80
+                ],
+                "id": "ec43b2c7-b4fa-4ef6-8eec-50edfb6fbd12",
+                "name": "If1"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/prompts",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $json.action.result.name }}.md",
+                    "fileContent": "={{ $json.action.result.result }}",
+                    "commitMessage": "{{ $('Config').item.json.action.object.text }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    1696,
+                    176
+                ],
+                "id": "4c60adea-ea75-41c8-a435-7ec9190f1626",
+                "name": "Create a file2",
+                "webhookId": "5c2968ca-8bb1-486a-9c3d-2cb56f7d0b52",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/prompts",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $json.action.result.name }}.md",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    1472,
+                    80
+                ],
+                "id": "c3a9f21d-4732-4097-8e67-cabf5fb425e4",
+                "name": "Get a file",
+                "webhookId": "5c2968ca-8bb1-486a-9c3d-2cb56f7d0b52",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                },
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/prompts",
+                        "mode": "url"
+                    },
+                    "filePath": "=src/{{ $json.action.result.name }}.md",
+                    "fileContent": "={{ $json.action.result.result }}",
+                    "commitMessage": "={{ $('Config').item.json.action.object.text }}"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    1696,
+                    -16
+                ],
+                "id": "1d17272a-5ec2-4a87-ae3e-24c260ef982c",
+                "name": "Edit a file",
+                "webhookId": "5c2968ca-8bb1-486a-9c3d-2cb56f7d0b52",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Google Gemini Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Simple Memory": {
+                "ai_memory": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_memory",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'System prompt engineer V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When chat message received": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'System prompt engineer V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Chat",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Chat1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If1": {
+                "main": [
+                    [
+                        {
+                            "node": "Get a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Create a file2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 8674dcdc",
+        "description": "",
+        "autosaved": false,
+        "createdAt": "2026-09-17T11:08:06.500Z",
+        "updatedAt": "2026-09-17T11:08:08.690Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
