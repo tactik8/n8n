@@ -1,0 +1,156 @@
+{
+    "id": "l2N8QfPt8NdJO6uy",
+    "name": "MCP WebPage V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-10-04T19:05:01.877Z",
+    "updatedAt": "2026-10-04T19:12:50.460Z",
+    "isArchived": false,
+    "versionId": "de94f373-39f1-45f6-af57-a0fd813e47b5",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "path": "8d929f48-2108-4932-aa3f-c941cf9c4d7b",
+                "instructions": "MCPP to save and retrieve webpage schema.org jsonld records.\n"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+            "typeVersion": 2.1,
+            "position": [
+                -64,
+                -240
+            ],
+            "id": "00fa667d-ac5c-45b1-b0e7-7f510502c7c3",
+            "name": "MCP Server Trigger",
+            "webhookId": "8d929f48-2108-4932-aa3f-c941cf9c4d7b"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "4cDANgr9IoqQIYQ3",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/4cDANgr9IoqQIYQ3",
+                    "cachedResultName": "MCP Tool Webpage get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('url', ``, 'string') }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                -32,
+                16
+            ],
+            "id": "55fb7d16-753d-43ec-8eb7-cdc8e76b861a",
+            "name": "Call 'MCP Tool Webpage get'"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "9QpLMhu1XROtH6ia",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/9QpLMhu1XROtH6ia",
+                    "cachedResultName": "MCP Tool Webpage save"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('url', ``, 'string') }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                208,
+                -16
+            ],
+            "id": "780fe626-b4d1-49c6-b645-444a7fd05756",
+            "name": "Call 'MCP Tool Webpage save'"
+        }
+    ],
+    "connections": {
+        "Call 'MCP Tool Webpage get'": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'MCP Tool Webpage save'": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "l2N8QfPt8NdJO6uy",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-04T19:05:01.877Z",
+            "updatedAt": "2026-10-04T19:05:01.877Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
