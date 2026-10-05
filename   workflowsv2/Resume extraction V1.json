@@ -1,0 +1,476 @@
+{
+    "id": "vgGKJTScjLPojNHv",
+    "name": "Resume extraction V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-04-10T15:28:57.699Z",
+    "updatedAt": "2026-05-01T13:55:45.076Z",
+    "isArchived": false,
+    "versionId": "dc13c59f-dada-4faa-8719-37b4edbe8629",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -1120,
+                -240
+            ],
+            "id": "7b7f3118-7e4e-4dc1-b1eb-e16677365069",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                            "name": "action.@type",
+                            "value": "SearchAction",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.object",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -896,
+                -240
+            ],
+            "id": "adabefe1-3e3c-47b7-b005-df46b0fc5a1e",
+            "name": "Action init"
+        },
+        {
+            "parameters": {
+                "bucketName": "triggers",
+                "fileKey": "={{ $json.Key }}"
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                112,
+                -240
+            ],
+            "id": "af713e08-4470-480d-a1c6-98e07e79b775",
+            "name": "Download a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "pdf",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.1,
+            "position": [
+                336,
+                -240
+            ],
+            "id": "dd4c2c5d-a337-4eb9-958c-f8f2d23916f1",
+            "name": "Extract from File"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Here is the file content: {{ $json.text }}",
+                "options": {
+                    "systemMessage": "Please extract the information from this resume and provide a markdown with the following structure:\n\n# Candidate Profile: [Full Name]\n\n## 1. Contact Information\n* **Email:** [Email Address]\n* **Phone:** [Phone Number]\n* **Location:** [City, State/Country]\n* **LinkedIn/Portfolio:** [URLs]\n\n## 2. Professional Summary\n> [2-3 sentence overview of their career identity]\n\n## 3. Technical Skills\n* **Languages/Tools:** [e.g., Python, SQL, AWS]\n* **Frameworks/Libraries:** [e.g., React, PyTorch]\n* **Soft Skills:** [e.g., Project Management, Leadership]\n\n## 4. Work Experience\n### [Job Title] | [Company Name]\n**Dates:** [MM/YYYY – MM/YYYY or Present]\n* **Key Achievement 1:** [Action verb] + [Task] + [Measurable Result]\n* **Key Achievement 2:** ...\n\n### [Job Title] | [Company Name]\n**Dates:** [MM/YYYY – MM/YYYY]\n* **Key Achievement 1:** ...\n\n## 5. Education\n* **Degree:** [e.g., B.S. in Computer Science]\n* **Institution:** [University Name]\n* **Graduation Date:** [MM/YYYY]\n\n## 6. Certifications & Projects\n* [Name of Cert/Project] - [Issuing Org/Brief Description]"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                560,
+                -240
+            ],
+            "id": "a6dcc14b-dbc0-4db6-93de-2b0868725bcc",
+            "name": "AI Agent2"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                640,
+                -16
+            ],
+            "id": "199a32af-c90b-47ae-9ba0-e278e1c9c5da",
+            "name": "Google Gemini Chat Model2",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "723110d0-b656-4ead-a235-882836b355c9",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                912,
+                -240
+            ],
+            "id": "da533242-4c36-483f-ab9f-0790db254a89",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "resumes2",
+                "fileName": "=extract_{{ $('Download a file').item.json.Key }}.md",
+                "binaryData": false,
+                "fileContent": "={{ $json.output }}",
+                "additionalFields": {},
+                "tagsUi": {
+                    "tagsValues": []
+                }
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1136,
+                -240
+            ],
+            "id": "f03fadfe-3b5c-4310-854b-033539362c65",
+            "name": "Upload a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8b982fe1-43fa-48d3-8606-abe3285b7f27",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "86e5e09c-5e30-42df-b678-6402b31e4d26",
+                            "name": "prompt",
+                            "value": "Please extract the information from this resume and provide a markdown with the following structure:  \n\n# Candidate Profile: [Full Name]  \n\n## 1. Contact Information \n* **Email:** [Email Address] \n* **Phone:** [Phone Number] \n* **Location:** [City, State/Country] \n* **LinkedIn/Portfolio: ** [URLs]  \n\n## 2. Professional Summary > [2-3 sentence overview of their career identity]  \n\n## 3. Technical Skills \n* **Languages/Tools:** [e.g., Python, SQL, AWS] \n* **Frameworks/Libraries:** [e.g., React, PyTorch] \n* **Soft Skills:** [e.g., Project Management, Leadership]  \n\n## 4. Work Experience \n\n### [Job Title] [Company Name] **Dates:** [MM/YYYY – MM/YYYY or Present] \n* **Key Achievement 1:** [Action verb] + [Task] + [Measurable Result] \n* **Key Achievement 2:** ...  \n\n### [Job Title] [Company Name] **Dates:** [MM/YYYY – MM/YYYY or Present] \n* **Key Achievement 1:** [Action verb] + [Task] + [Measurable Result] \n* **Key Achievement 2:** ...  \n\n## 5. Education \n* **Degree:** [e.g., B.S. in Computer Science]  * **Institution:** [University Name]  * **Graduation Date:** [MM/YYYY]  \n\n## 6. Certifications & Projects \n* [Name of Cert/Project] - [Issuing Org/Brief Description]",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -672,
+                -240
+            ],
+            "id": "c46dfc76-b230-4b8d-8b5d-bbff059dcb8c",
+            "name": "Prompt"
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "bucketName": "triggers",
+                "returnAll": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                -448,
+                -240
+            ],
+            "id": "d14b9192-59c9-430c-98f5-907dd5c7a754",
+            "name": "Get many files",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "mode": "markdownToHtml",
+                "markdown": "={{ $json.output }}",
+                "destinationKey": "html",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.markdown",
+            "typeVersion": 1,
+            "position": [
+                1104,
+                0
+            ],
+            "id": "f1fb7308-f873-4786-88ef-fee8b9d2587d",
+            "name": "Markdown"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "9f0db014-e13d-4581-8a76-fcd9298e8b48",
+                            "leftValue": "={{ $json.Key }}",
+                            "rightValue": ".pdf",
+                            "operator": {
+                                "type": "string",
+                                "operation": "endsWith"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.3,
+            "position": [
+                -240,
+                -240
+            ],
+            "id": "1bf8bb4b-c3a1-42a3-84f1-56f81dba3619",
+            "name": "Filter"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "resumes2",
+                "fileName": "=extract_{{ $('Download a file').item.json.Key }}.html",
+                "binaryData": false,
+                "fileContent": "={{ $json.html }}",
+                "additionalFields": {},
+                "tagsUi": {
+                    "tagsValues": []
+                }
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1360,
+                -16
+            ],
+            "id": "ac6dadd3-b450-4ae2-bc81-1bf15abff40f",
+            "name": "Upload a file1",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action init",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action init": {
+            "main": [
+                [
+                    {
+                        "node": "Prompt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download a file": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model2": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent2": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Upload a file",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Markdown",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prompt": {
+            "main": [
+                [
+                    {
+                        "node": "Get many files",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many files": {
+            "main": [
+                [
+                    {
+                        "node": "Filter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter": {
+            "main": [
+                [
+                    {
+                        "node": "Download a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Markdown": {
+            "main": [
+                [
+                    {
+                        "node": "Upload a file1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "vgGKJTScjLPojNHv",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-10T15:28:57.699Z",
+            "updatedAt": "2026-04-10T15:28:57.699Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
