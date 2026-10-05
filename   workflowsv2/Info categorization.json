@@ -1,0 +1,809 @@
+{
+    "id": "zkM5oNXQhrTRYSby",
+    "name": "Info categorization",
+    "active": true,
+    "activeVersionId": "f3f71bcf-35c0-496e-96a2-a04216f6c419",
+    "createdAt": "2026-06-11T19:18:18.345Z",
+    "updatedAt": "2026-06-11T19:47:52.669Z",
+    "isArchived": false,
+    "versionId": "f3f71bcf-35c0-496e-96a2-a04216f6c419",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        },
+                        {
+                            "name": "content"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -384,
+                0
+            ],
+            "id": "1cfd9148-9d31-43dd-a983-ab34a0947d6d",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ebdd4135-4ff8-4a7a-962a-aaea8edaf14e",
+                            "name": "userPrompt",
+                            "value": "=url:  {{ $('If').item.json.url }}\ncontent: \n```\n{{ $json.data }}\n```",
+                            "type": "string"
+                        },
+                        {
+                            "id": "13b632f7-7bf1-44fd-85bc-26cbe2f2d68a",
+                            "name": "systemPrompt",
+                            "value": "You are an expert data extraction agent specialized in Semantic Web technologies and Schema.org vocabularies.   Your task is to analyze the provided input (which could be text, a description, a URL snippet, or raw data), determine its core entity type, and represent it as a valid JSON-LD (JavaScript Object Notation for Linked Data) object.  ### Core Objectives: 1. **Identify the Entity:** Determine the most specific and accurate Schema.org type that represents the input (e.g., `Product`, `Event`, `Recipe`, `LocalBusiness`, `Person`, `Article`, etc.). 2. **Extract Attributes:** Map the information found in the input to the correct properties of that Schema.org type.  3. **Format as JSON-LD:** Output *only* a valid, well-formed JSON-LD object. Do not include any conversational filler, explanations, or Markdown code blocks outside of the requested JSON.  ### Constraints & Guidelines: - **Strict JSON-LD:** Every response must include the standard `\"@context\": \"https://schema.org\"` and the correct `\"@type\"`. - **Specificity:** Always prefer the most specific subtype available (e.g., use `Book` instead of `CreativeWork`, or `Restaurant` instead of `Organization` if the context allows). - **Data Integrity:** Only extract information that is explicitly stated or strongly implied by the input. Do not hallucinate or invent missing data fields (e.g., if a price isn't mentioned for a product, omit the `price` property entirely). - **Nested Objects:** Use appropriate nested schemas where necessary (e.g., a `Product` should have an `offers` property containing an `Offer` object; an `Event` should have a `location` property containing a `Place` or `PostalAddress`). - **Clean Output:** Return only the JSON object.   ### Example Output Structure: {   \"@context\": \"https://schema.org\",   \"@type\": \"IdentifiedType\",   \"name\": \"Name of the entity\",   ... (other relevant properties) }",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                432,
+                -96
+            ],
+            "id": "2afa2505-092a-4213-b628-518f1d6b00c0",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                608,
+                0
+            ],
+            "id": "fe261d8d-f0ee-4b04-88c9-c7063310cacd",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                480,
+                208
+            ],
+            "id": "8596561b-492b-4f7b-b52f-888d26dc694d",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8c8bb0f2-a95a-4334-8820-d54e77395991",
+                            "name": "output",
+                            "value": "={{ JSON.parse($json.output.replace('```json', '').replace('```', '')) }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                960,
+                0
+            ],
+            "id": "e3ae956c-669c-4b08-995b-6cd026bb9b29",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.4,
+            "position": [
+                896,
+                288
+            ],
+            "id": "ed086387-34d0-4f57-9f47-1945d0a41e54",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ebdd4135-4ff8-4a7a-962a-aaea8edaf14e",
+                            "name": "userPrompt",
+                            "value": "MOYEN-ORIENT\nConflit au Moyen-Orient\nTrump annule les frappes contre\nl’Iran et évoque un accord\n(Washington) Dans une nouvelle volte-face, Donald Trump a dit\njeudi qu\n’il annulait les frappes dont il menaçait l’Iran le jour même,\nassurant qu\n’il ne restait plus qu\n’à trouver « la date et le lieu » pour la\n« signature » d’\nun accord avec Téhéran.\nPublié à 6 h 25 | Mis à jour à 14 h 57\nL’agence de presse iranienne Fars, citant une source anonyme, a indiqué jeudi que\nTéhéran n’avait pas approuvé de texte sur un éventuel accord avec les États-Unis.\n« Aucun texte n’a été approuvé pour un protocole d’accord initial avec les ÉtatsUnis », a écrit Fars, citant une source présentée comme bien informée et proche de\nl’équipe de négociation iranienne.\nLe président américain avait annoncé la nouvelle sur son réseau Truth Social.\n« Prenant acte du fait que les discussions avec la République islamique d’Iran ont été\nLES BUREAUX DE L’AFP À TÉHÉRAN, WASHINGTON ET BEYROUTH\nAgence France-Presse\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 1/8\nvues et approuvées par les plus hautes autorités iraniennes, j’ai […] annulé les frappes\net les bombardements qui étaient prévus contre l’Iran ce soir », a-t-il écrit.\n« Les discussions et les derniers points ont été, sur le principe et dans les détails,\napprouvés par toutes les parties prenantes, y compris les États-Unis, Israël, l’Arabie\nsaoudite, les Émirats arabes unis, le Qatar, la Turquie, le Pakistan, Bahreïn, le Koweït,\nla Jordanie, l’Égypte et d’autres », a-t-il poursuivi, ajoutant que le blocus des ports\niraniens resterait en place jusqu’à ce que la « transaction soit finalisée ».\nCAPTURE D’ÉCRAN TIRÉE DE TRUTH SOCIAL\n« La date et le lieu de la signature seront annoncés bientôt », a assuré le président\naméricain.\n« T4rèas\nrftoirct\nl\n »es restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 2/8\nIl avait menacé jeudi de frapper « très fort » l’Iran et prendre le contrôle\nd’infrastructures pétrolières du pays, dont son principal terminal, l’île de Kharg.\n« Les États-Unis vont frapper l’Iran […] TRÈS FORT ce soir », avait déclaré le\nprésident américain sur sa plateforme Truth Social.\nCAPTURE D’ÉCRAN TIRÉE DE TRUTH SOCIAL\nLa volte-face rappelle le revirement spectaculaire opéré par le milliardaire républicain\nle 7 avril, quand il avait menacé le matin d’anéantir la « civilisation » iranienne tout\nentière, pour finalement annoncer le soir un cessez-le-feu.\nDonald Trump avait assuré jeudi dans un entretien matinal avec la chaîne Fox News\nqu’il y aurait « de nouveaux bombardements ce soir », « plus puissants ».\n« Dans un avenir assez proche, nous prendrons l’île de Kharg, ainsi que d’autres\ninfrastructures pétrolières, et nous prendrons le contrôle total de leurs marchés du\npétrole et du gaz », avait-il écrit en début de journée sur Truth Social.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 3/8\nL’Iran n’avait pas tardé à répliquer. « Si les États-Unis tentent une nouvelle fois de\nmener des attaques contre l’Iran héroïque, ils s’exposeront à une riposte plus sévère\nqu’auparavant, et les flammes de la guerre, en plus de semer l’insécurité dans la région,\ndeviendront plus étendues », avait déclaré le général Ali Abdollahi, chef des forces\narmées iraniennes, dans un communiqué.\nLe cessez-le-feu au Moyen-Orient, entré en vigueur le 8 avril et globalement respecté\njusqu’au week-end dernier, est désormais « pratiquement dénué de sens », avait\nestimé plus tôt la diplomatie iranienne, après de nouvelles frappes des deux camps\ndans la nuit.\n« Fossé profond »\nL’armée américaine a indiqué avoir ciblé « des installations de surveillance militaire,\ndes systèmes de communication et des sites de défense aérienne iraniens à travers\ntout le pays », quand la veille, seul le sud avait été visé.\nTrois personnes ont été blessées, d’après les médias iraniens qui ont fait état\nd’explosions sur l’île de Qeshm, à Minab, à Sirik et dans le port de Bandar Abbas (Sud)\nmais aussi dans des lieux bien plus proches de la capitale.\nL’Iran a riposté en tirant une vingtaine de missiles vers une base américaine à Azraq\nen Jordanie – tous interceptés – et a à nouveau ciblé les monarchies du Golfe.\nÀ Bahreïn, une enfant a été blessée par des débris de drone, les autorités signalant\nplus de 36 tirs de drones au total. Le Koweït a brièvement fermé son espace aérien, et\nrecensé 24 attaques iraniennes de drones ces dernières 48 heures.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 4/8\nPHOTO MINISTÈRE DE L’INTÉRIEUR DE BAHREÏN, FOURNIE PAR REUTERS\nUn pompier intervient à la suite d’attaques de drones iraniens, selon le ministère de l’Intérieur de Bahreïn, sur cette\nphoto publiée le 11 juin 2026.\n38\ne\n promesse\nMardi, Donald Trump avait promis un accord imminent avec l’Iran – pour la 38e\nfois\ndepuis le début du conflit selon un décompte de CNN –, avant de faire volte-face le\nlendemain, accusant les Iraniens de « mener en bateau » les États-Unis.\nLe très stratégique détroit d’Ormuz, par lequel passait avant la guerre un cinquième\ndes hydrocarbures consommés dans le monde, concentre à nouveau les tensions :\nl’autorité maritime iranienne a indiqué le fermer totalement « jusqu’à nouvel ordre »\nalors que le passage d’une vingtaine de navires par jour était jusque-là autorisé.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 5/8\nPHOTO PIGISTE, REUTERS\nDes navires sont à l’ancrage dans le détroit d’Ormuz, vus depuis Musandam, à Oman, le 11 juin 2026.\nL’Iran le verrouille depuis le début du conflit le 28 février, les États-Unis imposant en\nretour un blocus des ports iraniens.\nLe commandement américain pour la région (CENTCOM) a annoncé jeudi avoir\nneutralisé au large d’Oman un nouveau pétrolier tentant de passer outre. La salle des\nmachines a pris feu et l’équipage a été évacué.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 6/8\nPHOTO CENTCOM, FOURNIE PAR L’AGENCE FRANCE-PRESSE\nDeux missiles ont été tirés sur la salle des machines du Jalveer, qui bat pavillon de Guinée-Bissau\nLa veille, l’armée américaine avait ciblé un autre navire, tuant trois marins indiens.\nL’enjeu libanais\nCette aggravation de la situation dans le Golfe maintient les cours du pétrole à un\nniveau élevé. Jeudi, le baril de Brent de la mer du Nord, référence internationale,\névoluait autour de 92 dollars, contre 70 dollars avant la guerre.\nLe conflit avait repris dimanche quand l’Iran a lancé des missiles sur Israël, pour la\npremière fois depuis le début de la fragile trêve, en représailles à des frappes\nisraéliennes sur Beyrouth.\nTéhéran, parrain du Hezbollah libanais, insiste pour que tout accord pour mettre fin à\nla guerre au Moyen-Orient inclue le Liban, dont Washington voudrait traiter le sort à\npart.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 7/8\nPHOTO AGENCE FRANCE-PRESSE\nUne frappe israélienne sur le village de Kfar Tibnit, dans le sud du Liban\nIsraël avait riposté aux missiles iraniens, avant que les deux ennemis n’annoncent\nsuspendre les hostilités, comme réclamé par Donald Trump.\nLe Liban a été entraîné dans la guerre le 2 mars, quand le Hezbollah a visé le territoire\nisraélien en soutien à l’Iran. Depuis, Israël pilonne le pays voisin, disant vouloir\n« éliminer » le mouvement chiite.\nSes opérations ont tué plus de 3600 personnes, principalement dans le sud du pays,\noù son armée occupe désormais une partie du territoire.\n© La Presse Inc. Tous droits réservés.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 8/8",
+                            "type": "string"
+                        },
+                        {
+                            "id": "13b632f7-7bf1-44fd-85bc-26cbe2f2d68a",
+                            "name": "systemPrompt",
+                            "value": "You are an expert data extraction agent specialized in Semantic Web technologies and Schema.org vocabularies.   Your task is to analyze the provided input (which could be text, a description, a URL snippet, or raw data), determine its core entity type, and represent it as a valid JSON-LD (JavaScript Object Notation for Linked Data) object.  ### Core Objectives: 1. **Identify the Entity:** Determine the most specific and accurate Schema.org type that represents the input (e.g., `Product`, `Event`, `Recipe`, `LocalBusiness`, `Person`, `Article`, etc.). 2. **Extract Attributes:** Map the information found in the input to the correct properties of that Schema.org type.  3. **Format as JSON-LD:** Output *only* a valid, well-formed JSON-LD object. Do not include any conversational filler, explanations, or Markdown code blocks outside of the requested JSON.  ### Constraints & Guidelines: - **Strict JSON-LD:** Every response must include the standard `\"@context\": \"https://schema.org\"` and the correct `\"@type\"`. - **Specificity:** Always prefer the most specific subtype available (e.g., use `Book` instead of `CreativeWork`, or `Restaurant` instead of `Organization` if the context allows). - **Data Integrity:** Only extract information that is explicitly stated or strongly implied by the input. Do not hallucinate or invent missing data fields (e.g., if a price isn't mentioned for a product, omit the `price` property entirely). - **Nested Objects:** Use appropriate nested schemas where necessary (e.g., a `Product` should have an `offers` property containing an `Offer` object; an `Event` should have a `location` property containing a `Place` or `PostalAddress`). - **Clean Output:** Return only the JSON object.   ### Example Output Structure: {   \"@context\": \"https://schema.org\",   \"@type\": \"IdentifiedType\",   \"name\": \"Name of the entity\",   ... (other relevant properties) }",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                192,
+                -304
+            ],
+            "id": "13dfe585-6df8-4889-9d62-a9882d6ac4e9",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "model": "gemma3:4b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                576,
+                304
+            ],
+            "id": "cfd610f9-4f2f-4059-9a15-e19c0a4f64a5",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "9574c9a7-f581-42f3-bcbc-0b2b8c8a4529",
+                            "leftValue": "={{ $json.url }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                -176,
+                0
+            ],
+            "id": "32598762-ea17-4416-8a44-a67116292631",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                48,
+                -96
+            ],
+            "id": "f39870a0-b4b7-47fe-b58a-7324e7b3a3a4",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ebdd4135-4ff8-4a7a-962a-aaea8edaf14e",
+                            "name": "userPrompt",
+                            "value": "=url: {{ $('When Executed by Another Workflow').item.json.url }}\ncontent: \n```\n{{ $('When Executed by Another Workflow').item.json.content }}\n```",
+                            "type": "string"
+                        },
+                        {
+                            "id": "13b632f7-7bf1-44fd-85bc-26cbe2f2d68a",
+                            "name": "systemPrompt",
+                            "value": "You are an expert data extraction agent specialized in Semantic Web technologies and Schema.org vocabularies.   Your task is to analyze the provided input (which could be text, a description, a URL snippet, or raw data), determine its core entity type, and represent it as a valid JSON-LD (JavaScript Object Notation for Linked Data) object.  ### Core Objectives: 1. **Identify the Entity:** Determine the most specific and accurate Schema.org type that represents the input (e.g., `Product`, `Event`, `Recipe`, `LocalBusiness`, `Person`, `Article`, etc.). 2. **Extract Attributes:** Map the information found in the input to the correct properties of that Schema.org type.  3. **Format as JSON-LD:** Output *only* a valid, well-formed JSON-LD object. Do not include any conversational filler, explanations, or Markdown code blocks outside of the requested JSON.  ### Constraints & Guidelines: - **Strict JSON-LD:** Every response must include the standard `\"@context\": \"https://schema.org\"` and the correct `\"@type\"`. - **Specificity:** Always prefer the most specific subtype available (e.g., use `Book` instead of `CreativeWork`, or `Restaurant` instead of `Organization` if the context allows). - **Data Integrity:** Only extract information that is explicitly stated or strongly implied by the input. Do not hallucinate or invent missing data fields (e.g., if a price isn't mentioned for a product, omit the `price` property entirely). - **Nested Objects:** Use appropriate nested schemas where necessary (e.g., a `Product` should have an `offers` property containing an `Offer` object; an `Event` should have a `location` property containing a `Place` or `PostalAddress`). - **Clean Output:** Return only the JSON object.   ### Example Output Structure: {   \"@context\": \"https://schema.org\",   \"@type\": \"IdentifiedType\",   \"name\": \"Name of the entity\",   ... (other relevant properties) }",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                160,
+                80
+            ],
+            "id": "b4513d9e-c91b-4bbe-94d5-d6b3ac6efdf1",
+            "name": "Edit Fields3"
+        },
+        {
+            "parameters": {
+                "html": "={{ $json.data }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.markdown",
+            "typeVersion": 1,
+            "position": [
+                256,
+                -96
+            ],
+            "id": "087703f6-a3d6-4ded-8b43-a50d69337cd8",
+            "name": "Markdown"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                []
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                []
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request1": {
+            "main": [
+                [
+                    {
+                        "node": "Markdown",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields3": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Markdown": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://github.com/spech66/lifelogbb",
+                    "content": null
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "zkM5oNXQhrTRYSby",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-11T19:18:18.345Z",
+            "updatedAt": "2026-06-11T19:18:18.345Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "f3f71bcf-35c0-496e-96a2-a04216f6c419",
+        "workflowId": "zkM5oNXQhrTRYSby",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "url"
+                            },
+                            {
+                                "name": "content"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -384,
+                    0
+                ],
+                "id": "1cfd9148-9d31-43dd-a983-ab34a0947d6d",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "ebdd4135-4ff8-4a7a-962a-aaea8edaf14e",
+                                "name": "userPrompt",
+                                "value": "=url:  {{ $('If').item.json.url }}\ncontent: \n```\n{{ $json.data }}\n```",
+                                "type": "string"
+                            },
+                            {
+                                "id": "13b632f7-7bf1-44fd-85bc-26cbe2f2d68a",
+                                "name": "systemPrompt",
+                                "value": "You are an expert data extraction agent specialized in Semantic Web technologies and Schema.org vocabularies.   Your task is to analyze the provided input (which could be text, a description, a URL snippet, or raw data), determine its core entity type, and represent it as a valid JSON-LD (JavaScript Object Notation for Linked Data) object.  ### Core Objectives: 1. **Identify the Entity:** Determine the most specific and accurate Schema.org type that represents the input (e.g., `Product`, `Event`, `Recipe`, `LocalBusiness`, `Person`, `Article`, etc.). 2. **Extract Attributes:** Map the information found in the input to the correct properties of that Schema.org type.  3. **Format as JSON-LD:** Output *only* a valid, well-formed JSON-LD object. Do not include any conversational filler, explanations, or Markdown code blocks outside of the requested JSON.  ### Constraints & Guidelines: - **Strict JSON-LD:** Every response must include the standard `\"@context\": \"https://schema.org\"` and the correct `\"@type\"`. - **Specificity:** Always prefer the most specific subtype available (e.g., use `Book` instead of `CreativeWork`, or `Restaurant` instead of `Organization` if the context allows). - **Data Integrity:** Only extract information that is explicitly stated or strongly implied by the input. Do not hallucinate or invent missing data fields (e.g., if a price isn't mentioned for a product, omit the `price` property entirely). - **Nested Objects:** Use appropriate nested schemas where necessary (e.g., a `Product` should have an `offers` property containing an `Offer` object; an `Event` should have a `location` property containing a `Place` or `PostalAddress`). - **Clean Output:** Return only the JSON object.   ### Example Output Structure: {   \"@context\": \"https://schema.org\",   \"@type\": \"IdentifiedType\",   \"name\": \"Name of the entity\",   ... (other relevant properties) }",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    432,
+                    -96
+                ],
+                "id": "2afa2505-092a-4213-b628-518f1d6b00c0",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "={{ $json.userPrompt }}",
+                    "options": {
+                        "systemMessage": "={{ $json.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    608,
+                    0
+                ],
+                "id": "fe261d8d-f0ee-4b04-88c9-c7063310cacd",
+                "name": "AI Agent"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+                "typeVersion": 1.1,
+                "position": [
+                    480,
+                    208
+                ],
+                "id": "8596561b-492b-4f7b-b52f-888d26dc694d",
+                "name": "Google Gemini Chat Model",
+                "credentials": {
+                    "googlePalmApi": {
+                        "id": "zwRaxgOUTF4g2xjR",
+                        "name": "Google Gemini(PaLM) Api account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "8c8bb0f2-a95a-4334-8820-d54e77395991",
+                                "name": "output",
+                                "value": "={{ JSON.parse($json.output.replace('```json', '').replace('```', '')) }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    960,
+                    0
+                ],
+                "id": "e3ae956c-669c-4b08-995b-6cd026bb9b29",
+                "name": "Edit Fields1"
+            },
+            {
+                "parameters": {
+                    "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                    "options": {},
+                    "optimizeResponse": true,
+                    "responseType": "html",
+                    "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                    "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                    "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+                },
+                "type": "n8n-nodes-base.httpRequestTool",
+                "typeVersion": 4.4,
+                "position": [
+                    896,
+                    288
+                ],
+                "id": "ed086387-34d0-4f57-9f47-1945d0a41e54",
+                "name": "HTTP Request"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "ebdd4135-4ff8-4a7a-962a-aaea8edaf14e",
+                                "name": "userPrompt",
+                                "value": "MOYEN-ORIENT\nConflit au Moyen-Orient\nTrump annule les frappes contre\nl’Iran et évoque un accord\n(Washington) Dans une nouvelle volte-face, Donald Trump a dit\njeudi qu\n’il annulait les frappes dont il menaçait l’Iran le jour même,\nassurant qu\n’il ne restait plus qu\n’à trouver « la date et le lieu » pour la\n« signature » d’\nun accord avec Téhéran.\nPublié à 6 h 25 | Mis à jour à 14 h 57\nL’agence de presse iranienne Fars, citant une source anonyme, a indiqué jeudi que\nTéhéran n’avait pas approuvé de texte sur un éventuel accord avec les États-Unis.\n« Aucun texte n’a été approuvé pour un protocole d’accord initial avec les ÉtatsUnis », a écrit Fars, citant une source présentée comme bien informée et proche de\nl’équipe de négociation iranienne.\nLe président américain avait annoncé la nouvelle sur son réseau Truth Social.\n« Prenant acte du fait que les discussions avec la République islamique d’Iran ont été\nLES BUREAUX DE L’AFP À TÉHÉRAN, WASHINGTON ET BEYROUTH\nAgence France-Presse\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 1/8\nvues et approuvées par les plus hautes autorités iraniennes, j’ai […] annulé les frappes\net les bombardements qui étaient prévus contre l’Iran ce soir », a-t-il écrit.\n« Les discussions et les derniers points ont été, sur le principe et dans les détails,\napprouvés par toutes les parties prenantes, y compris les États-Unis, Israël, l’Arabie\nsaoudite, les Émirats arabes unis, le Qatar, la Turquie, le Pakistan, Bahreïn, le Koweït,\nla Jordanie, l’Égypte et d’autres », a-t-il poursuivi, ajoutant que le blocus des ports\niraniens resterait en place jusqu’à ce que la « transaction soit finalisée ».\nCAPTURE D’ÉCRAN TIRÉE DE TRUTH SOCIAL\n« La date et le lieu de la signature seront annoncés bientôt », a assuré le président\naméricain.\n« T4rèas\nrftoirct\nl\n »es restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 2/8\nIl avait menacé jeudi de frapper « très fort » l’Iran et prendre le contrôle\nd’infrastructures pétrolières du pays, dont son principal terminal, l’île de Kharg.\n« Les États-Unis vont frapper l’Iran […] TRÈS FORT ce soir », avait déclaré le\nprésident américain sur sa plateforme Truth Social.\nCAPTURE D’ÉCRAN TIRÉE DE TRUTH SOCIAL\nLa volte-face rappelle le revirement spectaculaire opéré par le milliardaire républicain\nle 7 avril, quand il avait menacé le matin d’anéantir la « civilisation » iranienne tout\nentière, pour finalement annoncer le soir un cessez-le-feu.\nDonald Trump avait assuré jeudi dans un entretien matinal avec la chaîne Fox News\nqu’il y aurait « de nouveaux bombardements ce soir », « plus puissants ».\n« Dans un avenir assez proche, nous prendrons l’île de Kharg, ainsi que d’autres\ninfrastructures pétrolières, et nous prendrons le contrôle total de leurs marchés du\npétrole et du gaz », avait-il écrit en début de journée sur Truth Social.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 3/8\nL’Iran n’avait pas tardé à répliquer. « Si les États-Unis tentent une nouvelle fois de\nmener des attaques contre l’Iran héroïque, ils s’exposeront à une riposte plus sévère\nqu’auparavant, et les flammes de la guerre, en plus de semer l’insécurité dans la région,\ndeviendront plus étendues », avait déclaré le général Ali Abdollahi, chef des forces\narmées iraniennes, dans un communiqué.\nLe cessez-le-feu au Moyen-Orient, entré en vigueur le 8 avril et globalement respecté\njusqu’au week-end dernier, est désormais « pratiquement dénué de sens », avait\nestimé plus tôt la diplomatie iranienne, après de nouvelles frappes des deux camps\ndans la nuit.\n« Fossé profond »\nL’armée américaine a indiqué avoir ciblé « des installations de surveillance militaire,\ndes systèmes de communication et des sites de défense aérienne iraniens à travers\ntout le pays », quand la veille, seul le sud avait été visé.\nTrois personnes ont été blessées, d’après les médias iraniens qui ont fait état\nd’explosions sur l’île de Qeshm, à Minab, à Sirik et dans le port de Bandar Abbas (Sud)\nmais aussi dans des lieux bien plus proches de la capitale.\nL’Iran a riposté en tirant une vingtaine de missiles vers une base américaine à Azraq\nen Jordanie – tous interceptés – et a à nouveau ciblé les monarchies du Golfe.\nÀ Bahreïn, une enfant a été blessée par des débris de drone, les autorités signalant\nplus de 36 tirs de drones au total. Le Koweït a brièvement fermé son espace aérien, et\nrecensé 24 attaques iraniennes de drones ces dernières 48 heures.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 4/8\nPHOTO MINISTÈRE DE L’INTÉRIEUR DE BAHREÏN, FOURNIE PAR REUTERS\nUn pompier intervient à la suite d’attaques de drones iraniens, selon le ministère de l’Intérieur de Bahreïn, sur cette\nphoto publiée le 11 juin 2026.\n38\ne\n promesse\nMardi, Donald Trump avait promis un accord imminent avec l’Iran – pour la 38e\nfois\ndepuis le début du conflit selon un décompte de CNN –, avant de faire volte-face le\nlendemain, accusant les Iraniens de « mener en bateau » les États-Unis.\nLe très stratégique détroit d’Ormuz, par lequel passait avant la guerre un cinquième\ndes hydrocarbures consommés dans le monde, concentre à nouveau les tensions :\nl’autorité maritime iranienne a indiqué le fermer totalement « jusqu’à nouvel ordre »\nalors que le passage d’une vingtaine de navires par jour était jusque-là autorisé.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 5/8\nPHOTO PIGISTE, REUTERS\nDes navires sont à l’ancrage dans le détroit d’Ormuz, vus depuis Musandam, à Oman, le 11 juin 2026.\nL’Iran le verrouille depuis le début du conflit le 28 février, les États-Unis imposant en\nretour un blocus des ports iraniens.\nLe commandement américain pour la région (CENTCOM) a annoncé jeudi avoir\nneutralisé au large d’Oman un nouveau pétrolier tentant de passer outre. La salle des\nmachines a pris feu et l’équipage a été évacué.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 6/8\nPHOTO CENTCOM, FOURNIE PAR L’AGENCE FRANCE-PRESSE\nDeux missiles ont été tirés sur la salle des machines du Jalveer, qui bat pavillon de Guinée-Bissau\nLa veille, l’armée américaine avait ciblé un autre navire, tuant trois marins indiens.\nL’enjeu libanais\nCette aggravation de la situation dans le Golfe maintient les cours du pétrole à un\nniveau élevé. Jeudi, le baril de Brent de la mer du Nord, référence internationale,\névoluait autour de 92 dollars, contre 70 dollars avant la guerre.\nLe conflit avait repris dimanche quand l’Iran a lancé des missiles sur Israël, pour la\npremière fois depuis le début de la fragile trêve, en représailles à des frappes\nisraéliennes sur Beyrouth.\nTéhéran, parrain du Hezbollah libanais, insiste pour que tout accord pour mettre fin à\nla guerre au Moyen-Orient inclue le Liban, dont Washington voudrait traiter le sort à\npart.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 7/8\nPHOTO AGENCE FRANCE-PRESSE\nUne frappe israélienne sur le village de Kfar Tibnit, dans le sud du Liban\nIsraël avait riposté aux missiles iraniens, avant que les deux ennemis n’annoncent\nsuspendre les hostilités, comme réclamé par Donald Trump.\nLe Liban a été entraîné dans la guerre le 2 mars, quand le Hezbollah a visé le territoire\nisraélien en soutien à l’Iran. Depuis, Israël pilonne le pays voisin, disant vouloir\n« éliminer » le mouvement chiite.\nSes opérations ont tué plus de 3600 personnes, principalement dans le sud du pays,\noù son armée occupe désormais une partie du territoire.\n© La Presse Inc. Tous droits réservés.\n4 articles restants ce mois-ci Se connecter gratuitement\n6/11/26, 3:21 PM Conflit au Moyen-Orient | Trump annule les frappes contre l’Iran et évoque un accord\nhttps://www.lapresse.ca/international/moyen-orient/2026-06-11/conflit-au-moyen-orient/trump-annule-les-frappes-contre-l-iran-et-evoque-un-accord.php 8/8",
+                                "type": "string"
+                            },
+                            {
+                                "id": "13b632f7-7bf1-44fd-85bc-26cbe2f2d68a",
+                                "name": "systemPrompt",
+                                "value": "You are an expert data extraction agent specialized in Semantic Web technologies and Schema.org vocabularies.   Your task is to analyze the provided input (which could be text, a description, a URL snippet, or raw data), determine its core entity type, and represent it as a valid JSON-LD (JavaScript Object Notation for Linked Data) object.  ### Core Objectives: 1. **Identify the Entity:** Determine the most specific and accurate Schema.org type that represents the input (e.g., `Product`, `Event`, `Recipe`, `LocalBusiness`, `Person`, `Article`, etc.). 2. **Extract Attributes:** Map the information found in the input to the correct properties of that Schema.org type.  3. **Format as JSON-LD:** Output *only* a valid, well-formed JSON-LD object. Do not include any conversational filler, explanations, or Markdown code blocks outside of the requested JSON.  ### Constraints & Guidelines: - **Strict JSON-LD:** Every response must include the standard `\"@context\": \"https://schema.org\"` and the correct `\"@type\"`. - **Specificity:** Always prefer the most specific subtype available (e.g., use `Book` instead of `CreativeWork`, or `Restaurant` instead of `Organization` if the context allows). - **Data Integrity:** Only extract information that is explicitly stated or strongly implied by the input. Do not hallucinate or invent missing data fields (e.g., if a price isn't mentioned for a product, omit the `price` property entirely). - **Nested Objects:** Use appropriate nested schemas where necessary (e.g., a `Product` should have an `offers` property containing an `Offer` object; an `Event` should have a `location` property containing a `Place` or `PostalAddress`). - **Clean Output:** Return only the JSON object.   ### Example Output Structure: {   \"@context\": \"https://schema.org\",   \"@type\": \"IdentifiedType\",   \"name\": \"Name of the entity\",   ... (other relevant properties) }",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    192,
+                    -304
+                ],
+                "id": "13dfe585-6df8-4889-9d62-a9882d6ac4e9",
+                "name": "Edit Fields2"
+            },
+            {
+                "parameters": {
+                    "model": "gemma3:4b",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+                "typeVersion": 1,
+                "position": [
+                    576,
+                    304
+                ],
+                "id": "cfd610f9-4f2f-4059-9a15-e19c0a4f64a5",
+                "name": "Ollama Chat Model",
+                "credentials": {
+                    "ollamaApi": {
+                        "id": "eYA4JvgcNcu0q3Nd",
+                        "name": "Ollama account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "9574c9a7-f581-42f3-bcbc-0b2b8c8a4529",
+                                "leftValue": "={{ $json.url }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notEmpty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    -176,
+                    0
+                ],
+                "id": "32598762-ea17-4416-8a44-a67116292631",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "url": "={{ $json.url }}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    48,
+                    -96
+                ],
+                "id": "f39870a0-b4b7-47fe-b58a-7324e7b3a3a4",
+                "name": "HTTP Request1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "ebdd4135-4ff8-4a7a-962a-aaea8edaf14e",
+                                "name": "userPrompt",
+                                "value": "=url: {{ $('When Executed by Another Workflow').item.json.url }}\ncontent: \n```\n{{ $('When Executed by Another Workflow').item.json.content }}\n```",
+                                "type": "string"
+                            },
+                            {
+                                "id": "13b632f7-7bf1-44fd-85bc-26cbe2f2d68a",
+                                "name": "systemPrompt",
+                                "value": "You are an expert data extraction agent specialized in Semantic Web technologies and Schema.org vocabularies.   Your task is to analyze the provided input (which could be text, a description, a URL snippet, or raw data), determine its core entity type, and represent it as a valid JSON-LD (JavaScript Object Notation for Linked Data) object.  ### Core Objectives: 1. **Identify the Entity:** Determine the most specific and accurate Schema.org type that represents the input (e.g., `Product`, `Event`, `Recipe`, `LocalBusiness`, `Person`, `Article`, etc.). 2. **Extract Attributes:** Map the information found in the input to the correct properties of that Schema.org type.  3. **Format as JSON-LD:** Output *only* a valid, well-formed JSON-LD object. Do not include any conversational filler, explanations, or Markdown code blocks outside of the requested JSON.  ### Constraints & Guidelines: - **Strict JSON-LD:** Every response must include the standard `\"@context\": \"https://schema.org\"` and the correct `\"@type\"`. - **Specificity:** Always prefer the most specific subtype available (e.g., use `Book` instead of `CreativeWork`, or `Restaurant` instead of `Organization` if the context allows). - **Data Integrity:** Only extract information that is explicitly stated or strongly implied by the input. Do not hallucinate or invent missing data fields (e.g., if a price isn't mentioned for a product, omit the `price` property entirely). - **Nested Objects:** Use appropriate nested schemas where necessary (e.g., a `Product` should have an `offers` property containing an `Offer` object; an `Event` should have a `location` property containing a `Place` or `PostalAddress`). - **Clean Output:** Return only the JSON object.   ### Example Output Structure: {   \"@context\": \"https://schema.org\",   \"@type\": \"IdentifiedType\",   \"name\": \"Name of the entity\",   ... (other relevant properties) }",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    160,
+                    80
+                ],
+                "id": "b4513d9e-c91b-4bbe-94d5-d6b3ac6efdf1",
+                "name": "Edit Fields3"
+            },
+            {
+                "parameters": {
+                    "html": "={{ $json.data }}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.markdown",
+                "typeVersion": 1,
+                "position": [
+                    256,
+                    -96
+                ],
+                "id": "087703f6-a3d6-4ded-8b43-a50d69337cd8",
+                "name": "Markdown"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Google Gemini Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request": {
+                "ai_tool": [
+                    []
+                ]
+            },
+            "Ollama Chat Model": {
+                "ai_languageModel": [
+                    []
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "HTTP Request1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Edit Fields3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request1": {
+                "main": [
+                    [
+                        {
+                            "node": "Markdown",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields3": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Markdown": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version f3f71bcf",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-11T19:47:52.674Z",
+        "updatedAt": "2026-06-11T19:48:33.249Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
