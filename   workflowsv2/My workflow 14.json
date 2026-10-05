@@ -1,0 +1,176 @@
+{
+    "id": "LDtPnDtbrybwA3gu",
+    "name": "My workflow 14",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-06T14:09:01.559Z",
+    "updatedAt": "2026-07-06T15:05:38.592Z",
+    "isArchived": false,
+    "versionId": "00aec78b-bf9d-4c33-9c28-e89090149269",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "ab1c6fb6-8571-4791-ba16-566e54fbd1d1",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "511d0134-b768-4665-8ca8-ad8763d3614f",
+                            "name": "systemPrompt",
+                            "value": "You are a record keeper using the basic memory mcp. You use the project  'test' and directory 'test' for managing information. .",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d99c483f-5eda-4eab-bbe4-7b2ce522acee",
+                            "name": "userPrompt",
+                            "value": "Add a note to duchesnay re new it director is patrick dallaire",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                224,
+                0
+            ],
+            "id": "b091ea80-bb59-4fbc-b2c0-1175b05772e9",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                448,
+                0
+            ],
+            "id": "de7b7134-b052-4e01-8364-6720dabfdb85",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "endpointUrl": "https://basicmemory.tactik8.com/mcp",
+                "serverTransport": "sse",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1.3,
+            "position": [
+                672,
+                272
+            ],
+            "id": "8440ff7c-643c-4266-b2dc-8950b8d92388",
+            "name": "MCP Client"
+        },
+        {
+            "parameters": {
+                "model": "gemma4:e2b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                320,
+                208
+            ],
+            "id": "e4e4f90a-8c5e-4c01-a3b7-9d45769f2edc",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MCP Client": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "LDtPnDtbrybwA3gu",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-06T14:09:01.559Z",
+            "updatedAt": "2026-07-06T14:09:01.559Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
