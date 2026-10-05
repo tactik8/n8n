@@ -1,0 +1,487 @@
+{
+    "id": "JHEKHuEG5ZxogCdI",
+    "name": "Resume analysis V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-04-13T19:50:33.501Z",
+    "updatedAt": "2026-05-01T13:55:01.929Z",
+    "isArchived": false,
+    "versionId": "c3ca5cff-0fe1-4891-b65e-5e5f2a0ea27b",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -1120,
+                -240
+            ],
+            "id": "29634a95-52f4-4cb8-b640-e2658be10a1c",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                            "name": "action.@type",
+                            "value": "SearchAction",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.object",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -896,
+                -240
+            ],
+            "id": "2b11eea5-9d36-41ff-8229-87e99d9d088d",
+            "name": "Action init"
+        },
+        {
+            "parameters": {
+                "bucketName": "triggers",
+                "fileKey": "={{ $json.Key }}"
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                -16,
+                -240
+            ],
+            "id": "74b26fdb-bf73-4c1d-b1e1-bf56b7498e3a",
+            "name": "Download a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "pdf",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.1,
+            "position": [
+                400,
+                -240
+            ],
+            "id": "dc77ead0-4d72-4f29-b914-75f4b9386dd9",
+            "name": "Extract from File"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Resume: \n```\n{{ $json.data }}\n```\n\nJob description: \n```\n{{ $('Prompt').item.json.jobDescription }}\n```",
+                "options": {
+                    "systemMessage": "={{ $('Prompt').item.json.prompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                832,
+                -240
+            ],
+            "id": "fccf392e-c427-455b-8d25-e212201466c2",
+            "name": "AI Agent2"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                768,
+                16
+            ],
+            "id": "681a0b6b-1a1d-4b3c-b8af-f427119ab66a",
+            "name": "Google Gemini Chat Model2",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "723110d0-b656-4ead-a235-882836b355c9",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1376,
+                -256
+            ],
+            "id": "31ce38f9-ccb2-4523-a2ee-05837d1792cc",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "resumes2",
+                "fileName": "=extract_{{ $('Download a file').item.json.Key }}.md",
+                "binaryData": false,
+                "fileContent": "={{ $json.output }}",
+                "additionalFields": {},
+                "tagsUi": {
+                    "tagsValues": []
+                }
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1552,
+                -400
+            ],
+            "id": "750ccc24-efcc-44c2-9dc4-c291fbca753c",
+            "name": "Upload a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8b982fe1-43fa-48d3-8606-abe3285b7f27",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "86e5e09c-5e30-42df-b678-6402b31e4d26",
+                            "name": "prompt",
+                            "value": "# Role: You are a recruiting expert known to be tough and demanding. \n\n# Task:  Evaluate the resume provided to the job description and provide an evaluation from 1 to 5 on these elements:\n\n- industry experience\n- technical competencies\n- business competencies\n- behavioural competencies\n- culture fit\n- personality fit\n\nAlso provide a list of strengths and weaknesses of the candidates\n\nFinally, provide an overall score from 1 to 5 with explanation. \n\n# constraints\nKeep sentences short. \nDon't provide opinion, only facts. \nBase the evaluation on the experience, not on the claims on the resume. \n",
+                            "type": "string"
+                        },
+                        {
+                            "id": "600147b2-532d-4bb7-981b-63c6db2c9a53",
+                            "name": "jobDescription",
+                            "value": "We are currently looking for an IT Director who will set the strategic technology vision for Duchesnay Pharmaceutical group. This role oversees the 3 core pillars —Architecture, Digital Transformation, and Infrastructure & Operations to ensure technology accelerates business performance and organizational growth. The person in this role will translate business priorities into a clear technology roadmap and build a high-performing teams where IT operates as a strategic partner. Key Responsibilities  Define and execute a 3-year technology roadmap aligned with business goals Balance competing priorities between operations and driving transformation Ensure governance, risk, and compliance obligations are met across 3 pillars Manage & oversee IT budget (CapEx & OpEx) and key vendor relationships Mentor/coach the IT teams Establish and report departmental KPIs Maintain a disaster recovery and business continuity strategy Advise management on emerging technologies and digital trends Key Competencies  Strategic vision with the ability to turn business into actionable technology plans Strong budget and vendor management skills Comfort with ambiguity and skilled at solving complex problems Proven ability to lead, inspire and develop high preforming teams Effective at setting priorities, delegating and managing cross functional projects Committed to continuous learning and staying current with new technologies Required qualifications  10 years+ in IT leadership in a similar role; hands-on background in IT systems administration A university degree in IT management or equivalent Pharma or regulated industry experience considered a strong asset Fluency in French and English (spoken and written) – required due to interactions with national and international partners Technical Knowledge  Infrastructure: Windows environment, virtualization, networking, hardware lifecycles Microsoft Ecosystem: Active Directory, Group Policy, DNS, DHCP, Exchange and Office suite  Security: Authentication, authorization, IT security, and AI tools Operations: Telecommunications, hardware and software procurement and vendor management",
+                            "type": "string"
+                        },
+                        {
+                            "id": "bfc9ea89-d08b-41e4-9f9f-2cd5fcb2c5fd",
+                            "name": "promptOld",
+                            "value": "# Role: You are a recruiting expert.   # Task:  Evaluate the provided resume on these 25 competencies using a scale of 1 to 5.  Focus on the work experiences that demonstrate the competencies. Don't consider affirmations not related to a specific experience.  We want a factual analysis, not the opinion of someone.   ## Evaluation scale 1 - Needs Improvement/Below Expectations: Employee consistently fails to meet standards. 2 - Developing/Approaching Expectations: Employee shows progress but requires more training or experience. 3 - Meets Expectations/Competent: Employee meets the requirements of the role efficiently. 4 - Exceeds Expectations/Skilled: Employee frequently goes above requirements. 5 - Expert/Role Model: Employee consistently sets new standards and acts as a mentor.  ## Evaluation criteria Technical -Understanding existing systems and technology -Designing and developing applications -Applying procedures, tools and methods -Integrating systems -Designing technical architecture -Understanding emerging technologies Business -Understanding business practices and processes -Understanding business organization, politics and culture -Behaving commercially -Understanding and analyzing competitive situation -Managing projects -Managing change from IT applications -Planning prioritising and administering work -Communicating, listening and gathering information -Focusing on customer Behavioral -Leading, inspiring and building trust -Thinking creatively and innvoating -Focusing on results -Thinking strategically -Coaching, delegating and developing -Building relationships, team working -Influencing and persuading -Principled negotiating -Resolving conflicts and problems -Being adaptable   # output format provide a json record with  - category: the competency category (technical, business, behavioral) - competency: the competency name - evaluation: the score from 1 to 5  - comment: a brief explanation for the score  # constraints If a competency cannot be evaluated, leave blank",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -672,
+                -240
+            ],
+            "id": "ebe3f7ac-4bb7-499b-8cf3-3b4b04c387c8",
+            "name": "Prompt"
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "bucketName": "triggers",
+                "returnAll": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                -448,
+                -240
+            ],
+            "id": "73bf4197-cd46-45b2-9ec1-0dba686f8de3",
+            "name": "Get many files",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "resumes2",
+                "fileName": "=evaluation_{{ $('Download a file').item.json.Key }}.html",
+                "binaryData": false,
+                "fileContent": "={{ $json.data }}",
+                "additionalFields": {},
+                "tagsUi": {
+                    "tagsValues": []
+                }
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                2080,
+                0
+            ],
+            "id": "3b142d5d-219c-4498-9862-f872fd83fe6d",
+            "name": "Upload a file1",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                1136,
+                160
+            ],
+            "id": "e54ddfd0-e790-4655-a56c-b712a01bd861",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "keep": "lastItems"
+            },
+            "type": "n8n-nodes-base.limit",
+            "typeVersion": 1,
+            "position": [
+                192,
+                -240
+            ],
+            "id": "d048f93b-9914-4e4e-9fc8-43de734528d3",
+            "name": "Limit"
+        },
+        {
+            "parameters": {
+                "mode": "markdownToHtml",
+                "markdown": "={{ $json.output }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.markdown",
+            "typeVersion": 1,
+            "position": [
+                1760,
+                -128
+            ],
+            "id": "2c532eac-e10c-4dc6-9291-3eebc0c31944",
+            "name": "Markdown"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action init",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action init": {
+            "main": [
+                [
+                    {
+                        "node": "Prompt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download a file": {
+            "main": [
+                [
+                    {
+                        "node": "Limit",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model2": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent2": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Markdown",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prompt": {
+            "main": [
+                [
+                    {
+                        "node": "Get many files",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many files": {
+            "main": [
+                [
+                    {
+                        "node": "Download a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                []
+            ]
+        },
+        "Limit": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Markdown": {
+            "main": [
+                [
+                    {
+                        "node": "Upload a file1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "JHEKHuEG5ZxogCdI",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-13T19:50:33.501Z",
+            "updatedAt": "2026-04-13T19:50:33.501Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
