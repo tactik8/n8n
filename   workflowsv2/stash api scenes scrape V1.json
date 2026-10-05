@@ -1,0 +1,687 @@
+{
+    "id": "vzQtXhdgixxRdxKb",
+    "name": "stash api scenes scrape V1",
+    "active": true,
+    "activeVersionId": "94731ba6-1e47-4843-93d5-27080133ef1d",
+    "createdAt": "2026-04-10T13:16:43.906Z",
+    "updatedAt": "2026-04-13T16:35:13.268Z",
+    "isArchived": false,
+    "versionId": "c64e338a-46d8-4063-af92-e4bbc1472bfa",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -400,
+                -1024
+            ],
+            "id": "6648b921-4df3-4a05-9eed-1d03a03e517c",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2c816eb8-3e55-46e0-89c0-26a433545b31",
+                            "name": "url",
+                            "value": "https://xhamster.com/videos/first-threesome-milf-gets-it-rough-from-husband-and-best-friend-xhTL92B",
+                            "type": "string"
+                        },
+                        {
+                            "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                            "name": "ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                            "name": "apiUrl",
+                            "value": "http://192.168.2.243:9999/graphql",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -176,
+                -1024
+            ],
+            "id": "5218d39b-beac-47e6-9f92-20944e3a925c",
+            "name": "Init"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n    \"query\": \"\\n      query FindSceneByURL($url: String!) {\\n        findScenes(\\n          scene_filter: { url: { value: $url, modifier: EQUALS } }\\n          filter: { per_page: 1 }\\n        ) {\\n          scenes {\\n            id\\n            title\\n            url\\n            date\\n            created_at\\n          }\\n        }\\n      }\\n    \",\n    \"variables\": {\n        \"url\": \"{{ $json.url }}\"\n    }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                48,
+                -1024
+            ],
+            "id": "0aa64d25-bb3b-48b1-bf86-e6981ea066c3",
+            "name": "Find scene by url"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "2e8151e2-67a8-4a3d-ac32-2e697316d940",
+                            "leftValue": "={{ $json.data.findScenes.scenes }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "array",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                272,
+                -1024
+            ],
+            "id": "54532995-a5e7-472e-8065-26a52f239f2f",
+            "name": "If2"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "fa509efe-7663-4ee9-99aa-34aea48e76e3",
+                            "leftValue": "={{ $json.data.findJob.status }}",
+                            "rightValue": "FINISHED",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1664,
+                -1088
+            ],
+            "id": "e2cdd78b-e0de-429b-97c0-90230a87f1ec",
+            "name": "If3"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1.1,
+            "position": [
+                1888,
+                -928
+            ],
+            "id": "9dfc3227-961b-4c0c-bfe7-c2e08fc36c77",
+            "name": "Wait2",
+            "webhookId": "8b06efa2-46a9-42fd-8a19-2388c228a0d2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": []
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1888,
+                -1184
+            ],
+            "id": "15f7ce86-05e9-4d8f-a5d1-d7938db948b7",
+            "name": "Edit Fields6"
+        },
+        {
+            "parameters": {
+                "action": "generate"
+            },
+            "type": "n8n-nodes-base.crypto",
+            "typeVersion": 2,
+            "position": [
+                496,
+                -1024
+            ],
+            "id": "d12688df-fb2f-4f8c-b82e-f9e00dc56eb7",
+            "name": "Crypto2"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:9999/graphql",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n    \"query\": \"\\n      mutation RunPluginOperation($plugin_id: ID!, $args: Map) {\\n        runPluginOperation(plugin_id: $plugin_id, args: $args)\\n      }\\n    \",\n    \"variables\": {\n        \"plugin_id\": \"stash-downloader\",\n        \"args\": {\n            \"mode\": \"read_result\",\n            \"result_id\": \"{{ $json.result_id }}\"\n        }\n    }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                2112,
+                -1184
+            ],
+            "id": "d5ed394b-772a-410d-aea6-b78287d7434b",
+            "name": "Read Get Metadata2"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n    \"query\": \"\\n      mutation RunPluginTask($plugin_id: ID!, $task_name: String, $args_map: Map) {\\n        runPluginTask(plugin_id: $plugin_id, task_name: $task_name, args_map: $args_map)\\n      }\\n    \",\n    \"variables\": {\n        \"plugin_id\": \"stash-downloader\",\n        \"task_name\": \"Download Video\",\n        \"args_map\": {\n            \"mode\": \"download\",\n            \"url\": \"{{ $json.url }}\",\n            \"fallback_url\": \"{{ $json.url }}\",\n            \"output_dir\": \"/media_libraries/media2/videos\",\n            \"quality\": \"best\",\n            \"result_id\": \"{{ $json.result_id }}\",\n            \"progress_id\": \"1776095248696-qztiqjp\",\n            \"proxy\": \"http://192.168.2.243:8888\",\n            \"ytdlp_path\": \"\"\n        }\n    }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                944,
+                -1024
+            ],
+            "id": "ca5f6ffb-aee1-4204-90fa-f081aff583bf",
+            "name": "Submit Download1"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:9999/graphql",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n    \"query\": \"\\n      query FindJob($input: FindJobInput!) {\\n        findJob(input: $input) {\\n          id\\n          status\\n          progress\\n          error\\n          description\\n        }\\n      }\\n    \",\n    \"variables\": {\n        \"input\": {\n            \"id\": \"{{ $json.config.taskId.runPluginTask }}\"\n        }\n    }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                1440,
+                -1024
+            ],
+            "id": "752c6c72-fa8c-4a2c-b61c-468fd04adc92",
+            "name": "Monitor Download1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "aabd5b6a-54f8-4443-b188-7d6534fe1c66",
+                            "name": "apiUrl",
+                            "value": "={{ $('Init').item.json.apiUrl }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e737f870-f759-4337-bf33-8349c7b87596",
+                            "name": "ApiKey",
+                            "value": "={{ $('Init').item.json.ApiKey }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "da4f4965-5edd-4499-abaa-c76ef63ddc70",
+                            "name": "result_id",
+                            "value": "=download-{{ $json.data }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "60cff38b-fb4a-4df2-bbe2-e17fe5954462",
+                            "name": "url",
+                            "value": "={{ $('Init').item.json.url }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                720,
+                -1024
+            ],
+            "id": "5e361e32-fbee-4df1-9448-3d5481d2f670",
+            "name": "Edit2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8b960cff-1e41-4120-82ba-82b8f16a49f6",
+                            "name": "config",
+                            "value": "={{ $('Input wait').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2112,
+                -928
+            ],
+            "id": "f7082bdc-8f41-498f-a6f0-045966918b3a",
+            "name": "Edit Fields7"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8b9bcf51-0a40-4a23-ab04-115cacba59bb",
+                            "name": "config.taskId",
+                            "value": "={{ $json.data }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1152,
+                -1024
+            ],
+            "id": "28994014-0232-4443-a965-06754de9330f",
+            "name": "Input wait"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Init",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Init": {
+            "main": [
+                [
+                    {
+                        "node": "Find scene by url",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Find scene by url": {
+            "main": [
+                [
+                    {
+                        "node": "If2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If3": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields6",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Wait2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait2": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields7",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields6": {
+            "main": [
+                [
+                    {
+                        "node": "Read Get Metadata2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Crypto2": {
+            "main": [
+                [
+                    {
+                        "node": "Edit2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Submit Download1": {
+            "main": [
+                [
+                    {
+                        "node": "Input wait",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Monitor Download1": {
+            "main": [
+                [
+                    {
+                        "node": "If3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If2": {
+            "main": [
+                [
+                    {
+                        "node": "Crypto2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit2": {
+            "main": [
+                [
+                    {
+                        "node": "Submit Download1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields7": {
+            "main": [
+                [
+                    {
+                        "node": "Monitor Download1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Input wait": {
+            "main": [
+                [
+                    {
+                        "node": "Monitor Download1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://xhamster.com/videos/i-dont-want-to-fuck-in-the-ass-anymore-no-you-have-to-xhg8wNP"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "vzQtXhdgixxRdxKb",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-10T13:16:43.906Z",
+            "updatedAt": "2026-04-10T13:16:43.906Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "94731ba6-1e47-4843-93d5-27080133ef1d",
+        "workflowId": "vzQtXhdgixxRdxKb",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "url"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -208,
+                    0
+                ],
+                "id": "6648b921-4df3-4a05-9eed-1d03a03e517c",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "http://192.168.2.243:9999/graphql",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "bodyParameters": {
+                        "parameters": [
+                            {
+                                "name": "query",
+                                "value": "=mutation {\n  runPluginTask(\n    plugin_id: \"stash-downloader\", \n    task_name: \"Download Video\", \n    args: [\n      {\n        key: \"url\",\n        value: { str: \"{{ $json.url }}\" }\n      },\n      { \n        key: \"serverDownloadPath\", \n        value: { str: \"/media_libraries/media2/videos\" } \n      }\n    ]\n  )\n}"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    112,
+                    0
+                ],
+                "id": "00f3c04c-a478-4659-a39e-ca3f7a2b9952",
+                "name": "HTTP Request"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                                "name": "action.@type",
+                                "value": "SearchAction",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                                "name": "action.@id",
+                                "value": "={{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                                "name": "action.result",
+                                "value": "={{ $json.movies }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    800,
+                    0
+                ],
+                "id": "e8c403c6-ea1a-4ec7-a326-9896f3c43e26",
+                "name": "Edit Fields"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "HTTP Request",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request": {
+                "main": [
+                    []
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 94731ba6",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-04-10T14:18:52.505Z",
+        "updatedAt": "2026-04-10T14:20:04.085Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
