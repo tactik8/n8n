@@ -1,0 +1,401 @@
+{
+    "id": "9QpLMhu1XROtH6ia",
+    "name": "MCP Tool Webpage save",
+    "active": true,
+    "activeVersionId": "e537da60-6a8d-4ea8-bc10-cf464732ad47",
+    "createdAt": "2026-10-04T19:05:48.540Z",
+    "updatedAt": "2026-10-04T19:10:26.048Z",
+    "isArchived": false,
+    "versionId": "e537da60-6a8d-4ea8-bc10-cf464732ad47",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "f4c27bd9-137e-4e5d-afb7-1d55610a72ef",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c36bf48-1a89-4d2e-87a8-6c2884fcea6e",
+                            "name": "@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7952ff2b-b351-465a-b063-be1ab6d5945d",
+                            "name": "@id",
+                            "value": "={{ $json.url }}#webpage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e347fc16-8984-4942-a5bb-435142857385",
+                            "name": "url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                0
+            ],
+            "id": "99304e2b-3b51-473b-b3f7-92ff96221177",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "r0iPZkb7BWNPAbdn",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                    "cachedResultName": "api_db post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "dwv1",
+                        "tenantID": "webpage",
+                        "record": "={{  $json }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                448,
+                0
+            ],
+            "id": "9d4ceed2-7771-4b06-adde-40c4cb6ff470",
+            "name": "Call 'api_db post V1'"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1356c335-09e1-45f8-94b6-994c8a6bc04e",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                672,
+                0
+            ],
+            "id": "1f6e52b9-dda2-4a11-adfa-bff35f58ee30",
+            "name": "Edit Fields1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db post V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db post V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.tets.com/test21"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "9QpLMhu1XROtH6ia",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-04T19:05:48.540Z",
+            "updatedAt": "2026-10-04T19:05:48.540Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "e537da60-6a8d-4ea8-bc10-cf464732ad47",
+        "workflowId": "9QpLMhu1XROtH6ia",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "url"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "f4c27bd9-137e-4e5d-afb7-1d55610a72ef",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "0c36bf48-1a89-4d2e-87a8-6c2884fcea6e",
+                                "name": "@type",
+                                "value": "WebPage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7952ff2b-b351-465a-b063-be1ab6d5945d",
+                                "name": "@id",
+                                "value": "={{ $json.url }}#webpage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e347fc16-8984-4942-a5bb-435142857385",
+                                "name": "url",
+                                "value": "={{ $json.url }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    224,
+                    0
+                ],
+                "id": "99304e2b-3b51-473b-b3f7-92ff96221177",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "r0iPZkb7BWNPAbdn",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                        "cachedResultName": "api_db post V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "dwv1",
+                            "tenantID": "webpage",
+                            "record": "={{  $json }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    448,
+                    0
+                ],
+                "id": "9d4ceed2-7771-4b06-adde-40c4cb6ff470",
+                "name": "Call 'api_db post V1'"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "1356c335-09e1-45f8-94b6-994c8a6bc04e",
+                                "name": "output",
+                                "value": "={{ $json.output }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    672,
+                    0
+                ],
+                "id": "1f6e52b9-dda2-4a11-adfa-bff35f58ee30",
+                "name": "Edit Fields1"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db post V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db post V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version e537da60",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-04T19:08:30.773Z",
+        "updatedAt": "2026-10-04T19:08:35.164Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
