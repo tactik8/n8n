@@ -1,0 +1,513 @@
+{
+    "id": "HAx3ZxsnDRoV7NE9",
+    "name": "Extract brand identity",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-05-05T15:44:06.955Z",
+    "updatedAt": "2026-05-05T15:56:33.844Z",
+    "isArchived": false,
+    "versionId": "ad60ed0a-30f9-4a5e-b291-85858efb354f",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "url": "={{ $json.URL }}",
+                "options": {
+                    "allowUnauthorizedCerts": true
+                }
+            },
+            "id": "99e4235e-9c40-413c-9552-606c8ad1fd32",
+            "name": "HTTP Request",
+            "type": "n8n-nodes-base.httpRequest",
+            "position": [
+                144,
+                144
+            ],
+            "typeVersion": 4.4
+        },
+        {
+            "parameters": {
+                "modelId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "models/gemini-3-flash-preview",
+                    "cachedResultName": "models/gemini-3-flash-preview"
+                },
+                "messages": {
+                    "values": [
+                        {
+                            "content": "**System Instruction:** You are the Litopy Extraction Engine. Your goal is to analyze the provided raw text from a brand's website and extract a rigid \"Identity Definition\" into JSON format. Do not describe the tone; quantify it.\n\n**Task:**\n1. **Lexicon Mining:** Identify words used frequently that are *not* standard English stop-words. Identify \"Corporate Speak\" that is notably absent (these become Forbidden Words).\n2. **Syntax Calculus:** Calculate the average words per sentence. Does the text use fragments? (e.g., \"Fast. Secure. Done.\") If yes, mark `complexity_score` low.\n3. **Stance Detection:** Determine if the brand speaks *at* the user (Mentor) or *with* the user (Peer). Look for \"We believe\" statements vs. \"You should\" statements.\n \n \n **Output:** strictly valid JSON matching the `vault_a_style_matrix` schema.\n\"vault_a_style_matrix\": {\n      \"lexicon_constraints\": {\n        \"power_words\": [\n          \"List of 5-10 high-frequency words unique to the brand (e.g., 'Bespoke', 'Ecosystem')\"\n        ],\n        \"forbidden_words\": [\n          \"List of banned generic terms (e.g., 'Synergy', 'Delve', 'Game-changer')\"\n        ],\n        \"preferred_synonyms\": {\n          \"client\": \"partner\",\n          \"cost\": \"investment\",\n          \"buy\": \"acquire\"\n        }\n      },\n      \"syntax_signature\": {\n        \"average_sentence_length\": \"Integer (e.g., 12)\",\n        \"complexity_score\": \"Float 0.0-1.0 (0=Hemingway, 1=Academic)\",\n        \"active_voice_ratio\": \"Float 0.0-1.0 (Target >0.8)\",\n        \"paragraph_structure\": \"String (e.g., 'One-sentence hooks only', '3-line blocks')\"\n      },\n      \"stance_parameters\": {\n        \"relationship_model\": \"String (Options: 'Peer', 'Mentor', 'Challenger', 'Servant')\",\n        \"risk_appetite\": \"String (Options: 'Conservative', 'Aggressive', 'Contrarian')\",\n        \"emotional_temperature\": \"Float 0.0-1.0 (0=Clinical, 1=Hyper-Emotive)\"\n      },\n      \"formatting_rules\": {\n        \"emoji_usage\": \"String (e.g., 'None', 'Bullets only', 'Gen-Z style')\",\n        \"header_style\": \"String (e.g., 'Title Case', 'All Caps', 'Lowercase')\",\n        \"cta_structure\": \"String (e.g., 'Soft ask', 'Hard URL', 'Question')\"\n      }\n    }\n\n**Output Validation:** Check the output that it is valid JSON with a single object (no array on top level). Only return valid JSON using the data structure provided (no array on top level - just a single object). Ensure the JSON output is valid using the data structure provided!\n",
+                            "role": "model"
+                        },
+                        {
+                            "content": "=**Input Text:**\n\n {{ $json.data }}"
+                        }
+                    ]
+                },
+                "simplify": false,
+                "jsonOutput": true,
+                "builtInTools": {},
+                "options": {}
+            },
+            "id": "7ba9d240-2174-40e6-b9e1-2e3b098fbf12",
+            "name": "Extract Vault A",
+            "type": "@n8n/n8n-nodes-langchain.googleGemini",
+            "position": [
+                368,
+                144
+            ],
+            "typeVersion": 1.1,
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "815badc3-d2ba-438a-bfe8-666e290b177b",
+                            "name": "raw",
+                            "type": "string",
+                            "value": "={{ $json.candidates[0].content.parts[0].text }}"
+                        },
+                        {
+                            "id": "50561d91-dd5d-4b54-a019-22f261a7945d",
+                            "name": "parsed",
+                            "type": "object",
+                            "value": "={{ $json.candidates[0].content.parts[0].text }}"
+                        }
+                    ]
+                },
+                "options": {
+                    "dotNotation": false
+                }
+            },
+            "id": "e6d517cb-cd98-4353-bc0a-acc5786fe4ab",
+            "name": "Extract AI Response",
+            "type": "n8n-nodes-base.set",
+            "position": [
+                720,
+                144
+            ],
+            "typeVersion": 3.4
+        },
+        {
+            "parameters": {
+                "mode": "raw",
+                "jsonOutput": "={\n  \"URL\": \"https://{{ $json.URL }}\",\n  \"submittedAt\": \"{{ $json.submittedAt }}\",\n  \"formMode\": \"{{ $json.formMode }}\"\n}\n",
+                "options": {}
+            },
+            "id": "3a7c8267-0ecb-417e-b378-af97791a9500",
+            "name": "Add Missing Protocol",
+            "type": "n8n-nodes-base.set",
+            "position": [
+                -80,
+                224
+            ],
+            "typeVersion": 3.4
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "combinator": "and",
+                                "conditions": [
+                                    {
+                                        "id": "d25a45bb-8822-4815-a726-fb969e658a8c",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "startsWith"
+                                        },
+                                        "leftValue": "={{ $json.URL }}",
+                                        "rightValue": "http://"
+                                    }
+                                ]
+                            },
+                            "renameOutput": true,
+                            "outputKey": "http"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "combinator": "and",
+                                "conditions": [
+                                    {
+                                        "id": "ec311e16-a45c-49f8-92b9-5aa0cd68d411",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "startsWith"
+                                        },
+                                        "leftValue": "={{ $json.URL }}",
+                                        "rightValue": "https://"
+                                    }
+                                ]
+                            },
+                            "renameOutput": true,
+                            "outputKey": "https"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "combinator": "and",
+                                "conditions": [
+                                    {
+                                        "id": "8952e304-dae5-4203-a8e9-4e1a5fd879f5",
+                                        "operator": {
+                                            "name": "filter.operator.equals",
+                                            "type": "string",
+                                            "operation": "equals"
+                                        },
+                                        "leftValue": "",
+                                        "rightValue": ""
+                                    }
+                                ]
+                            },
+                            "renameOutput": true,
+                            "outputKey": "No protocol"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "68a87189-5e91-4908-a637-604805248888",
+            "name": "Check URL",
+            "type": "n8n-nodes-base.switch",
+            "position": [
+                -304,
+                128
+            ],
+            "typeVersion": 3.4
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6ece9336-8816-468b-9a87-60a458d88ad5",
+                            "name": "parsed.vault_a_style_matrix.lexicon_constraints.power_words",
+                            "type": "array",
+                            "value": "={{ $json.parsed.vault_a_style_matrix.lexicon_constraints.power_words }}"
+                        },
+                        {
+                            "id": "4825c479-d411-4eef-886b-383519ab990e",
+                            "name": "parsed.vault_a_style_matrix.lexicon_constraints.forbidden_words",
+                            "type": "array",
+                            "value": "={{ $json.parsed.vault_a_style_matrix.lexicon_constraints.forbidden_words }}"
+                        },
+                        {
+                            "id": "3b48d4b4-6ef3-4ad3-8347-086f4209d139",
+                            "name": "parsed.vault_a_style_matrix.lexicon_constraints.preferred_synonyms",
+                            "type": "object",
+                            "value": "={{ $json.parsed.vault_a_style_matrix.lexicon_constraints.preferred_synonyms }}"
+                        },
+                        {
+                            "id": "4648a1cc-8bc2-4561-acb4-65df8ce84057",
+                            "name": "parsed.vault_a_style_matrix.syntax_signature",
+                            "type": "object",
+                            "value": "={{ $json.parsed.vault_a_style_matrix.syntax_signature }}"
+                        },
+                        {
+                            "id": "b5540b4e-ad8c-4848-8909-0b252594d0d7",
+                            "name": "parsed.vault_a_style_matrix.stance_parameters",
+                            "type": "object",
+                            "value": "={{ $json.parsed.vault_a_style_matrix.stance_parameters }}"
+                        },
+                        {
+                            "id": "19596518-d981-404f-8cc8-16dc15a51c21",
+                            "name": "parsed.vault_a_style_matrix.formatting_rules",
+                            "type": "object",
+                            "value": "={{ $json.parsed.vault_a_style_matrix.formatting_rules }}"
+                        },
+                        {
+                            "id": "de8d7c90-7e40-4ce9-9f03-af4a502469fd",
+                            "name": "parsed.vault_a_style_matrix.url",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.URL }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "0fe8366d-9c95-42fd-9250-95ff2e0522e7",
+            "name": "Extract Nested Data",
+            "type": "n8n-nodes-base.set",
+            "position": [
+                944,
+                144
+            ],
+            "typeVersion": 3.4
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "URL"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -528,
+                144
+            ],
+            "id": "575f2782-9cc2-4767-9da0-bdf1eca97da3",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "529312eb-cb72-407d-b455-dc524b7fd5f8",
+                            "name": "result",
+                            "value": "={{ $json.parsed.vault_a_style_matrix }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "08ff6b90-78be-4c1c-bdd6-d88a148a83c5",
+                            "name": "result.@type",
+                            "value": "BrandIdentityMarkers",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d8dcf283-d1b9-4cf9-a1a3-807e720a17a2",
+                            "name": "result.@id",
+                            "value": "=https://{{ $json.parsed.vault_a_style_matrix.url.extractDomain().replaceAll('www.', '') }}#brandidentitymarkers",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1152,
+                144
+            ],
+            "id": "fbe8c090-157c-490d-bf6d-78fe0dc1285c",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "0WwZ74ImuHAGVHCE",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/0WwZ74ImuHAGVHCE",
+                    "cachedResultName": "api s3 post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "brand1",
+                        "record": "={{ $json.result }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "metadata",
+                            "displayName": "metadata",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1360,
+                144
+            ],
+            "id": "e7311e6f-c065-4c15-a812-4c5b90de452c",
+            "name": "Call 'api s3 post V1'"
+        }
+    ],
+    "connections": {
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Vault A",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Vault A": {
+            "main": [
+                [
+                    {
+                        "node": "Extract AI Response",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract AI Response": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Nested Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add Missing Protocol": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check URL": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Add Missing Protocol",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Nested Data": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Check URL",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api s3 post V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "URL": "https://www.duchesnay.com/en"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "HAx3ZxsnDRoV7NE9",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-05T15:44:06.955Z",
+            "updatedAt": "2026-05-05T15:44:06.955Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
