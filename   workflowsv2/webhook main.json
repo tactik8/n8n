@@ -1,0 +1,360 @@
+{
+    "id": "FhEA3lOMF6S3nszp",
+    "name": "webhook main",
+    "active": true,
+    "activeVersionId": "0ce3e9e1-f72a-4d87-b3b9-9d70c769833a",
+    "createdAt": "2026-09-09T15:07:22.004Z",
+    "updatedAt": "2026-09-09T15:53:07.626Z",
+    "isArchived": false,
+    "versionId": "37f6749a-af38-43d8-9f11-c48a1c5a60af",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "multipleMethods": true,
+                "path": "7e27d36f-b314-4848-bdd8-2855e92f78e0/:systemID",
+                "responseMode": "lastNode",
+                "options": {
+                    "allowedOrigins": "*"
+                }
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                -384,
+                96
+            ],
+            "id": "de05fa49-12fe-4061-979a-51106931d43b",
+            "name": "Webhook",
+            "webhookId": "7e27d36f-b314-4848-bdd8-2855e92f78e0"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "049f8120-e606-49e0-a679-3e4e8f3cfcbe",
+                            "name": "config.params",
+                            "value": "={{ $json.params }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "f62fd4b1-cf78-41ee-9cbe-5daba427752b",
+                            "name": "config.query",
+                            "value": "={{ $json.query }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "08215a1e-0315-40f4-a243-2ede3300451e",
+                            "name": "config.body",
+                            "value": "={{ $json.body }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                16,
+                0
+            ],
+            "id": "94b82652-7a2f-4008-a116-8124345d235a",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.config.params.systemID }}",
+                                        "rightValue": "karakeep",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        },
+                                        "id": "2c2c6458-b8f2-4886-9c5e-633bfa4de949"
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.4,
+            "position": [
+                240,
+                0
+            ],
+            "id": "f9a5c968-be00-4f41-86bc-18a5b48cb841",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "fgs9m7Bpqu38thCp",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/fgs9m7Bpqu38thCp",
+                    "cachedResultName": "pipeline karakeep new bookmark"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "accountID": "={{ $json.body.userId }}",
+                        "bookmarkID": "={{ $json.body.bookmarkId }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "accountID",
+                            "displayName": "accountID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "bookmarkID",
+                            "displayName": "bookmarkID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                496,
+                -48
+            ],
+            "id": "070495e9-5e21-4b29-8a52-e1c39fdaa791",
+            "name": "Call 'pipeline karakeep new bookmark'"
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'pipeline karakeep new bookmark'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "FhEA3lOMF6S3nszp",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-09T15:07:22.004Z",
+            "updatedAt": "2026-09-09T15:07:22.004Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "0ce3e9e1-f72a-4d87-b3b9-9d70c769833a",
+        "workflowId": "FhEA3lOMF6S3nszp",
+        "nodes": [
+            {
+                "parameters": {
+                    "multipleMethods": true,
+                    "path": "7e27d36f-b314-4848-bdd8-2855e92f78e0/:systemID",
+                    "responseMode": "lastNode",
+                    "options": {
+                        "allowedOrigins": "*"
+                    }
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    -384,
+                    96
+                ],
+                "id": "de05fa49-12fe-4061-979a-51106931d43b",
+                "name": "Webhook",
+                "webhookId": "7e27d36f-b314-4848-bdd8-2855e92f78e0"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "049f8120-e606-49e0-a679-3e4e8f3cfcbe",
+                                "name": "config.params",
+                                "value": "={{ $json.params }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "f62fd4b1-cf78-41ee-9cbe-5daba427752b",
+                                "name": "config.query",
+                                "value": "={{ $json.query }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "08215a1e-0315-40f4-a243-2ede3300451e",
+                                "name": "config.body",
+                                "value": "={{ $json.body }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    16,
+                    0
+                ],
+                "id": "94b82652-7a2f-4008-a116-8124345d235a",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "rules": {
+                        "values": [
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "leftValue": "={{ $json.config.params.systemID }}",
+                                            "rightValue": "karakeep",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "equals"
+                                            },
+                                            "id": "2c2c6458-b8f2-4886-9c5e-633bfa4de949"
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                }
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.switch",
+                "typeVersion": 3.4,
+                "position": [
+                    240,
+                    0
+                ],
+                "id": "f9a5c968-be00-4f41-86bc-18a5b48cb841",
+                "name": "Switch"
+            }
+        ],
+        "connections": {
+            "Webhook": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Switch",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 0ce3e9e1",
+        "description": "",
+        "autosaved": false,
+        "createdAt": "2026-09-09T15:24:26.136Z",
+        "updatedAt": "2026-09-09T15:31:11.824Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
