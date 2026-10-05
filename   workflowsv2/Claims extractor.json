@@ -1,0 +1,207 @@
+{
+    "id": "rh96bFzFP7zLe1EO",
+    "name": "Claims extractor",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-06-11T19:12:46.974Z",
+    "updatedAt": "2026-06-12T12:55:34.514Z",
+    "isArchived": false,
+    "versionId": "6b623d72-d8a3-4455-a598-ce56a424a1b3",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "1b700000-5ac8-4f3c-8d95-eaba713a17d4",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ebdd4135-4ff8-4a7a-962a-aaea8edaf14e",
+                            "name": "userPrompt",
+                            "value": "Conflit au Moyen-Orient Trump annule les frappes contre l’Iran et évoque un accord  Pause  Désactiver le son Current Time  0:44 / Duration  0:56 Remaining Time  - 0:12  Picture-in-Picture  Plein écran (Washington) Dans une nouvelle volte-face, Donald Trump a dit jeudi qu’il annulait les frappes dont il menaçait l’Iran le jour même, assurant qu’il ne restait plus qu’à trouver « la date et le lieu » pour la « signature » d’un accord avec Téhéran.  Publié à 6 h 25 Mis à jour à 14 h 57  Partager  Imprimer Les bureaux de l’AFP à Téhéran, Washington et Beyrouth Agence France-Presse L’agence de presse iranienne Fars, citant une source anonyme, a indiqué jeudi que Téhéran n’avait pas approuvé de texte ",
+                            "type": "string"
+                        },
+                        {
+                            "id": "13b632f7-7bf1-44fd-85bc-26cbe2f2d68a",
+                            "name": "systemPrompt",
+                            "value": "You are an expert Information Extraction Agent. Your task is to analyze the provided text, extract distinct factual claims, and format them into a structured Schema.org JSON-LD array.  For every fact identified, you must extract: 1. The core relationship formatted succinctly as \"A [relation] B\" (e.g., \"increase in calories eaten [promotes] weight gain\"). 2. The specific source snippet from the text that supports the fact. 3. Your confidence level in the accuracy of the extraction (Low, Medium, High) based on text clarity and explicitness.  ### Extraction Rules: - **Succinct Triples:** The fact must follow the \"Entity/Concept A -> Relationship -> Entity/Concept B\" structure. Avoid lengthy prose. - **Strict Grounding:** Extract ONLY facts directly stated or strongly implied by the text. Do not extrapolate. - **Schema.org Alignment:** Format the output as a valid JSON-LD `@graph` using `ClaimReview` and `CreativeWork` types to represent the claim, its appearance, and your confidence assessment.  ### Output Format: Return ONLY a valid JSON-LD object. Do not include conversational filler, markdown formatting outside of the json code block, or explanations.   Use the following JSON-LD structure as your template: {   \"@context\": \"https://schema.org\",   \"@graph\": [     {       \"@type\": \"ClaimReview\",       \"claimReviewed\": \"Concept A [relation] Concept B\",       \"reviewRating\": {         \"@type\": \"Rating\",         \"ratingValue\": \"High/Medium/Low\",         \"reviewAspect\": \"Extraction Confidence\"       },       \"itemReviewed\": {         \"@type\": \"CreativeWork\",         \"citation\": \"Exact quote or source snippet from the text\"       }     }   ] }",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "230e6571-60c3-4e7a-8315-b4aedf09f293",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                416,
+                0
+            ],
+            "id": "c1fc1b37-4aae-41f1-bacb-a8f85c5499a9",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                288,
+                208
+            ],
+            "id": "2ce038cd-c352-46fd-864e-fab7d3b0aa3e",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8c8bb0f2-a95a-4334-8820-d54e77395991",
+                            "name": "output",
+                            "value": "={{ JSON.parse($json.output.replace('```json', '').replace('```', '')) }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                768,
+                0
+            ],
+            "id": "ef14b722-14d7-4c43-b8d1-00f483576d82",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "model": "gemma3:4b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                464,
+                320
+            ],
+            "id": "8a13dd4b-402a-4d55-b98e-e96c367ccbc0",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                []
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "rh96bFzFP7zLe1EO",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-11T19:12:46.974Z",
+            "updatedAt": "2026-06-11T19:12:46.974Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
