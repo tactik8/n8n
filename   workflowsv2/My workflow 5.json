@@ -1,0 +1,81 @@
+{
+    "id": "WvF2euusa5qlzrgO",
+    "name": "My workflow 5",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-04-17T14:06:26.984Z",
+    "updatedAt": "2026-05-02T18:54:49.372Z",
+    "isArchived": true,
+    "versionId": "998425b5-2a9d-40c3-97ef-2190a9e2f528",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "72b5ba5c-be22-4aab-bd3a-f83cdeedeb65",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "collection": "test",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.mongoDb",
+            "typeVersion": 1.2,
+            "position": [
+                208,
+                0
+            ],
+            "id": "412e6e99-4a8b-48a5-a653-b0335f88e7fb",
+            "name": "Find documents",
+            "credentials": {
+                "mongoDb": {
+                    "id": "dHeEVtBeWey2f4lB",
+                    "name": "MongoDB account 2"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Find documents",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "WvF2euusa5qlzrgO",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-17T14:06:26.984Z",
+            "updatedAt": "2026-04-17T14:06:26.984Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
