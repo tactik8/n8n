@@ -1,0 +1,120 @@
+{
+    "id": "9XfthyedGowt7CeQ",
+    "name": "My workflow 6",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-04-27T16:54:22.126Z",
+    "updatedAt": "2026-05-02T19:01:41.003Z",
+    "isArchived": true,
+    "versionId": "96f33c11-05cc-44f3-825f-92b20c4d7995",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "23df4863-e3ef-4374-98c0-e48d1e50ade0",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "url": "http://192.168.2.243:13001/record",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                528,
+                -208
+            ],
+            "id": "27aef8b2-1158-4dc0-92fc-a59b66a66bce",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\n\nfunction testRecord(name, no = 0, depth = 1) {\n\n\n    name = String(name || \"test\") \n    \n\n    let records = []\n\n    for (let i = 0; i <= no; i++) {\n\n        let item_name = name + \"_\" + String(i)\n        let record = {\n            \"@type\": \"Thing\",\n            \"@id\": \"https://testrecord.com/\" + item_name,\n            \"name\": item_name\n        }\n\n        if(depth > 0){\n            record.other1 = testRecord(item_name, no, depth -1)\n        }\n\n        records.push(record)\n    }\n\n    return no == 0 ? records[0] : records\n\n\n}\n\n\n\n\n\nfor (const item of $input.all()) {\n  item.json.record = testRecord('test_name', 5, 3)\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                208,
+                0
+            ],
+            "id": "c41b03bd-4248-498a-8877-1f88cf53d49f",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:13001/record",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ $json.record }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                512,
+                16
+            ],
+            "id": "3b93b0c8-7839-476f-9ee8-3060aa0bcf48",
+            "name": "HTTP Request1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "9XfthyedGowt7CeQ",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-27T16:54:22.126Z",
+            "updatedAt": "2026-04-27T16:54:22.126Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
