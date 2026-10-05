@@ -1,0 +1,597 @@
+{
+    "id": "oHzPSx125bfMjgRh",
+    "name": "stash api scenes to mongodb v2",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-08-02T16:52:46.480Z",
+    "updatedAt": "2026-08-02T19:24:59.611Z",
+    "isArchived": false,
+    "versionId": "c587595f-d1f8-4f58-a378-b14496720a1b",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -448,
+                -224
+            ],
+            "id": "c22f3bb3-2c71-4807-a809-4349e2d11faa",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "={{ $json.config.query }}"
+                        },
+                        {
+                            "name": "variables.filter.page",
+                            "value": "=1"
+                        },
+                        {
+                            "name": "variables.filter.per_page",
+                            "value": "100"
+                        }
+                    ]
+                },
+                "options": {
+                    "pagination": {
+                        "pagination": {
+                            "parameters": {
+                                "parameters": [
+                                    {
+                                        "type": "body",
+                                        "name": "variables",
+                                        "value": "={{ {\"filter\": { \"page\": $pageCount + 1, \"per_page\": 100 } } }}"
+                                    }
+                                ]
+                            },
+                            "paginationCompleteWhen": "other",
+                            "completeExpression": "={{ ($response.body?.data?.findScenes?.scenes || []).length==0 }}",
+                            "limitPagesFetched": true,
+                            "maxRequests": 3
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                448,
+                -224
+            ],
+            "id": "2a5e4ad0-78df-44de-9765-e876f84a5be3",
+            "name": "Find scene by url"
+        },
+        {
+            "parameters": {
+                "jsCode": "/**\n * Converts a Stash Scene object to a Schema.org VideoObject (JSON-LD)\n * @param {Object} scene - The scene record from Stash API\n * @returns {Object} JSON-LD VideoObject\n */\nfunction mapStashSceneToSchema(scene) {\n  // Helper to convert seconds to ISO 8601 duration (PT#H#M#S)\n  const formatDuration = (seconds) => {\n    if (!seconds) return undefined;\n    const h = Math.floor(seconds / 3600);\n    const m = Math.floor((seconds % 3600) / 60);\n    const s = Math.floor(seconds % 60);\n    return `PT${h > 0 ? h + 'H' : ''}${m > 0 ? m + 'M' : ''}${s}S`;\n  };\n\n  const primaryFile = scene.files && scene.files[0];\n\n  // Helper to convert bytes to human-readable string (e.g., 1.2 GB)\n  const formatBytes = (bytes) => {\n    if (!bytes) return undefined;\n    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];\n    const i = Math.floor(Math.log(bytes) / Math.log(1024));\n    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;\n  };\n\n  \n\n  \n  let ld = {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"VideoObject\",\n    \"name\": scene.title || \"Untitled Scene\",\n    \"description\": scene.details || \"\",\n    \"thumbnailUrl\": [scene.paths?.screenshot || scene.paths?.preview],\n    \"uploadDate\": scene.date || new Date().toISOString().split('T')[0],\n    \"duration\": formatDuration(scene.file?.duration),\n    \"contentUrl\": scene.paths?.stream || \"\",\n    \"embedUrl\": scene.paths?.stream || \"\",\n    \"keywords\": scene.tags?.map(t => t.name).join(\", \"),\n    \"url\": scene?.urls || [],\n\n    // Technical File Details\n    \"associatedMedia\": scene.files?.map(file => ({\n      \"@type\": \"MediaObject\",\n      \"contentUrl\": `file://${file.path}`,\n      \"contentSize\": formatBytes(file.size),\n      \"encodingFormat\": \"video/mp4\", // Or detect via extension\n      \"bitrate\": file.bit_rate ? `${(file.bit_rate / 1000).toFixed(0)} kbps` : undefined,\n      \"width\": file.width,\n      \"height\": file.height\n    })),\n\n   \n  \n    // Mapping the Studio\n    \"productionCompany\": scene.studio ? {\n      \"@type\": \"Organization\",\n      \"name\": scene.studio.name,\n      \"url\": scene.studio.url\n    } : undefined,\n\n    // Mapping Performers\n    \"actor\": scene.performers?.map(performer => ({\n      \"@type\": \"Person\",\n      \"name\": performer.name,\n      \"url\": performer.url,\n      \"image\": performer.image_path\n    })),\n\n    // Mapping Internal Rating (Stash uses 1-5)\n    \"aggregateRating\": scene.rating10 ? {\n      \"@type\": \"AggregateRating\",\n      \"ratingValue\": scene.rating10 / 2, // Converting 10-point scale to 5-star if needed\n      \"bestRating\": \"5\",\n      \"worstRating\": \"1\"\n    } : undefined\n\n\n\n    \n  };\n  \n     // 1. Add Static Screenshot\n  if (scene.paths?.screenshot) {\n    ld.thumbnail = ld?.thumbnail || []\n    ld.thumbnail = Array.isArray(ld.thumbnail) ? ld.thumbnail : [ld.thumbnail]\n    ld.thumbnail.push({\n      \"@type\": \"ImageObject\",\n      \"name\": \"Static Screenshot\",\n      \"contentUrl\": scene.paths.screenshot\n    });\n  }\n\n  // 2. Add Animated Preview (GIF/WebP)\n  if (scene.paths?.preview) {\n    ld.thumbnail = ld?.thumbnail || []\n    ld.thumbnail = Array.isArray(ld.thumbnail) ? ld.thumbnail : [ld.thumbnail]\n    ld.thumbnail.push({\n      \"@type\": \"ImageObject\",\n      \"name\": \"Animated Preview\",\n      \"contentUrl\": scene.paths.preview,\n      \"encodingFormat\": \"image/webp\" // Stash usually uses WebP for previews\n    });\n  }\n\n  // 3. Add Sprite Sheet\n  if (scene.paths?.sprite) {\n    ld.associatedMedia = ld?.associatedMedia || []\n    ld.associatedMedia = Array.isArray(ld.associatedMedia) ? ld.associatedMedia : [ld.associatedMedia]\n    ld.associatedMedia.push({\n       \n      \"@type\": \"ImageObject\",\n      \"name\": \"Scene Sprite Sheet\",\n      \"description\": \"Scrubbing sprite sheet for player seek bar\",\n      \"contentUrl\": scene.paths.sprite,\n      // Include the VTT file as a related resource if available\n      \"mainEntityOfPage\": scene.paths.vtt || undefined \n    });\n  }\n\n  \n\n  // 5. Map a Video Preview (if your Stash setup generates mp4 previews)\n  if (scene.paths?.preview) {\n    ld.subjectOf = ld?.subjectOf || []\n    ld.subjectOf = Array.isArray(ld.subjectOf) ? ld.subjectOf : [ld.subjectOf]\n    ld.subjectOf.push({\n      \"@type\": \"VideoObject\",\n      \"name\": \"Scene Preview Clip\",\n      \"contentUrl\": scene.paths.preview,\n      \"description\": \"Short teaser of the full scene\"\n    });\n  }\n\n  return ld\n}\n\n\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nfor (const item of $input.all()) {\n\n  let movies = []\n  for(let m of item.json.data.findScenes.scenes || []){\n\n    \n    movies.push(mapStashSceneToSchema(m))\n    \n  }\n\n  item.json.data = undefined\n  item.json.result = movies\n}\n\n  return $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                656,
+                -224
+            ],
+            "id": "8685d2c6-0abd-4766-96ab-b0925f618da6",
+            "name": "Schema conversion"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                            "name": "action",
+                            "value": "={{ $('Config1').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.result",
+                            "value": "={{ $json.result }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1040,
+                -224
+            ],
+            "id": "f06019a2-9837-40d1-a9ee-2e76589258a3",
+            "name": "Action close1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1264,
+                -224
+            ],
+            "id": "faa6e2ce-ab40-4886-a2db-52b87b9a09ac",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -224,
+                -224
+            ],
+            "id": "3499f90e-35af-4619-bca1-452f54d50d86",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                            "name": "config.ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                            "name": "config.apiUrl",
+                            "value": "http://192.168.2.243:9999/graphql",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7aa4c3e1-9332-4bfb-a32c-b4154ae664e5",
+                            "name": "config.url",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c2859457-7784-4f24-9ad1-5de44ddd5cb9",
+                            "name": "config.filepath",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.filepath }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "dfb2908d-cf51-43ef-81f2-bad6b51a5f3d",
+                            "name": "config.id",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.id }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                0,
+                -224
+            ],
+            "id": "8d845cb7-15ad-44e6-834b-a5aba90b245c",
+            "name": "Config1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c7e0c2f8-b616-4c51-8162-0c63d90048c2",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "80034cb3-2add-465a-a8cc-d8e02e3bc776",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c792c6a5-da9d-4eeb-8ba3-2aa092268964",
+                            "name": "config.query",
+                            "value": "query FindScenes($filter: FindFilterType) { findScenes(filter: $filter) { \n    \n   scenes{\n created_at\n    date\n    details\n    director\n    files {\n      basename\n      created_at\n      format\n      id\n      parent_folder {\n        basename\n      }\n      path\n      size\n      updated_at\n    }\n    id\n    paths {\n      caption\n      funscript\n      interactive_heatmap\n      preview\n      screenshot\n      sprite\n      stream\n      vtt\n      webp\n    }\n    performers {\n      alias_list\n      birthdate\n      gender\n      id\n      name\n      scene_count\n      url\n      urls\n    }\n    tags {\n      aliases\n      id\n      name\n    }\n    title\n    url\n    urls\n    updated_at\n    studio {\n      id\n      url\n      urls\n      name\n    }\n    code\n}\n  \n} }",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3e45bf14-4b5c-4ff3-8ba5-e80a1c006f44",
+                            "name": "config.variables.filter.page",
+                            "value": 1,
+                            "type": "number"
+                        },
+                        {
+                            "id": "2f22bcc5-57d4-4216-852d-4ba6e06e92cd",
+                            "name": "config.variables.filter.per_page",
+                            "value": 25,
+                            "type": "number"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                -224
+            ],
+            "id": "e615e720-925b-4cf4-8b94-6f5a45901910",
+            "name": "query"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={ \n  \"query\": \"query MyQuery { allScenes { id\\n files {\\n basename\\n id\\n path\\n }\\n title\\n url\\n urls\\n }\\n }\"\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                480,
+                48
+            ],
+            "id": "ee60fa76-d41a-48a6-8e1d-e8f05729eabf",
+            "name": "Find scene by url1"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "={{ $json.config.query }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                256,
+                64
+            ],
+            "id": "fe215235-2189-40c7-bb7b-f2c78a3f07ee",
+            "name": "Find scene by url2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c7e0c2f8-b616-4c51-8162-0c63d90048c2",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "80034cb3-2add-465a-a8cc-d8e02e3bc776",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c792c6a5-da9d-4eeb-8ba3-2aa092268964",
+                            "name": "config.query",
+                            "value": "query MyQuery {\n  allScenes {\n    created_at\n    date\n    details\n    director\n    files {\n      basename\n      created_at\n      format\n      id\n      parent_folder {\n        basename\n      }\n      path\n      size\n      updated_at\n    }\n    id\n    paths {\n      caption\n      funscript\n      interactive_heatmap\n      preview\n      screenshot\n      sprite\n      stream\n      vtt\n      webp\n    }\n    performers {\n      alias_list\n      birthdate\n      gender\n      id\n      name\n      scene_count\n      url\n      urls\n    }\n    tags {\n      aliases\n      id\n      name\n    }\n    title\n    url\n    urls\n    updated_at\n    studio {\n      id\n      url\n      urls\n      name\n    }\n    code\n  }\n}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -96,
+                64
+            ],
+            "id": "7468d748-08dd-4f0b-a6ae-ccfc316ebc42",
+            "name": "query1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "3diS7BdqEWE6Fncw",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/3diS7BdqEWE6Fncw",
+                    "cachedResultName": "API MongoDB jsonld Post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "stash",
+                        "record": "={{ $json.result }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                848,
+                -224
+            ],
+            "id": "9faccef1-5165-4ba2-ad77-ac7dfd775b7f",
+            "name": "Call 'API MongoDB jsonld Post V1'"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Find scene by url": {
+            "main": [
+                [
+                    {
+                        "node": "Schema conversion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action close1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schema conversion": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'API MongoDB jsonld Post V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config1": {
+            "main": [
+                [
+                    {
+                        "node": "query",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "query": {
+            "main": [
+                [
+                    {
+                        "node": "Find scene by url",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'API MongoDB jsonld Post V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Action close1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {}
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "oHzPSx125bfMjgRh",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-08-02T16:52:46.480Z",
+            "updatedAt": "2026-08-02T16:52:46.480Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
