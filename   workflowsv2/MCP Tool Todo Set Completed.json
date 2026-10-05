@@ -1,0 +1,633 @@
+{
+    "id": "xxzqjg25dcc99LWy",
+    "name": "MCP Tool Todo Set Completed",
+    "active": true,
+    "activeVersionId": "cf272970-0a52-45a5-aacd-e714fde9badd",
+    "createdAt": "2026-10-04T20:03:59.729Z",
+    "updatedAt": "2026-10-05T12:48:39.438Z",
+    "isArchived": false,
+    "versionId": "cf272970-0a52-45a5-aacd-e714fde9badd",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "@id"
+                        },
+                        {
+                            "name": "result",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                -112
+            ],
+            "id": "34d92888-3d85-471c-8ab0-3ee009c45b3e",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7952ff2b-b351-465a-b063-be1ab6d5945d",
+                            "name": "record.@id",
+                            "value": "={{ $json['@id'] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": false
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                -112
+            ],
+            "id": "0f3c3670-cbdb-4b4a-978d-8e2084b6e87f",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1356c335-09e1-45f8-94b6-994c8a6bc04e",
+                            "name": "output",
+                            "value": "={{ $json.output.object }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "55ad837c-4eae-4ecd-9824-3b7062dac17f",
+                            "name": "",
+                            "value": "",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                1120,
+                -112
+            ],
+            "id": "9260f2da-1e98-4ee9-a0ab-a1f764a1ccfb",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "WNkRN271ivwmXvrV",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/WNkRN271ivwmXvrV",
+                    "cachedResultName": "MCP Tool Todo get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@id": "={{ $json.record['@id'] }}"
+                    },
+                    "matchingColumns": [
+                        "@id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                448,
+                -112
+            ],
+            "id": "fe5acce0-c30d-4011-bed4-ae993c067263",
+            "name": "Call 'MCP Tool Todo get'"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "e51501b4-b5bd-4020-acf5-970f36ddfb0c",
+                            "name": "record",
+                            "value": "={{ $json.output || {} }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "7952ff2b-b351-465a-b063-be1ab6d5945d",
+                            "name": "record.@id",
+                            "value": "={{ $('Edit Fields').item.json.record['@id'] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6b511021-d8c7-45c5-855c-5c093610750e",
+                            "name": "record.actionStatus",
+                            "value": "=CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "57b357f6-2e97-4475-b8c4-5f326455c06f",
+                            "name": "record endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "543b29db-f4a2-4dd5-9f8e-38bb72d2ac28",
+                            "name": "record.result",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                672,
+                -112
+            ],
+            "id": "c3e34c48-f81b-4e7e-9987-860efa8d2b38",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "r0iPZkb7BWNPAbdn",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                    "cachedResultName": "api_db post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "dwv1",
+                        "tenantID": "todo",
+                        "record": "={{  $json.record }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                896,
+                -112
+            ],
+            "id": "300e2e58-57e1-4e39-8f39-2a1514dacbc5",
+            "name": "Call 'api_db post V1'"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'MCP Tool Todo get'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'MCP Tool Todo get'": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db post V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db post V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "@id": "https://www.test.com/todo1",
+                    "result": {
+                        "@type": "Thing",
+                        "@id": "https://www.test.com/thing1#thing"
+                    }
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "xxzqjg25dcc99LWy",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-04T20:03:59.729Z",
+            "updatedAt": "2026-10-04T20:03:59.729Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "cf272970-0a52-45a5-aacd-e714fde9badd",
+        "workflowId": "xxzqjg25dcc99LWy",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "@id"
+                            },
+                            {
+                                "name": "result",
+                                "type": "any"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    0,
+                    -112
+                ],
+                "id": "34d92888-3d85-471c-8ab0-3ee009c45b3e",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7952ff2b-b351-465a-b063-be1ab6d5945d",
+                                "name": "record.@id",
+                                "value": "={{ $json['@id'] }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": false
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    224,
+                    -112
+                ],
+                "id": "0f3c3670-cbdb-4b4a-978d-8e2084b6e87f",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "1356c335-09e1-45f8-94b6-994c8a6bc04e",
+                                "name": "output",
+                                "value": "={{ $json.output.object }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "55ad837c-4eae-4ecd-9824-3b7062dac17f",
+                                "name": "",
+                                "value": "",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    1120,
+                    -112
+                ],
+                "id": "9260f2da-1e98-4ee9-a0ab-a1f764a1ccfb",
+                "name": "Edit Fields1"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "WNkRN271ivwmXvrV",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/WNkRN271ivwmXvrV",
+                        "cachedResultName": "MCP Tool Todo get"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "@id": "={{ $json.record['@id'] }}"
+                        },
+                        "matchingColumns": [
+                            "@id"
+                        ],
+                        "schema": [
+                            {
+                                "id": "@id",
+                                "displayName": "@id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    448,
+                    -112
+                ],
+                "id": "fe5acce0-c30d-4011-bed4-ae993c067263",
+                "name": "Call 'MCP Tool Todo get'"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "e51501b4-b5bd-4020-acf5-970f36ddfb0c",
+                                "name": "record",
+                                "value": "={{ $json.output || {} }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "7952ff2b-b351-465a-b063-be1ab6d5945d",
+                                "name": "record.@id",
+                                "value": "={{ $('Edit Fields').item.json.record['@id'] }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "6b511021-d8c7-45c5-855c-5c093610750e",
+                                "name": "record.actionStatus",
+                                "value": "=CompletedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "57b357f6-2e97-4475-b8c4-5f326455c06f",
+                                "name": "record endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "543b29db-f4a2-4dd5-9f8e-38bb72d2ac28",
+                                "name": "record.result",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.result }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    672,
+                    -112
+                ],
+                "id": "c3e34c48-f81b-4e7e-9987-860efa8d2b38",
+                "name": "Edit Fields2"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "r0iPZkb7BWNPAbdn",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                        "cachedResultName": "api_db post V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "dwv1",
+                            "tenantID": "todo",
+                            "record": "={{  $json.record }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    896,
+                    -112
+                ],
+                "id": "300e2e58-57e1-4e39-8f39-2a1514dacbc5",
+                "name": "Call 'api_db post V1'"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'MCP Tool Todo get'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'MCP Tool Todo get'": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields2": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db post V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db post V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version cf272970",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-05T12:48:39.443Z",
+        "updatedAt": "2026-10-05T12:48:42.868Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
