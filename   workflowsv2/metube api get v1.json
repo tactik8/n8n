@@ -1,0 +1,374 @@
+{
+    "id": "RuOTIAhQMxLgTyI9",
+    "name": "metube api get v1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-04-09T18:20:53.436Z",
+    "updatedAt": "2026-05-02T18:15:26.372Z",
+    "isArchived": true,
+    "versionId": "c0ced13a-8a5d-40ba-b80e-8f8edea0c906",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": []
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -480,
+                0
+            ],
+            "id": "41ae3317-9692-48ca-a58d-13a285986c02",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let bookmarks = []\n  for(let m of item.json.rawResults){\n\n    let r = {\n      \"@type\": \"BookmarkAction\",\n      \"@id\": \"https://karakeep.tactik8.com/bookmarks/\" + m.id,\n      \"object\":{\n        \"@type\": \"WebPage\",\n        \"@id\": m.content.url + \"#webpage\",\n        \"url\": m.content.url\n      },\n      \"startTime\": m.createdAt,\n      \"endTime\": m.modifiedAt,\n      \"agent\": {\n        \"@type\": \"Person\",\n        \"@id\": \"https://karakeep.tactik8.com/users/\" + m.userId\n      }\n     \n    }\n    bookmarks.push(r)\n    \n  }\n\n\n  item.json.results = (item.json.results || []).concat(bookmarks)\n}\n\n  return $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1360,
+                128
+            ],
+            "id": "7acfdb12-0ff9-4901-b1c8-877cca6cabd2",
+            "name": "Schema conversion"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                            "name": "action.@type",
+                            "value": "SearchAction",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                            "name": "action.@id",
+                            "value": "={{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.result",
+                            "value": "={{ $json.results }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1264,
+                -160
+            ],
+            "id": "1def64d5-2755-41e2-bcee-5a919ab0696b",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "content": "## I'm a note \n",
+                "height": 192
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -32,
+                -464
+            ],
+            "typeVersion": 1,
+            "id": "b6fea0a7-aa95-4dc7-be5f-fdca25a905fe",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "cc7d3268-0cf7-4a7e-be71-054ae6e3f6cc",
+                            "leftValue": "={{ $json.config.cursor }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1008,
+                16
+            ],
+            "id": "df47587d-20d9-4704-9ae2-3d64062f1c3e",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "79de8a2c-4748-4982-8cf2-8fdf9d7fc6dc",
+                            "name": "config",
+                            "value": "={{ $('Iter1').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c0fc440a-c9aa-4487-83e1-10e1594e163a",
+                            "name": "results",
+                            "value": "={{ $('Iter1').item.json.results }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "bdc687cf-d9eb-4be8-9935-43e368fee877",
+                            "name": "rawResults",
+                            "value": "={{ $json.bookmarks }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "5a75f9b8-103d-4c72-a980-38ce32976b79",
+                            "name": "config.cursor",
+                            "value": "={{ $json.nextCursor }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                800,
+                0
+            ],
+            "id": "1a204043-119f-4ab1-bae1-2fbc0268d05e",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "de9780e3-c30f-4bcc-8a33-d8b5961a265b",
+                            "name": "config.cursor",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "59fabf2e-4204-4e2b-925c-5f8f09a2db39",
+                            "name": "config.url",
+                            "value": "https://xhamster.com/videos/ashley-meets-the-most-interesting-man-xhJ3ztK",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -224,
+                0
+            ],
+            "id": "c2bfa0ee-10c3-4c36-bece-1fd0377f428d",
+            "name": "Init"
+        },
+        {
+            "parameters": {
+                "url": "http://192.168.2.243:8081/history",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Accept",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "json"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                400,
+                -144
+            ],
+            "id": "abb4aa72-c8e1-4ccc-977c-6a21af0de926",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:8081/add",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Accept",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "url",
+                            "value": "={{ $json.config.url }}"
+                        },
+                        {
+                            "name": "folder",
+                            "value": "=metube/{{ $json.config.url.urlEncode() }}"
+                        }
+                    ]
+                },
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "json"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                160,
+                16
+            ],
+            "id": "87173970-ed9e-405d-b7ee-ae75c133f6b5",
+            "name": "HTTP Request1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Init",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schema conversion": {
+            "main": [
+                []
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Schema conversion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Init": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {}
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "RuOTIAhQMxLgTyI9",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-09T18:20:53.436Z",
+            "updatedAt": "2026-04-09T18:20:53.436Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
