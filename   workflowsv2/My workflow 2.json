@@ -1,0 +1,194 @@
+{
+    "id": "zXtYo9hjaFUnF7hl",
+    "name": "My workflow 2",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-04-07T11:32:20.315Z",
+    "updatedAt": "2026-05-02T19:01:28.725Z",
+    "isArchived": true,
+    "versionId": "71d939e2-32ed-4ee2-8591-2890514dcdd2",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -272,
+                80
+            ],
+            "id": "74b927c1-8c1f-461d-853e-149fd4934318",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "test",
+                "fileName": "test_dir/test2.txt",
+                "binaryData": false,
+                "fileContent": "this is a test",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                288,
+                160
+            ],
+            "id": "7dd1458e-e009-4518-a921-da479f33cacb",
+            "name": "Upload a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "bucketName": "test",
+                "returnAll": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                288,
+                384
+            ],
+            "id": "0685df6a-ad02-4368-a162-c67c95e73479",
+            "name": "Get many files",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "bucketName": "test",
+                "fileKey": "={{ $json.Key }}"
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                592,
+                384
+            ],
+            "id": "1cff1bc2-0a28-40a4-b7f7-a80ddf621fc8",
+            "name": "Download a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "bucket",
+                "name": "bronze/zone1",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                288,
+                592
+            ],
+            "id": "4f42f7ae-b406-4fe2-b13a-e7b96f922a9f",
+            "name": "Create a bucket",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "folder",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                288,
+                -128
+            ],
+            "id": "035068d0-1475-4815-827f-b34dc0f2ad0a",
+            "name": "Create a folder",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Create a folder",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Upload a file",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get many files",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Create a bucket",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many files": {
+            "main": [
+                [
+                    {
+                        "node": "Download a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "zXtYo9hjaFUnF7hl",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-07T11:32:20.315Z",
+            "updatedAt": "2026-04-07T11:32:20.315Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
