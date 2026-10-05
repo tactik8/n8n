@@ -1,0 +1,1114 @@
+{
+    "id": "0QeJw1ntAEBB28Yp",
+    "name": "text rewriter v1",
+    "active": true,
+    "activeVersionId": "1c427bd4-3617-4191-8e22-241b5e3d8e4e",
+    "createdAt": "2026-09-17T12:42:42.687Z",
+    "updatedAt": "2026-09-18T12:15:38.498Z",
+    "isArchived": false,
+    "versionId": "a65a7c28-d5b6-4322-a76b-8e8d165e8ab2",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "object",
+                            "type": "object"
+                        },
+                        {
+                            "name": "headline"
+                        },
+                        {
+                            "name": "text"
+                        },
+                        {
+                            "name": "targetLanguage"
+                        },
+                        {
+                            "name": "tone"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -1312,
+                -192
+            ],
+            "id": "7eecae12-022a-45e6-8cf8-8318690f173b",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "6c372ea1-7dfb-4792-913c-6a07b63062f0",
+                            "name": "action.description",
+                            "value": "=Target Language: {{ $('When Executed by Another Workflow').item.json.targetLanguage }}\nTone: {{ $('When Executed by Another Workflow').item.json.tone }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "362e60be-4df7-4051-a4f6-abf65e0fd2e2",
+                            "name": "config.targetLanguage",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.targetLanguage }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "13b1deda-965d-415c-ac11-37875962547a",
+                            "name": "config.tone",
+                            "value": "=value {{ $('When Executed by Another Workflow').item.json.tone }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -864,
+                -192
+            ],
+            "id": "2400467f-e783-4e50-9906-b45210dd9363",
+            "name": "Config2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3ca84413-c7a2-4d88-bc9e-5c0f9426f054",
+                            "name": "object",
+                            "value": "={{ $json?.object || {} }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "={{ $json?.object?.[\"@type\"] || \"DigitalDocument\" }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1e570af9-7b8a-4834-9a89-83d12b0b5c42",
+                            "name": "action.object.headline",
+                            "value": "={{ $json?.object?.headline || $json?.headline || \"\"}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "=action.object.text",
+                            "value": "={{ $json?.object?.text || $json?.text || \"\"}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTime",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -1088,
+                -192
+            ],
+            "id": "1983a6ca-e26a-4776-af30-675f3d5f0526",
+            "name": "Action2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6839b30f-b1f8-41f3-b8b5-91d4dd2dadd4",
+                            "name": "action",
+                            "value": "={{ $('Config2').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "bbc9ef5d-884d-4c54-9f5c-9e3d6c5ed1f8",
+                            "name": "action.result",
+                            "value": "={{ $('Config2').item.json.action.object }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "dcab5652-df3e-4592-979c-6cbfde0163db",
+                            "name": "action.result.headline",
+                            "value": "={{ JSON.parse($json.output.replace(\"```json\", \"\").replace('```', ''))?.headline || \"\" }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "808125d1-e039-4054-8421-250f98c5420e",
+                            "name": "action.result.text",
+                            "value": "={{ JSON.parse($json.output.replace(\"```json\", \"\").replace('```', ''))?.text || \"\" }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -64,
+                -288
+            ],
+            "id": "eebc2b25-facc-4ddc-89f1-4a1fad5aea5e",
+            "name": "Format2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                160,
+                -288
+            ],
+            "id": "13eb4765-9a54-4e9f-a34b-945bdf40f8bd",
+            "name": "Action Close2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                384,
+                -288
+            ],
+            "id": "353f5f9c-d845-4c35-a814-1b4c97b004ff",
+            "name": "Output4"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                160,
+                -96
+            ],
+            "id": "746d81d1-575f-4703-82e8-598af3e9900d",
+            "name": "Output5"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6b21cd81-49b9-4682-84a0-4a58bf3823a8",
+                            "name": "action.error",
+                            "value": "error",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -64,
+                -96
+            ],
+            "id": "6a7f1f51-d23f-4906-a216-1c78e1a4a5d0",
+            "name": "Action Failed2"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.config.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.config.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                -416,
+                -192
+            ],
+            "id": "b42fd8a7-78dd-496c-ae11-bacfa934867d",
+            "name": "AI Agent",
+            "retryOnFail": true,
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4f948e30-d6ec-428a-a885-3a8f96a5061d",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "e24ea729-0753-4769-932c-5e097cbd059b",
+                            "name": "config.userPrompt",
+                            "value": "=Tone: {{ $json.config.tone || \"Same as provided text.\"}}\nHeadline: \nText: \n{{ $json.action.object.text }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.systemPrompt",
+                            "value": "## Role\nYou are an expert Polyglot Copywriter and Tone Specialist. You possess a master-level command of linguistics and style across multiple languages, allowing you to transform the voice and energy of any content while preserving its core message and factual integrity.\n\n## Objective\nRewrite a provided headline and body text to match a specific target tone. You must ensure the content is linguistically natural in the source language while adopting the nuances of the requested style.\n\n## Input Structure\nYou will receive three inputs:\n\nheadline: The original title.\ntext: The original body content.\ntone: The specific style or persona to adopt.\n\n\n## Operational Guidelines\nTone Alignment: Both the headline and the text must be fully adapted to the requested tone. If the tone is 'Professional', use formal syntax; if it is 'Gen-Z', use current slang and informal structures; if it is 'Concise', strip all fluff.\nInformation Preservation: You must not lose any factual information from the original source. Do not hallucinate new details, but feel free to rephrase and restructure extensively to suit the tone.\nLength Flexibility: You are authorized to expand the text (e.g., if the tone is 'Flowery' or 'Explanatory') or contract it (e.g., if the tone is 'Minimalist' or 'Urgent') as the style dictates.\nMultilingual Support: Process the text in the language it is provided. Your output must remain in that same language unless explicitly told otherwise, but the style must reflect the target tone within that language's cultural context.\n\n## Output Format\nYour response must be a single, valid JSON object with the following keys:\n\nheadline: The rewritten headline.\ntext: The rewritten body text.\n\n## Example\nInput:\n\nheadline: \"We are launching a new app.\"\ntext: \"The app helps you track your water intake and stay hydrated throughout the day.\"\ntone: \"High-energy hype\"\nOutput: { \"headline\": \"GET READY: The Ultimate Hydration Revolution is HERE! 🚀\", \"text\": \"Stop settling for being thirsty! We just dropped the most insane hydration tracker ever built. It's time to crush your water goals and feel absolutely unstoppable every single day!\" }\n\n## Constraints\nDo not include any text outside of the JSON object.\nDo not include markdown code blocks (e.g., ```json).\nEnsure all characters are properly escaped for valid JSON parsing.\nMissing text: If text is missing, return empty string. \n",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -640,
+                -192
+            ],
+            "id": "699a3bd3-f716-4ef6-bee3-cb52b699fb9e",
+            "name": "Prompts definition"
+        },
+        {
+            "parameters": {
+                "model": "gemma4:e2b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                -496,
+                48
+            ],
+            "id": "b45642a5-c243-49d1-8b38-f30aa4b2b97e",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config2": {
+            "main": [
+                [
+                    {
+                        "node": "Prompts definition",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action2": {
+            "main": [
+                [
+                    {
+                        "node": "Config2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format2": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close2": {
+            "main": [
+                [
+                    {
+                        "node": "Output4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Failed2": {
+            "main": [
+                [
+                    {
+                        "node": "Output5",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Format2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Action Failed2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prompts definition": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "tone": "funny, casual.",
+                    "headline": "The Fed was bullied into hiking rates. Now it hopes it didn’t royally screw up",
+                    "text": "The bond market gave the Federal Reserve an ultimatum: Raise rates, or we will.\n\nSo the Fed did the only thing it could do. Backed into a corner by rising Treasury yields and inflation, the central bank boosted its target interest rate Wednesday for the first time since 2023.\n\nAmericans have suffered from a persistent inflation problem for five years, and an interest rate hike is a powerful weapon that could help squash it. But it’s a blunt tool that comes with a nasty side effect: It can unintentionally turn the job market into collateral damage.\n\nStill, for Fed Chairman Kevin Warsh & Co., this isn’t any ordinary inflation problem. It’s mainly a result of high energy prices caused by the war with Iran, and as my colleague Matt Egan noted in July: Warsh can’t reopen the Strait of Hormuz.\n\nSo the bond market got its wish Wednesday, and the reasonably strong job market and robust consumer spending probably gave the Fed enough room for error.\n\nBut the Fed is playing with fire. Raising interest rates risks slowing down the American economy without anything to show for it.\n\n‘Weak case’\nBefore the Fed decision, some prominent economists were already on its case.\n\nGoldman Sachs economists suggested in a note to clients this week that the case for a rate hike was “weak,” based on the state of the US economy. They argued the economy wasn’t overheating, demand wasn’t excessive, and the supply shocks fueling inflation – namely high oil and fuel prices – would correct themselves once the war ended.\n\nIt’s not that the Iran war and Ukraine’s attacks on Russian diesel refineries are part of the problem; they are the problem – all of it, Goldman’s economists said.\n- Analyze the impact of this news on the company potential performance for Q1."
+                }
+            },
+            {
+                "json": {
+                    "tone": "Classic, verbose.",
+                    "object": {
+                        "@type": "NoteDocument",
+                        "@id": "Some id",
+                        "headline": "",
+                        "text": "Here is a sumamry of the meeting notes:\nMarc will product financial results for Q4\nEveryone needs to submit timesheets by friday\nPLan for christmas vacation."
+                    }
+                }
+            },
+            {
+                "json": {
+                    "tone": "Same as text.",
+                    "text": ""
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "0QeJw1ntAEBB28Yp",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-17T12:42:42.687Z",
+            "updatedAt": "2026-09-17T12:42:42.687Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "1c427bd4-3617-4191-8e22-241b5e3d8e4e",
+        "workflowId": "0QeJw1ntAEBB28Yp",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "object",
+                                "type": "object"
+                            },
+                            {
+                                "name": "headline"
+                            },
+                            {
+                                "name": "text"
+                            },
+                            {
+                                "name": "targetLanguage"
+                            },
+                            {
+                                "name": "tone"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    -1312,
+                    -192
+                ],
+                "id": "7eecae12-022a-45e6-8cf8-8318690f173b",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "6c372ea1-7dfb-4792-913c-6a07b63062f0",
+                                "name": "action.description",
+                                "value": "=Target Language: {{ $('When Executed by Another Workflow').item.json.targetLanguage }}\nTone: {{ $('When Executed by Another Workflow').item.json.tone }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "362e60be-4df7-4051-a4f6-abf65e0fd2e2",
+                                "name": "config.targetLanguage",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.targetLanguage }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "13b1deda-965d-415c-ac11-37875962547a",
+                                "name": "config.tone",
+                                "value": "=value {{ $('When Executed by Another Workflow').item.json.tone }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -864,
+                    -192
+                ],
+                "id": "2400467f-e783-4e50-9906-b45210dd9363",
+                "name": "Config2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "3ca84413-c7a2-4d88-bc9e-5c0f9426f054",
+                                "name": "object",
+                                "value": "={{ $json?.object || {} }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "={{ $json?.object?.[\"@type\"] || \"DigitalDocument\" }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "1e570af9-7b8a-4834-9a89-83d12b0b5c42",
+                                "name": "action.object.headline",
+                                "value": "={{ $json?.object?.headline || $json?.headline || \"\"}}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "=action.object.text",
+                                "value": "={{ $json?.object?.text || $json?.text || \"\"}}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTime",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -1088,
+                    -192
+                ],
+                "id": "1983a6ca-e26a-4776-af30-675f3d5f0526",
+                "name": "Action2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6839b30f-b1f8-41f3-b8b5-91d4dd2dadd4",
+                                "name": "action",
+                                "value": "={{ $('Config2').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "bbc9ef5d-884d-4c54-9f5c-9e3d6c5ed1f8",
+                                "name": "action.result",
+                                "value": "={{ $('Config2').item.json.action.object }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "dcab5652-df3e-4592-979c-6cbfde0163db",
+                                "name": "action.result.headline",
+                                "value": "={{ JSON.parse($json.output.replace(\"```json\", \"\").replace('```', ''))?.headline || \"\" }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "808125d1-e039-4054-8421-250f98c5420e",
+                                "name": "action.result.text",
+                                "value": "={{ JSON.parse($json.output.replace(\"```json\", \"\").replace('```', ''))?.text || \"\" }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -64,
+                    -288
+                ],
+                "id": "eebc2b25-facc-4ddc-89f1-4a1fad5aea5e",
+                "name": "Format2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    160,
+                    -288
+                ],
+                "id": "13eb4765-9a54-4e9f-a34b-945bdf40f8bd",
+                "name": "Action Close2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    384,
+                    -288
+                ],
+                "id": "353f5f9c-d845-4c35-a814-1b4c97b004ff",
+                "name": "Output4"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    160,
+                    -96
+                ],
+                "id": "746d81d1-575f-4703-82e8-598af3e9900d",
+                "name": "Output5"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "FailedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "6b21cd81-49b9-4682-84a0-4a58bf3823a8",
+                                "name": "action.error",
+                                "value": "error",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -64,
+                    -96
+                ],
+                "id": "6a7f1f51-d23f-4906-a216-1c78e1a4a5d0",
+                "name": "Action Failed2"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "={{ $json.config.userPrompt }}",
+                    "options": {
+                        "systemMessage": "={{ $json.config.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    -416,
+                    -192
+                ],
+                "id": "b42fd8a7-78dd-496c-ae11-bacfa934867d",
+                "name": "AI Agent",
+                "retryOnFail": true,
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4f948e30-d6ec-428a-a885-3a8f96a5061d",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "e24ea729-0753-4769-932c-5e097cbd059b",
+                                "name": "config.userPrompt",
+                                "value": "=Tone: {{ $json.config.tone || \"Same as provided text.\"}}\nHeadline: \nText: \n{{ $json.action.object.text }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.systemPrompt",
+                                "value": "## Role\nYou are an expert Polyglot Copywriter and Tone Specialist. You possess a master-level command of linguistics and style across multiple languages, allowing you to transform the voice and energy of any content while preserving its core message and factual integrity.\n\n## Objective\nRewrite a provided headline and body text to match a specific target tone. You must ensure the content is linguistically natural in the source language while adopting the nuances of the requested style.\n\n## Input Structure\nYou will receive three inputs:\n\nheadline: The original title.\ntext: The original body content.\ntone: The specific style or persona to adopt.\nOperational Guidelines\nTone Alignment: Both the headline and the text must be fully adapted to the requested tone. If the tone is 'Professional', use formal syntax; if it is 'Gen-Z', use current slang and informal structures; if it is 'Concise', strip all fluff.\nInformation Preservation: You must not lose any factual information from the original source. Do not hallucinate new details, but feel free to rephrase and restructure extensively to suit the tone.\nLength Flexibility: You are authorized to expand the text (e.g., if the tone is 'Flowery' or 'Explanatory') or contract it (e.g., if the tone is 'Minimalist' or 'Urgent') as the style dictates.\nMultilingual Support: Process the text in the language it is provided. Your output must remain in that same language unless explicitly told otherwise, but the style must reflect the target tone within that language's cultural context.\n\n## Output Format\nYour response must be a single, valid JSON object with the following keys:\n\nheadline: The rewritten headline.\ntext: The rewritten body text.\n\n## Example\nInput:\n\nheadline: \"We are launching a new app.\"\ntext: \"The app helps you track your water intake and stay hydrated throughout the day.\"\ntone: \"High-energy hype\"\nOutput: { \"headline\": \"GET READY: The Ultimate Hydration Revolution is HERE! 🚀\", \"text\": \"Stop settling for being thirsty! We just dropped the most insane hydration tracker ever built. It's time to crush your water goals and feel absolutely unstoppable every single day!\" }\n\n## Constraints\nDo not include any text outside of the JSON object.\nDo not include markdown code blocks (e.g., ```json).\nEnsure all characters are properly escaped for valid JSON parsing.\nMissing text: If text is missing, return empty string. \n",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -640,
+                    -192
+                ],
+                "id": "699a3bd3-f716-4ef6-bee3-cb52b699fb9e",
+                "name": "Prompts definition"
+            },
+            {
+                "parameters": {
+                    "model": "gemma4:e2b",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+                "typeVersion": 1,
+                "position": [
+                    -496,
+                    48
+                ],
+                "id": "b45642a5-c243-49d1-8b38-f30aa4b2b97e",
+                "name": "Ollama Chat Model",
+                "credentials": {
+                    "ollamaApi": {
+                        "id": "eYA4JvgcNcu0q3Nd",
+                        "name": "Ollama account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config2": {
+                "main": [
+                    [
+                        {
+                            "node": "Prompts definition",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action2": {
+                "main": [
+                    [
+                        {
+                            "node": "Config2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Format2": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close2": {
+                "main": [
+                    [
+                        {
+                            "node": "Output4",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Failed2": {
+                "main": [
+                    [
+                        {
+                            "node": "Output5",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Format2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Action Failed2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Prompts definition": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Ollama Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 1c427bd4",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-09-17T12:54:42.419Z",
+        "updatedAt": "2026-09-17T12:56:24.212Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
