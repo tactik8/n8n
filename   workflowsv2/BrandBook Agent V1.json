@@ -1,0 +1,212 @@
+{
+    "id": "8MEmyTlBtkUuZEfl",
+    "name": "BrandBook Agent V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-09-02T21:23:54.795Z",
+    "updatedAt": "2026-09-02T21:29:42.426Z",
+    "isArchived": false,
+    "versionId": "2dd70a5b-1966-434a-a936-877fe37765f4",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "BrandBook",
+                "options": {
+                    "responseMode": "responseNodes"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.4,
+            "position": [
+                0,
+                0
+            ],
+            "id": "634718eb-9a1b-49e2-90b1-556903a1dc5a",
+            "name": "When chat message received",
+            "webhookId": "45a13821-d335-420a-b062-9dc43effcf7c"
+        },
+        {
+            "parameters": {
+                "options": {
+                    "systemMessage": "Role: \nYou are a brand strategist. \nTask:\nYou answer the user questions regarding specific brands. You have access to a database of brand books. You provide the source of your answers.\n\n"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                224,
+                0
+            ],
+            "id": "51ddb358-d873-4978-9be6-a54c66ad93d8",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                96,
+                208
+            ],
+            "id": "cf0fd2c3-7573-4c7d-871a-e34a9dd4e070",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1.4,
+            "position": [
+                240,
+                208
+            ],
+            "id": "7e1b63af-8981-4311-b7ae-b35bd87f7ad7",
+            "name": "Simple Memory"
+        },
+        {
+            "parameters": {
+                "endpointUrl": "https://n8n.tactik8.com/mcp/579a1b99-d1aa-4401-a0c3-869bbe145c2e",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1.4,
+            "position": [
+                480,
+                176
+            ],
+            "id": "7f010df1-5677-4cb6-9486-fbf991784f0e",
+            "name": "MCP Client"
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.5,
+            "position": [
+                384,
+                208
+            ],
+            "id": "c505b1af-2f58-4dad-8ecb-479bb0b3a5db",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                592,
+                0
+            ],
+            "id": "640a57c2-1076-4308-a3cd-55f5f0c8f333",
+            "name": "Respond to Webhook"
+        }
+    ],
+    "connections": {
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Simple Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MCP Client": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "8MEmyTlBtkUuZEfl",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-02T21:23:54.795Z",
+            "updatedAt": "2026-09-02T21:23:54.795Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
