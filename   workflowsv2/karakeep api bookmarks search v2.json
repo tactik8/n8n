@@ -1,0 +1,1031 @@
+{
+    "id": "8FQvRveJHotxlLdc",
+    "name": "karakeep api bookmarks search v2",
+    "active": true,
+    "activeVersionId": "98d96b28-5b7b-4dd1-bd51-84e9c584db36",
+    "createdAt": "2026-09-09T12:13:43.756Z",
+    "updatedAt": "2026-09-09T14:59:34.340Z",
+    "isArchived": false,
+    "versionId": "98d96b28-5b7b-4dd1-bd51-84e9c584db36",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "content": "## I'm a note \nak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44",
+                "height": 192
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -1040,
+                -1184
+            ],
+            "typeVersion": 1,
+            "id": "8ea6c8b6-1d55-4c34-a296-57c1e3d811f7",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -1392,
+                -496
+            ],
+            "id": "c95ed6bd-3a43-48f2-a027-2038bf099f3d",
+            "name": "Config1"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                -496,
+                -496
+            ],
+            "id": "4f3d2de0-f796-4896-bfad-600b22850d31",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d6f69276-aa0b-4235-98dd-0682acaeebe9",
+                            "name": "action",
+                            "value": "={{ $('Config1').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "36cfaebe-710c-46cd-91ee-4736c8772cc3",
+                            "name": "action.object",
+                            "value": "={{ $json.output?.result || $json.output.object }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -736,
+                -752
+            ],
+            "id": "af53ffa6-c274-4959-8fc8-6818aa847860",
+            "name": "Edit Fields4"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "rCxc7cU0hejEYmeL",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/rCxc7cU0hejEYmeL",
+                    "cachedResultName": "user account get v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "system.url": "={{ $json.action.object.system.url }}",
+                        "user.email": "={{ $json.action.object.user.email }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "system.url",
+                            "displayName": "system.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "user.email",
+                            "displayName": "user.email",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "accountID",
+                            "displayName": "accountID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                -960,
+                -752
+            ],
+            "id": "ef41370d-d939-4c15-bb61-e9726866cb0a",
+            "name": "Get credentials1"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "6e59a880-8b87-4bdc-bd84-a83aec1575bf",
+                            "leftValue": "={{ $json.action.object?.credential?.token }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                -1168,
+                -496
+            ],
+            "id": "63508c70-3ab6-478a-890f-56dde3b69553",
+            "name": "Check if credentials provided1"
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "system.url"
+                        },
+                        {
+                            "name": "user.email"
+                        },
+                        {
+                            "name": "credential.token"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -1888,
+                -480
+            ],
+            "id": "c84b705e-e0dd-48dc-9961-e9bf43d68b82",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "UserAccount",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8ce15c98-22ef-44a8-be4e-2a2e82527764",
+                            "name": "action.object.user.email",
+                            "value": "={{ $json['user.email'] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.system.url",
+                            "value": "={{ $json['system.url'] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0921c685-93cb-4a78-9943-e0b433547071",
+                            "name": "action.object.credential.token",
+                            "value": "={{ $json['credential.token'] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -1632,
+                -480
+            ],
+            "id": "93bf94d0-50bc-49d4-84ca-f1afcd96723c",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "jsCode": "let fetch = this.helpers.request\n\nconst { systems } = require('/home/node/node_modules/helpers_systems')\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let url = item.json.action.object.system.url\n  let token = item.json.action.object.credential.token\n\n\n\n\n  \n  let karakeep = new systems.Karakeep(url, token)\n  item.json.action.result = await karakeep.bookmarks.search()\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -176,
+                -496
+            ],
+            "id": "c7e3a458-d0f8-4498-b79e-6029935da5a0",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "command": "npm install github:tactik8/helpers_systems\n"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -944,
+                48
+            ],
+            "id": "a6afac78-6470-40ac-8834-d867bed9d361",
+            "name": "Execute Command"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                272,
+                -496
+            ],
+            "id": "0e934a5c-3e69-4a66-bcd9-cc4e39bd2e59",
+            "name": "Action close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                496,
+                -496
+            ],
+            "id": "92af7c8f-9ace-4dd2-8c51-5188f49c9128",
+            "name": "Output"
+        }
+    ],
+    "connections": {
+        "Config1": {
+            "main": [
+                [
+                    {
+                        "node": "Check if credentials provided1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields4": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get credentials1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check if credentials provided1": {
+            "main": [
+                [
+                    {
+                        "node": "Get credentials1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Action close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "system.url": "https://karakeep.tactik8.com",
+                    "user.email": "vllnlair@gmail.com"
+                }
+            },
+            {
+                "json": {
+                    "system.url": "https://karakeep.tactik8.com",
+                    "credential.token": "ak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "8FQvRveJHotxlLdc",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-09T12:13:43.756Z",
+            "updatedAt": "2026-09-09T12:13:43.756Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "98d96b28-5b7b-4dd1-bd51-84e9c584db36",
+        "workflowId": "8FQvRveJHotxlLdc",
+        "nodes": [
+            {
+                "parameters": {
+                    "content": "## I'm a note \nak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44",
+                    "height": 192
+                },
+                "type": "n8n-nodes-base.stickyNote",
+                "position": [
+                    -1040,
+                    -1184
+                ],
+                "typeVersion": 1,
+                "id": "8ea6c8b6-1d55-4c34-a296-57c1e3d811f7",
+                "name": "Sticky Note"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -1392,
+                    -496
+                ],
+                "id": "c95ed6bd-3a43-48f2-a027-2038bf099f3d",
+                "name": "Config1"
+            },
+            {
+                "parameters": {},
+                "type": "n8n-nodes-base.merge",
+                "typeVersion": 3.2,
+                "position": [
+                    -496,
+                    -496
+                ],
+                "id": "4f3d2de0-f796-4896-bfad-600b22850d31",
+                "name": "Merge"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "d6f69276-aa0b-4235-98dd-0682acaeebe9",
+                                "name": "action",
+                                "value": "={{ $('Config1').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "36cfaebe-710c-46cd-91ee-4736c8772cc3",
+                                "name": "action.object",
+                                "value": "={{ $json.output?.result || $json.output.object }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    -736,
+                    -752
+                ],
+                "id": "af53ffa6-c274-4959-8fc8-6818aa847860",
+                "name": "Edit Fields4"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "rCxc7cU0hejEYmeL",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/rCxc7cU0hejEYmeL",
+                        "cachedResultName": "user account get v1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "system.url": "={{ $json.action.object.system.url }}",
+                            "user.email": "={{ $json.action.object.user.email }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "system.url",
+                                "displayName": "system.url",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "user.email",
+                                "displayName": "user.email",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "accountID",
+                                "displayName": "accountID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    -960,
+                    -752
+                ],
+                "id": "ef41370d-d939-4c15-bb61-e9726866cb0a",
+                "name": "Get credentials1"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "6e59a880-8b87-4bdc-bd84-a83aec1575bf",
+                                "leftValue": "={{ $json.action.object?.credential?.token }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "empty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    -1168,
+                    -496
+                ],
+                "id": "63508c70-3ab6-478a-890f-56dde3b69553",
+                "name": "Check if credentials provided1"
+            },
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "system.url"
+                            },
+                            {
+                                "name": "user.email"
+                            },
+                            {
+                                "name": "credential.token"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -1888,
+                    -480
+                ],
+                "id": "c84b705e-e0dd-48dc-9961-e9bf43d68b82",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "UserAccount",
+                                "type": "string"
+                            },
+                            {
+                                "id": "8ce15c98-22ef-44a8-be4e-2a2e82527764",
+                                "name": "action.object.user.email",
+                                "value": "={{ $json['user.email'] }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.system.url",
+                                "value": "={{ $json['system.url'] }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0921c685-93cb-4a78-9943-e0b433547071",
+                                "name": "action.object.credential.token",
+                                "value": "={{ $json['credential.token'] }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -1632,
+                    -480
+                ],
+                "id": "93bf94d0-50bc-49d4-84ca-f1afcd96723c",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "jsCode": "let fetch = this.helpers.request\n\nconst { systems } = require('/home/node/node_modules/helpers_systems')\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let url = item.json.action.object.system.url\n  let token = item.json.action.object.credential.token\n\n\n\n\n  \n  let karakeep = new systems.Karakeep(url, token)\n  item.json.action.result = await karakeep.bookmarks.search()\n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    -176,
+                    -496
+                ],
+                "id": "c7e3a458-d0f8-4498-b79e-6029935da5a0",
+                "name": "Code in JavaScript"
+            },
+            {
+                "parameters": {
+                    "command": "npm install github:tactik8/helpers_systems\n"
+                },
+                "type": "n8n-nodes-base.executeCommand",
+                "typeVersion": 1,
+                "position": [
+                    -944,
+                    48
+                ],
+                "id": "a6afac78-6470-40ac-8834-d867bed9d361",
+                "name": "Execute Command"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    272,
+                    -496
+                ],
+                "id": "0e934a5c-3e69-4a66-bcd9-cc4e39bd2e59",
+                "name": "Action close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    496,
+                    -496
+                ],
+                "id": "92af7c8f-9ace-4dd2-8c51-5188f49c9128",
+                "name": "Output"
+            }
+        ],
+        "connections": {
+            "Config1": {
+                "main": [
+                    [
+                        {
+                            "node": "Check if credentials provided1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Merge": {
+                "main": [
+                    [
+                        {
+                            "node": "Code in JavaScript",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields4": {
+                "main": [
+                    [
+                        {
+                            "node": "Merge",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get credentials1": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields4",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Check if credentials provided1": {
+                "main": [
+                    [
+                        {
+                            "node": "Get credentials1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Merge",
+                            "type": "main",
+                            "index": 1
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Code in JavaScript": {
+                "main": [
+                    [
+                        {
+                            "node": "Action close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 98d96b28",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-09-09T14:59:34.342Z",
+        "updatedAt": "2026-09-09T14:59:58.711Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
