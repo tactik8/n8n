@@ -1,0 +1,481 @@
+{
+    "id": "FRwaLQVCAFhOX8oy",
+    "name": "Admin - n8n workflow backup v1",
+    "active": true,
+    "activeVersionId": "5b8ac6e0-88a9-4d3c-9e8d-67e9726b9dbb",
+    "createdAt": "2026-05-02T19:02:19.239Z",
+    "updatedAt": "2026-10-05T13:50:26.825Z",
+    "isArchived": false,
+    "versionId": "1a906eb7-b6df-47b7-ba22-14632afcedf6",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "968b8e63-39e5-4aa7-b2fc-5ebd040256ca",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "e095a87c-5d90-47d6-be83-7fdb7bee8d25",
+                            "name": "config.apiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkMWEwNjEzYi0zNjRmLTQ5OGQtYTdlNy04ZGMwZDU5NzY2YWUiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiMTZiZTA2Y2ItNTVmZi00NTAxLWFiMzAtNWE5M2RjY2M2ZWEyIiwiaWF0IjoxNzc3NzQ4NTI3fQ.VaeGHJy5ov3yCIk4QDVncpAdAkzOx8lfh4USXYNM18Q",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "b79a4671-c749-4e80-ae58-816dd413b461",
+            "name": "config"
+        },
+        {
+            "parameters": {
+                "filters": {},
+                "requestOptions": {}
+            },
+            "type": "n8n-nodes-base.n8n",
+            "typeVersion": 1,
+            "position": [
+                416,
+                0
+            ],
+            "id": "d54c0fd8-db50-4821-bda8-3e8de38727bb",
+            "name": "Get many workflows",
+            "credentials": {
+                "n8nApi": {
+                    "id": "HQAd3VDbEb09rvuZ",
+                    "name": "n8n account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "toJson",
+                "options": {
+                    "fileName": "={{ $json.name }}.json"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                624,
+                0
+            ],
+            "id": "59ce6004-cdb4-435e-b465-96339f6ca8dd",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "backup",
+                "fileName": "=n8n_backup_{{ $now.format('yyyy_MM_dd') }}.json",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                880,
+                16
+            ],
+            "id": "d282431f-fc3c-4cce-8c15-8200985c3b5c",
+            "name": "Upload a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "triggerAtHour": 1
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                0,
+                -240
+            ],
+            "id": "0acfcad3-06fc-45f7-af49-3bf92b601d97",
+            "name": "Schedule Trigger"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "list",
+                    "cachedResultName": "tactik8",
+                    "cachedResultUrl": "https://github.com/tactik8"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "n8n",
+                    "mode": "list",
+                    "cachedResultName": "n8n",
+                    "cachedResultUrl": "https://github.com/tactik8/n8n"
+                },
+                "filePath": "=workflowsv2/{{ $json.name }}.json",
+                "fileContent": "={{ JSON.stringify($json, null, 4) }}",
+                "commitMessage": "n8n workflow backup"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                704,
+                -336
+            ],
+            "id": "c668b5e4-0d3b-4255-8d16-a6e114bb4edf",
+            "name": "Edit a file",
+            "webhookId": "29a3fd19-153c-44b1-abb1-67b02a6d7f06",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8",
+                    "mode": "url"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "n8n",
+                    "mode": "list",
+                    "cachedResultName": "n8n",
+                    "cachedResultUrl": "https://github.com/tactik8/n8n"
+                },
+                "filePath": "=  workflowsv2/{{ $('Get many workflows').item.json.name }}.json",
+                "fileContent": "={{ JSON.stringify($json, null, 4)  }}",
+                "commitMessage": "n8n workflow create"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                928,
+                -240
+            ],
+            "id": "3b572d4a-9999-4c4c-8911-969302050684",
+            "name": "Create a file",
+            "webhookId": "b7a25ed1-2706-464d-85f7-0054630c2233",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            },
+            "onError": "continueRegularOutput"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "config": {
+            "main": [
+                [
+                    {
+                        "node": "Get many workflows",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many workflows": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "Upload a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit a file": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Create a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": {
+        "node:Schedule Trigger": {
+            "recurrenceRules": [
+                null
+            ],
+            "recurrenceRuleSignatures": [
+                null
+            ]
+        }
+    },
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "FRwaLQVCAFhOX8oy",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-02T19:02:19.239Z",
+            "updatedAt": "2026-05-02T19:02:19.239Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "5b8ac6e0-88a9-4d3c-9e8d-67e9726b9dbb",
+        "workflowId": "FRwaLQVCAFhOX8oy",
+        "nodes": [
+            {
+                "parameters": {
+                    "inputSource": "passthrough"
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "968b8e63-39e5-4aa7-b2fc-5ebd040256ca",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "e095a87c-5d90-47d6-be83-7fdb7bee8d25",
+                                "name": "config.apiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkMWEwNjEzYi0zNjRmLTQ5OGQtYTdlNy04ZGMwZDU5NzY2YWUiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiMTZiZTA2Y2ItNTVmZi00NTAxLWFiMzAtNWE5M2RjY2M2ZWEyIiwiaWF0IjoxNzc3NzQ4NTI3fQ.VaeGHJy5ov3yCIk4QDVncpAdAkzOx8lfh4USXYNM18Q",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    208,
+                    0
+                ],
+                "id": "b79a4671-c749-4e80-ae58-816dd413b461",
+                "name": "config"
+            },
+            {
+                "parameters": {
+                    "filters": {},
+                    "requestOptions": {}
+                },
+                "type": "n8n-nodes-base.n8n",
+                "typeVersion": 1,
+                "position": [
+                    416,
+                    0
+                ],
+                "id": "d54c0fd8-db50-4821-bda8-3e8de38727bb",
+                "name": "Get many workflows",
+                "credentials": {
+                    "n8nApi": {
+                        "id": "HQAd3VDbEb09rvuZ",
+                        "name": "n8n account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "operation": "toJson",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.convertToFile",
+                "typeVersion": 1.1,
+                "position": [
+                    624,
+                    0
+                ],
+                "id": "59ce6004-cdb4-435e-b465-96339f6ca8dd",
+                "name": "Convert to File"
+            },
+            {
+                "parameters": {
+                    "operation": "upload",
+                    "bucketName": "backup",
+                    "fileName": "=n8n_backup_{{ $now.format('yyyy_MM_dd') }}.json",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    880,
+                    16
+                ],
+                "id": "d282431f-fc3c-4cce-8c15-8200985c3b5c",
+                "name": "Upload a file",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "rule": {
+                        "interval": [
+                            {
+                                "triggerAtHour": 1
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.scheduleTrigger",
+                "typeVersion": 1.3,
+                "position": [
+                    0,
+                    -240
+                ],
+                "id": "0acfcad3-06fc-45f7-af49-3bf92b601d97",
+                "name": "Schedule Trigger"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "config": {
+                "main": [
+                    [
+                        {
+                            "node": "Get many workflows",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get many workflows": {
+                "main": [
+                    [
+                        {
+                            "node": "Convert to File",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Convert to File": {
+                "main": [
+                    [
+                        {
+                            "node": "Upload a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Schedule Trigger": {
+                "main": [
+                    [
+                        {
+                            "node": "config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 5b8ac6e0",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-05-02T19:14:43.507Z",
+        "updatedAt": "2026-05-02T19:14:45.800Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
