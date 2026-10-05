@@ -1,0 +1,3545 @@
+{
+    "id": "LxFJtywlqB6srIyt",
+    "name": "api_db_test V1",
+    "active": true,
+    "activeVersionId": "d6c75781-fc37-40d0-8a42-ea7d6b9fbd9b",
+    "createdAt": "2026-09-08T13:54:33.246Z",
+    "updatedAt": "2026-09-08T14:13:34.663Z",
+    "isArchived": false,
+    "versionId": "d6c75781-fc37-40d0-8a42-ea7d6b9fbd9b",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -368,
+                -224
+            ],
+            "id": "deec3f4c-228c-4ec4-a9af-986ae33aabc0",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{ $json.output?.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1632,
+                1264
+            ],
+            "id": "9401b65b-b323-4550-9843-81eca45885d3",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1856,
+                1264
+            ],
+            "id": "c7489a41-6ff8-4320-83fc-6dae8cab97e1",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2080,
+                1264
+            ],
+            "id": "8ecfa934-7dbb-4c67-bf5b-a25256f572db",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.databaseID",
+                            "value": "=unitTestN8NApiDb",
+                            "type": "string"
+                        },
+                        {
+                            "id": "30bd05b6-1b12-4853-b502-fc05cdab59e5",
+                            "name": "config.tenantID",
+                            "value": "=unitTestN8NApiDb1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "12eab3e9-7766-4a3b-92b2-d53019cee9b4",
+                            "name": "config.record.@type",
+                            "value": "Thing",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ec24426a-f06a-430d-bf87-49a701c9c4f0",
+                            "name": "config.record.@id",
+                            "value": "https://www.test.com/thing1#thing",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e541aa48-b8ed-4b4f-a98a-27d748705479",
+                            "name": "config.record.name",
+                            "value": "Thing1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "40e041a9-d80f-436f-8ea6-ece83cf4cd26",
+                            "name": "config.patch.@id",
+                            "value": "https://www.test.com/thing1#thing",
+                            "type": "string"
+                        },
+                        {
+                            "id": "052cd33d-f8f0-4879-841b-9a51b8f93c57",
+                            "name": "config.patch.newName",
+                            "value": "newName1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                80,
+                -224
+            ],
+            "id": "5e50acd2-fecf-4d87-b7b8-e0d40730fa73",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object",
+                            "value": "={{ $json.record }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": false
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -144,
+                -224
+            ],
+            "id": "79f919bd-c894-417e-88b8-1c821c0c4ecd",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "AlhzQzNAkyn2CBDP",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                    "cachedResultName": "api_db get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "unitTestN8NApiDb",
+                        "tenantID": "unitTestN8NApiDb1",
+                        "record_id": "={{ $json.config.record['@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                752,
+                -224
+            ],
+            "id": "f72ea6dc-9dd8-46b2-88f3-d05300cd44a5",
+            "name": "Call 'api_db get V1'"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "ab164b83-989a-44e1-abdc-aed1f314d0c5",
+                            "leftValue": "={{ $json.output.result }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "object",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                976,
+                -224
+            ],
+            "id": "b208291f-f073-480b-8dd6-b1da0ca6d65c",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b6730b46-2917-401c-a22d-d2ababa5112c",
+                            "name": "action.error",
+                            "value": "Failed test 1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1200,
+                -320
+            ],
+            "id": "89ba4e76-2327-4377-b711-01fe8949fe56",
+            "name": "Action Close1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1424,
+                -320
+            ],
+            "id": "31ae7adb-5cd0-4080-9ace-e97e148bc5b6",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "r0iPZkb7BWNPAbdn",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                    "cachedResultName": "api_db post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "record": "={{ $json.config.record }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                304,
+                176
+            ],
+            "id": "05dda3c5-7e73-4e45-bfb4-ebb6df76481d",
+            "name": "Call 'api_db post"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                80,
+                176
+            ],
+            "id": "4e0a57a3-4e7b-4dc5-9626-03398be03ba7",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "AlhzQzNAkyn2CBDP",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                    "cachedResultName": "api_db get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "unitTestN8NApiDb",
+                        "tenantID": "unitTestN8NApiDb1",
+                        "record_id": "={{ $json.config.record['@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                752,
+                176
+            ],
+            "id": "87e2ed6b-ed13-479c-b895-ef85a08f9058",
+            "name": "Call 'api_db get V1'1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                528,
+                176
+            ],
+            "id": "8362b999-a8d4-4c0c-82e3-de0caee7a76b",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "ab164b83-989a-44e1-abdc-aed1f314d0c5",
+                            "leftValue": "={{ $json.output.result['@id'] }}",
+                            "rightValue": "={{ $json.output.result['@id'] }}",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEquals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                976,
+                176
+            ],
+            "id": "184e4191-499c-48f3-ab6a-09ca6817df3a",
+            "name": "If1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "X7T3DOcftP04Sogs",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/X7T3DOcftP04Sogs",
+                    "cachedResultName": "api_db delete V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "record_id": "={{ $json.config.record['@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                304,
+                -224
+            ],
+            "id": "ae1d5918-9e8d-4456-8cb0-66f5cf0272b4",
+            "name": "Call 'api_db get V1'2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                528,
+                -224
+            ],
+            "id": "cd87c73f-debb-4a3c-91b1-4f61a6f728f8",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                80,
+                592
+            ],
+            "id": "4b002d4c-7ef7-4379-91ab-8529eb95c2fd",
+            "name": "Edit Fields3"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b6730b46-2917-401c-a22d-d2ababa5112c",
+                            "name": "action.error",
+                            "value": "Failed test 1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1200,
+                80
+            ],
+            "id": "417c829d-8a02-4152-8781-2e5c727fcd5b",
+            "name": "Action Close2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1424,
+                80
+            ],
+            "id": "70cd993e-b1f3-4617-b9d9-735b88ce66a2",
+            "name": "Output2"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "AlhzQzNAkyn2CBDP",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                    "cachedResultName": "api_db get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "unitTestN8NApiDb",
+                        "tenantID": "unitTestN8NApiDb1",
+                        "record_id": "={{ $json.config.record['@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                752,
+                592
+            ],
+            "id": "934b3eaf-d640-4bcb-addd-3491fa0d0392",
+            "name": "Call 'api_db get V1'3"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                528,
+                592
+            ],
+            "id": "99f604d5-1c60-4ae5-9fdb-107ff0d2609c",
+            "name": "Edit Fields4"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dSApIWk7xsFRrbgd",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dSApIWk7xsFRrbgd",
+                    "cachedResultName": "api_db patch V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "record": "={{ $json.config.patch }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                304,
+                592
+            ],
+            "id": "10d25491-7189-462d-bdd8-48503bad1d2a",
+            "name": "Call 'api_db patch"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                1200,
+                688
+            ],
+            "id": "a754cd01-b31b-4af4-be84-4c329a975ff7",
+            "name": "Edit Fields5"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b6730b46-2917-401c-a22d-d2ababa5112c",
+                            "name": "action.error",
+                            "value": "Failed test 1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1200,
+                496
+            ],
+            "id": "5f73767b-0470-4af3-aaee-90e4b4964989",
+            "name": "Action Close3"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1424,
+                496
+            ],
+            "id": "d9c154c1-a3d4-404a-9481-d3fa3104f412",
+            "name": "Output3"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "ab164b83-989a-44e1-abdc-aed1f314d0c5",
+                            "leftValue": "={{ $json.output.result.newName }}",
+                            "rightValue": "={{ $('Edit Fields4').item.json.config.patch.newName }}",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEquals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                976,
+                592
+            ],
+            "id": "a65990e1-b05d-4ff1-8c23-6ff0f034ea86",
+            "name": "If2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                80,
+                1024
+            ],
+            "id": "53502594-2320-4462-a916-a65951de5e4b",
+            "name": "Edit Fields6"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "AlhzQzNAkyn2CBDP",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                    "cachedResultName": "api_db get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "unitTestN8NApiDb",
+                        "tenantID": "unitTestN8NApiDb1",
+                        "record_id": "={{ $json.config.record['@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                752,
+                1024
+            ],
+            "id": "a6276892-e122-4335-b760-8477b35e7f51",
+            "name": "Call 'api_db get V1'4"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                528,
+                1024
+            ],
+            "id": "190adccc-d76b-4d95-8083-f8fb044827cf",
+            "name": "Edit Fields7"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "X7T3DOcftP04Sogs",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/X7T3DOcftP04Sogs",
+                    "cachedResultName": "api_db delete V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "record_id": "={{ $json.config.record['@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                304,
+                1024
+            ],
+            "id": "aa83fe3a-f4b3-4b65-8961-00c7b0dba644",
+            "name": "Call 'api_db patch1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "444b4c6d-3257-4022-8a49-473411362795",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                1200,
+                1120
+            ],
+            "id": "99869753-1281-4f27-8773-2a41edfb5aeb",
+            "name": "Edit Fields8"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b6730b46-2917-401c-a22d-d2ababa5112c",
+                            "name": "action.error",
+                            "value": "Failed test 1",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1200,
+                928
+            ],
+            "id": "f6428a8d-e7f3-4662-9ea4-cd3ca9354192",
+            "name": "Action Close4"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1424,
+                928
+            ],
+            "id": "bd24aba8-710c-4d90-bc6f-ae85c0dfdb02",
+            "name": "Output4"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "ab164b83-989a-44e1-abdc-aed1f314d0c5",
+                            "leftValue": "={{ $json.output.result?.['@id'] }}",
+                            "rightValue": "={{ $('Edit Fields7').item.json.config.patch.newName }}",
+                            "operator": {
+                                "type": "string",
+                                "operation": "exists",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                976,
+                1024
+            ],
+            "id": "518be3da-4627-494d-bb3d-11617ab672dd",
+            "name": "If3"
+        }
+    ],
+    "connections": {
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db get V1'2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db get V1'": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db post",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db post": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db get V1'1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db get V1'1": {
+            "main": [
+                [
+                    {
+                        "node": "If1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db get V1'2": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db get V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If1": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close2": {
+            "main": [
+                [
+                    {
+                        "node": "Output2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields4": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db get V1'3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db patch": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields3": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db patch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close3": {
+            "main": [
+                [
+                    {
+                        "node": "Output3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db get V1'3": {
+            "main": [
+                [
+                    {
+                        "node": "If2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If2": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields5",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields6": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db patch1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db get V1'4": {
+            "main": [
+                [
+                    {
+                        "node": "If3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields7": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db get V1'4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db patch1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields7",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close4": {
+            "main": [
+                [
+                    {
+                        "node": "Output4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If3": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Edit Fields8",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields5": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields6",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields8": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "LxFJtywlqB6srIyt",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-08T13:54:33.246Z",
+            "updatedAt": "2026-09-08T13:54:33.246Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "d6c75781-fc37-40d0-8a42-ea7d6b9fbd9b",
+        "workflowId": "LxFJtywlqB6srIyt",
+        "nodes": [
+            {
+                "parameters": {
+                    "inputSource": "passthrough"
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    -368,
+                    -224
+                ],
+                "id": "deec3f4c-228c-4ec4-a9af-986ae33aabc0",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{ $json.output?.result }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1632,
+                    1264
+                ],
+                "id": "9401b65b-b323-4550-9843-81eca45885d3",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1856,
+                    1264
+                ],
+                "id": "c7489a41-6ff8-4320-83fc-6dae8cab97e1",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    2080,
+                    1264
+                ],
+                "id": "8ecfa934-7dbb-4c67-bf5b-a25256f572db",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.databaseID",
+                                "value": "=unitTestN8NApiDb",
+                                "type": "string"
+                            },
+                            {
+                                "id": "30bd05b6-1b12-4853-b502-fc05cdab59e5",
+                                "name": "config.tenantID",
+                                "value": "=unitTestN8NApiDb1",
+                                "type": "string"
+                            },
+                            {
+                                "id": "12eab3e9-7766-4a3b-92b2-d53019cee9b4",
+                                "name": "config.record.@type",
+                                "value": "Thing",
+                                "type": "string"
+                            },
+                            {
+                                "id": "ec24426a-f06a-430d-bf87-49a701c9c4f0",
+                                "name": "config.record.@id",
+                                "value": "https://www.test.com/thing1#thing",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e541aa48-b8ed-4b4f-a98a-27d748705479",
+                                "name": "config.record.name",
+                                "value": "Thing1",
+                                "type": "string"
+                            },
+                            {
+                                "id": "40e041a9-d80f-436f-8ea6-ece83cf4cd26",
+                                "name": "config.patch.@id",
+                                "value": "https://www.test.com/thing1#thing",
+                                "type": "string"
+                            },
+                            {
+                                "id": "052cd33d-f8f0-4879-841b-9a51b8f93c57",
+                                "name": "config.patch.newName",
+                                "value": "newName1",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    80,
+                    -224
+                ],
+                "id": "5e50acd2-fecf-4d87-b7b8-e0d40730fa73",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object",
+                                "value": "={{ $json.record }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": false
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -144,
+                    -224
+                ],
+                "id": "79f919bd-c894-417e-88b8-1c821c0c4ecd",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "AlhzQzNAkyn2CBDP",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                        "cachedResultName": "api_db get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "unitTestN8NApiDb",
+                            "tenantID": "unitTestN8NApiDb1",
+                            "record_id": "={{ $json.config.record['@id'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    752,
+                    -224
+                ],
+                "id": "f72ea6dc-9dd8-46b2-88f3-d05300cd44a5",
+                "name": "Call 'api_db get V1'"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "ab164b83-989a-44e1-abdc-aed1f314d0c5",
+                                "leftValue": "={{ $json.output.result }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "object",
+                                    "operation": "notEmpty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    976,
+                    -224
+                ],
+                "id": "b208291f-f073-480b-8dd6-b1da0ca6d65c",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "FailedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b6730b46-2917-401c-a22d-d2ababa5112c",
+                                "name": "action.error",
+                                "value": "Failed test 1",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1200,
+                    -320
+                ],
+                "id": "89ba4e76-2327-4377-b711-01fe8949fe56",
+                "name": "Action Close1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1424,
+                    -320
+                ],
+                "id": "31ae7adb-5cd0-4080-9ace-e97e148bc5b6",
+                "name": "Output1"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "r0iPZkb7BWNPAbdn",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                        "cachedResultName": "api_db post V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "={{ $json.config.databaseID }}",
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "record": "={{ $json.config.record }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    304,
+                    176
+                ],
+                "id": "05dda3c5-7e73-4e45-bfb4-ebb6df76481d",
+                "name": "Call 'api_db post"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    80,
+                    176
+                ],
+                "id": "4e0a57a3-4e7b-4dc5-9626-03398be03ba7",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "AlhzQzNAkyn2CBDP",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                        "cachedResultName": "api_db get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "unitTestN8NApiDb",
+                            "tenantID": "unitTestN8NApiDb1",
+                            "record_id": "={{ $json.config.record['@id'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    752,
+                    176
+                ],
+                "id": "87e2ed6b-ed13-479c-b895-ef85a08f9058",
+                "name": "Call 'api_db get V1'1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    528,
+                    176
+                ],
+                "id": "8362b999-a8d4-4c0c-82e3-de0caee7a76b",
+                "name": "Edit Fields1"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "ab164b83-989a-44e1-abdc-aed1f314d0c5",
+                                "leftValue": "={{ $json.output.result['@id'] }}",
+                                "rightValue": "={{ $json.output.result['@id'] }}",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notEquals"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    976,
+                    176
+                ],
+                "id": "184e4191-499c-48f3-ab6a-09ca6817df3a",
+                "name": "If1"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "X7T3DOcftP04Sogs",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/X7T3DOcftP04Sogs",
+                        "cachedResultName": "api_db delete V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "={{ $json.config.databaseID }}",
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "record_id": "={{ $json.config.record['@id'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    304,
+                    -224
+                ],
+                "id": "ae1d5918-9e8d-4456-8cb0-66f5cf0272b4",
+                "name": "Call 'api_db get V1'2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    528,
+                    -224
+                ],
+                "id": "cd87c73f-debb-4a3c-91b1-4f61a6f728f8",
+                "name": "Edit Fields2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    80,
+                    592
+                ],
+                "id": "4b002d4c-7ef7-4379-91ab-8529eb95c2fd",
+                "name": "Edit Fields3"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "FailedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b6730b46-2917-401c-a22d-d2ababa5112c",
+                                "name": "action.error",
+                                "value": "Failed test 1",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1200,
+                    80
+                ],
+                "id": "417c829d-8a02-4152-8781-2e5c727fcd5b",
+                "name": "Action Close2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1424,
+                    80
+                ],
+                "id": "70cd993e-b1f3-4617-b9d9-735b88ce66a2",
+                "name": "Output2"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "AlhzQzNAkyn2CBDP",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                        "cachedResultName": "api_db get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "unitTestN8NApiDb",
+                            "tenantID": "unitTestN8NApiDb1",
+                            "record_id": "={{ $json.config.record['@id'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    752,
+                    592
+                ],
+                "id": "934b3eaf-d640-4bcb-addd-3491fa0d0392",
+                "name": "Call 'api_db get V1'3"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    528,
+                    592
+                ],
+                "id": "99f604d5-1c60-4ae5-9fdb-107ff0d2609c",
+                "name": "Edit Fields4"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "dSApIWk7xsFRrbgd",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/dSApIWk7xsFRrbgd",
+                        "cachedResultName": "api_db patch V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "={{ $json.config.databaseID }}",
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "record": "={{ $json.config.patch }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    304,
+                    592
+                ],
+                "id": "10d25491-7189-462d-bdd8-48503bad1d2a",
+                "name": "Call 'api_db patch"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    1200,
+                    688
+                ],
+                "id": "a754cd01-b31b-4af4-be84-4c329a975ff7",
+                "name": "Edit Fields5"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "FailedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b6730b46-2917-401c-a22d-d2ababa5112c",
+                                "name": "action.error",
+                                "value": "Failed test 1",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1200,
+                    496
+                ],
+                "id": "5f73767b-0470-4af3-aaee-90e4b4964989",
+                "name": "Action Close3"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1424,
+                    496
+                ],
+                "id": "d9c154c1-a3d4-404a-9481-d3fa3104f412",
+                "name": "Output3"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "ab164b83-989a-44e1-abdc-aed1f314d0c5",
+                                "leftValue": "={{ $json.output.result.newName }}",
+                                "rightValue": "={{ $('Edit Fields4').item.json.config.patch.newName }}",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notEquals"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    976,
+                    592
+                ],
+                "id": "a65990e1-b05d-4ff1-8c23-6ff0f034ea86",
+                "name": "If2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    80,
+                    1024
+                ],
+                "id": "53502594-2320-4462-a916-a65951de5e4b",
+                "name": "Edit Fields6"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "AlhzQzNAkyn2CBDP",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                        "cachedResultName": "api_db get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "unitTestN8NApiDb",
+                            "tenantID": "unitTestN8NApiDb1",
+                            "record_id": "={{ $json.config.record['@id'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    752,
+                    1024
+                ],
+                "id": "a6276892-e122-4335-b760-8477b35e7f51",
+                "name": "Call 'api_db get V1'4"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    528,
+                    1024
+                ],
+                "id": "190adccc-d76b-4d95-8083-f8fb044827cf",
+                "name": "Edit Fields7"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "X7T3DOcftP04Sogs",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/X7T3DOcftP04Sogs",
+                        "cachedResultName": "api_db delete V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "={{ $json.config.databaseID }}",
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "record_id": "={{ $json.config.record['@id'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    304,
+                    1024
+                ],
+                "id": "aa83fe3a-f4b3-4b65-8961-00c7b0dba644",
+                "name": "Call 'api_db patch1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "444b4c6d-3257-4022-8a49-473411362795",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "4368f96f-b111-4a21-bf5a-0d34e58ae745",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    1200,
+                    1120
+                ],
+                "id": "99869753-1281-4f27-8773-2a41edfb5aeb",
+                "name": "Edit Fields8"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "FailedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b6730b46-2917-401c-a22d-d2ababa5112c",
+                                "name": "action.error",
+                                "value": "Failed test 1",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1200,
+                    928
+                ],
+                "id": "f6428a8d-e7f3-4662-9ea4-cd3ca9354192",
+                "name": "Action Close4"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1424,
+                    928
+                ],
+                "id": "bd24aba8-710c-4d90-bc6f-ae85c0dfdb02",
+                "name": "Output4"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "ab164b83-989a-44e1-abdc-aed1f314d0c5",
+                                "leftValue": "={{ $json.output.result?.['@id'] }}",
+                                "rightValue": "={{ $('Edit Fields7').item.json.config.patch.newName }}",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "exists",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    976,
+                    1024
+                ],
+                "id": "518be3da-4627-494d-bb3d-11617ab672dd",
+                "name": "If3"
+            }
+        ],
+        "connections": {
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db get V1'2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db get V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close1": {
+                "main": [
+                    [
+                        {
+                            "node": "Output1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db post",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db post": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields1": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db get V1'1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db get V1'1": {
+                "main": [
+                    [
+                        {
+                            "node": "If1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db get V1'2": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields2": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db get V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If1": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Edit Fields3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close2": {
+                "main": [
+                    [
+                        {
+                            "node": "Output2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields4": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db get V1'3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db patch": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields4",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields3": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db patch",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close3": {
+                "main": [
+                    [
+                        {
+                            "node": "Output3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db get V1'3": {
+                "main": [
+                    [
+                        {
+                            "node": "If2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If2": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Edit Fields5",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields6": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db patch1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db get V1'4": {
+                "main": [
+                    [
+                        {
+                            "node": "If3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields7": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db get V1'4",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db patch1": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields7",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close4": {
+                "main": [
+                    [
+                        {
+                            "node": "Output4",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If3": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close4",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Edit Fields8",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields5": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields6",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields8": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version d6c75781",
+        "description": "",
+        "autosaved": false,
+        "createdAt": "2026-09-08T14:13:34.665Z",
+        "updatedAt": "2026-09-08T14:13:45.298Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
