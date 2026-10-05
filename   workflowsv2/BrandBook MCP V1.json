@@ -1,0 +1,187 @@
+{
+    "id": "UoSBoALbLSlcHTJT",
+    "name": "BrandBook MCP V1",
+    "active": true,
+    "activeVersionId": "445b11fd-4c0a-45c2-b665-c7d08f8ffd70",
+    "createdAt": "2026-09-02T19:52:49.345Z",
+    "updatedAt": "2026-09-02T21:23:27.875Z",
+    "isArchived": false,
+    "versionId": "445b11fd-4c0a-45c2-b665-c7d08f8ffd70",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "path": "579a1b99-d1aa-4401-a0c3-869bbe145c2e"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+            "typeVersion": 2.1,
+            "position": [
+                -128,
+                -176
+            ],
+            "id": "6472fa17-d77c-4675-bc23-6150a7f453b0",
+            "name": "MCP Server Trigger",
+            "webhookId": "579a1b99-d1aa-4401-a0c3-869bbe145c2e"
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to retrieve a brandbook record. \nThe input hould be the url for the brand. \nThe output is a brandbook json record wi the following properties:\n- @type: the type of record (BrandBook)\n- @id: the id of the record\n- url: the url of the brand\n- text: the brandBook content in markdown",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "NUGUXZcyWZzO6ASB",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/NUGUXZcyWZzO6ASB",
+                    "cachedResultName": "BrandBook Get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('url', ``, 'string') }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                -128,
+                32
+            ],
+            "id": "76180f33-0a20-4323-b8db-9fe63ab4748e",
+            "name": "Call 'BrandBook Get V1'"
+        }
+    ],
+    "connections": {
+        "Call 'BrandBook Get V1'": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "UoSBoALbLSlcHTJT",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-02T19:52:49.345Z",
+            "updatedAt": "2026-09-02T19:52:49.345Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "445b11fd-4c0a-45c2-b665-c7d08f8ffd70",
+        "workflowId": "UoSBoALbLSlcHTJT",
+        "nodes": [
+            {
+                "parameters": {
+                    "path": "579a1b99-d1aa-4401-a0c3-869bbe145c2e"
+                },
+                "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+                "typeVersion": 2.1,
+                "position": [
+                    -128,
+                    -176
+                ],
+                "id": "6472fa17-d77c-4675-bc23-6150a7f453b0",
+                "name": "MCP Server Trigger",
+                "webhookId": "579a1b99-d1aa-4401-a0c3-869bbe145c2e"
+            },
+            {
+                "parameters": {
+                    "description": "Call this tool to retrieve a brandbook record. \nThe input hould be the url for the brand. \nThe output is a brandbook json record wi the following properties:\n- @type: the type of record (BrandBook)\n- @id: the id of the record\n- url: the url of the brand\n- text: the brandBook content in markdown",
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "NUGUXZcyWZzO6ASB",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/NUGUXZcyWZzO6ASB",
+                        "cachedResultName": "BrandBook Get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('url', ``, 'string') }}"
+                        },
+                        "matchingColumns": [
+                            "url"
+                        ],
+                        "schema": [
+                            {
+                                "id": "url",
+                                "displayName": "url",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": false
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+                "typeVersion": 2.2,
+                "position": [
+                    -128,
+                    32
+                ],
+                "id": "76180f33-0a20-4323-b8db-9fe63ab4748e",
+                "name": "Call 'BrandBook Get V1'"
+            }
+        ],
+        "connections": {
+            "Call 'BrandBook Get V1'": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "MCP Server Trigger",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 445b11fd",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-09-02T21:22:43.127Z",
+        "updatedAt": "2026-09-02T21:22:46.435Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
