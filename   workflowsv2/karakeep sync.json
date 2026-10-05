@@ -1,0 +1,569 @@
+{
+    "id": "fzYjKArC2xIeibbA",
+    "name": "karakeep sync",
+    "active": true,
+    "activeVersionId": "a6c78dbe-fd77-4f27-a661-ca853f5a0f51",
+    "createdAt": "2026-06-15T15:12:55.467Z",
+    "updatedAt": "2026-06-26T11:57:13.223Z",
+    "isArchived": false,
+    "versionId": "b21781b6-2e39-4d47-b6f1-227519e19bcf",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "2c411088-b434-4d26-aa23-c98951097973",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "J5r71fBePBjwGlY4",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/J5r71fBePBjwGlY4",
+                    "cachedResultName": "karakeep api bookmarks search v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                224,
+                0
+            ],
+            "id": "d2a2116e-470b-4fb7-94db-4c655c089ecb",
+            "name": "Call 'karakeep api bookmarks search v1'"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "M9AXLScY02S2uZdP",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/M9AXLScY02S2uZdP",
+                    "cachedResultName": "pipeline video scrape v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.object.url }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1136,
+                -128
+            ],
+            "id": "2fff2893-116f-4246-8b64-a540bc17408c",
+            "name": "Call 'pipeline video scrape v1'",
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "output.result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                448,
+                0
+            ],
+            "id": "be83e197-6344-4197-b0e1-326408a62366",
+            "name": "Split Out"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "7d84a49c-6c72-4ea4-84e9-8476fe2fb473",
+                            "leftValue": "={{ $json.startTime }}",
+                            "rightValue": "2026-06-25T00:00:00",
+                            "operator": {
+                                "type": "dateTime",
+                                "operation": "after"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.3,
+            "position": [
+                672,
+                0
+            ],
+            "id": "7137bcc3-2a45-497a-80c4-f6f1255e3ca3",
+            "name": "Filter"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                848,
+                144
+            ],
+            "id": "5d9df800-50ab-40bf-ae73-217557450864",
+            "name": "Loop Over Items"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "M9AXLScY02S2uZdP",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/M9AXLScY02S2uZdP",
+                    "cachedResultName": "pipeline video scrape v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.object.url }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {
+                    "waitForSubWorkflow": true
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1088,
+                240
+            ],
+            "id": "7d6fef69-1bb4-4466-8489-5f4d51069f49",
+            "name": "Call 'pipeline video scrape v1'1",
+            "onError": "continueRegularOutput"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'karakeep api bookmarks search v1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'karakeep api bookmarks search v1'": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out": {
+            "main": [
+                [
+                    {
+                        "node": "Filter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop Over Items": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Call 'pipeline video scrape v1'1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'pipeline video scrape v1'1": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "fzYjKArC2xIeibbA",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-15T15:12:55.467Z",
+            "updatedAt": "2026-06-15T15:12:55.467Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "a6c78dbe-fd77-4f27-a661-ca853f5a0f51",
+        "workflowId": "fzYjKArC2xIeibbA",
+        "nodes": [
+            {
+                "parameters": {
+                    "inputSource": "passthrough"
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "2c411088-b434-4d26-aa23-c98951097973",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "J5r71fBePBjwGlY4",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/J5r71fBePBjwGlY4",
+                        "cachedResultName": "karakeep api bookmarks search v1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {},
+                        "matchingColumns": [],
+                        "schema": [],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    224,
+                    0
+                ],
+                "id": "d2a2116e-470b-4fb7-94db-4c655c089ecb",
+                "name": "Call 'karakeep api bookmarks search v1'"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "M9AXLScY02S2uZdP",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/M9AXLScY02S2uZdP",
+                        "cachedResultName": "pipeline video scrape v1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "url": "={{ $json.object.url }}"
+                        },
+                        "matchingColumns": [
+                            "url"
+                        ],
+                        "schema": [
+                            {
+                                "id": "url",
+                                "displayName": "url",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "mode": "each",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    1136,
+                    -128
+                ],
+                "id": "2fff2893-116f-4246-8b64-a540bc17408c",
+                "name": "Call 'pipeline video scrape v1'",
+                "onError": "continueRegularOutput"
+            },
+            {
+                "parameters": {
+                    "fieldToSplitOut": "output.result",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.splitOut",
+                "typeVersion": 1,
+                "position": [
+                    448,
+                    0
+                ],
+                "id": "be83e197-6344-4197-b0e1-326408a62366",
+                "name": "Split Out"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "7d84a49c-6c72-4ea4-84e9-8476fe2fb473",
+                                "leftValue": "={{ $json.startTime }}",
+                                "rightValue": "={{ $today}}",
+                                "operator": {
+                                    "type": "dateTime",
+                                    "operation": "after"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.filter",
+                "typeVersion": 2.3,
+                "position": [
+                    672,
+                    0
+                ],
+                "id": "7137bcc3-2a45-497a-80c4-f6f1255e3ca3",
+                "name": "Filter"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.splitInBatches",
+                "typeVersion": 3,
+                "position": [
+                    848,
+                    144
+                ],
+                "id": "5d9df800-50ab-40bf-ae73-217557450864",
+                "name": "Loop Over Items"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "M9AXLScY02S2uZdP",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/M9AXLScY02S2uZdP",
+                        "cachedResultName": "pipeline video scrape v1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "url": "={{ $json.object.url }}"
+                        },
+                        "matchingColumns": [
+                            "url"
+                        ],
+                        "schema": [
+                            {
+                                "id": "url",
+                                "displayName": "url",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "mode": "each",
+                    "options": {
+                        "waitForSubWorkflow": true
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    1088,
+                    240
+                ],
+                "id": "7d6fef69-1bb4-4466-8489-5f4d51069f49",
+                "name": "Call 'pipeline video scrape v1'1",
+                "onError": "continueRegularOutput"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'karakeep api bookmarks search v1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'karakeep api bookmarks search v1'": {
+                "main": [
+                    [
+                        {
+                            "node": "Split Out",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Split Out": {
+                "main": [
+                    [
+                        {
+                            "node": "Filter",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Filter": {
+                "main": [
+                    [
+                        {
+                            "node": "Loop Over Items",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Loop Over Items": {
+                "main": [
+                    [],
+                    [
+                        {
+                            "node": "Call 'pipeline video scrape v1'1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'pipeline video scrape v1'1": {
+                "main": [
+                    [
+                        {
+                            "node": "Loop Over Items",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version a6c78dbe",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-25T16:56:48.967Z",
+        "updatedAt": "2026-06-25T17:23:00.613Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
