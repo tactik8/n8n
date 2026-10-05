@@ -1,0 +1,168 @@
+{
+    "id": "uFuQLjsjIiMOjfEv",
+    "name": "My workflow 11",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-05-22T20:26:08.036Z",
+    "updatedAt": "2026-05-24T14:54:30.864Z",
+    "isArchived": false,
+    "versionId": "038771db-b122-4b74-8358-68186b85bbad",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "path": "ui",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "8d9885d2-5c93-4300-8769-3ea6f3f410b4",
+            "name": "Webhook",
+            "webhookId": "8f1ec0f2-3c82-4883-b420-7c6bb58b78d4"
+        },
+        {
+            "parameters": {
+                "jsCode": "const { htmlHelpers } = require('/home/node/node_modules/html_helpers')\nconst { records } = require('/home/node/node_modules/jsonld_helpers')\n\n\nfor (const item of $input.all()) {\n\n  let website = new htmlHelpers.classElements.WebSite()\n    website.baseUrl = \"https://kickassurl.com/api\"\n    website.name = \"Kick ass site\"\n    website.url = \"https://www.test.com\"\n    website.addHeaderLink('link1', '/link1')\n    website.addHeaderLink('link2', '/link2')\n    website.addHeaderLink('link3', '/link3')\n    website.addFooterLink('link1', '/link1')\n    website.addFooterLink('link2', '/link2')\n    website.addFooterLink('link3', '/link3')\n\n    // init webpage \n    let webpage = website.webpage('/')\n    webpage.name = \"main\"\n\n  let s = webpage.section()\n  let r = records.thing(1)\n  s.add(new htmlHelpers.classElements.Record(r))\n\n\n  \n  item.json.output = htmlHelpers.testRecords.article(0, 3)\n}\n\nreturn $input.all();\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                208,
+                0
+            ],
+            "id": "5965f00c-adb2-4a89-9279-8b506341a0a8",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "command": "npm install github:tactik8/htmlHelpers;\n\n"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                256,
+                -448
+            ],
+            "id": "273f0ff9-8b5e-4c09-8ed6-dbced4d07fab",
+            "name": "Execute Command"
+        },
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -16,
+                -208
+            ],
+            "id": "b1fe156b-30d2-490d-b534-f0b3dca1f8ff",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "const { htmlHelpers } = require('/home/node/node_modules/html_helpers')\n\nconst { records } = require('/home/node/node_modules/jsonld_helpers')\n\n\n\nfor (const item of $input.all()) {\n\n  let website = new htmlHelpers.classElements.WebSite()\n    website.baseUrl = \"https://kickassurl.com/api\"\n    website.name = \"Kick ass site\"\n    website.url = \"https://www.test.com\"\n    website.addHeaderLink('link1', '/link1')\n    website.addHeaderLink('link2', '/link2')\n    website.addHeaderLink('link3', '/link3')\n    website.addFooterLink('link1', '/link1')\n    website.addFooterLink('link2', '/link2')\n    website.addFooterLink('link3', '/link3')\n\n    // init webpage \n    let webpage = website.webpage('/')\n    webpage.name = \"main\"\n\n  let s = webpage.section()\n  let r = records.thing(1)\n  s.add(new htmlHelpers.classElements.Record(r))\n\n\n  \n  item.json.output = await webpage.get()\n}\n\nreturn $input.all();\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                496,
+                -320
+            ],
+            "id": "cbeb1218-0e3e-4f15-862f-628e1d4751c2",
+            "name": "Code in JavaScript1"
+        },
+        {
+            "parameters": {
+                "command": "npm i handlebars@4.7.7;\nnpm i whatwg-url@latest;"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                208,
+                -640
+            ],
+            "id": "0447a3da-2421-4dbb-bde1-00a5bb5d46a5",
+            "name": "Execute Command1"
+        },
+        {
+            "parameters": {
+                "command": "npm install github:tactik8/jsonldHelpers_v1;\nnpm install github:tactik8/htmlHelpers;\n\n"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                144,
+                144
+            ],
+            "id": "6aa3d824-a868-427e-931b-27f933bacea1",
+            "name": "Execute Command2"
+        },
+        {
+            "parameters": {
+                "jsCode": "\n// 2. Require Handlebars safely while the security trap is operational\n//const  Handlebars  = require('/home/node/node_modules/handlebars');\n\nconst Handlebars = await import('/home/node/node_modules/handlebars');\n\nfor (const item of $input.all()) {\n\n  \n \n \n  \n  item.json.output = [{json: {version: hbs.VERSION}}]\n}\n\nreturn $input.all();\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                608,
+                -128
+            ],
+            "id": "5539252c-007c-46d2-bd45-5da62d3f22fb",
+            "name": "Code in JavaScript2"
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Code in JavaScript2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "uFuQLjsjIiMOjfEv",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-22T20:26:08.036Z",
+            "updatedAt": "2026-05-22T20:26:08.036Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
