@@ -1,0 +1,677 @@
+{
+    "id": "QYMltMUatLczaLJp",
+    "name": "karakeep api bookmarks get v1",
+    "active": true,
+    "activeVersionId": "9ac49e08-4363-4345-8ff7-0f6f4e1565af",
+    "createdAt": "2026-04-09T13:22:44.826Z",
+    "updatedAt": "2026-05-08T11:57:53.838Z",
+    "isArchived": false,
+    "versionId": "9ac49e08-4363-4345-8ff7-0f6f4e1565af",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "bookmarkID"
+                        },
+                        {
+                            "name": "apiKey"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -480,
+                -112
+            ],
+            "id": "cda7e590-8cf8-4b30-839e-a1c6cb89b148",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "content": "## I'm a note \nak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44",
+                "height": 192
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -32,
+                -464
+            ],
+            "typeVersion": 1,
+            "id": "40fb1e7e-222b-4459-b714-484a9e74d88c",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "url": "=https://karakeep.tactik8.com/api/v1/bookmarks/{{ $json.config.bookmarkID }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $json.config.apiKey }}"
+                        },
+                        {
+                            "name": "Accept",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "options": {
+                    "pagination": {
+                        "pagination": {
+                            "parameters": {
+                                "parameters": [
+                                    {
+                                        "name": "cursor",
+                                        "value": "={{ $response.body.nextCursor || \"\" }}"
+                                    }
+                                ]
+                            },
+                            "paginationCompleteWhen": "other",
+                            "completeExpression": "={{ $response.body?.nextCursor == undefined }}"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                192,
+                -112
+            ],
+            "id": "95819cd8-333c-4c12-9012-7b8076eefe3d",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let m = item.json\n\n    let r = {\n      \"@type\": \"BookmarkAction\",\n      \"@id\": \"https://karakeep.tactik8.com/bookmarks/\" + m.id,\n      \"actionStatus\": \"CompletedActionStatus\",\n      \"object\":{\n        \"@type\": \"WebPage\",\n        \"@id\": m.content.url + \"#webpage\",\n        \"name\": m.content?.title,\n        \"url\": m.content.url,\n        \"description\": m.content.description\n      },\n      \"startTime\": m.createdAt,\n      \"endTime\": m.modifiedAt,\n      \"agent\": {\n        \"@type\": \"Person\",\n        \"@id\": \"https://karakeep.tactik8.com/users/\" + m.userId\n      }\n     \n    }\n    \n  item.json = {}\n\n  item.json.result = r\n}\n\n  return $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                416,
+                -112
+            ],
+            "id": "45645000-72b2-41d6-8771-ee95e161bb52",
+            "name": "Schema conversion1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                            "name": "action",
+                            "value": "={{ $('Action init').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.result",
+                            "value": "={{ $json.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                640,
+                -112
+            ],
+            "id": "0f8cba32-44d5-4524-8ba7-aaa47aea9590",
+            "name": "Action close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                864,
+                -112
+            ],
+            "id": "57d02ddb-aa94-47a5-9d11-baa6caac09a0",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                            "name": "action.@type",
+                            "value": "SearchAction",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -256,
+                -112
+            ],
+            "id": "e5dfe60c-9aa9-413c-ad0f-4909e8cc4f1e",
+            "name": "Action init"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0ffd5926-ea51-40ae-ac7f-eeb2242e11b8",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "e6d92355-71f8-4fe7-aab7-523c134c5bf3",
+                            "name": "config.apiKey",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.apiKey }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e5273ff0-c871-4abc-b477-f7a977a48c24",
+                            "name": "config.bookmarkID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.bookmarkID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d5fda55f-b59d-47d2-9a1b-e42bec9db687",
+                            "name": "config.apiKey",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.apiKey }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -32,
+                -112
+            ],
+            "id": "249d9965-d999-4d87-ad3a-9e7cafd0e470",
+            "name": "Config"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action init",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request1": {
+            "main": [
+                [
+                    {
+                        "node": "Schema conversion1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schema conversion1": {
+            "main": [
+                [
+                    {
+                        "node": "Action close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action init": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "bookmarkID": "z4jd1ihkaoqv1gv6hrcuqnhq",
+                    "apiKey": "ak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "QYMltMUatLczaLJp",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-09T13:22:44.826Z",
+            "updatedAt": "2026-04-09T13:22:44.826Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "9ac49e08-4363-4345-8ff7-0f6f4e1565af",
+        "workflowId": "QYMltMUatLczaLJp",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "bookmarkID"
+                            },
+                            {
+                                "name": "apiKey"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -480,
+                    -112
+                ],
+                "id": "cda7e590-8cf8-4b30-839e-a1c6cb89b148",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "content": "## I'm a note \nak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44",
+                    "height": 192
+                },
+                "type": "n8n-nodes-base.stickyNote",
+                "position": [
+                    -32,
+                    -464
+                ],
+                "typeVersion": 1,
+                "id": "40fb1e7e-222b-4459-b714-484a9e74d88c",
+                "name": "Sticky Note"
+            },
+            {
+                "parameters": {
+                    "url": "=https://karakeep.tactik8.com/api/v1/bookmarks/{{ $json.config.bookmarkID }}",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "Authorization",
+                                "value": "=Bearer {{ $json.config.apiKey }}"
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "pagination": {
+                            "pagination": {
+                                "parameters": {
+                                    "parameters": [
+                                        {
+                                            "name": "cursor",
+                                            "value": "={{ $response.body.nextCursor || \"\" }}"
+                                        }
+                                    ]
+                                },
+                                "paginationCompleteWhen": "other",
+                                "completeExpression": "={{ $response.body?.nextCursor == undefined }}"
+                            }
+                        }
+                    }
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    192,
+                    -112
+                ],
+                "id": "95819cd8-333c-4c12-9012-7b8076eefe3d",
+                "name": "HTTP Request1"
+            },
+            {
+                "parameters": {
+                    "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let m = item.json\n\n    let r = {\n      \"@type\": \"BookmarkAction\",\n      \"@id\": \"https://karakeep.tactik8.com/bookmarks/\" + m.id,\n      \"actionStatus\": \"CompletedActionStatus\",\n      \"object\":{\n        \"@type\": \"WebPage\",\n        \"@id\": m.content.url + \"#webpage\",\n        \"name\": m.content?.title,\n        \"url\": m.content.url,\n        \"description\": m.content.description\n      },\n      \"startTime\": m.createdAt,\n      \"endTime\": m.modifiedAt,\n      \"agent\": {\n        \"@type\": \"Person\",\n        \"@id\": \"https://karakeep.tactik8.com/users/\" + m.userId\n      }\n     \n    }\n    \n  item.json = {}\n\n  item.json.result = r\n}\n\n  return $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    416,
+                    -112
+                ],
+                "id": "45645000-72b2-41d6-8771-ee95e161bb52",
+                "name": "Schema conversion1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                                "name": "action",
+                                "value": "={{ $('Action init').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                                "name": "action.result",
+                                "value": "={{ $json.result }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    640,
+                    -112
+                ],
+                "id": "0f8cba32-44d5-4524-8ba7-aaa47aea9590",
+                "name": "Action close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    864,
+                    -112
+                ],
+                "id": "57d02ddb-aa94-47a5-9d11-baa6caac09a0",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                                "name": "action.@type",
+                                "value": "SearchAction",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -256,
+                    -112
+                ],
+                "id": "e5dfe60c-9aa9-413c-ad0f-4909e8cc4f1e",
+                "name": "Action init"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "0ffd5926-ea51-40ae-ac7f-eeb2242e11b8",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "e6d92355-71f8-4fe7-aab7-523c134c5bf3",
+                                "name": "config.apiKey",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.apiKey }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e5273ff0-c871-4abc-b477-f7a977a48c24",
+                                "name": "config.bookmarkID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.bookmarkID }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d5fda55f-b59d-47d2-9a1b-e42bec9db687",
+                                "name": "config.apiKey",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.apiKey }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -32,
+                    -112
+                ],
+                "id": "249d9965-d999-4d87-ad3a-9e7cafd0e470",
+                "name": "Config"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action init",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request1": {
+                "main": [
+                    [
+                        {
+                            "node": "Schema conversion1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Schema conversion1": {
+                "main": [
+                    [
+                        {
+                            "node": "Action close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action init": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "HTTP Request1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 9ac49e08",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-05-08T11:57:53.843Z",
+        "updatedAt": "2026-05-08T13:15:00.258Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
