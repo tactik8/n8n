@@ -1,0 +1,57 @@
+{
+    "id": "OTBpBVEYnauocHty",
+    "name": "My workflow 9",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-05-06T16:50:04.152Z",
+    "updatedAt": "2026-05-06T16:50:21.512Z",
+    "isArchived": false,
+    "versionId": "dd79e837-9d6a-426e-92ac-0b914c1628e8",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "formTitle": "test",
+                "formFields": {
+                    "values": [
+                        {
+                            "fieldLabel": "data",
+                            "fieldType": "file"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.formTrigger",
+            "typeVersion": 2.5,
+            "position": [
+                0,
+                0
+            ],
+            "id": "12d43ec0-f9b7-40a6-9f5a-819d1c38485e",
+            "name": "On form submission",
+            "webhookId": "8f36f85a-eab1-40c2-a851-1c61d868ded2"
+        }
+    ],
+    "connections": {},
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "OTBpBVEYnauocHty",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-06T16:50:04.152Z",
+            "updatedAt": "2026-05-06T16:50:04.152Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
