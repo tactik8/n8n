@@ -1,0 +1,1164 @@
+{
+    "id": "HcaFx6K5MWFPOH0c",
+    "name": "Action set Potential V1",
+    "active": true,
+    "activeVersionId": "aadb1739-1016-487e-82a9-facfc04a1fb7",
+    "createdAt": "2026-09-20T17:03:14.950Z",
+    "updatedAt": "2026-09-20T17:07:29.041Z",
+    "isArchived": false,
+    "versionId": "aadb1739-1016-487e-82a9-facfc04a1fb7",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "databaseID"
+                        },
+                        {
+                            "name": "tenantID"
+                        },
+                        {
+                            "name": "record",
+                            "type": "object"
+                        },
+                        {
+                            "name": "@id"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -352,
+                -16
+            ],
+            "id": "bfe82685-f23a-4467-b7a7-18ad256dd167",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "3c19ee15-c69f-43b6-ae98-95b302ffe485",
+                            "name": "action",
+                            "value": "={{ $('Set Potential').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "fb2fb9df-1989-4cfb-a0ff-f4604cd0cd89",
+                            "name": "config",
+                            "value": "={{ $('Set Potential').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1200,
+                -16
+            ],
+            "id": "0edd470a-b1d0-44ce-964a-91878ade084a",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1392,
+                -16
+            ],
+            "id": "ac170020-eb16-450e-b121-f09cf77c811f",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1584,
+                -16
+            ],
+            "id": "443897bc-a757-4541-9cb3-1bbe3d5e632c",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "5f6fb4ea-e559-408b-b126-ee68935ccd57",
+                            "name": "config.databaseID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.databaseID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a3e57328-1755-47e5-8fbc-53d13540385a",
+                            "name": "config.tenantID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.tenantID }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                112,
+                -16
+            ],
+            "id": "0b2903fd-72c2-47d2-be34-8397cf57fb9f",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object",
+                            "value": "={{ $json.record }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.@id",
+                            "value": "={{ $json?.['@id'] || $json.record?.['@id'] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTime",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -112,
+                -16
+            ],
+            "id": "8a10bd03-f474-4875-bc36-f06bff0193db",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "AlhzQzNAkyn2CBDP",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                    "cachedResultName": "api_db get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "record_id": "={{ $json.action.object['@id'] }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                336,
+                -16
+            ],
+            "id": "00b4b947-b4fe-413c-83a9-0fb686c602c7",
+            "name": "Retrieve latest version"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6cd895f3-a4f0-4df1-8ede-0014c72a7fc0",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "a7c80cc5-1d6c-4997-9cbd-106291bdddea",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "9d3a7245-a660-447a-84e8-51e2657dd2f8",
+                            "name": "action.object",
+                            "value": "={{ Object.keys($json.output?.result).length != 0  ? $json.output?.result : $('Config').item.json.action.object }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                560,
+                -16
+            ],
+            "id": "73a65e4b-8c33-48b8-acb4-82a461153420",
+            "name": "Key DB version if exists"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "r0iPZkb7BWNPAbdn",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                    "cachedResultName": "api_db post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "record": "={{ $json.action.result }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                992,
+                -16
+            ],
+            "id": "455d853b-a8b8-4511-8c87-997921fc2578",
+            "name": "Save action to db"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d92b9122-0844-4855-a6b2-add45f66587f",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "399f8d74-ff7d-43c6-a201-1f322a7dfb1b",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d8d3eb90-c5c0-4beb-b92d-a8b260ea4298",
+                            "name": "action.result",
+                            "value": "={{ JSON.parse(JSON.stringify($json.action.object)) }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "1d52d677-215d-42ca-b065-ee426da3c01f",
+                            "name": "action.result.actionStatus",
+                            "value": "=PotentialActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f6146c54-68ba-401a-854a-44b046d459f0",
+                            "name": "action.result.startTime",
+                            "value": "={{ \"\" }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "cb1d2c87-c510-4cd6-b945-8e15acf8f042",
+                            "name": "action.result.endTime",
+                            "value": "={{ \"\" }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                784,
+                -16
+            ],
+            "id": "5badc882-c62c-4bf1-b6e2-89ad658e9691",
+            "name": "Set Potential"
+        }
+    ],
+    "connections": {
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve latest version",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve latest version": {
+            "main": [
+                [
+                    {
+                        "node": "Key DB version if exists",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Key DB version if exists": {
+            "main": [
+                [
+                    {
+                        "node": "Set Potential",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save action to db": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set Potential": {
+            "main": [
+                [
+                    {
+                        "node": "Save action to db",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "databaseID": "n8ntest",
+                    "tenantID": "action_methods",
+                    "record": {
+                        "@type": "Action",
+                        "@id": "https://www.test.com/action1#action",
+                        "name": "Action 1"
+                    },
+                    "@id": null
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "HcaFx6K5MWFPOH0c",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-20T17:03:14.950Z",
+            "updatedAt": "2026-09-20T17:03:14.950Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "aadb1739-1016-487e-82a9-facfc04a1fb7",
+        "workflowId": "HcaFx6K5MWFPOH0c",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "databaseID"
+                            },
+                            {
+                                "name": "tenantID"
+                            },
+                            {
+                                "name": "record",
+                                "type": "object"
+                            },
+                            {
+                                "name": "@id"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    -352,
+                    -16
+                ],
+                "id": "bfe82685-f23a-4467-b7a7-18ad256dd167",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "3c19ee15-c69f-43b6-ae98-95b302ffe485",
+                                "name": "action",
+                                "value": "={{ $('Set Potential').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "fb2fb9df-1989-4cfb-a0ff-f4604cd0cd89",
+                                "name": "config",
+                                "value": "={{ $('Set Potential').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1200,
+                    -16
+                ],
+                "id": "0edd470a-b1d0-44ce-964a-91878ade084a",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1392,
+                    -16
+                ],
+                "id": "ac170020-eb16-450e-b121-f09cf77c811f",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1584,
+                    -16
+                ],
+                "id": "443897bc-a757-4541-9cb3-1bbe3d5e632c",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "5f6fb4ea-e559-408b-b126-ee68935ccd57",
+                                "name": "config.databaseID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.databaseID }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "a3e57328-1755-47e5-8fbc-53d13540385a",
+                                "name": "config.tenantID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.tenantID }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    112,
+                    -16
+                ],
+                "id": "0b2903fd-72c2-47d2-be34-8397cf57fb9f",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object",
+                                "value": "={{ $json.record }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.@id",
+                                "value": "={{ $json?.['@id'] || $json.record?.['@id'] }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTime",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -112,
+                    -16
+                ],
+                "id": "8a10bd03-f474-4875-bc36-f06bff0193db",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "AlhzQzNAkyn2CBDP",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                        "cachedResultName": "api_db get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "={{ $json.config.databaseID }}",
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "record_id": "={{ $json.action.object['@id'] }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    336,
+                    -16
+                ],
+                "id": "00b4b947-b4fe-413c-83a9-0fb686c602c7",
+                "name": "Retrieve latest version"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6cd895f3-a4f0-4df1-8ede-0014c72a7fc0",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "a7c80cc5-1d6c-4997-9cbd-106291bdddea",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "9d3a7245-a660-447a-84e8-51e2657dd2f8",
+                                "name": "action.object",
+                                "value": "={{ Object.keys($json.output?.result).length != 0  ? $json.output?.result : $('Config').item.json.action.object }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    560,
+                    -16
+                ],
+                "id": "73a65e4b-8c33-48b8-acb4-82a461153420",
+                "name": "Key DB version if exists"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "r0iPZkb7BWNPAbdn",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/r0iPZkb7BWNPAbdn",
+                        "cachedResultName": "api_db post V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "={{ $json.config.databaseID }}",
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "record": "={{ $json.action.result }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    992,
+                    -16
+                ],
+                "id": "455d853b-a8b8-4511-8c87-997921fc2578",
+                "name": "Save action to db"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "d92b9122-0844-4855-a6b2-add45f66587f",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "399f8d74-ff7d-43c6-a201-1f322a7dfb1b",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d8d3eb90-c5c0-4beb-b92d-a8b260ea4298",
+                                "name": "action.result",
+                                "value": "={{ JSON.parse(JSON.stringify($json.action.object)) }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "1d52d677-215d-42ca-b065-ee426da3c01f",
+                                "name": "action.result.actionStatus",
+                                "value": "=PotentialActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f6146c54-68ba-401a-854a-44b046d459f0",
+                                "name": "action.result.startTime",
+                                "value": "={{ \"\" }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "cb1d2c87-c510-4cd6-b945-8e15acf8f042",
+                                "name": "action.result.endTime",
+                                "value": "={{ \"\" }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    784,
+                    -16
+                ],
+                "id": "5badc882-c62c-4bf1-b6e2-89ad658e9691",
+                "name": "Set Potential"
+            }
+        ],
+        "connections": {
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Retrieve latest version",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Retrieve latest version": {
+                "main": [
+                    [
+                        {
+                            "node": "Key DB version if exists",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Key DB version if exists": {
+                "main": [
+                    [
+                        {
+                            "node": "Set Potential",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Save action to db": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Set Potential": {
+                "main": [
+                    [
+                        {
+                            "node": "Save action to db",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version aadb1739",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-09-20T17:07:29.042Z",
+        "updatedAt": "2026-09-20T17:07:30.924Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
