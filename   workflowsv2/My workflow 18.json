@@ -1,0 +1,84 @@
+{
+    "id": "pnos7I6wiuzVqlsa",
+    "name": "My workflow 18",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-14T14:11:02.602Z",
+    "updatedAt": "2026-07-14T14:11:24.611Z",
+    "isArchived": false,
+    "versionId": "2a1f0ae9-4efe-4a8b-9bcf-af12ee3ff4a9",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "a57555e3-a9a7-4b78-95eb-8df1d1485cfc",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://n8n.tactik8.com/webhook-test/15a21f7e-7a19-4769-898a-6fe48ba0635b",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "url",
+                            "value": "url1"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "19e37314-bd2e-4dac-880d-8081a7991896",
+            "name": "HTTP Request"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "pnos7I6wiuzVqlsa",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-14T14:11:02.602Z",
+            "updatedAt": "2026-07-14T14:11:02.602Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
