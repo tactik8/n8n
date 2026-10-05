@@ -1,0 +1,229 @@
+{
+    "id": "P4KllWlwQuJFM4oU",
+    "name": "yt-dlp api post v1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-05-02T13:34:06.841Z",
+    "updatedAt": "2026-05-02T13:41:36.572Z",
+    "isArchived": false,
+    "versionId": "eed34cd9-d1c4-4c1b-9e79-f8de44172524",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "ee9d50f6-e96a-406e-9d8d-6bc26e8e8850",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "eac01bc5-297a-4f00-a931-85ff5843bda6",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "e9677fb6-1990-49b6-beee-30e7793f870d",
+            "name": "Init Action"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:3033/auth/login",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": []
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "{\"username\":\"\",\"password\":\"\"}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                464,
+                0
+            ],
+            "id": "f95346b8-e67d-4f2b-ab24-65fa8e3ad50b",
+            "name": "Get token"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:3033/api/v1/exec",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "token",
+                            "value": "={{ $json.data }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "url",
+                            "value": "={{ $('Init Action').item.json.action.object.url }}"
+                        }
+                    ]
+                },
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "text"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                672,
+                0
+            ],
+            "id": "fa4b256f-477b-47c6-b62e-21114d39f6b6",
+            "name": "Post scrape request"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:3033/api/v1/progress",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "token",
+                            "value": "={{ $json.data }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "ID",
+                            "value": "={{ $json.data }}"
+                        }
+                    ]
+                },
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "text"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                912,
+                0
+            ],
+            "id": "61d7549a-1bfe-46f4-a2f0-5c0e320b400c",
+            "name": "Post scrape request1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Init Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Init Action": {
+            "main": [
+                [
+                    {
+                        "node": "Get token",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get token": {
+            "main": [
+                [
+                    {
+                        "node": "Post scrape request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Post scrape request": {
+            "main": [
+                [
+                    {
+                        "node": "Post scrape request1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.youtube.com/watch?v=MtN1YnoL46Q&list=RDMtN1YnoL46Q&start_radio=1"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "P4KllWlwQuJFM4oU",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-02T13:34:06.841Z",
+            "updatedAt": "2026-05-02T13:34:06.841Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
