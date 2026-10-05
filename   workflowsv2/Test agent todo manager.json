@@ -1,0 +1,434 @@
+{
+    "id": "32CTDhXatT5AsOPU",
+    "name": "Test agent todo manager",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-10-04T18:44:21.030Z",
+    "updatedAt": "2026-10-04T20:13:44.682Z",
+    "isArchived": false,
+    "versionId": "40b9ce35-17fe-47c6-a884-bfde37d0059b",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dyiY2K7EtgW1SrFl",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dyiY2K7EtgW1SrFl",
+                    "cachedResultName": "agent generic V2 And MCP"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "testMode": false,
+                        "databaseID": "agentConversationsV1",
+                        "tenantID": "={{ $workflow.id }}",
+                        "conversationID": "={{ $json.conversationID }}",
+                        "sender": "={{  { \"@id\": \"https://www.test.com/sender1\"} }}",
+                        "userPrompt": "={{ $json.message }}",
+                        "systemPrompt": "={{ $json.systemPrompt }}",
+                        "recipient": "={{  { \"@id\": \"https://www.test.com/agent1\"} }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "conversationID",
+                            "displayName": "conversationID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "systemPrompt",
+                            "displayName": "systemPrompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "userPrompt",
+                            "displayName": "userPrompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "sender",
+                            "displayName": "sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "recipient",
+                            "displayName": "recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "testMode",
+                            "displayName": "testMode",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "boolean",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                112,
+                -32
+            ],
+            "id": "c39358c2-0da7-4184-b565-c81d4f13948f",
+            "name": "Call 'agent generic V2'1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "21b5b4a2-8587-4310-8e5c-281c8cae512e",
+                            "name": "conversationID",
+                            "value": "={{ $('input').item.json.conversationID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "db4ae1c9-5b7c-4509-97d3-826969b4360f",
+                            "name": "sender",
+                            "value": "={{ $('input').item.json.sender }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d2f1bf03-0a1a-429c-86ba-697098375862",
+                            "name": "message",
+                            "value": "={{ $json.message }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "817fb77e-335d-4f47-82fc-91f4e2ee654f",
+                            "name": "systemPrompt",
+                            "value": "You are a personal assistant in charge of managing my todos. ",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -112,
+                -32
+            ],
+            "id": "3290148f-9c38-44d0-87ec-106febb7ad2e",
+            "name": "set cs agent"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "afa6a2f7-8e31-494a-925a-2612213fdca3",
+                            "name": "conversationID",
+                            "value": "={{ $json.conversationID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ec1a7ddf-2afb-4058-a845-30ac9acf2ae9",
+                            "name": "sender",
+                            "value": "=person",
+                            "type": "string"
+                        },
+                        {
+                            "id": "646be572-7aef-4696-be0a-6dd790d22720",
+                            "name": "message",
+                            "value": "={{ $('When chat message received').item.json.chatInput }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8af2e508-0a5c-43dd-b5a2-89a9201307e7",
+                            "name": "config.testMode",
+                            "value": "={{ $json.config.testMode }}",
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -336,
+                -32
+            ],
+            "id": "c6f9b217-c8ab-400a-a587-c5bc61b2834e",
+            "name": "input"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                560,
+                -32
+            ],
+            "id": "af6600a9-c238-4d20-a835-872a7a369dac",
+            "name": "output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "10ff4c42-630f-455e-ad0b-1460a099e2fa",
+                            "name": "conversationID",
+                            "value": "={{ $('input').item.json.conversationID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4c0c8b6f-3b4f-45a6-9593-db35d10f13fc",
+                            "name": "sender",
+                            "value": "=csagent",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9fceff51-5299-4b53-97f8-25140ed469ad",
+                            "name": "message",
+                            "value": "={{ $json.output.result.hasPart.sort((a,b)=> DateTime.fromISO(b.dateSent) - DateTime.fromISO(a.dateSent))[0].text }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4f156790-a402-41e0-b23a-86ce2e0dfabd",
+                            "name": "config",
+                            "value": "={{ $('input').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                336,
+                -32
+            ],
+            "id": "ab942ae6-deac-49bd-a427-50285975a33f",
+            "name": "Edit Fields3"
+        },
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Go.",
+                "options": {
+                    "responseMode": "responseNodes"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.5,
+            "position": [
+                -784,
+                -32
+            ],
+            "id": "792d16ca-8039-42a8-813f-0758f3e34374",
+            "name": "When chat message received",
+            "webhookId": "b727a86c-481b-4fb4-ad83-e117c1f2e937"
+        },
+        {
+            "parameters": {
+                "message": "={{  $json.message }}",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chat",
+            "typeVersion": 1.3,
+            "position": [
+                784,
+                -32
+            ],
+            "id": "4f7b8e81-80b5-417e-b1e7-cd1e91d706e1",
+            "name": "Chat",
+            "webhookId": "510ef349-26cb-4133-9dc4-b06f05f01233"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "5d665809-1767-4d12-90c2-05a02a7f8ab3",
+                            "name": "conversationID",
+                            "value": "=https://www.test.com/conversation1#conversation{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "20b44777-6dfd-4c07-9faf-e06124e71f9d",
+                            "name": "config.testMode",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -560,
+                -32
+            ],
+            "id": "de950779-eea5-4432-8cac-78ac6058d752",
+            "name": "start"
+        }
+    ],
+    "connections": {
+        "Call 'agent generic V2'1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "set cs agent": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'agent generic V2'1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "input": {
+            "main": [
+                [
+                    {
+                        "node": "set cs agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "output": {
+            "main": [
+                [
+                    {
+                        "node": "Chat",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields3": {
+            "main": [
+                [
+                    {
+                        "node": "output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "start",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Chat": {
+            "main": [
+                []
+            ]
+        },
+        "start": {
+            "main": [
+                [
+                    {
+                        "node": "input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "32CTDhXatT5AsOPU",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-04T18:44:21.030Z",
+            "updatedAt": "2026-10-04T18:44:21.030Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
