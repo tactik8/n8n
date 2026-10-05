@@ -1,0 +1,327 @@
+{
+    "id": "jNDWFptj0jRjKhNW",
+    "name": "Content writer",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-05-05T15:52:49.800Z",
+    "updatedAt": "2026-05-05T16:08:34.098Z",
+    "isArchived": false,
+    "versionId": "4378511c-0a46-4b82-8e1d-01407e320dcd",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        },
+                        {
+                            "name": "topic"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "7e89a717-6344-4680-84d2-5d0d83266cd9",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "0kP6vTNozGqvD3PZ",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/0kP6vTNozGqvD3PZ",
+                    "cachedResultName": "api s3 get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "brand1",
+                        "record_id": "=https://{{ $json.url.extractDomain().replaceAll('www.', '') }}#brandidentitymarkers"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                224,
+                0
+            ],
+            "id": "990badd9-d66e-4958-b713-fb3b5be59e4d",
+            "name": "Call 'api s3 get V1'"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "U2JMesIKLT0xyEJ4",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/U2JMesIKLT0xyEJ4",
+                    "cachedResultName": "markdown-json converter"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "jsonValue": "={{ $json.output.result }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "jsonValue",
+                            "displayName": "jsonValue",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "markdownValue",
+                            "displayName": "markdownValue",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                448,
+                0
+            ],
+            "id": "3ee93680-5078-4d89-8364-faad6fb06762",
+            "name": "Call 'markdown-json converter'"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ccd8b03f-4bfd-4315-836d-3b34ee3f91d6",
+                            "name": "config.brandIdentity",
+                            "value": "={{ $json.markdownValue }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "66ffe6af-7bb3-49a7-87ec-7aacfc85f9e0",
+                            "name": "config.userPrompt",
+                            "value": "=topic: {{ $('When Executed by Another Workflow').item.json.topic }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a00cb721-3089-4f2c-8b2b-4ffaeb0297e5",
+                            "name": "config.systemPrompt",
+                            "value": "=## task Write an article on the topic provided by the user using the brand identify markers below:  \n\n## brand identity markers: \n{{ $('Call \\'markdown-json converter\\'').item.json.markdownValue }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                672,
+                0
+            ],
+            "id": "c46a6b6d-00c5-4d77-b631-9fd83e626598",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.config.userPrompt }}\n",
+                "messages": {
+                    "messageValues": [
+                        {
+                            "message": "={{ $json.config.systemPrompt }}"
+                        }
+                    ]
+                },
+                "batching": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.9,
+            "position": [
+                896,
+                0
+            ],
+            "id": "a5f8ed94-6f0a-4663-abe0-215b4f96cd1c",
+            "name": "Basic LLM Chain"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1248,
+                0
+            ],
+            "id": "02b1ddfa-689b-4274-9c2b-49f01d4812e5",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1,
+            "position": [
+                832,
+                208
+            ],
+            "id": "6fa52f41-92e5-487c-be8e-2bd78a39c05b",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api s3 get V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api s3 get V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'markdown-json converter'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'markdown-json converter'": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.duchesnay.com/en",
+                    "topic": "The benefit of ring-type contraceptives for women."
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "jNDWFptj0jRjKhNW",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-05T15:52:49.800Z",
+            "updatedAt": "2026-05-05T15:52:49.800Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
