@@ -1,0 +1,1613 @@
+{
+    "id": "QExdMjMIc7Tsd7eq",
+    "name": "stash api scene post V2",
+    "active": true,
+    "activeVersionId": "de79d968-d829-410d-a8c5-b144e2f36c28",
+    "createdAt": "2026-04-09T13:01:22.218Z",
+    "updatedAt": "2026-07-10T14:36:20.432Z",
+    "isArchived": false,
+    "versionId": "c5f01311-2dc5-4e32-9986-784524c2ce5b",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        },
+                        {
+                            "name": "filepath"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -576,
+                -272
+            ],
+            "id": "7e678e63-62c1-4a07-9b27-6fd5b57d1f22",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:9999/graphql",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "mutation UpdateSceneURL {   sceneUpdate(input: {     id: \"995\",     url: \"https://new-example-url.com/video\"   }) {     id     url     title   } }"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                720,
+                224
+            ],
+            "id": "ab2877fb-f5fd-492f-9530-fab21fc51b31",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let movies = []\n  for(let m of item.json.data.allScenes){\n\n    let movie = {\n      \"@type\": \"VideoObject\",\n      \"headline\": m.title,\n      \"name\": m.title || m.files[0]?.basename,\n      \"url\": m.urls,\n      \"contentUrl\": m.files[0]?.path,\n    }\n    movies.push(movie)\n    \n  }\n\n\n  item.json.movies = movies\n}\n\n  return $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                896,
+                224
+            ],
+            "id": "30e0f79d-09ec-45b3-9ed6-62c1917708e8",
+            "name": "Schema conversion"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                            "name": "action.@type",
+                            "value": "SearchAction",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                            "name": "action.@id",
+                            "value": "={{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.result",
+                            "value": "={{ $json.movies }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1104,
+                224
+            ],
+            "id": "2417a136-1d6c-4094-ae98-8b7bed3b6773",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let systemRecords = []\n  for(let m of item.json.records){\n\n    let fragments = m?.[\"@id\"].split('/')\n    let id = fragments[fragments.length -1 ]\n\n    let urls = m?.url || \"\"\n    urls = Array.isArray(urls) ? urls : [urls]\n    let url = urls?.[0] || undefined\n    \n    let r = {      \n      \"id\": id,\n      \"url\": url,\n      \"urls\": urls, \n    }\n\n    systemRecords.push(r)\n  }\n\n\n  item.json.systemRecords = systemRecords\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                448,
+                224
+            ],
+            "id": "28765c89-eefa-4937-943e-e7d49d164f01",
+            "name": "schema conversion1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.systemPrompt",
+                            "value": "# role: \nextract action items from text. \n\n# output format: \njsonld schema.org action record",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                704,
+                -480
+            ],
+            "id": "53b6d2cf-7a45-4dfe-b6c8-951ecdae0625",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object",
+                            "value": "={{ $json.records }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -288,
+                -144
+            ],
+            "id": "1012ff28-08b2-44c0-be15-b923e01b6bde",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:9999/graphql",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "=query MyQuery3 {\n  findFile(\n    path: \"{{ $json.config.filepath }}\"\n  ) {\n    id\n  }\n}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                208,
+                -144
+            ],
+            "id": "b3ec7a36-5816-4e6a-bfbd-df9d861def61",
+            "name": "Find file"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "9ae4c68b-0f24-46e8-84c0-caf789523c52",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "2affaa5f-5b14-4f50-bd48-a752d5153a88",
+                            "name": "config.url",
+                            "value": "https://xhamster.com/videos/gemma-bones-painful-screaming-anal-sex-bts-xh09ETj",
+                            "type": "string"
+                        },
+                        {
+                            "id": "17f22df4-7883-40a4-a6f1-d3242d6016bc",
+                            "name": "config.filepath",
+                            "value": "/media_libraries/media2/videos/metube/GEMMA_BONES_painful_screaming_anal_sex_BTS/GEMMA_BONES_painful_screaming_anal_sex_BTS.mp4",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -32,
+                -144
+            ],
+            "id": "d273812d-20af-4cb9-9991-58eb9eb25325",
+            "name": "Config1"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:9999/graphql",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "=mutation MyMutation2 {\n  sceneCreate(\n    input: {\n      url: \"{{ $('Config1').item.json.config.url }}\"\n      file_ids: \"{{ $json.data.findFile.id }}\"\n    }\n  ) {\n    id\n  }\n} "
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                1728,
+                -288
+            ],
+            "id": "d1ec80a5-6675-410b-8e59-6afc9b62e736",
+            "name": "Create scene"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:9999/graphql",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "=mutation MyMutation3($fieldOptions: [IdentifyFieldOptionsInput!] = { createMissing: true, strategy: OVERWRITE, field: \"title\" }) {\n  metadataIdentify(\n    input: {\n      sources: {\n        source: { scraper_id: \"ScrapeWithURL\" }\n        options: { setCoverImage: true, fieldOptions: $fieldOptions }\n      }\n      sceneIDs: \"{{ $json.config.scene.id }}\"\n    }\n  )\n  \n}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                2208,
+                -144
+            ],
+            "id": "09b51e76-32df-417b-84f7-aae864ddf6a9",
+            "name": "Identify"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2ef7f2c2-c580-4fe5-9afa-2e4faf397e83",
+                            "name": "action",
+                            "value": "={{ $('Config1').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d466a6fd-d864-4df2-aea7-e2555a5f2072",
+                            "name": "config",
+                            "value": "={{ $('Config1').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "08d67c76-9ee8-43d2-8cea-7930a18b6e4a",
+                            "name": "config.file.id",
+                            "value": "={{ $json.data.findFile.id }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                416,
+                -144
+            ],
+            "id": "764dce91-62ee-45fc-82e9-52efe4c200a1",
+            "name": "Config2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "59c936a6-095a-477d-bef7-ea8a8522a73c",
+                            "name": "config",
+                            "value": "={{ $('Config2').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "18e8a0ac-f693-4784-b797-073e90dd5b55",
+                            "name": "config.scene.id",
+                            "value": "={{ $json.data.findScenes.scenes?.[0]?.id }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1184,
+                -144
+            ],
+            "id": "59f60429-adc1-4233-a2d8-30f78595c04f",
+            "name": "config3"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1936,
+                -288
+            ],
+            "id": "2953e7e5-e3dc-4c7d-99f1-dca935e8bba0",
+            "name": "config4"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "489e5ca4-d38e-42fe-9b8c-e97d0a8441c9",
+                            "name": "action",
+                            "value": "={{ $('Config2').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "5c296ffc-3d90-4fdc-8485-7f2195acc7a0",
+                            "name": "action.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a96444ae-b560-4eee-8588-f6b2741e8f9d",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d368ea2-6f88-4590-815f-421609b269cc",
+                            "name": "action.error",
+                            "value": "=Stash could not find the file with path: {{ $('Config2').item.json.config.filepath }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                864,
+                64
+            ],
+            "id": "cc8add0d-6012-4807-8bde-e60232fca1f1",
+            "name": "Error 1"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "f6668f53-a1a3-4fef-a534-70f0a6f21375",
+                            "leftValue": "={{ $json.config.filepath }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                624,
+                -144
+            ],
+            "id": "b81a33c9-0881-4ce5-9b95-f91c33acedbe",
+            "name": "If file exists"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "af96f924-5a9c-4fff-8e2c-0473de9cefcc",
+                            "leftValue": "={{ $json.config.scene.id }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1408,
+                -144
+            ],
+            "id": "32058099-6719-44c5-947d-c84ed82f54e5",
+            "name": "If scene doesn't exist"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:9999/graphql",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "=query MyQuery4 {\n  findScenes(\n    scene_filter: {\n      files_filter: {\n        path: {\n          value: \"{{ $json.config.filepath }}\"\n          modifier: EQUALS\n        }\n      }\n    }\n  ) {\n    scenes {\n      id\n    }\n  }\n}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                976,
+                -144
+            ],
+            "id": "0543fe9c-8426-44a0-8af8-cd802c8b3e84",
+            "name": "Find scene by file"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1072,
+                64
+            ],
+            "id": "41a47f7a-b464-4823-9d64-74d718afb5c1",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "d1dce278-96ed-4fdf-a1ec-618ec0cdcd8d",
+                            "leftValue": "",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1616,
+                -144
+            ],
+            "id": "81c1268d-a7ec-4dca-86d0-d183c7b3a6ae",
+            "name": "If"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Schema conversion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schema conversion": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "schema conversion1": {
+            "main": [
+                []
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Find file": {
+            "main": [
+                [
+                    {
+                        "node": "Config2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config1": {
+            "main": [
+                [
+                    {
+                        "node": "Find file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create scene": {
+            "main": [
+                [
+                    {
+                        "node": "config4",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config2": {
+            "main": [
+                [
+                    {
+                        "node": "If file exists",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "config3": {
+            "main": [
+                [
+                    {
+                        "node": "If scene doesn't exist",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "config4": {
+            "main": [
+                [
+                    {
+                        "node": "Identify",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If file exists": {
+            "main": [
+                [
+                    {
+                        "node": "Find scene by file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Error 1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If scene doesn't exist": {
+            "main": [
+                [
+                    {
+                        "node": "Create scene",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Find scene by file": {
+            "main": [
+                [
+                    {
+                        "node": "config3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error 1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Identify",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://xhamster.com/videos/veronica-leal-reality-backstage-anal-sex-and-throat-fuck-worming-up-bts-xhqcSaB",
+                    "filepath": "/media_libraries/media2/videos/metube/Veronica_Leal_REALITY_BACKSTAGE_ANAL_SEX_AND_THROAT_FUCK_WORMING_UP_bts/Veronica_Leal_REALITY_BACKSTAGE_ANAL_SEX_AND_THROAT_FUCK_WORMING_UP_bts.mp4"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "QExdMjMIc7Tsd7eq",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-09T13:01:22.218Z",
+            "updatedAt": "2026-04-09T13:01:22.218Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "de79d968-d829-410d-a8c5-b144e2f36c28",
+        "workflowId": "QExdMjMIc7Tsd7eq",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "url"
+                            },
+                            {
+                                "name": "filepath"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -256,
+                    -320
+                ],
+                "id": "7e678e63-62c1-4a07-9b27-6fd5b57d1f22",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "http://192.168.2.243:9999/graphql",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "bodyParameters": {
+                        "parameters": [
+                            {
+                                "name": "query",
+                                "value": "mutation UpdateSceneURL {   sceneUpdate(input: {     id: \"995\",     url: \"https://new-example-url.com/video\"   }) {     id     url     title   } }"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    720,
+                    224
+                ],
+                "id": "ab2877fb-f5fd-492f-9530-fab21fc51b31",
+                "name": "HTTP Request"
+            },
+            {
+                "parameters": {
+                    "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let movies = []\n  for(let m of item.json.data.allScenes){\n\n    let movie = {\n      \"@type\": \"VideoObject\",\n      \"headline\": m.title,\n      \"name\": m.title || m.files[0]?.basename,\n      \"url\": m.urls,\n      \"contentUrl\": m.files[0]?.path,\n    }\n    movies.push(movie)\n    \n  }\n\n\n  item.json.movies = movies\n}\n\n  return $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    896,
+                    224
+                ],
+                "id": "30e0f79d-09ec-45b3-9ed6-62c1917708e8",
+                "name": "Schema conversion"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                                "name": "action.@type",
+                                "value": "SearchAction",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                                "name": "action.@id",
+                                "value": "={{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                                "name": "action.result",
+                                "value": "={{ $json.movies }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1104,
+                    224
+                ],
+                "id": "2417a136-1d6c-4094-ae98-8b7bed3b6773",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let systemRecords = []\n  for(let m of item.json.records){\n\n    let fragments = m?.[\"@id\"].split('/')\n    let id = fragments[fragments.length -1 ]\n\n    let urls = m?.url || \"\"\n    urls = Array.isArray(urls) ? urls : [urls]\n    let url = urls?.[0] || undefined\n    \n    let r = {      \n      \"id\": id,\n      \"url\": url,\n      \"urls\": urls, \n    }\n\n    systemRecords.push(r)\n  }\n\n\n  item.json.systemRecords = systemRecords\n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    448,
+                    224
+                ],
+                "id": "28765c89-eefa-4937-943e-e7d49d164f01",
+                "name": "schema conversion1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.systemPrompt",
+                                "value": "# role: \nextract action items from text. \n\n# output format: \njsonld schema.org action record",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    704,
+                    -480
+                ],
+                "id": "53b6d2cf-7a45-4dfe-b6c8-951ecdae0625",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object",
+                                "value": "={{ $json.records }}",
+                                "type": "array"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    352,
+                    -496
+                ],
+                "id": "1012ff28-08b2-44c0-be15-b923e01b6bde",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "http://192.168.2.243:9999/graphql",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "bodyParameters": {
+                        "parameters": [
+                            {
+                                "name": "query",
+                                "value": "=query MyQuery3 {\n  findFile(\n    path: \"{{ $json.config.filepath }}\"\n  ) {\n    id\n  }\n}"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    208,
+                    -144
+                ],
+                "id": "b3ec7a36-5816-4e6a-bfbd-df9d861def61",
+                "name": "Find file"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2affaa5f-5b14-4f50-bd48-a752d5153a88",
+                                "name": "config.url",
+                                "value": "https://xhamster.com/videos/veronica-leal-reality-backstage-anal-sex-and-throat-fuck-worming-up-bts-xhqcSaB",
+                                "type": "string"
+                            },
+                            {
+                                "id": "17f22df4-7883-40a4-a6f1-d3242d6016bc",
+                                "name": "config.filepath",
+                                "value": "/media_libraries/media2/videos/metube/Veronica_Leal_REALITY_BACKSTAGE_ANAL_SEX_AND_THROAT_FUCK_WORMING_UP_bts/Veronica_Leal_REALITY_BACKSTAGE_ANAL_SEX_AND_THROAT_FUCK_WORMING_UP_bts.mp4",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    0,
+                    -144
+                ],
+                "id": "d273812d-20af-4cb9-9991-58eb9eb25325",
+                "name": "Config1"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "http://192.168.2.243:9999/graphql",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "bodyParameters": {
+                        "parameters": [
+                            {
+                                "name": "query",
+                                "value": "=mutation MyMutation2 {\n  sceneCreate(\n    input: {\n      url: \"{{ $('Config1').item.json.config.url }}\"\n      file_ids: \"{{ $json.data.findFile.id }}\"\n    }\n  ) {\n    id\n  }\n} "
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    1728,
+                    -288
+                ],
+                "id": "d1ec80a5-6675-410b-8e59-6afc9b62e736",
+                "name": "Create scene"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "http://192.168.2.243:9999/graphql",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "bodyParameters": {
+                        "parameters": [
+                            {
+                                "name": "query",
+                                "value": "=mutation MyMutation3($fieldOptions: [IdentifyFieldOptionsInput!] = { createMissing: true, strategy: OVERWRITE, field: \"title\" }) {\n  metadataIdentify(\n    input: {\n      sources: {\n        source: { scraper_id: \"ScrapeWithURL\" }\n        options: { setCoverImage: true, fieldOptions: $fieldOptions }\n      }\n      sceneIDs: \"{{ $json.config.scene.id }}\"\n    }\n  )\n  \n}"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    2208,
+                    -144
+                ],
+                "id": "09b51e76-32df-417b-84f7-aae864ddf6a9",
+                "name": "Identify"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "d466a6fd-d864-4df2-aea7-e2555a5f2072",
+                                "name": "config",
+                                "value": "={{ $('Config1').item.json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "08d67c76-9ee8-43d2-8cea-7930a18b6e4a",
+                                "name": "config.file.id",
+                                "value": "={{ $json.data.findFile.id }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    416,
+                    -144
+                ],
+                "id": "764dce91-62ee-45fc-82e9-52efe4c200a1",
+                "name": "Config2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "59c936a6-095a-477d-bef7-ea8a8522a73c",
+                                "name": "config",
+                                "value": "={{ $('Config2').item.json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "18e8a0ac-f693-4784-b797-073e90dd5b55",
+                                "name": "config.scene.id",
+                                "value": "={{ $json.data.findScenes.scenes?.[0]?.id }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1184,
+                    -144
+                ],
+                "id": "59f60429-adc1-4233-a2d8-30f78595c04f",
+                "name": "config3"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1936,
+                    -288
+                ],
+                "id": "2953e7e5-e3dc-4c7d-99f1-dca935e8bba0",
+                "name": "config4"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    864,
+                    64
+                ],
+                "id": "cc8add0d-6012-4807-8bde-e60232fca1f1",
+                "name": "Error 1"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "f6668f53-a1a3-4fef-a534-70f0a6f21375",
+                                "leftValue": "={{ $json.config.filepath }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notEmpty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    624,
+                    -144
+                ],
+                "id": "b81a33c9-0881-4ce5-9b95-f91c33acedbe",
+                "name": "If file exists"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "af96f924-5a9c-4fff-8e2c-0473de9cefcc",
+                                "leftValue": "={{ $json.config.scene.id }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "empty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    1408,
+                    -144
+                ],
+                "id": "32058099-6719-44c5-947d-c84ed82f54e5",
+                "name": "If scene doesn't exist"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "http://192.168.2.243:9999/graphql",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "bodyParameters": {
+                        "parameters": [
+                            {
+                                "name": "query",
+                                "value": "=query MyQuery4 {\n  findScenes(\n    scene_filter: {\n      files_filter: {\n        path: {\n          value: \"{{ $json.config.filepath }}\"\n          modifier: EQUALS\n        }\n      }\n    }\n  ) {\n    scenes {\n      id\n    }\n  }\n}"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    976,
+                    -144
+                ],
+                "id": "0543fe9c-8426-44a0-8af8-cd802c8b3e84",
+                "name": "Find scene by file"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Config1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request": {
+                "main": [
+                    [
+                        {
+                            "node": "Schema conversion",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Schema conversion": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "schema conversion1": {
+                "main": [
+                    []
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Find file": {
+                "main": [
+                    [
+                        {
+                            "node": "Config2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config1": {
+                "main": [
+                    [
+                        {
+                            "node": "Find file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Create scene": {
+                "main": [
+                    [
+                        {
+                            "node": "config4",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config2": {
+                "main": [
+                    [
+                        {
+                            "node": "If file exists",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "config3": {
+                "main": [
+                    [
+                        {
+                            "node": "If scene doesn't exist",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "config4": {
+                "main": [
+                    [
+                        {
+                            "node": "Identify",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If file exists": {
+                "main": [
+                    [
+                        {
+                            "node": "Find scene by file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Error 1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If scene doesn't exist": {
+                "main": [
+                    [
+                        {
+                            "node": "Create scene",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Identify",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Find scene by file": {
+                "main": [
+                    [
+                        {
+                            "node": "config3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version de79d968",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-07-10T11:51:44.310Z",
+        "updatedAt": "2026-07-10T12:05:46.703Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
