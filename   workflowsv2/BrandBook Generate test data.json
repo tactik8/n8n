@@ -1,0 +1,154 @@
+{
+    "id": "6bjns7O8ogkZ4NBq",
+    "name": "BrandBook Generate test data",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-09-02T21:19:18.949Z",
+    "updatedAt": "2026-09-02T21:21:08.345Z",
+    "isArchived": false,
+    "versionId": "3f5adb9b-c699-4353-89e9-c7b83a28f9f1",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "327740c9-7683-4447-9a39-1d877c3b06b3",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "3c8c45cb-8ebd-4112-802c-128890bca59b",
+                            "name": "brandBook.@type",
+                            "value": "BrandBook",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d5de84b2-1037-4705-ab35-7dd551fe7c06",
+                            "name": "brandBook.@id",
+                            "value": "https://duchesnay.com#brandbook",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f99b55b5-588f-4e86-bd02-32d63a1a2239",
+                            "name": "brandBook.url",
+                            "value": "https://duchesnay.com",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f52a2d60-f514-456b-a6ce-d2be0533419e",
+                            "name": "brandBook.text",
+                            "value": "# Duchesnay (duchesnay.com) Brand Book  ## 1. Brand Identity & Strategy  ### Brand Purpose & Mission  Duchesnay exists to empower individuals—specifically women and their families—by developing safe, innovative, and targeted therapeutic solutions. Guided by the conviction that women’s health is foundational to thriving communities, Duchesnay provides healthcare solutions across every stage of life.  ### Brand Vision  To remain a global leader in specialty pharmaceuticals, continuously advancing medical care through scientific rigor, ethical innovation, and strategic partnerships.  ### Core Values  * **Excellence:** Unwavering commitment to safety, compliance, clinical precision, and product quality. * **Integrity:** Transparent, evidence-backed communications, maintaining trust with healthcare professionals (HCPs) and patients. * **Innovation:** Continuous advancement in drug development and specialized therapeutic solutions. * **Collaboration:** Partnering closely with medical practitioners, researchers, and global healthcare entities.  ---  ## 2. Visual Identity Guidelines  ### Brand Color Palette  | Color Role | Color Name | Hex Code | Primary Usage | | --- | --- | --- | --- | | **Primary Brand Color** | Duchesnay Deep Violet | `#4A2574` | Header text, main navigation, hero brand elements | | **Supporting Brand Color** | Clinical Magenta / Rose | `#C23B75` | Accent highlights, buttons, callouts, active links | | **Trust Neutral** | Slate Grey | `#4A5568` | Body copy, secondary headers, UI icons | | **Background Neutral** | Soft Clinical Tint | `#F8F9FA` | Card backgrounds, section fills | | **Base Surface** | Pure White | `#FFFFFF` | Background containers, whitepapers, clean space |  ### Logo Usage & Clear Space  * **Primary Mark:** The wordmark with integrated gradient accent representing precision and human-centric care. * **Minimum Clear Space:** Maintain a border equal to the height of the letter \"D\" around all sides of the logo. * **Minimum Size:** Print: 25 mm wide | Digital: 120 px wide. * **Misuse Rules:** Do not skew, apply drop shadows, alter brand colors, or place on low-contrast backgrounds.  ### Typography Hierarchy  * **Primary Font (Headings):** Montserrat / Inter (Semi-Bold / Bold) * Clean, geometric, readable, and modern.   * **Secondary Font (Body Text):** Open Sans / Roboto (Regular / Medium) * Highly legible at small scales for technical and medical copy.    ---  ## 3. Brand Voice & Communication Tone  ### Tone Matrix  | Context | Tone Characteristics | Example Application | | --- | --- | --- | | **Patient Communications** | Empathetic, supportive, clear, accessible | *\"Supporting your health journey through every milestone.\"* | | **Healthcare Professionals (HCPs)** | Clinical, objective, authoritative, evidence-backed | *\"Formulated for targeted therapeutic efficacy and proven safety profile.\"* | | **Corporate & Media** | Visionary, ethical, transparent, professional | *\"Driving innovation in specialized pharmaceutical manufacturing.\"* |  ### Copywriting Rules  * **DO:** Use clear, medically accurate language supported by scientific evidence. * **DO:** Maintain a human, empathetic focus on quality of life. * **DON'T:** Use overly dense jargon when addressing patients directly. * **DON'T:** Make unsubstantiated claims or overly aggressive promotional statements.  ---  ## 4. Digital & UI Brand Standards (duchesnay.com)  * **Button Styling:** Primary CTAs use Deep Violet (`#4A2574`) or Clinical Magenta (`#C23B75`) with rounded edges (4px border radius) and explicit hover states. * **Imagery Style:** Clean, high-resolution imagery featuring real patients and healthcare environments in natural light. Avoid overly artificial stock photos. * **Grid & Layout:** Generous white space with clean 12-column digital grids to maintain structured accessibility.  ---",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                0
+            ],
+            "id": "d72964bb-380f-4b8e-a776-b30bb40176f5",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "7oEYWoxuLuKVUvXZ",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/7oEYWoxuLuKVUvXZ",
+                    "cachedResultName": "BrandBook Post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "brandBook": "={{ $json.brandBook }}"
+                    },
+                    "matchingColumns": [
+                        "brandBook"
+                    ],
+                    "schema": [
+                        {
+                            "id": "brandBook",
+                            "displayName": "brandBook",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                448,
+                0
+            ],
+            "id": "c5091e39-8eef-4d4b-b04b-81d960a0c990",
+            "name": "Call 'BrandBook Post V1'"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'BrandBook Post V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "6bjns7O8ogkZ4NBq",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-02T21:19:18.949Z",
+            "updatedAt": "2026-09-02T21:19:18.949Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
