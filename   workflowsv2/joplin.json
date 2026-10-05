@@ -1,0 +1,92 @@
+{
+    "id": "tAqb3kiwjvtC9Qbc",
+    "name": "joplin",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-02T13:17:43.870Z",
+    "updatedAt": "2026-07-02T13:43:41.840Z",
+    "isArchived": false,
+    "versionId": "adbcf624-eb88-474a-b9ce-25fe2238002f",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "79691182-7079-4dd9-bc20-98d93de9c49b",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "url": "https://joplin.tactik8.com/notes",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "token",
+                            "value": "5d161036a02cdd34028e073ac8f4fbdfef1c498fe2eb937a12f0c75274faee6beae67efbcdb7ebaf8097bc861b09710c4ce404aea8c2549a97a83cf2a103ba28"
+                        }
+                    ]
+                },
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "53b545a8-686e-43eb-8cea-c3c3d4c7cdda",
+            "name": "HTTP Request"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "tAqb3kiwjvtC9Qbc",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-02T13:17:43.870Z",
+            "updatedAt": "2026-07-02T13:17:43.870Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
