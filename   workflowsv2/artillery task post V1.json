@@ -1,0 +1,697 @@
+{
+    "id": "TbJW7230F8rZzWQO",
+    "name": "artillery task post V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-14T11:30:47.054Z",
+    "updatedAt": "2026-07-14T12:52:50.733Z",
+    "isArchived": false,
+    "versionId": "18eb1f0e-589c-4d22-bde2-1e0eaf139b3d",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -224,
+                0
+            ],
+            "id": "92742bb3-e23b-45bf-a4c5-b2292b952bf6",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                0,
+                -16
+            ],
+            "id": "d65c7662-77b1-4708-9014-a1f6db506701",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                            "name": "config.ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                            "name": "config.apiUrl",
+                            "value": "http://192.168.2.243:9999/graphql",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2e8ee011-7a12-4046-9ccc-5d2206ad8e26",
+                            "name": "config.apiUrl",
+                            "value": "http://192.168.2.243:18088",
+                            "type": "string"
+                        },
+                        {
+                            "id": "5147469a-20c2-4136-bad9-84e3017cdbbf",
+                            "name": "config.apiUrlTask",
+                            "value": "http://192.168.2.243:18088/tasks",
+                            "type": "string"
+                        },
+                        {
+                            "id": "371d7ad0-a7f1-43c8-97ae-f11c527d005c",
+                            "name": "config.data.name",
+                            "value": "=AAAA_{{ $json.action.object.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "048480ac-5923-4ea7-8492-a2a7100be750",
+                            "name": "config.data.urls",
+                            "value": "={{ $json.action.object.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d3b662e-a966-41d8-b227-57c2e71254a5",
+                            "name": "config.data.schedule",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a1051aeb-3546-45bc-bea7-526900296da9",
+                            "name": "config.data.command",
+                            "value": "gallery-dl --write-metadata --write-info-json --write-tags --input-file urls.txt",
+                            "type": "string"
+                        },
+                        {
+                            "id": "62e813ec-112d-4ae3-94d1-43fb40407d37",
+                            "name": "config.data.command_display",
+                            "value": "gallery-dl --write-metadata --write-info-json --write-tags --input-file urls.txt",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6fbc5a71-31f0-436c-a2aa-e344010b5372",
+                            "name": "config.data.editing_flag",
+                            "value": "0",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                224,
+                -16
+            ],
+            "id": "60108f39-e28c-4b09-a76c-2a06ff8b7bb7",
+            "name": "Config1"
+        },
+        {
+            "parameters": {
+                "url": "http://192.168.2.243:18088/tasks",
+                "options": {
+                    "response": {
+                        "response": {
+                            "fullResponse": true
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                432,
+                -16
+            ],
+            "id": "2c05a8bb-4ef1-4ca8-914a-6a4a8815cf58",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "operation": "extractHtmlContent",
+                "extractionValues": {
+                    "values": [
+                        {
+                            "key": "csrf_token",
+                            "cssSelector": "meta[name=\"csrf-token\"]",
+                            "returnValue": "attribute",
+                            "attribute": "content"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.html",
+            "typeVersion": 1.2,
+            "position": [
+                640,
+                -16
+            ],
+            "id": "70f414d5-0d27-480b-8e43-faff630f7bd6",
+            "name": "HTML"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b841aa7a-a3e9-428c-adee-012a2bb18909",
+                            "name": "action",
+                            "value": "={{ $('Config1').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "4f7f24d4-d613-4097-9471-57e5f73b8aed",
+                            "name": "config",
+                            "value": "={{ $('Config1').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "3b61c743-e236-43a4-a94b-445db4cf77ae",
+                            "name": "config.data.csrf_token",
+                            "value": "={{ $json.csrf_token }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "02feca9c-9384-4da7-a92f-1780ea8cbe05",
+                            "name": "config.session",
+                            "value": "={{ $('HTTP Request1').item.json.headers[\"set-cookie\"][0].split(';')[0].split('=')[1] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                848,
+                -16
+            ],
+            "id": "a4bd20ee-4bdf-4469-af35-ed94c1bdb5d9",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "html": "={{ $json.data }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.markdown",
+            "typeVersion": 1,
+            "position": [
+                2336,
+                -16
+            ],
+            "id": "b05d264a-569d-4cac-aa36-d9e68d3dc46c",
+            "name": "Markdown"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.apiUrlTask }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "X-CSRFToken",
+                            "value": "={{ $json.config.data.csrf_token }}"
+                        },
+                        {
+                            "name": "X-XSRF-TOKEN",
+                            "value": "={{ $json.config.data.csrf_token }}"
+                        },
+                        {
+                            "name": "Cookie",
+                            "value": "={{ $('HTTP Request1').item.json.headers[\"set-cookie\"] }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "contentType": "multipart-form-data",
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "value": "={{ $json.config.data.name }}"
+                        },
+                        {
+                            "name": "urls",
+                            "value": "={{ $json.config.data.urls }}"
+                        },
+                        {
+                            "name": "schedule",
+                            "value": "={{ $json.config.data.schedule }}"
+                        },
+                        {
+                            "name": "command",
+                            "value": "={{ $json.config.data.command }}"
+                        },
+                        {
+                            "name": "command_display",
+                            "value": "={{ $json.config.data.command_display }}"
+                        },
+                        {
+                            "name": "editing_flag",
+                            "value": "={{ $json.config.data.editing_flag }}"
+                        },
+                        {
+                            "name": "csrf_token",
+                            "value": "={{ $json.config.data.csrf_token }}"
+                        }
+                    ]
+                },
+                "options": {
+                    "redirect": {
+                        "redirect": {}
+                    },
+                    "sendCredentialsOnCrossOriginRedirect": true
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                1136,
+                -16
+            ],
+            "id": "2e4d4789-8edf-47a1-9397-abefe3b9f626",
+            "name": "Create task"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dCIpSDYGWcwgJJiH",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dCIpSDYGWcwgJJiH",
+                    "cachedResultName": "artillery task get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [
+                        "taskID"
+                    ],
+                    "schema": [
+                        {
+                            "id": "taskID",
+                            "displayName": "taskID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1424,
+                0
+            ],
+            "id": "49912676-f37c-4a0e-92f7-6c2a51aa3e19",
+            "name": "Call 'artillery task get V1'"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.output = item.json.output.result.find(x => x.object.url == $('Edit Fields').first().json.config.data.name)\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1632,
+                0
+            ],
+            "id": "4dd3f244-e39a-484d-b8c2-536614f24c75",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "operation": "extractHtmlContent",
+                "extractionValues": {
+                    "values": [
+                        {
+                            "key": "forms",
+                            "cssSelector": "form",
+                            "returnValue": "attribute",
+                            "returnArray": true
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.html",
+            "typeVersion": 1.2,
+            "position": [
+                2080,
+                -176
+            ],
+            "id": "32ad21ed-d075-4dba-ab18-e84fc6e262d2",
+            "name": "HTML1"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "sendBody": true,
+                "contentType": "raw",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                2416,
+                160
+            ],
+            "id": "188c3373-0cd6-4b85-aa01-caac356757ba",
+            "name": "HTTP Request2"
+        },
+        {
+            "parameters": {
+                "url": "=http://192.168.2.243:18088/tasks?selected={{ $json.output['@id'].split('/').at(-1) }}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "fullResponse": true
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                1840,
+                0
+            ],
+            "id": "d5c6b76e-f1e8-40fe-87ae-32bd94d5867e",
+            "name": "Get jon html"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "be0420fc-f3f3-47fb-8c30-b8506fae9ddf",
+                            "name": "config.Cookies",
+                            "value": "={{ $json.Cookies }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "93b76b51-dcd0-47d8-8e4c-55ea1e30eb04",
+                            "name": "result",
+                            "value": "={{ $json.result.find(x => x.attributes.id == \"fRun\") }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2304,
+                160
+            ],
+            "id": "3d8e2dab-31b3-4d1b-9d2e-3d261363a8a6",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "jsCode": "// 1. A lightweight, zero-dependency HTML parser for sandboxed environments\nfunction parseHTMLForms(html) {\n  const forms = [];\n  let currentForm = null;\n\n  // Tokenize the HTML string into tags and text chunks\n  const tagRegex = /<([^>]+)>/g;\n  let match;\n  let lastIndex = 0;\n\n  while ((match = tagRegex.exec(html)) !== null) {\n    const tagContent = match[1].trim();\n    const isClosing = tagContent.startsWith('/');\n    const isSelfClosing = tagContent.endsWith('/');\n    \n    // Normalize tag content (strip leading/trailing slashes)\n    let cleanTag = tagContent;\n    if (isClosing) cleanTag = cleanTag.substring(1);\n    if (isSelfClosing) cleanTag = cleanTag.substring(0, cleanTag.length - 1);\n    cleanTag = cleanTag.trim();\n\n    const spaceIndex = cleanTag.indexOf(' ');\n    const tagName = (spaceIndex === -1 ? cleanTag : cleanTag.substring(0, spaceIndex)).toLowerCase();\n    const rawAttrs = spaceIndex === -1 ? '' : cleanTag.substring(spaceIndex + 1);\n\n    // Helper to parse attributes from a tag string\n    const parseAttrs = (attrStr) => {\n      const attrs = {};\n      const attrRegex = /([a-zA-Z0-9:-]+)(?:\\s*=\\s*(?:'([^']*)'|\"([^\"]*)\"|([^\\s>]+)))?/g;\n      let attrMatch;\n      while ((attrMatch = attrRegex.exec(attrStr)) !== null) {\n        const key = attrMatch[1];\n        const val = attrMatch[2] ?? attrMatch[3] ?? attrMatch[4] ?? \"\";\n        attrs[key] = val;\n      }\n      return attrs;\n    };\n\n    if (tagName === 'form') {\n      if (!isClosing) {\n        // Start of a new form\n        currentForm = {\n          attributes: parseAttrs(rawAttrs),\n          inputs: []\n        };\n      } else if (currentForm) {\n        // End of the current form\n        forms.push(currentForm);\n        currentForm = null;\n      }\n    } else if (currentForm && ['input', 'select', 'textarea', 'button'].includes(tagName)) {\n      if (!isClosing) {\n        const attributes = parseAttrs(rawAttrs);\n        let value = attributes.value || '';\n\n        // If it's a textarea or select, we might need to grab its text value.\n        // We look ahead to the next closing tag to fetch any inner content.\n        if (tagName === 'textarea' || tagName === 'select') {\n          const nextTagIndex = tagRegex.lastIndex;\n          const closeTagPattern = new RegExp(`</${tagName}\\\\s*>`, 'i');\n          const closeMatch = closeTagPattern.exec(html.substring(nextTagIndex));\n          \n          if (closeMatch) {\n            const innerContent = html.substring(nextTagIndex, nextTagIndex + closeMatch.index).trim();\n            if (tagName === 'textarea') {\n              value = innerContent;\n            } else if (tagName === 'select') {\n              // Extract the selected option's value\n              const optMatch = /<option[^>]*selected[^>]*value=[\"']([^\"']*)[\"']/i.exec(innerContent) \n                            || /<option[^>]*value=[\"']([^\"']*)[\"']/i.exec(innerContent);\n              value = optMatch ? optMatch[1] : '';\n            }\n          }\n        }\n\n        currentForm.inputs.push({\n          tagName,\n          attributes,\n          value\n        });\n      }\n    }\n  }\n\n  return forms;\n}\n\n\nfunction getForm(html, formID){\n\n  let forms = parseHTMLForms(html)\n\n  let f = forms.find(x => x?.attributes.id == formID )\n\n  let record = {}\n  f.inputs.filter(x => x.attributes.type !=\"submit\").forEach(x => record[x.attributes.id] = x.value || \"tbd\" )\n\n  \n}\n\n\n\nfor (const item of $input.all()) {\n  item.json = {\"result\": getForm(item.json.data, 'fGet'), \"Cookies\": $input.first().json.headers['set-cookie'][0]}\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2096,
+                160
+            ],
+            "id": "8d9574bc-08c9-423f-9e5f-3bfa568248a2",
+            "name": "html Processing"
+        }
+    ],
+    "connections": {
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config1": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request1": {
+            "main": [
+                [
+                    {
+                        "node": "HTML",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTML": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Create task",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create task": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'artillery task get V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'artillery task get V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Get jon html",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get jon html": {
+            "main": [
+                [
+                    {
+                        "node": "Markdown",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "HTML1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "html Processing",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "html Processing": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.pornpics.com/galleries/beautiful-milf-pepper-flashes-her-perky-tits-and-ass-in-public-on-a-chilly-day-69907253/"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "TbJW7230F8rZzWQO",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-14T11:30:47.054Z",
+            "updatedAt": "2026-07-14T11:30:47.054Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
