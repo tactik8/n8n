@@ -1,0 +1,983 @@
+{
+    "id": "FtcwrLrfbmnfu9bU",
+    "name": "BrandVisualIdentityExtractor",
+    "active": true,
+    "activeVersionId": "dd66fe6c-b189-4276-95b6-b2e729b08a23",
+    "createdAt": "2026-06-29T19:20:15.841Z",
+    "updatedAt": "2026-07-14T14:25:05.780Z",
+    "isArchived": false,
+    "versionId": "dd66fe6c-b189-4276-95b6-b2e729b08a23",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "393fab70-6ddc-4de1-875a-3589341db12a",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "af650b1b-d4e3-4d08-8160-4325a9640d61",
+                            "name": "config.userPrompt",
+                            "value": "=url: {{ $('When Executed by Another Workflow').item.json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.systemPrompt",
+                            "value": "# ROLE & OBJECTIVE You are a specialized Web Design & Brand Identity Extraction Agent. Your sole task is to analyze the content, CSS, metadata, and visual structure of a provided brand URL, extract its core design tokens, and output a structured JSON object.   You must strictly map your findings to the provided \"BrandVisualIdentity\" JSON schema. Do not include markdown code block backticks unless explicitly instructed, do not add introductory or concluding text, and ensure the response is valid, parsable JSON.  ---  # EXTRACTION RULES & DATA MAPPING GUIDELINES  ## 1. Core Schema Attributes - **@type**: Must be a string matching one of these permitted values: [\\\"BrandVisualIdentity\\\"]. - **validFrom**: Set to the current date (YYYY-MM-DD) representing when this data was fetched. - **validTo**: Set to a date exactly one year from the current date (YYYY-MM-DD).  ## 2. Color Palettes (Strict CSS rgb Format) - Identify the primary brand colors by parsing the DOM, root CSS variables (e.g., `--primary`, `--color-brand`), headers, and prominent buttons. - **Format Constraint**: Every color returned in `colorPrimary`, `colorSecondary`, `colorTertiary`, and `colorNeutral` MUST strictly match the regex: ^rgb\\(\\s*([0-1]?\\d{1,2}|2[0-4]\\d|25[0-5])\\s*,\\s*([0-1]?\\d{1,2}|2[0-4]\\d|25[0-5])\\s*,\\s*([0-1]?\\d{1,2}|2[0-4]\\d|25[0-5])\\s*\\)$ - *Example*: \"rgb(255, 0, 128)\" is valid. Hex codes (`#FF0080`) or color names (`blue`) are NOT allowed and must be converted to the explicit `rgb(...)` format.  ## 3. Typography Scales - Inspect computed styles or style sheets for font families and sizes mapped to H1, H2, H3, and body text. - **Font Size Constraint**: Fields ending in `FontSize` (e.g., `typographyH1FontSize`, `typographyH2FontSize`, `typographyH3FontSize`, `typographyBodyFontSize`) MUST use numeric values explicitly suffixed with `px`, `rem`, or `em` (e.g., \"32px\", \"2rem\", \"1.5em\"). - **Font Families**: Return the clean font-family stack sequence string (e.g., \"'Inter', sans-serif\").  ## 4. Layout, Spacing & Assets - **Spacing/Borders**: Find the baseline spacing unit (often 4px or 8px grid bases) and standard border-radii used on buttons or cards. - **Assets**: Extract absolute URIs or relative layout paths for `logoPathPrimary`, `logoPathDark`, and the `faviconPath` from standard `<link rel=\"icon\">` or image tags. - **WCAG Compliance**: Analyze the color contrast of the primary text against the background canvas. Return \"A\", \"AA\", or \"AAA\" based on estimated contrast ratios. If indeterminate, default to \"AA\".  ---  # OUTPUT FORMAT  You must output a single JSON object that perfectly complies with the following schema rules. Missing fields that are NOT marked as \"required\" should be omitted rather than left empty or null.  ## Required Fields Checklist Your output JSON object MUST include these keys: - \"@type\" - \"validFrom\" - \"validTo\" - \"colorPrimary\" - \"colorSecondary\" - \"colorNeutral\" - \"typographyH1FontFamily\" - \"typographyH1FontSize\" - \"typographyBodyFontFamily\" - \"typographyBodyFontSize\"  ## JSON Response Template Structure {   \"@type\": \"BrandVisualIdentity\",   \"validFrom\": \"YYYY-MM-DD\",   \"validTo\": \"YYYY-MM-DD\",   \"colorPrimary\": \"rgb(X, Y, Z)\",   \"colorSecondary\": \"rgb(X, Y, Z)\",   \"colorNeutral\": \"rgb(X, Y, Z)\",   \"typographyH1FontFamily\": \"Font Stack\",   \"typographyH1FontSize\": \"XXpx\",   \"typographyBodyFontFamily\": \"Font Stack\",   \"typographyBodyFontSize\": \"XXpx\",   ...[Include any other identified schema properties here if discovered] }  ---  # SYSTEM CONSTRAINTS & GUARDRAILS 1. Do not invent color strings that fail the RGB regex pattern. 2. If a required field cannot be directly found, infer it intelligently from the nearest structural element (e.g., if a dedicated body text color is missing, use the dominant text color found in the primary body copy container for `colorNeutral`). 3. Return ONLY raw JSON text. No conversational banter, no explanations.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b90a9278-7989-4441-b706-864fd10fc618",
+                            "name": "config.jsonSchema",
+                            "value": "{   \"type\": \"object\",   \"title\": \"BrandVisualIdentity\",   \"description\": \"Defines the core visual identity system for a brand, including color palettes, typography scales, layout spacing, asset paths, and compliance levels.\",   \"required\": [     \"type\",     \"validFrom\",     \"validTo\",     \"colorPrimary\",     \"colorSecondary\",     \"colorNeutral\",     \"typographyH1FontFamily\",     \"typographyH1FontSize\",     \"typographyBodyFontFamily\",     \"typographyBodyFontSize\"   ],   \"properties\": {     \"type\": {       \"type\": \"string\",       \"enum\": [\"BrandVisualIdentity\"],       \"description\": \"The schema type identifier.\"     },     \"validFrom\": {       \"type\": \"string\",       \"description\": \"The start date from which this visual identity version is effective (YYYY-MM-DD).\"     },     \"validTo\": {       \"type\": \"string\",       \"description\": \"The expiration date of this visual identity version (YYYY-MM-DD).\"     },     \"colorPrimary\": {       \"type\": \"string\",       \"description\": \"The brand's dominant primary color (e.g., 'rgb(30, 41, 59)').\"     },     \"colorSecondary\": {       \"type\": \"string\",       \"description\": \"The brand's secondary accent color.\"     },     \"colorTertiary\": {       \"type\": \"string\",       \"description\": \"An optional tertiary accent color for highlight elements.\"     },     \"colorNeutral\": {       \"type\": \"string\",       \"description\": \"The canvas, background, or body text neutral shade.\"     },     \"colorSuccess\": {       \"type\": \"string\",       \"description\": \"System UI status color indicating positive operations.\"     },     \"colorWarning\": {       \"type\": \"string\",       \"description\": \"System UI status color indicating caution.\"     },     \"colorError\": {       \"type\": \"string\",       \"description\": \"System UI status color indicating failure or danger.\"     },     \"colorDarkPrimary\": {       \"type\": \"string\",       \"description\": \"The inverted primary canvas variant optimized for dark mode interfaces.\"     },     \"colorDarkNeutral\": {       \"type\": \"string\",       \"description\": \"The inverted neutral layout variant optimized for dark mode typography/surfaces.\"     },     \"typographyH1FontFamily\": {       \"type\": \"string\",       \"description\": \"The designated font stack for primary page headers (H1).\"     },     \"typographyH1FontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit for H1 elements (e.g., '48px').\"     },     \"typographyH1FontWeight\": {       \"type\": \"string\",       \"description\": \"The font weight descriptor for H1 typography.\"     },     \"typographyH2FontFamily\": {       \"type\": \"string\",       \"description\": \"The designated font stack for subheaders (H2).\"     },     \"typographyH2FontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit for H2 elements.\"     },     \"typographyH2FontWeight\": {       \"type\": \"string\",       \"description\": \"The font weight descriptor for H2 typography.\"     },     \"typographyH3FontFamily\": {       \"type\": \"string\",       \"description\": \"The designated font stack for section titles (H3).\"     },     \"typographyH3FontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit for H3 elements.\"     },     \"typographyH3FontWeight\": {       \"type\": \"string\",       \"description\": \"The font weight descriptor for H3 typography.\"     },     \"typographyBodyFontFamily\": {       \"type\": \"string\",       \"description\": \"The primary legibility font stack applied to long-form body paragraphs.\"     },     \"typographyBodyFontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit for standard body text.\"     },     \"typographyBodyFontWeight\": {       \"type\": \"string\",       \"description\": \"The standard body weight descriptor.\"     },     \"typographyButtonFontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit allocated specifically for interactive UI triggers.\"     },     \"typographyButtonFontWeight\": {       \"type\": \"string\",       \"description\": \"The font weight dedicated to action links and button components.\"     },     \"spacingBaseUnit\": {       \"type\": \"string\",       \"description\": \"The foundational geometric increment underpinning layout calculations (e.g., '4px').\"     },     \"borderRadiusSmall\": {       \"type\": \"string\",       \"description\": \"Corner clipping boundary for micro-elements like tags or badges.\"     },     \"borderRadiusMedium\": {       \"type\": \"string\",       \"description\": \"Standard container layout rounding applied to inputs, alerts, and buttons.\"     },     \"borderRadiusLarge\": {       \"type\": \"string\",       \"description\": \"Extended corner treatment targeted for modal layouts and surface structural blocks.\"     },     \"breakpointMobile\": {       \"type\": \"string\",       \"description\": \"Maximum width threshold defining mobile viewport adaptations.\"     },     \"breakpointTablet\": {       \"type\": \"string\",       \"description\": \"Maximum width threshold defining responsive tablet viewports.\"     },     \"breakpointDesktop\": {       \"type\": \"string\",       \"description\": \"Minimum design canvas baseline targeted for responsive grid scaling.\"     },     \"logoPathPrimary\": {       \"type\": \"string\",       \"description\": \"Relative storage system or CDN pointer referencing the default brand asset logomark.\"     },     \"logoPathDark\": {       \"type\": \"string\",       \"description\": \"Inverted asset variation optimized exclusively for high contrast execution against dark structural fields.\"     },     \"faviconPath\": {       \"type\": \"string\",       \"description\": \"Asset URI mapping standard contextual system navigation layout icons.\"     },     \"wcagComplianceLevel\": {       \"type\": \"string\",       \"enum\": [\"A\", \"AA\", \"AAA\"],       \"description\": \"The baseline digital product accessibility requirement threshold targeting WCAG constraints.\"     }   } }",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                496,
+                0
+            ],
+            "id": "226f07d0-f64f-4511-97f9-a02d9f6b4ba9",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                272,
+                0
+            ],
+            "id": "3522949a-6c35-41ec-ab2c-076a7dfd9f05",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.config.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.config.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                704,
+                0
+            ],
+            "id": "1dfb2dd3-181e-4af6-a64d-9fa730e7b721",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                576,
+                208
+            ],
+            "id": "41a86a34-e92f-4fb1-8213-39e15247160e",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.4,
+            "position": [
+                752,
+                224
+            ],
+            "id": "010841eb-47e1-42d7-a4b6-12bab2e1a66b",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "304ffa37-e891-4be5-b80b-3604ddb301c3",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "ee654373-b98e-48c2-adba-921ab35fd0e1",
+                            "name": "action.result",
+                            "value": "={{ $json.output }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1056,
+                0
+            ],
+            "id": "4158aedd-45ef-4d02-9e23-a3d64b9e0406",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/ref_brands",
+                    "mode": "url"
+                },
+                "filePath": "=brands/{{ $('When Executed by Another Workflow').item.json.url.extractDomain().replaceAll('www.', '').replace('.', '_') }}/BrandVisualIdentity.json",
+                "fileContent": "={{ JSON.stringify($json.action.result, null, 4) }}",
+                "commitMessage": "go"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                1264,
+                -160
+            ],
+            "id": "73491105-bb94-4f7f-a649-0798e6c556cc",
+            "name": "Create a file",
+            "webhookId": "bbd3864e-f043-4d88-ba64-a2ada163469d",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f23ee29a-fa68-48b7-a85a-951fb4336824",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1264,
+                48
+            ],
+            "id": "a1c13eec-3c44-4843-a818-3bf5d0f5819b",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "15a21f7e-7a19-4769-898a-6fe48ba0635b",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                16,
+                -384
+            ],
+            "id": "06d9be64-0173-4f73-8bbe-668d43ca09be",
+            "name": "Webhook",
+            "webhookId": "15a21f7e-7a19-4769-898a-6fe48ba0635b"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "FtcwrLrfbmnfu9bU",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/FtcwrLrfbmnfu9bU",
+                    "cachedResultName": "BrandVisualIdentityExtractor"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "url": "={{ $json.body.url }}"
+                    },
+                    "matchingColumns": [
+                        "url"
+                    ],
+                    "schema": [
+                        {
+                            "id": "url",
+                            "displayName": "url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                224,
+                -384
+            ],
+            "id": "76a8f199-6a56-4b6e-819d-b0f902705984",
+            "name": "Call 'BrandVisualIdentityExtractor'"
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json.output }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                432,
+                -384
+            ],
+            "id": "be66b1bd-155b-4b40-8262-ed3a61714601",
+            "name": "Respond to Webhook"
+        }
+    ],
+    "connections": {
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'BrandVisualIdentityExtractor'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'BrandVisualIdentityExtractor'": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.duchesnay.com/en"
+                }
+            }
+        ],
+        "Webhook": [
+            {
+                "json": {
+                    "body": {
+                        "url": "https://www.duchesnay.com/en"
+                    }
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "FtcwrLrfbmnfu9bU",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-29T19:20:15.841Z",
+            "updatedAt": "2026-06-29T19:20:15.841Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "dd66fe6c-b189-4276-95b6-b2e729b08a23",
+        "workflowId": "FtcwrLrfbmnfu9bU",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "url"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "393fab70-6ddc-4de1-875a-3589341db12a",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "af650b1b-d4e3-4d08-8160-4325a9640d61",
+                                "name": "config.userPrompt",
+                                "value": "=url: {{ $('When Executed by Another Workflow').item.json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.systemPrompt",
+                                "value": "# ROLE & OBJECTIVE You are a specialized Web Design & Brand Identity Extraction Agent. Your sole task is to analyze the content, CSS, metadata, and visual structure of a provided brand URL, extract its core design tokens, and output a structured JSON object.   You must strictly map your findings to the provided \"BrandVisualIdentity\" JSON schema. Do not include markdown code block backticks unless explicitly instructed, do not add introductory or concluding text, and ensure the response is valid, parsable JSON.  ---  # EXTRACTION RULES & DATA MAPPING GUIDELINES  ## 1. Core Schema Attributes - **@type**: Must be a string matching one of these permitted values: [\\\"BrandVisualIdentity\\\"]. - **validFrom**: Set to the current date (YYYY-MM-DD) representing when this data was fetched. - **validTo**: Set to a date exactly one year from the current date (YYYY-MM-DD).  ## 2. Color Palettes (Strict CSS rgb Format) - Identify the primary brand colors by parsing the DOM, root CSS variables (e.g., `--primary`, `--color-brand`), headers, and prominent buttons. - **Format Constraint**: Every color returned in `colorPrimary`, `colorSecondary`, `colorTertiary`, and `colorNeutral` MUST strictly match the regex: ^rgb\\(\\s*([0-1]?\\d{1,2}|2[0-4]\\d|25[0-5])\\s*,\\s*([0-1]?\\d{1,2}|2[0-4]\\d|25[0-5])\\s*,\\s*([0-1]?\\d{1,2}|2[0-4]\\d|25[0-5])\\s*\\)$ - *Example*: \"rgb(255, 0, 128)\" is valid. Hex codes (`#FF0080`) or color names (`blue`) are NOT allowed and must be converted to the explicit `rgb(...)` format.  ## 3. Typography Scales - Inspect computed styles or style sheets for font families and sizes mapped to H1, H2, H3, and body text. - **Font Size Constraint**: Fields ending in `FontSize` (e.g., `typographyH1FontSize`, `typographyH2FontSize`, `typographyH3FontSize`, `typographyBodyFontSize`) MUST use numeric values explicitly suffixed with `px`, `rem`, or `em` (e.g., \"32px\", \"2rem\", \"1.5em\"). - **Font Families**: Return the clean font-family stack sequence string (e.g., \"'Inter', sans-serif\").  ## 4. Layout, Spacing & Assets - **Spacing/Borders**: Find the baseline spacing unit (often 4px or 8px grid bases) and standard border-radii used on buttons or cards. - **Assets**: Extract absolute URIs or relative layout paths for `logoPathPrimary`, `logoPathDark`, and the `faviconPath` from standard `<link rel=\"icon\">` or image tags. - **WCAG Compliance**: Analyze the color contrast of the primary text against the background canvas. Return \"A\", \"AA\", or \"AAA\" based on estimated contrast ratios. If indeterminate, default to \"AA\".  ---  # OUTPUT FORMAT  You must output a single JSON object that perfectly complies with the following schema rules. Missing fields that are NOT marked as \"required\" should be omitted rather than left empty or null.  ## Required Fields Checklist Your output JSON object MUST include these keys: - \"@type\" - \"validFrom\" - \"validTo\" - \"colorPrimary\" - \"colorSecondary\" - \"colorNeutral\" - \"typographyH1FontFamily\" - \"typographyH1FontSize\" - \"typographyBodyFontFamily\" - \"typographyBodyFontSize\"  ## JSON Response Template Structure {   \"@type\": \"BrandVisualIdentity\",   \"validFrom\": \"YYYY-MM-DD\",   \"validTo\": \"YYYY-MM-DD\",   \"colorPrimary\": \"rgb(X, Y, Z)\",   \"colorSecondary\": \"rgb(X, Y, Z)\",   \"colorNeutral\": \"rgb(X, Y, Z)\",   \"typographyH1FontFamily\": \"Font Stack\",   \"typographyH1FontSize\": \"XXpx\",   \"typographyBodyFontFamily\": \"Font Stack\",   \"typographyBodyFontSize\": \"XXpx\",   ...[Include any other identified schema properties here if discovered] }  ---  # SYSTEM CONSTRAINTS & GUARDRAILS 1. Do not invent color strings that fail the RGB regex pattern. 2. If a required field cannot be directly found, infer it intelligently from the nearest structural element (e.g., if a dedicated body text color is missing, use the dominant text color found in the primary body copy container for `colorNeutral`). 3. Return ONLY raw JSON text. No conversational banter, no explanations.",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b90a9278-7989-4441-b706-864fd10fc618",
+                                "name": "config.jsonSchema",
+                                "value": "{   \"type\": \"object\",   \"title\": \"BrandVisualIdentity\",   \"description\": \"Defines the core visual identity system for a brand, including color palettes, typography scales, layout spacing, asset paths, and compliance levels.\",   \"required\": [     \"type\",     \"validFrom\",     \"validTo\",     \"colorPrimary\",     \"colorSecondary\",     \"colorNeutral\",     \"typographyH1FontFamily\",     \"typographyH1FontSize\",     \"typographyBodyFontFamily\",     \"typographyBodyFontSize\"   ],   \"properties\": {     \"type\": {       \"type\": \"string\",       \"enum\": [\"BrandVisualIdentity\"],       \"description\": \"The schema type identifier.\"     },     \"validFrom\": {       \"type\": \"string\",       \"description\": \"The start date from which this visual identity version is effective (YYYY-MM-DD).\"     },     \"validTo\": {       \"type\": \"string\",       \"description\": \"The expiration date of this visual identity version (YYYY-MM-DD).\"     },     \"colorPrimary\": {       \"type\": \"string\",       \"description\": \"The brand's dominant primary color (e.g., 'rgb(30, 41, 59)').\"     },     \"colorSecondary\": {       \"type\": \"string\",       \"description\": \"The brand's secondary accent color.\"     },     \"colorTertiary\": {       \"type\": \"string\",       \"description\": \"An optional tertiary accent color for highlight elements.\"     },     \"colorNeutral\": {       \"type\": \"string\",       \"description\": \"The canvas, background, or body text neutral shade.\"     },     \"colorSuccess\": {       \"type\": \"string\",       \"description\": \"System UI status color indicating positive operations.\"     },     \"colorWarning\": {       \"type\": \"string\",       \"description\": \"System UI status color indicating caution.\"     },     \"colorError\": {       \"type\": \"string\",       \"description\": \"System UI status color indicating failure or danger.\"     },     \"colorDarkPrimary\": {       \"type\": \"string\",       \"description\": \"The inverted primary canvas variant optimized for dark mode interfaces.\"     },     \"colorDarkNeutral\": {       \"type\": \"string\",       \"description\": \"The inverted neutral layout variant optimized for dark mode typography/surfaces.\"     },     \"typographyH1FontFamily\": {       \"type\": \"string\",       \"description\": \"The designated font stack for primary page headers (H1).\"     },     \"typographyH1FontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit for H1 elements (e.g., '48px').\"     },     \"typographyH1FontWeight\": {       \"type\": \"string\",       \"description\": \"The font weight descriptor for H1 typography.\"     },     \"typographyH2FontFamily\": {       \"type\": \"string\",       \"description\": \"The designated font stack for subheaders (H2).\"     },     \"typographyH2FontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit for H2 elements.\"     },     \"typographyH2FontWeight\": {       \"type\": \"string\",       \"description\": \"The font weight descriptor for H2 typography.\"     },     \"typographyH3FontFamily\": {       \"type\": \"string\",       \"description\": \"The designated font stack for section titles (H3).\"     },     \"typographyH3FontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit for H3 elements.\"     },     \"typographyH3FontWeight\": {       \"type\": \"string\",       \"description\": \"The font weight descriptor for H3 typography.\"     },     \"typographyBodyFontFamily\": {       \"type\": \"string\",       \"description\": \"The primary legibility font stack applied to long-form body paragraphs.\"     },     \"typographyBodyFontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit for standard body text.\"     },     \"typographyBodyFontWeight\": {       \"type\": \"string\",       \"description\": \"The standard body weight descriptor.\"     },     \"typographyButtonFontSize\": {       \"type\": \"string\",       \"description\": \"The sizing unit allocated specifically for interactive UI triggers.\"     },     \"typographyButtonFontWeight\": {       \"type\": \"string\",       \"description\": \"The font weight dedicated to action links and button components.\"     },     \"spacingBaseUnit\": {       \"type\": \"string\",       \"description\": \"The foundational geometric increment underpinning layout calculations (e.g., '4px').\"     },     \"borderRadiusSmall\": {       \"type\": \"string\",       \"description\": \"Corner clipping boundary for micro-elements like tags or badges.\"     },     \"borderRadiusMedium\": {       \"type\": \"string\",       \"description\": \"Standard container layout rounding applied to inputs, alerts, and buttons.\"     },     \"borderRadiusLarge\": {       \"type\": \"string\",       \"description\": \"Extended corner treatment targeted for modal layouts and surface structural blocks.\"     },     \"breakpointMobile\": {       \"type\": \"string\",       \"description\": \"Maximum width threshold defining mobile viewport adaptations.\"     },     \"breakpointTablet\": {       \"type\": \"string\",       \"description\": \"Maximum width threshold defining responsive tablet viewports.\"     },     \"breakpointDesktop\": {       \"type\": \"string\",       \"description\": \"Minimum design canvas baseline targeted for responsive grid scaling.\"     },     \"logoPathPrimary\": {       \"type\": \"string\",       \"description\": \"Relative storage system or CDN pointer referencing the default brand asset logomark.\"     },     \"logoPathDark\": {       \"type\": \"string\",       \"description\": \"Inverted asset variation optimized exclusively for high contrast execution against dark structural fields.\"     },     \"faviconPath\": {       \"type\": \"string\",       \"description\": \"Asset URI mapping standard contextual system navigation layout icons.\"     },     \"wcagComplianceLevel\": {       \"type\": \"string\",       \"enum\": [\"A\", \"AA\", \"AAA\"],       \"description\": \"The baseline digital product accessibility requirement threshold targeting WCAG constraints.\"     }   } }",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    496,
+                    0
+                ],
+                "id": "226f07d0-f64f-4511-97f9-a02d9f6b4ba9",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "WebPage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.url",
+                                "value": "={{ $json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    272,
+                    0
+                ],
+                "id": "3522949a-6c35-41ec-ab2c-076a7dfd9f05",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "={{ $json.config.userPrompt }}",
+                    "options": {
+                        "systemMessage": "={{ $json.config.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    704,
+                    0
+                ],
+                "id": "1dfb2dd3-181e-4af6-a64d-9fa730e7b721",
+                "name": "AI Agent"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+                "typeVersion": 1.1,
+                "position": [
+                    576,
+                    208
+                ],
+                "id": "41a86a34-e92f-4fb1-8213-39e15247160e",
+                "name": "Google Gemini Chat Model",
+                "credentials": {
+                    "googlePalmApi": {
+                        "id": "zwRaxgOUTF4g2xjR",
+                        "name": "Google Gemini(PaLM) Api account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                    "options": {},
+                    "optimizeResponse": true,
+                    "responseType": "html",
+                    "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                    "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                    "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+                },
+                "type": "n8n-nodes-base.httpRequestTool",
+                "typeVersion": 4.4,
+                "position": [
+                    752,
+                    224
+                ],
+                "id": "010841eb-47e1-42d7-a4b6-12bab2e1a66b",
+                "name": "HTTP Request"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "304ffa37-e891-4be5-b80b-3604ddb301c3",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "ee654373-b98e-48c2-adba-921ab35fd0e1",
+                                "name": "action.result",
+                                "value": "={{ $json.output }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1056,
+                    0
+                ],
+                "id": "4158aedd-45ef-4d02-9e23-a3d64b9e0406",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/ref_brands",
+                        "mode": "url"
+                    },
+                    "filePath": "=brands/{{ $('When Executed by Another Workflow').item.json.url.extractDomain().replaceAll('www.', '').replace('.', '_') }}/BrandVisualIdentity.json",
+                    "fileContent": "={{ JSON.stringify($json.action.result, null, 4) }}",
+                    "commitMessage": "go"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    1264,
+                    -160
+                ],
+                "id": "73491105-bb94-4f7f-a649-0798e6c556cc",
+                "name": "Create a file",
+                "webhookId": "bbd3864e-f043-4d88-ba64-a2ada163469d",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f23ee29a-fa68-48b7-a85a-951fb4336824",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1264,
+                    48
+                ],
+                "id": "a1c13eec-3c44-4843-a818-3bf5d0f5819b",
+                "name": "Edit Fields1"
+            },
+            {
+                "parameters": {
+                    "httpMethod": "POST",
+                    "path": "15a21f7e-7a19-4769-898a-6fe48ba0635b",
+                    "responseMode": "responseNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    16,
+                    -384
+                ],
+                "id": "06d9be64-0173-4f73-8bbe-668d43ca09be",
+                "name": "Webhook",
+                "webhookId": "15a21f7e-7a19-4769-898a-6fe48ba0635b"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "FtcwrLrfbmnfu9bU",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/FtcwrLrfbmnfu9bU",
+                        "cachedResultName": "BrandVisualIdentityExtractor"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "url": "={{ $json.body.url }}"
+                        },
+                        "matchingColumns": [
+                            "url"
+                        ],
+                        "schema": [
+                            {
+                                "id": "url",
+                                "displayName": "url",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    224,
+                    -384
+                ],
+                "id": "76a8f199-6a56-4b6e-819d-b0f902705984",
+                "name": "Call 'BrandVisualIdentityExtractor'"
+            },
+            {
+                "parameters": {
+                    "respondWith": "json",
+                    "responseBody": "={{ $json.output }}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    432,
+                    -384
+                ],
+                "id": "be66b1bd-155b-4b40-8262-ed3a61714601",
+                "name": "Respond to Webhook"
+            }
+        ],
+        "connections": {
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Google Gemini Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'BrandVisualIdentityExtractor'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'BrandVisualIdentityExtractor'": {
+                "main": [
+                    [
+                        {
+                            "node": "Respond to Webhook",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version dd66fe6c",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-07-14T14:25:05.782Z",
+        "updatedAt": "2026-07-14T14:25:09.661Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
