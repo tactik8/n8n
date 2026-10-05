@@ -1,0 +1,925 @@
+{
+    "id": "L9oNLAV4hT6WzSbW",
+    "name": "stash api scene post v1",
+    "active": true,
+    "activeVersionId": "e0f7644d-2f52-4199-aabb-72b31aceb933",
+    "createdAt": "2026-05-02T15:30:50.644Z",
+    "updatedAt": "2026-06-21T19:51:40.405Z",
+    "isArchived": false,
+    "versionId": "e0f7644d-2f52-4199-aabb-72b31aceb933",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "videoobject",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                80,
+                -264
+            ],
+            "id": "6ad04cb7-6ae4-4a4a-8c0b-bbd23a536d78",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1648,
+                -384
+            ],
+            "id": "35d1786f-8869-4f28-bbc0-f40cf11bf0f2",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1872,
+                -384
+            ],
+            "id": "d909386d-6875-4363-b59c-2e036e61445a",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object",
+                            "value": "={{ $json.videoobject }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                304,
+                -264
+            ],
+            "id": "71cedb8b-a9b4-42b6-a0e8-af03a6d4cfa2",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                            "name": "config.ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                            "name": "config.apiUrl",
+                            "value": "http://192.168.2.243:9999/graphql",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a5823d06-016e-4920-988e-b672fff70deb",
+                            "name": "",
+                            "value": "",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                528,
+                -264
+            ],
+            "id": "9ca22af0-c802-4760-9b9f-990b7c428799",
+            "name": "Config1"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"query\": \"mutation MetadataScan($paths: [String!]!) { metadataScan(input: { paths: $paths }) }\",\n  \"variables\": {\n    \"paths\": [\"/media_libraries/media2/videos/metube/{{ $json.action.object.contentUrl.replaceAll(' ', '_').split('/')[1].replaceAll(' ', '_') }}\"]\n  }\n} \n\n",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                752,
+                -264
+            ],
+            "id": "19bba10a-1f07-494f-b631-99b61452fc61",
+            "name": "Scan file"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $('Config1').item.json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $('Config1').item.json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"query\": \"query FindSceneByPath { findScenes(scene_filter: { path: { value: \\\"/media_libraries/media2/videos/metube{{ $('Action').item.json.action.object.contentUrl.replaceAll(' ', '_')}}\\\", modifier: INCLUDES } }) { scenes { id files { id path } } } }\",\n  \"variables\": {}\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                976,
+                -264
+            ],
+            "id": "6de54105-8379-45cd-b07e-8232e0a893eb",
+            "name": "Get scene just created by scan"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $('Config1').item.json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $('Config1').item.json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"query\": \"mutation SceneUpdate($input: SceneUpdateInput!) { sceneUpdate(input: $input) { id url files { id path } } }\",\n  \"variables\": {\n    \"input\": {\n      \"id\": \"{{ $json.data.findScenes.scenes[0].id }}\",\n      \"url\": \"{{ $('Config1').item.json.action.object.url }}\"\n     \n    }\n  }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                1424,
+                -384
+            ],
+            "id": "a69b51d3-8774-4ad8-b157-b894c0088dbd",
+            "name": "Add metadata"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "0a7e1a46-cc99-4f5a-8dfd-3c9744d04578",
+                            "leftValue": "={{ $json.data?.findScenes?.scenes || [] }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "array",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1200,
+                -336
+            ],
+            "id": "f52a9841-fbd3-424e-8b6d-b7b0eeb115e7",
+            "name": "If"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1.1,
+            "position": [
+                1424,
+                -168
+            ],
+            "id": "6d079eed-6747-48c7-b2c4-a89cd041e578",
+            "name": "Wait",
+            "webhookId": "960dc286-b879-4f0c-a677-cc8a28b52815"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config1": {
+            "main": [
+                [
+                    {
+                        "node": "Scan file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Scan file": {
+            "main": [
+                [
+                    {
+                        "node": "Get scene just created by scan",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get scene just created by scan": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add metadata": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Add metadata",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Wait",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait": {
+            "main": [
+                [
+                    {
+                        "node": "Get scene just created by scan",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "timeSavedMode": "fixed",
+        "callerPolicy": "workflowsFromSameOwner",
+        "executionTimeout": 900,
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "videoobject": {
+                        "@type": "VideoObject",
+                        "@id": "https://xhamster.com/videos/veronica-leal-reality-backstage-anal-sex-and-throat-fuck-worming-up-bts-xhqcSaB#videoobject",
+                        "headline": "Veronica Leal REALITY BACKSTAGE ANAL SEX AND THROAT FUCK WORMING UP bts",
+                        "contentUrl": "/Veronica Leal REALITY BACKSTAGE ANAL SEX AND THROAT FUCK WORMING UP bts/Veronica Leal REALITY BACKSTAGE ANAL SEX AND THROAT FUCK WORMING UP bts.mp4",
+                        "url": "https://xhamster.com/videos/veronica-leal-reality-backstage-anal-sex-and-throat-fuck-worming-up-bts-xhqcSaB"
+                    }
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "L9oNLAV4hT6WzSbW",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-02T15:30:50.644Z",
+            "updatedAt": "2026-05-02T15:30:50.644Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "e0f7644d-2f52-4199-aabb-72b31aceb933",
+        "workflowId": "L9oNLAV4hT6WzSbW",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "videoobject",
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    80,
+                    -264
+                ],
+                "id": "6ad04cb7-6ae4-4a4a-8c0b-bbd23a536d78",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1648,
+                    -384
+                ],
+                "id": "35d1786f-8869-4f28-bbc0-f40cf11bf0f2",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1872,
+                    -384
+                ],
+                "id": "d909386d-6875-4363-b59c-2e036e61445a",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object",
+                                "value": "={{ $json.videoobject }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    304,
+                    -264
+                ],
+                "id": "71cedb8b-a9b4-42b6-a0e8-af03a6d4cfa2",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                                "name": "config.ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                                "name": "config.apiUrl",
+                                "value": "http://192.168.2.243:9999/graphql",
+                                "type": "string"
+                            },
+                            {
+                                "id": "a5823d06-016e-4920-988e-b672fff70deb",
+                                "name": "",
+                                "value": "",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    528,
+                    -264
+                ],
+                "id": "9ca22af0-c802-4760-9b9f-990b7c428799",
+                "name": "Config1"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "={{ $json.config.apiUrl }}",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "={{ $json.config.ApiKey }}"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "specifyBody": "json",
+                    "jsonBody": "={\n  \"query\": \"mutation MetadataScan($paths: [String!]!) { metadataScan(input: { paths: $paths }) }\",\n  \"variables\": {\n    \"paths\": [\"/media_libraries/media2/videos/metube/{{ $json.action.object.contentUrl.replaceAll(' ', '_').split('/')[1].replaceAll(' ', '_') }}\"]\n  }\n} \n\n",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    752,
+                    -264
+                ],
+                "id": "19bba10a-1f07-494f-b631-99b61452fc61",
+                "name": "Scan file"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "={{ $('Config1').item.json.config.apiUrl }}",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "={{ $('Config1').item.json.config.ApiKey }}"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "specifyBody": "json",
+                    "jsonBody": "={\n  \"query\": \"query FindSceneByPath { findScenes(scene_filter: { path: { value: \\\"/media_libraries/media2/videos/metube{{ $('Action').item.json.action.object.contentUrl.replaceAll(' ', '_')}}\\\", modifier: INCLUDES } }) { scenes { id files { id path } } } }\",\n  \"variables\": {}\n}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    976,
+                    -264
+                ],
+                "id": "6de54105-8379-45cd-b07e-8232e0a893eb",
+                "name": "Get scene just created by scan"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "={{ $('Config1').item.json.config.apiUrl }}",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "={{ $('Config1').item.json.config.ApiKey }}"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "specifyBody": "json",
+                    "jsonBody": "={\n  \"query\": \"mutation SceneUpdate($input: SceneUpdateInput!) { sceneUpdate(input: $input) { id url files { id path } } }\",\n  \"variables\": {\n    \"input\": {\n      \"id\": \"{{ $json.data.findScenes.scenes[0].id }}\",\n      \"url\": \"{{ $('Config1').item.json.action.object.url }}\"\n     \n    }\n  }\n}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    1424,
+                    -384
+                ],
+                "id": "a69b51d3-8774-4ad8-b157-b894c0088dbd",
+                "name": "Add metadata"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "0a7e1a46-cc99-4f5a-8dfd-3c9744d04578",
+                                "leftValue": "={{ $json.data?.findScenes?.scenes || [] }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "array",
+                                    "operation": "notEmpty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    1200,
+                    -336
+                ],
+                "id": "f52a9841-fbd3-424e-8b6d-b7b0eeb115e7",
+                "name": "If"
+            },
+            {
+                "parameters": {},
+                "type": "n8n-nodes-base.wait",
+                "typeVersion": 1.1,
+                "position": [
+                    1424,
+                    -168
+                ],
+                "id": "6d079eed-6747-48c7-b2c4-a89cd041e578",
+                "name": "Wait",
+                "webhookId": "960dc286-b879-4f0c-a677-cc8a28b52815"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config1": {
+                "main": [
+                    [
+                        {
+                            "node": "Scan file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Scan file": {
+                "main": [
+                    [
+                        {
+                            "node": "Get scene just created by scan",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get scene just created by scan": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Add metadata": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Add metadata",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Wait",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Wait": {
+                "main": [
+                    [
+                        {
+                            "node": "Get scene just created by scan",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version e0f7644d",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-21T19:51:07.322Z",
+        "updatedAt": "2026-06-21T19:51:49.939Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
