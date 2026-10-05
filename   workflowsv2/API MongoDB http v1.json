@@ -1,0 +1,2523 @@
+{
+    "id": "wgm5U0zloR9QoMWu",
+    "name": "API MongoDB http v1",
+    "active": true,
+    "activeVersionId": "e5446a6c-6445-4927-9e26-fa69598b5ee5",
+    "createdAt": "2026-09-03T12:32:25.424Z",
+    "updatedAt": "2026-09-03T14:32:59.841Z",
+    "isArchived": false,
+    "versionId": "e5446a6c-6445-4927-9e26-fa69598b5ee5",
+    "triggerCount": 3,
+    "nodes": [
+        {
+            "parameters": {
+                "multipleMethods": true,
+                "httpMethod": [
+                    "GET",
+                    "POST",
+                    "PATCH",
+                    "DELETE"
+                ],
+                "path": "47568665-079f-4673-b34d-b3815fe5614b/:tenantID",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                -1440,
+                -1008
+            ],
+            "id": "946cfd62-9af0-48da-971d-9540079aa537",
+            "name": "Webhook /",
+            "webhookId": "47568665-079f-4673-b34d-b3815fe5614b"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{ $json.output.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                528,
+                -784
+            ],
+            "id": "92c35a60-c7f6-449d-ab56-a7e409fd83e5",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                752,
+                -784
+            ],
+            "id": "e7175b2b-94eb-4a6f-9c42-c5104c062258",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                976,
+                -784
+            ],
+            "id": "3b548a05-a71d-4c84-ad0d-786b9577a751",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "=action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8913ef58-b362-4ba6-9005-74693a79ec25",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -736,
+                -784
+            ],
+            "id": "462df9ac-d1fe-4e12-b1cf-42482e80047e",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "enhsUbpA0NeXCosL",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/enhsUbpA0NeXCosL",
+                    "cachedResultName": "API MongoDB jsonld Get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "recordID": "={{ $json.config.record_id }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "recordID",
+                            "displayName": "recordID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                304,
+                -976
+            ],
+            "id": "079f920d-784b-4a39-b1bf-dbbf4256d5c6",
+            "name": "Call 'API MongoDB jsonld Get V1'2"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.config?.type}}",
+                                        "rightValue": "get",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        },
+                                        "id": "ee545720-d080-4fc3-802a-a7b860dbe948"
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "get"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "8a1ffcd0-59d2-403a-b6ac-4eb840438fc3",
+                                        "leftValue": "={{ $json.config?.type}}",
+                                        "rightValue": "post",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "post"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "be10add6-894d-409d-b1ff-fdc90972c12f",
+                                        "leftValue": "={{ $json.config?.type}}",
+                                        "rightValue": "patch",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "patch"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "dd48293b-b476-465e-a1ab-d1d482f3618a",
+                                        "leftValue": "={{ $json.config?.type}}",
+                                        "rightValue": "delete",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "equals",
+                                            "name": "filter.operator.equals"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "delete"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.4,
+            "position": [
+                -144,
+                -816
+            ],
+            "id": "22264b00-569c-4f23-bd84-9e4bcf4d5f2c",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json.output?.result }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                1200,
+                -784
+            ],
+            "id": "42d4b02b-f44a-49f5-8c5f-4f4efd0640ce",
+            "name": "Respond to Webhook2"
+        },
+        {
+            "parameters": {
+                "multipleMethods": true,
+                "httpMethod": [
+                    "GET",
+                    "POST",
+                    "PATCH",
+                    "DELETE"
+                ],
+                "path": "47568665-079f-4673-b34d-b3815fe5614b/:tenantID/:record_id",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                -1408,
+                -528
+            ],
+            "id": "171e9a84-a468-4129-a0b4-7a8ffb5e7287",
+            "name": "Webhook /1",
+            "webhookId": "47568665-079f-4673-b34d-b3815fe5614b"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "3diS7BdqEWE6Fncw",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/3diS7BdqEWE6Fncw",
+                    "cachedResultName": "API MongoDB jsonld Post V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "record": "={{ $json.config.records }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                304,
+                -592
+            ],
+            "id": "75c7533f-c949-4ab1-a3c1-be8b25ac11b4",
+            "name": "Call 'API MongoDB jsonld Post V1'"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.config?.record_id }}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "notEmpty",
+                                            "singleValue": true
+                                        },
+                                        "id": "cae2d718-03a0-43a2-8099-a87bc7e3d54a"
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "get single"
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "72fd747c-1e98-4c8c-a20c-0f8692c6bc21",
+                                        "leftValue": "={{ $json.config?.record_id }}",
+                                        "rightValue": "",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "empty",
+                                            "singleValue": true
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            },
+                            "renameOutput": true,
+                            "outputKey": "get search"
+                        }
+                    ]
+                },
+                "options": {
+                    "fallbackOutput": "none"
+                }
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.4,
+            "position": [
+                80,
+                -880
+            ],
+            "id": "3edbd63c-9eae-47bc-af6a-070a36d992e4",
+            "name": "Switch1"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "2zncCWjURfknIc6Q",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/2zncCWjURfknIc6Q",
+                    "cachedResultName": "API MongoDB jsonld Search V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "filter": "={{ $json.config.filter || {}  }}",
+                        "limit": "={{ $json.config.limit }}",
+                        "offset": "={{ $json.config.offset }}",
+                        "orderBy": "={{ $json.config.orderBy }}",
+                        "orderDirection": "={{ $json.config.orderDirection }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "filter",
+                            "displayName": "filter",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object"
+                        },
+                        {
+                            "id": "limit",
+                            "displayName": "limit",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "offset",
+                            "displayName": "offset",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "orderBy",
+                            "displayName": "orderBy",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        },
+                        {
+                            "id": "orderDirection",
+                            "displayName": "orderDirection",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string"
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                304,
+                -784
+            ],
+            "id": "81bfe812-f297-47f2-a0d8-f0a241ddad96",
+            "name": "Call 'API MongoDB jsonld search"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1261643b-25c1-4adc-bbf1-bbc0c638314f",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "38e9a4c7-a034-4352-87c3-f1cc1ac2ddb0",
+                            "name": "config.tenantID",
+                            "value": "={{ $json.config.request.params?.tenantID ||\n $json.config.request.query?.tenantID   }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "76ea2883-f52f-4568-a211-4b8cc67e969c",
+                            "name": "config.record_id",
+                            "value": "={{ $json.config.request.params.record_id ||\n $json.config.request.query.record_id   }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "77b54b5d-1de8-4b70-bf71-18d8481776e0",
+                            "name": "config.filter",
+                            "value": "={{ JSON.parse($json.config.request.query?.filter || {}) }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "52c60a62-db77-4aeb-83f5-85442c99b8d4",
+                            "name": "config.offset",
+                            "value": "={{ $json.config.request.query?.offset }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a4624103-01e0-4781-84b0-3b9991687a14",
+                            "name": "config.limit",
+                            "value": "={{ $json.config.request.query?.limit }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c75a0935-afe1-4766-ae56-15ef4ed9e26f",
+                            "name": "config.orderBy",
+                            "value": "={{ $json.config.request.query?.orderBy }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8a521b64-9398-467e-988e-265ce8643839",
+                            "name": "config.orderDirection",
+                            "value": "={{ $json.config.request.query?.orderDirection }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "759e44b2-034c-4311-a322-3c496a989b1c",
+                            "name": "config.records",
+                            "value": "={{ Array.isArray($json.config.request?.body) ? $json.config.request?.body : [$json.config.request?.body]   || [] }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -960,
+                -784
+            ],
+            "id": "df4d0fc8-c3c9-4aee-b1a9-a0bf609042b6",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c36a655a-4a61-4ac3-a2b0-5d319342b9e4",
+                            "name": "config.request",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "a10ee189-9ff8-49ab-be0d-d2510326b44f",
+                            "name": "config.type",
+                            "value": "get",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -1184,
+                -1072
+            ],
+            "id": "8cf795f5-7e7b-462d-88d5-333ea2eadea3",
+            "name": "Entry get"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c36a655a-4a61-4ac3-a2b0-5d319342b9e4",
+                            "name": "config.request",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "a10ee189-9ff8-49ab-be0d-d2510326b44f",
+                            "name": "config.type",
+                            "value": "post",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -1184,
+                -880
+            ],
+            "id": "0bea3d20-0b25-40c9-aa0c-8ef5d44bf409",
+            "name": "Entry post"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c36a655a-4a61-4ac3-a2b0-5d319342b9e4",
+                            "name": "config.request",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "a10ee189-9ff8-49ab-be0d-d2510326b44f",
+                            "name": "config.type",
+                            "value": "patch",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -1184,
+                -688
+            ],
+            "id": "0e2ab73c-380f-44ce-abde-471bd1d70442",
+            "name": "Entry patch"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c36a655a-4a61-4ac3-a2b0-5d319342b9e4",
+                            "name": "config.request",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "a10ee189-9ff8-49ab-be0d-d2510326b44f",
+                            "name": "config.type",
+                            "value": "delete",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -1184,
+                -496
+            ],
+            "id": "268d70ca-ad10-4d7a-bc65-14372b1de8ca",
+            "name": "Entry delete"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "1a3d3f35-3e28-438e-ad69-5e8a0358f41b",
+                            "leftValue": "={{ $('Config').item.json.config.tenantID }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                -560,
+                -784
+            ],
+            "id": "18cc20c8-1605-40fe-98b0-c2b459ee366d",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                112,
+                -304
+            ],
+            "id": "8751bcf6-ba75-4fdc-b6cb-8c9dd07d895d",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json.output }}",
+                "options": {
+                    "responseCode": 400
+                }
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                336,
+                -304
+            ],
+            "id": "6de6c71d-aa09-470c-aa1b-3357d730c702",
+            "name": "Respond to Webhook"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "FailedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "48513da3-4769-49dc-a3fb-c6206ec4f5d7",
+                            "name": "action.error",
+                            "value": "Missing tenantID",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -112,
+                -304
+            ],
+            "id": "c33a87da-a516-4625-8e7e-3f189867140c",
+            "name": "Action Close Error 1"
+        },
+        {
+            "parameters": {
+                "multipleMethods": true,
+                "httpMethod": [
+                    "GET",
+                    "POST",
+                    "PATCH",
+                    "DELETE"
+                ],
+                "path": "47568665-079f-4673-b34d-b3815fe5614b",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                -1456,
+                -1280
+            ],
+            "id": "d0867327-270b-4644-ab13-e2c913a32f5a",
+            "name": "Webhook /2",
+            "webhookId": "47568665-079f-4673-b34d-b3815fe5614b"
+        }
+    ],
+    "connections": {
+        "Webhook /": {
+            "main": [
+                [
+                    {
+                        "node": "Entry get",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry post",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry patch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry delete",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Switch1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Call 'API MongoDB jsonld Post V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [],
+                []
+            ]
+        },
+        "Output": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook /1": {
+            "main": [
+                [
+                    {
+                        "node": "Entry get",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry post",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry patch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry delete",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'API MongoDB jsonld Get V1'2": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'API MongoDB jsonld Post V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch1": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'API MongoDB jsonld Get V1'2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Call 'API MongoDB jsonld search",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'API MongoDB jsonld search": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Entry get": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Entry post": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Entry patch": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Entry delete": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Action Close Error 1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Output1": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close Error 1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook /2": {
+            "main": [
+                [
+                    {
+                        "node": "Entry get",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry post",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry patch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Entry delete",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "wgm5U0zloR9QoMWu",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-03T12:32:25.424Z",
+            "updatedAt": "2026-09-03T12:32:25.424Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "e5446a6c-6445-4927-9e26-fa69598b5ee5",
+        "workflowId": "wgm5U0zloR9QoMWu",
+        "nodes": [
+            {
+                "parameters": {
+                    "multipleMethods": true,
+                    "httpMethod": [
+                        "GET",
+                        "POST",
+                        "PATCH",
+                        "DELETE"
+                    ],
+                    "path": "47568665-079f-4673-b34d-b3815fe5614b/:tenantID",
+                    "responseMode": "responseNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    -1440,
+                    -1008
+                ],
+                "id": "946cfd62-9af0-48da-971d-9540079aa537",
+                "name": "Webhook /",
+                "webhookId": "47568665-079f-4673-b34d-b3815fe5614b"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{ $json.output.result }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    528,
+                    -784
+                ],
+                "id": "92c35a60-c7f6-449d-ab56-a7e409fd83e5",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    752,
+                    -784
+                ],
+                "id": "e7175b2b-94eb-4a6f-9c42-c5104c062258",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    976,
+                    -784
+                ],
+                "id": "3b548a05-a71d-4c84-ad0d-786b9577a751",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "=action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "8913ef58-b362-4ba6-9005-74693a79ec25",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -736,
+                    -784
+                ],
+                "id": "462df9ac-d1fe-4e12-b1cf-42482e80047e",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "enhsUbpA0NeXCosL",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/enhsUbpA0NeXCosL",
+                        "cachedResultName": "API MongoDB jsonld Get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "recordID": "={{ $json.config.record_id }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "recordID",
+                                "displayName": "recordID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    304,
+                    -976
+                ],
+                "id": "079f920d-784b-4a39-b1bf-dbbf4256d5c6",
+                "name": "Call 'API MongoDB jsonld Get V1'2"
+            },
+            {
+                "parameters": {
+                    "rules": {
+                        "values": [
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "leftValue": "={{ $json.config?.type}}",
+                                            "rightValue": "get",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "equals"
+                                            },
+                                            "id": "ee545720-d080-4fc3-802a-a7b860dbe948"
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "get"
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "8a1ffcd0-59d2-403a-b6ac-4eb840438fc3",
+                                            "leftValue": "={{ $json.config?.type}}",
+                                            "rightValue": "post",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "equals"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "post"
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "be10add6-894d-409d-b1ff-fdc90972c12f",
+                                            "leftValue": "={{ $json.config?.type}}",
+                                            "rightValue": "patch",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "equals",
+                                                "name": "filter.operator.equals"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "patch"
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "dd48293b-b476-465e-a1ab-d1d482f3618a",
+                                            "leftValue": "={{ $json.config?.type}}",
+                                            "rightValue": "delete",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "equals",
+                                                "name": "filter.operator.equals"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "delete"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.switch",
+                "typeVersion": 3.4,
+                "position": [
+                    -144,
+                    -816
+                ],
+                "id": "22264b00-569c-4f23-bd84-9e4bcf4d5f2c",
+                "name": "Switch"
+            },
+            {
+                "parameters": {
+                    "respondWith": "json",
+                    "responseBody": "={{ $json.output?.result }}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    1200,
+                    -784
+                ],
+                "id": "42d4b02b-f44a-49f5-8c5f-4f4efd0640ce",
+                "name": "Respond to Webhook2"
+            },
+            {
+                "parameters": {
+                    "multipleMethods": true,
+                    "httpMethod": [
+                        "GET",
+                        "POST",
+                        "PATCH",
+                        "DELETE"
+                    ],
+                    "path": "47568665-079f-4673-b34d-b3815fe5614b/:tenantID/:record_id",
+                    "responseMode": "responseNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    -1408,
+                    -528
+                ],
+                "id": "171e9a84-a468-4129-a0b4-7a8ffb5e7287",
+                "name": "Webhook /1",
+                "webhookId": "47568665-079f-4673-b34d-b3815fe5614b"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "3diS7BdqEWE6Fncw",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/3diS7BdqEWE6Fncw",
+                        "cachedResultName": "API MongoDB jsonld Post V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "record": "={{ $json.config.records }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "mode": "each",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    304,
+                    -592
+                ],
+                "id": "75c7533f-c949-4ab1-a3c1-be8b25ac11b4",
+                "name": "Call 'API MongoDB jsonld Post V1'"
+            },
+            {
+                "parameters": {
+                    "rules": {
+                        "values": [
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "leftValue": "={{ $json.config?.record_id }}",
+                                            "rightValue": "",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "notEmpty",
+                                                "singleValue": true
+                                            },
+                                            "id": "cae2d718-03a0-43a2-8099-a87bc7e3d54a"
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "get single"
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "72fd747c-1e98-4c8c-a20c-0f8692c6bc21",
+                                            "leftValue": "={{ $json.config?.record_id }}",
+                                            "rightValue": "",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "empty",
+                                                "singleValue": true
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                },
+                                "renameOutput": true,
+                                "outputKey": "get search"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "fallbackOutput": "none"
+                    }
+                },
+                "type": "n8n-nodes-base.switch",
+                "typeVersion": 3.4,
+                "position": [
+                    80,
+                    -880
+                ],
+                "id": "3edbd63c-9eae-47bc-af6a-070a36d992e4",
+                "name": "Switch1"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "2zncCWjURfknIc6Q",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/2zncCWjURfknIc6Q",
+                        "cachedResultName": "API MongoDB jsonld Search V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "filter": "={{ $json.config.filter || {}  }}",
+                            "limit": "={{ $json.config.limit }}",
+                            "offset": "={{ $json.config.offset }}",
+                            "orderBy": "={{ $json.config.orderBy }}",
+                            "orderDirection": "={{ $json.config.orderDirection }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "filter",
+                                "displayName": "filter",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object"
+                            },
+                            {
+                                "id": "limit",
+                                "displayName": "limit",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "offset",
+                                "displayName": "offset",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "orderBy",
+                                "displayName": "orderBy",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            },
+                            {
+                                "id": "orderDirection",
+                                "displayName": "orderDirection",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string"
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "mode": "each",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    304,
+                    -784
+                ],
+                "id": "81bfe812-f297-47f2-a0d8-f0a241ddad96",
+                "name": "Call 'API MongoDB jsonld search"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "1261643b-25c1-4adc-bbf1-bbc0c638314f",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "38e9a4c7-a034-4352-87c3-f1cc1ac2ddb0",
+                                "name": "config.tenantID",
+                                "value": "={{ $json.config.request.params?.tenantID ||\n $json.config.request.query?.tenantID   }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "76ea2883-f52f-4568-a211-4b8cc67e969c",
+                                "name": "config.record_id",
+                                "value": "={{ $json.config.request.params.record_id ||\n $json.config.request.query.record_id   }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "77b54b5d-1de8-4b70-bf71-18d8481776e0",
+                                "name": "config.filter",
+                                "value": "={{ JSON.parse($json.config.request.query?.filter || {}) }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "52c60a62-db77-4aeb-83f5-85442c99b8d4",
+                                "name": "config.offset",
+                                "value": "={{ $json.config.request.query?.offset }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "a4624103-01e0-4781-84b0-3b9991687a14",
+                                "name": "config.limit",
+                                "value": "={{ $json.config.request.query?.limit }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "c75a0935-afe1-4766-ae56-15ef4ed9e26f",
+                                "name": "config.orderBy",
+                                "value": "={{ $json.config.request.query?.orderBy }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "8a521b64-9398-467e-988e-265ce8643839",
+                                "name": "config.orderDirection",
+                                "value": "={{ $json.config.request.query?.orderDirection }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "759e44b2-034c-4311-a322-3c496a989b1c",
+                                "name": "config.records",
+                                "value": "={{ Array.isArray($json.config.request?.body) ? $json.config.request?.body : [$json.config.request?.body]   || [] }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -960,
+                    -784
+                ],
+                "id": "df4d0fc8-c3c9-4aee-b1a9-a0bf609042b6",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "c36a655a-4a61-4ac3-a2b0-5d319342b9e4",
+                                "name": "config.request",
+                                "value": "={{ $json }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "a10ee189-9ff8-49ab-be0d-d2510326b44f",
+                                "name": "config.type",
+                                "value": "get",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    -1184,
+                    -1072
+                ],
+                "id": "8cf795f5-7e7b-462d-88d5-333ea2eadea3",
+                "name": "Entry get"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "c36a655a-4a61-4ac3-a2b0-5d319342b9e4",
+                                "name": "config.request",
+                                "value": "={{ $json }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "a10ee189-9ff8-49ab-be0d-d2510326b44f",
+                                "name": "config.type",
+                                "value": "post",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    -1184,
+                    -880
+                ],
+                "id": "0bea3d20-0b25-40c9-aa0c-8ef5d44bf409",
+                "name": "Entry post"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "c36a655a-4a61-4ac3-a2b0-5d319342b9e4",
+                                "name": "config.request",
+                                "value": "={{ $json }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "a10ee189-9ff8-49ab-be0d-d2510326b44f",
+                                "name": "config.type",
+                                "value": "patch",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    -1184,
+                    -688
+                ],
+                "id": "0e2ab73c-380f-44ce-abde-471bd1d70442",
+                "name": "Entry patch"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "c36a655a-4a61-4ac3-a2b0-5d319342b9e4",
+                                "name": "config.request",
+                                "value": "={{ $json }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "a10ee189-9ff8-49ab-be0d-d2510326b44f",
+                                "name": "config.type",
+                                "value": "delete",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    -1184,
+                    -496
+                ],
+                "id": "268d70ca-ad10-4d7a-bc65-14372b1de8ca",
+                "name": "Entry delete"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "1a3d3f35-3e28-438e-ad69-5e8a0358f41b",
+                                "leftValue": "={{ $('Config').item.json.config.tenantID }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notEmpty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    -560,
+                    -784
+                ],
+                "id": "18cc20c8-1605-40fe-98b0-c2b459ee366d",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    112,
+                    -304
+                ],
+                "id": "8751bcf6-ba75-4fdc-b6cb-8c9dd07d895d",
+                "name": "Output1"
+            },
+            {
+                "parameters": {
+                    "respondWith": "json",
+                    "responseBody": "={{ $json.output }}",
+                    "options": {
+                        "responseCode": 400
+                    }
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    336,
+                    -304
+                ],
+                "id": "6de6c71d-aa09-470c-aa1b-3357d730c702",
+                "name": "Respond to Webhook"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "FailedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "48513da3-4769-49dc-a3fb-c6206ec4f5d7",
+                                "name": "action.error",
+                                "value": "Missing tenantID",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -112,
+                    -304
+                ],
+                "id": "c33a87da-a516-4625-8e7e-3f189867140c",
+                "name": "Action Close Error 1"
+            },
+            {
+                "parameters": {
+                    "multipleMethods": true,
+                    "httpMethod": [
+                        "GET",
+                        "POST",
+                        "PATCH",
+                        "DELETE"
+                    ],
+                    "path": "47568665-079f-4673-b34d-b3815fe5614b",
+                    "responseMode": "responseNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    -1456,
+                    -1280
+                ],
+                "id": "d0867327-270b-4644-ab13-e2c913a32f5a",
+                "name": "Webhook /2",
+                "webhookId": "47568665-079f-4673-b34d-b3815fe5614b"
+            }
+        ],
+        "connections": {
+            "Webhook /": {
+                "main": [
+                    [
+                        {
+                            "node": "Entry get",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry post",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry patch",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry delete",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Switch": {
+                "main": [
+                    [
+                        {
+                            "node": "Switch1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Call 'API MongoDB jsonld Post V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [],
+                    []
+                ]
+            },
+            "Output": {
+                "main": [
+                    [
+                        {
+                            "node": "Respond to Webhook2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook /1": {
+                "main": [
+                    [
+                        {
+                            "node": "Entry get",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry post",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry patch",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry delete",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'API MongoDB jsonld Get V1'2": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'API MongoDB jsonld Post V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Switch1": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'API MongoDB jsonld Get V1'2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Call 'API MongoDB jsonld search",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'API MongoDB jsonld search": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Entry get": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Entry post": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Entry patch": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Entry delete": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Switch",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Action Close Error 1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Output1": {
+                "main": [
+                    [
+                        {
+                            "node": "Respond to Webhook",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close Error 1": {
+                "main": [
+                    [
+                        {
+                            "node": "Output1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook /2": {
+                "main": [
+                    [
+                        {
+                            "node": "Entry get",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry post",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry patch",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Entry delete",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version e5446a6c",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-09-03T14:32:59.843Z",
+        "updatedAt": "2026-09-03T14:33:03.047Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
