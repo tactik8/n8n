@@ -1,0 +1,878 @@
+{
+    "id": "47REy4WzFyEJyF9L",
+    "name": "Generate word file from markdown",
+    "active": true,
+    "activeVersionId": "09c52e2c-3421-4eda-bf10-68dc10eb5d55",
+    "createdAt": "2026-06-11T13:45:25.978Z",
+    "updatedAt": "2026-06-11T15:04:16.571Z",
+    "isArchived": false,
+    "versionId": "09c52e2c-3421-4eda-bf10-68dc10eb5d55",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "markdownContent"
+                        },
+                        {
+                            "name": "filename"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -544,
+                -208
+            ],
+            "id": "40921508-a288-4e69-a1d5-19b9188df879",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "command": "npm install markdown-docx"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -320,
+                -304
+            ],
+            "id": "ad751598-e9af-45c9-805a-87b3ba4890ea",
+            "name": "Execute Command"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "={{ $('Config').item.json.config.bucket }}",
+                "fileName": "={{ $('Config').item.json.config.filepath }}/{{ $json.action.result.title }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                352,
+                -16
+            ],
+            "id": "73333685-841d-4bdd-8e94-3e9191032c6b",
+            "name": "Upload a file1",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "const { default: markdownDocx, Packer } = require('/home/node/node_modules/markdown-docx');\n\nasync function convertMarkdownToDocx(markdown) {\n \n  // Convert to docx\n  const doc = await markdownDocx(markdown);\n\n  // Save to file\n  const buffer = await Packer.toBuffer(doc);\n  return buffer\n\n}\n\n// Execute the function\n\n\n\nfor (const item of $input.all()) {\n\n  let action = JSON.parse(JSON.stringify(item.json.action))\n\n\n  let title = item.json.action.object.title\n  if(!title.endsWith(\".docx\")){\n    title = title + '.docx'\n  }\n\n  let baseUrl = item.json.config.baseUrl\n  if(!baseUrl.endsWith('/')){\n    baseUrl = baseUrl + '/'\n  }\n  \n  action.result = {\n    \"@type\": \"DigitalDocument\",\n    \"title\": title,\n    \"url\": `${item.json.config.baseUrl}${item.json.config.bucket}/${item.json.config.filepath}/${title}`\n  }\n\n  \n  return {\n    json: {\"action\": action},\n    binary: {\n      data: {\n        data: await convertMarkdownToDocx(item.json.action.object.text), \n        mimeType: \"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\n        fileName: title,\n        fileExtension: \"docx\"\n      }\n    }\n  }\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                128,
+                -112
+            ],
+            "id": "fe50a3b2-b4f3-4185-b268-5a9cd3eacf94",
+            "name": "Generate word file"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config.bucket",
+                            "value": "cdn",
+                            "type": "string"
+                        },
+                        {
+                            "id": "64063d2f-c5be-4c94-89e1-042a9798983f",
+                            "name": "config.baseUrl",
+                            "value": "https://s3.tactik8.com/buckets/",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c18f0358-c758-4d82-a562-9050c8f0f0e2",
+                            "name": "config.filepath",
+                            "value": "=workflow_{{ $workflow.id }}/execution_{{ $execution.id }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -96,
+                -112
+            ],
+            "id": "cff97490-b61b-4b32-87ed-947e780115da",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "DigitalDocument",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3f3666b-a1df-4c32-bdd9-a2eb1007bc0f",
+                            "name": "action.object.title",
+                            "value": "={{ $json.filename }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.text",
+                            "value": "={{ $json.markdownContent }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -320,
+                -112
+            ],
+            "id": "a5ecef3c-8964-4f10-a9ac-fdb728efbb65",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "resource": "bucket",
+                "name": "={{ $('Config').item.json.config.bucket }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                352,
+                -208
+            ],
+            "id": "5901da54-7d31-4935-9ef8-308260ae351d",
+            "name": "Create a bucket",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            },
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7c9dad2b-4f60-4ab0-91d8-8cb8c68ff8bd",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "ed3a8241-9aca-41f4-b91b-1ada4e63b66d",
+                            "name": "action",
+                            "value": "={{ $('Generate word file').item.json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "include": "selected",
+                "includeFields": "data",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                352,
+                256
+            ],
+            "id": "5baeb27f-9d1d-4252-ac77-2bb7f9c0a2fb",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "include": "selected",
+                "includeFields": "data",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                576,
+                256
+            ],
+            "id": "b6514169-1cda-40e7-a9c4-9484476ab3ec",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "include": "selected",
+                "includeFields": "data",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                768,
+                256
+            ],
+            "id": "ed0eba72-72c0-4782-9fe7-a5925c26dbf2",
+            "name": "Output"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Execute Command",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate word file": {
+            "main": [
+                [
+                    {
+                        "node": "Create a bucket",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Upload a file1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Generate word file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create a bucket": {
+            "main": [
+                []
+            ]
+        },
+        "Upload a file1": {
+            "main": [
+                []
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "markdownContent": "# Test title 1 \n## Test title 2",
+                    "filename": "test_filename_1.docx"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "47REy4WzFyEJyF9L",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-11T13:45:25.978Z",
+            "updatedAt": "2026-06-11T13:45:25.978Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "09c52e2c-3421-4eda-bf10-68dc10eb5d55",
+        "workflowId": "47REy4WzFyEJyF9L",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "markdownContent"
+                            },
+                            {
+                                "name": "filename"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -544,
+                    -208
+                ],
+                "id": "40921508-a288-4e69-a1d5-19b9188df879",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "command": "npm install markdown-docx"
+                },
+                "type": "n8n-nodes-base.executeCommand",
+                "typeVersion": 1,
+                "position": [
+                    -320,
+                    -304
+                ],
+                "id": "ad751598-e9af-45c9-805a-87b3ba4890ea",
+                "name": "Execute Command"
+            },
+            {
+                "parameters": {
+                    "operation": "upload",
+                    "bucketName": "={{ $('Config').item.json.config.bucket }}",
+                    "fileName": "={{ $('Config').item.json.config.filepath }}/{{ $json.action.result.title }}",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    352,
+                    -16
+                ],
+                "id": "73333685-841d-4bdd-8e94-3e9191032c6b",
+                "name": "Upload a file1",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "jsCode": "const { default: markdownDocx, Packer } = require('/home/node/node_modules/markdown-docx');\n\nasync function convertMarkdownToDocx(markdown) {\n \n  // Convert to docx\n  const doc = await markdownDocx(markdown);\n\n  // Save to file\n  const buffer = await Packer.toBuffer(doc);\n  return buffer\n\n}\n\n// Execute the function\n\n\n\nfor (const item of $input.all()) {\n\n  let action = JSON.parse(JSON.stringify(item.json.action))\n\n\n  let title = item.json.action.object.title\n  if(!title.endsWith(\".docx\")){\n    title = title + '.docx'\n  }\n\n  let baseUrl = item.json.config.baseUrl\n  if(!baseUrl.endsWith('/')){\n    baseUrl = baseUrl + '/'\n  }\n  \n  action.result = {\n    \"@type\": \"DigitalDocument\",\n    \"title\": title,\n    \"url\": `${item.json.config.baseUrl}${item.json.config.bucket}/${item.json.config.filepath}/${title}`\n  }\n\n  \n  return {\n    json: {\"action\": action},\n    binary: {\n      data: {\n        data: await convertMarkdownToDocx(item.json.action.object.text), \n        mimeType: \"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\n        fileName: title,\n        fileExtension: \"docx\"\n      }\n    }\n  }\n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    128,
+                    -112
+                ],
+                "id": "fe50a3b2-b4f3-4185-b268-5a9cd3eacf94",
+                "name": "Generate word file"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config.bucket",
+                                "value": "cdn",
+                                "type": "string"
+                            },
+                            {
+                                "id": "64063d2f-c5be-4c94-89e1-042a9798983f",
+                                "name": "config.baseUrl",
+                                "value": "https://s3.tactik8.com/buckets/",
+                                "type": "string"
+                            },
+                            {
+                                "id": "c18f0358-c758-4d82-a562-9050c8f0f0e2",
+                                "name": "config.filepath",
+                                "value": "=workflow_{{ $workflow.id }}/execution_{{ $execution.id }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -96,
+                    -112
+                ],
+                "id": "cff97490-b61b-4b32-87ed-947e780115da",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "DigitalDocument",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d3f3666b-a1df-4c32-bdd9-a2eb1007bc0f",
+                                "name": "action.object.title",
+                                "value": "={{ $json.filename }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.text",
+                                "value": "={{ $json.markdownContent }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -320,
+                    -112
+                ],
+                "id": "a5ecef3c-8964-4f10-a9ac-fdb728efbb65",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "resource": "bucket",
+                    "name": "={{ $('Config').item.json.config.bucket }}",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    352,
+                    -208
+                ],
+                "id": "5901da54-7d31-4935-9ef8-308260ae351d",
+                "name": "Create a bucket",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                },
+                "onError": "continueRegularOutput"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7c9dad2b-4f60-4ab0-91d8-8cb8c68ff8bd",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "ed3a8241-9aca-41f4-b91b-1ada4e63b66d",
+                                "name": "action",
+                                "value": "={{ $('Generate word file').item.json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "includeOtherFields": true,
+                    "include": "selected",
+                    "includeFields": "data",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    352,
+                    256
+                ],
+                "id": "5baeb27f-9d1d-4252-ac77-2bb7f9c0a2fb",
+                "name": "Edit Fields1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "includeOtherFields": true,
+                    "include": "selected",
+                    "includeFields": "data",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    576,
+                    256
+                ],
+                "id": "b6514169-1cda-40e7-a9c4-9484476ab3ec",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "includeOtherFields": true,
+                    "include": "selected",
+                    "includeFields": "data",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    768,
+                    256
+                ],
+                "id": "ed0eba72-72c0-4782-9fe7-a5925c26dbf2",
+                "name": "Output"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Execute Command",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Generate word file": {
+                "main": [
+                    [
+                        {
+                            "node": "Create a bucket",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Upload a file1",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Generate word file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Create a bucket": {
+                "main": [
+                    []
+                ]
+            },
+            "Upload a file1": {
+                "main": [
+                    []
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields1": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 09c52e2c",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-11T15:04:16.573Z",
+        "updatedAt": "2026-06-11T15:04:59.595Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
