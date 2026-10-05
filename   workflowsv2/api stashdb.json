@@ -1,0 +1,403 @@
+{
+    "id": "OnK8fzuq51Jck6VG",
+    "name": "api stashdb",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-06-09T11:57:51.539Z",
+    "updatedAt": "2026-06-09T12:55:52.338Z",
+    "isArchived": false,
+    "versionId": "5b0c0ab1-58f7-4a19-b00d-7c088e3e6890",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "77c7e4bc-07d7-46e8-bf49-43a97cda8bee",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "={{ $json.query }}"
+                        },
+                        {
+                            "name": "variables",
+                            "value": "={       \n  \"input\": {         \n    \"page\": {{ $json.page }},         \n    \"per_page\": 1000,\n    \"sort\": \"DATE\",\n    \"direction\": \"DESC\",\n    \"date\": {\n            \"value\": \"{{ $json.date }}\",\n            \"modifier\": \"EQUALS\"\n        }\n  }     \n}"
+                        }
+                    ]
+                },
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.apiKey }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                688,
+                0
+            ],
+            "id": "f6959b38-5576-4087-926e-b30fb69a1444",
+            "name": "HTTP Request2"
+        },
+        {
+            "parameters": {
+                "jsCode": "/**\n * Converts a StashDB Scene API object into a Schema.org VideoObject JSON-LD format.\n * * @param {Object} scene - The raw scene object fetched from StashDB.\n * @returns {Object} A JSON-LD compliant VideoObject.\n */\nfunction convertStashSceneToJSONLD(scene) {\n  if (!scene) return null;\n\n  // 1. Map StashDB URLs array to find an official or primary link if available\n  const primaryUrl = scene.urls && scene.urls.length > 0 \n    ? scene.urls[0].url \n    : `https://stashdb.org/scenes/${scene.id}`;\n\n  // 2. Map performers to Schema.org Person schemas\n  const actors = (scene.performers || []).map(p => ({\n    \"@type\": \"Person\",\n    \"name\": p.performer ? p.performer.name : (p.as || \"Unknown Performer\"),\n    \"sameAs\": p.performer ? `https://stashdb.org/performers/${p.performer.id}` : undefined\n  }));\n\n  // 3. Map tags to comma-separated keywords\n  const keywords = (scene.tags || []).map(t => t.name).join(\", \");\n\n  // 4. Extract thumbnail/poster images if present\n  const thumbnailUrls = (scene.images || []).map(img => img.url);\n\n  // 5. Convert StashDB duration (seconds) to ISO 8601 Duration format (e.g., PT1H23M45S)\n  let isoDuration = undefined;\n  if (scene.duration) {\n    const hours = Math.floor(scene.duration / 3600);\n    const minutes = Math.floor((scene.duration % 3600) / 60);\n    const seconds = Math.floor(scene.duration % 60);\n    \n    isoDuration = \"PT\";\n    if (hours > 0) isoDuration += `${hours}H`;\n    if (minutes > 0) isoDuration += `${minutes}M`;\n    if (seconds > 0 || isoDuration === \"PT\") isoDuration += `${seconds}S`;\n  }\n\n  // Assemble the JSON-LD payload\n  const jsonLd = {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"VideoObject\",\n    \"@id\": `https://stashdb.org/scenes/${scene.id}`,\n    \"name\": scene.title || \"Untitled Scene\",\n    \"description\": scene.details || `Scene item listed under ID ${scene.id}`,\n    \"url\": primaryUrl,\n    \"duration\": isoDuration,\n    \"uploadDate\": scene.date || undefined,\n    \"keywords\": keywords || undefined,\n    \"actor\": actors.length > 0 ? actors : undefined,\n  };\n\n  // Add Production Company if a Studio exists\n  if (scene.studio && scene.studio.name) {\n    jsonLd.productionCompany = {\n      \"@type\": \"Organization\",\n      \"name\": scene.studio.name,\n      \"@id\": `https://stashdb.org/studios/${scene.studio.id}`\n    };\n  }\n\n  // Add Director if available\n  if (scene.director) {\n    jsonLd.director = {\n      \"@type\": \"Person\",\n      \"name\": scene.director\n    };\n  }\n\n  // Add Content/SKU Code under identifier tracking\n  if (scene.code) {\n    jsonLd.identifier = scene.code;\n  }\n\n  // Embed Thumbnail Images\n  if (thumbnailUrls.length > 0) {\n    jsonLd.thumbnailUrl = thumbnailUrls;\n  }\n\n  return jsonLd;\n}\n\n\n\nfor (const item of $input.all()) {\n  let results = []\n\n  for(let s of item.json.data.queryScenes.scenes){\n    let r = convertStashSceneToJSONLD(s)\n    results.push(r)\n  }\n  item.json = {}\n  item.json.result = results\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1168,
+                112
+            ],
+            "id": "744750c4-1f38-4f25-893a-ea7b8cccf183",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "stashdb",
+                "fileName": "=date_{{ $('loop input').item.json.date }}.json",
+                "binaryData": false,
+                "fileContent": "={{ JSON.stringify($json.result, null, 4) }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1392,
+                112
+            ],
+            "id": "159f8ad7-bc44-49f8-842f-3ed6cab2424a",
+            "name": "Upload a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "46025931-ec1f-4563-92dc-b72818c206e0",
+                            "leftValue": "={{ $json.data.queryScenes.scenes }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "array",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                896,
+                0
+            ],
+            "id": "7758def3-92f5-4aaf-ac29-b7296abaf4ed",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6c10e07c-cd77-4932-9a0a-9e05c6bf3e15",
+                            "name": "url",
+                            "value": "={{ $('loop input').item.json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "41790dcc-56e2-402a-af3b-270fcae77a4c",
+                            "name": "apiKey",
+                            "value": "={{ $('loop input').item.json.apiKey }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "60f61c08-5ef1-48bb-a210-389d9a6f208d",
+                            "name": "query",
+                            "value": "={{ $('loop input').item.json.query }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "86519334-d6e5-4e3d-b22e-6e7c7607186c",
+                            "name": "page",
+                            "value": "={{ $('loop input').item.json.page }}",
+                            "type": "number"
+                        },
+                        {
+                            "id": "38a2541b-b106-4cde-9788-dda0cd190d47",
+                            "name": "date",
+                            "value": "={{ $('loop input').item.json.date.toDateTime().plus(1, 'days').format('yyyy-MM-dd') }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1600,
+                112
+            ],
+            "id": "ee34cbc1-67d2-44ad-9c00-8631b58a313c",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "afe8a43b-2ea9-418c-951b-fadff55061b3",
+                            "name": "url",
+                            "value": "https://stashdb.org/graphql",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4f675beb-cbb2-4954-9f1d-af01abde85fa",
+                            "name": "apiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIwMTliOGFiOC0wMmY0LTcwODctOTEzNy0zMmI3YmQ1NzIxODIiLCJzdWIiOiJBUElLZXkiLCJpYXQiOjE3Njc1NTg4NzN9.VfO-N3K1VniTpsp7nfuuwISPIrMXGVgYLfzHLs2aBVI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "a2c68759-8048-4d7e-aca5-3de0b7fe58e6",
+                            "name": "query",
+                            "value": "query QueryScenes($input: SceneQueryInput!) { queryScenes(input: $input) { count scenes {  \n\nid\n      title\n      details\n      date\n      duration\n      code\n      director\n      urls {\n        url\n        type\n      }\n      studio {\n        id\n        name\n      }\n      performers {\n        performer {\n          id\n          name\n          disambiguation\n        }\n        as\n      }\n      tags {\n        id\n        name\n        description\n      }\n      fingerprints {\n        hash\n        algorithm\n        duration\n      }\n      images {\n        id\n        url\n        width\n        height\n      }\n\n\n\n\n} } }\n  ",
+                            "type": "string"
+                        },
+                        {
+                            "id": "49c87293-2ccf-4513-a575-abe6795ea1f3",
+                            "name": "variables",
+                            "value": "{       \"input\": {         \"page\": 0,         \"per_page\": 100       }     }",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6eb48ec3-2aa2-42cf-a9b9-7a7e41c0c9ac",
+                            "name": "page",
+                            "value": 0,
+                            "type": "number"
+                        },
+                        {
+                            "id": "a5052e18-ac41-4a08-9418-16c640a9333c",
+                            "name": "per_page",
+                            "value": 100,
+                            "type": "number"
+                        },
+                        {
+                            "id": "a1fee510-6e10-4711-8d2e-ce4497a0f1bd",
+                            "name": "date",
+                            "value": "2026-05-01",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                272,
+                0
+            ],
+            "id": "434e79f1-e415-4fad-a808-cca55a0c2dd7",
+            "name": "init"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4a560ce8-2b74-4840-9696-a8385d20c585",
+                            "name": "url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "78412966-5260-41ac-84b9-618732ff38a7",
+                            "name": "apiKey",
+                            "value": "={{ $json.apiKey }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1c44fba6-2bdc-417e-b6e1-466643de584b",
+                            "name": "query",
+                            "value": "={{ $json.query }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "10904387-0ada-46bc-8ab5-7b27bc83af5a",
+                            "name": "page",
+                            "value": "={{ $json.page }}",
+                            "type": "number"
+                        },
+                        {
+                            "id": "131e0b75-e464-424e-b3c2-07486fc4f6a8",
+                            "name": "date",
+                            "value": "={{ $json.date }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                480,
+                0
+            ],
+            "id": "74664b27-6a2e-4228-b66a-d835413332d6",
+            "name": "loop input"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "init",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request2": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Upload a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload a file": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "init": {
+            "main": [
+                [
+                    {
+                        "node": "loop input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "loop input": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "loop input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "OnK8fzuq51Jck6VG",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-09T11:57:51.539Z",
+            "updatedAt": "2026-06-09T11:57:51.539Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
