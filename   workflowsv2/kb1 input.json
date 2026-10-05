@@ -1,0 +1,870 @@
+{
+    "id": "Fw5bMH5el8sVk0Y8",
+    "name": "kb1 input",
+    "active": true,
+    "activeVersionId": "9ae6a1db-79f9-4a3a-886f-92a8b6a2c5f0",
+    "createdAt": "2026-06-11T19:50:03.107Z",
+    "updatedAt": "2026-06-12T12:28:36.878Z",
+    "isArchived": false,
+    "versionId": "52d33361-5fd6-4f98-b1d9-e51bfe045ba1",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "content"
+                        },
+                        {
+                            "name": "discussionID"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -112,
+                0
+            ],
+            "id": "87b4f229-4229-4e97-89f8-a9051eeba200",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d156b6fa-a1ca-4a4a-94a3-71d8b91858e8",
+                            "name": "userPrompt",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.content }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "09077065-2782-4295-bb60-8d1776d75bb8",
+                            "name": "systemPrompt",
+                            "value": "# SYSTEM PROMPT: KNOWLEDGE BASE CURATOR  You are an expert Knowledge Management AI Agent. Your sole responsibility is to ingest new information, evaluate it against an existing knowledge base (KB), and output a single, flawlessly integrated, and updated knowledge base in Markdown format.  ## Core Objectives 1. **Integrate & Update:** Merge new relevant information into the existing knowledge base. 2. **De-duplicate:** Identify overlapping concepts and merge them. Do not repeat information across different sections. 3. **Maintain Succinctness:** Keep explanations concise, dense with information, and free of fluff or conversational filler. 4. **Enforce Structure:** Maintain a strict, logical hierarchical structure using Markdown.  ---  ## Input Format The user will provide two inputs in the following format: * **[EXISTING KNOWLEDGE BASE]:** The current state of the knowledge base (in Markdown). * **[NEW CONTENT]:** The fresh information, notes, or data to be integrated.  ---  ## Curation & Integration Rules  ### 1. Information Processing * **Relevance Check:** Only integrate information from [NEW CONTENT] that adds genuine value, context, or updates to the [EXISTING KNOWLEDGE BASE]. Discard trivialities or redundant phrasing. * **Conflict Resolution:** If [NEW CONTENT] contradicts the [EXISTING KNOWLEDGE BASE], prioritize the new content *only* if it represents a clear update or correction. Otherwise, note the nuance cleanly. * **Succinctness:** Use bullet points, short sentences, and bold keywords. Remove all introductory phrases (e.g., \"In this section, we will look at...\").  ### 2. Markdown Formatting Style Guide * **Headings:** Use logical nesting (`#` for Main Category, `##` for Sub-categories, `###` for specific concepts). Do not skip heading levels. * **Visual Elements:** Use bold text (`**keyword**`) to anchor the reader's eye to critical terms.  * **Lists:** Prefer clean bulleted lists (`*`) for definitions and features, and numbered lists (`1.`) *only* for sequential steps or processes. * **Code & Tables:** Use code blocks (```) for technical snippets/commands and Markdown tables for comparative data.  ---  ## Output Requirements * **Output ONLY the final, fully updated Markdown knowledge base.** * Do not include any conversational filler, meta-commentary, or explanations of what you changed (e.g., do *not* say \"I have updated the KB for you...\"). * Ensure the output starts directly with the first Markdown header.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "451021b1-0e77-4e32-bd3e-6cdd3124a687",
+                            "name": "knowledgeBase",
+                            "value": "={{ $json.data || \"\"}}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                656,
+                0
+            ],
+            "id": "d72eb164-9725-4a0d-bd53-a61376ca2f6e",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "operation": "text",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.1,
+            "position": [
+                416,
+                0
+            ],
+            "id": "b3bfa078-360a-4230-8290-7625436ff050",
+            "name": "Extract from File",
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=content: {{ $json.userPrompt }}\nknowledge base: \n```\n{{ $json.knowledgeBase }}\n```",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                864,
+                0
+            ],
+            "id": "5c6a77f4-d787-40a5-a480-bb53660dc832",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                736,
+                208
+            ],
+            "id": "3071bdf6-af22-4bea-8a02-f2f4914ba76b",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "263d07bd-fce2-4bf6-8dbe-b079660c9859",
+                            "name": "output",
+                            "value": "={{ $json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1216,
+                0
+            ],
+            "id": "faf89608-82f0-4fa3-9f36-d471046f0d2f",
+            "name": "Edit Fields1"
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "get",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/kb",
+                    "mode": "url"
+                },
+                "filePath": "src/kb1.md",
+                "additionalParameters": {}
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                128,
+                0
+            ],
+            "id": "ebd26498-71dd-45f7-a5eb-92964f91e91d",
+            "name": "Get a file",
+            "webhookId": "bdaeed00-213c-46cb-bd42-bde6e7e44a04",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "file",
+                "operation": "edit",
+                "owner": {
+                    "__rl": true,
+                    "value": "tactik8",
+                    "mode": "name"
+                },
+                "repository": {
+                    "__rl": true,
+                    "value": "https://github.com/tactik8/kb",
+                    "mode": "url"
+                },
+                "filePath": "src/kb1.md",
+                "fileContent": "={{ $json.output }}",
+                "commitMessage": "Knowledge added from n8n"
+            },
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1.1,
+            "position": [
+                1424,
+                0
+            ],
+            "id": "19beef46-2f4d-42fa-8760-2b4df3011cfc",
+            "name": "Edit a file",
+            "webhookId": "6f5b5f61-cb3e-4c14-bd63-a9d014fd9107",
+            "credentials": {
+                "githubApi": {
+                    "id": "MYlhJCWwjzLkkP49",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "036b273a-f1ae-4fb2-a28f-536d30411ff8",
+                            "name": "output",
+                            "value": "={{ $('Edit Fields1').item.json.output }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1632,
+                0
+            ],
+            "id": "ba9255ba-ff72-4c27-8f39-4d438d046dbe",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "public": true,
+                "initialMessages": "Kb. Go. ",
+                "options": {
+                    "responseMode": "responseNodes"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.4,
+            "position": [
+                -96,
+                -416
+            ],
+            "id": "c4c1cf54-9b9f-44b2-af21-49d3c56b2b3b",
+            "name": "When chat message received",
+            "webhookId": "357884bf-da19-46ff-9e83-c7c5c404f17b"
+        },
+        {
+            "parameters": {
+                "message": "={{ $json.output }}",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chat",
+            "typeVersion": 1.3,
+            "position": [
+                320,
+                -416
+            ],
+            "id": "9d785aeb-ce5a-4c94-a59e-c64eb2594cb8",
+            "name": "Chat",
+            "webhookId": "03a7c356-0799-48db-81a8-ecfd0d24612c"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "Fw5bMH5el8sVk0Y8",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/Fw5bMH5el8sVk0Y8",
+                    "cachedResultName": "kb1 input"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "content": "={{ $json.chatInput }}"
+                    },
+                    "matchingColumns": [
+                        "content"
+                    ],
+                    "schema": [
+                        {
+                            "id": "content",
+                            "displayName": "content",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                112,
+                -416
+            ],
+            "id": "0835e8fa-c496-4c22-af41-c03bdb0c17af",
+            "name": "Call 'kb1 input'"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Get a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get a file": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit a file": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'kb1 input'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'kb1 input'": {
+            "main": [
+                [
+                    {
+                        "node": "Chat",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "content": "Duchesnay is a pharmaceutical company in Quebec."
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "Fw5bMH5el8sVk0Y8",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-06-11T19:50:03.107Z",
+            "updatedAt": "2026-06-11T19:50:03.107Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "9ae6a1db-79f9-4a3a-886f-92a8b6a2c5f0",
+        "workflowId": "Fw5bMH5el8sVk0Y8",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "content"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -112,
+                    0
+                ],
+                "id": "87b4f229-4229-4e97-89f8-a9051eeba200",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "d156b6fa-a1ca-4a4a-94a3-71d8b91858e8",
+                                "name": "userPrompt",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.content }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "09077065-2782-4295-bb60-8d1776d75bb8",
+                                "name": "systemPrompt",
+                                "value": "# SYSTEM PROMPT: KNOWLEDGE BASE CURATOR  You are an expert Knowledge Management AI Agent. Your sole responsibility is to ingest new information, evaluate it against an existing knowledge base (KB), and output a single, flawlessly integrated, and updated knowledge base in Markdown format.  ## Core Objectives 1. **Integrate & Update:** Merge new relevant information into the existing knowledge base. 2. **De-duplicate:** Identify overlapping concepts and merge them. Do not repeat information across different sections. 3. **Maintain Succinctness:** Keep explanations concise, dense with information, and free of fluff or conversational filler. 4. **Enforce Structure:** Maintain a strict, logical hierarchical structure using Markdown.  ---  ## Input Format The user will provide two inputs in the following format: * **[EXISTING KNOWLEDGE BASE]:** The current state of the knowledge base (in Markdown). * **[NEW CONTENT]:** The fresh information, notes, or data to be integrated.  ---  ## Curation & Integration Rules  ### 1. Information Processing * **Relevance Check:** Only integrate information from [NEW CONTENT] that adds genuine value, context, or updates to the [EXISTING KNOWLEDGE BASE]. Discard trivialities or redundant phrasing. * **Conflict Resolution:** If [NEW CONTENT] contradicts the [EXISTING KNOWLEDGE BASE], prioritize the new content *only* if it represents a clear update or correction. Otherwise, note the nuance cleanly. * **Succinctness:** Use bullet points, short sentences, and bold keywords. Remove all introductory phrases (e.g., \"In this section, we will look at...\").  ### 2. Markdown Formatting Style Guide * **Headings:** Use logical nesting (`#` for Main Category, `##` for Sub-categories, `###` for specific concepts). Do not skip heading levels. * **Visual Elements:** Use bold text (`**keyword**`) to anchor the reader's eye to critical terms.  * **Lists:** Prefer clean bulleted lists (`*`) for definitions and features, and numbered lists (`1.`) *only* for sequential steps or processes. * **Code & Tables:** Use code blocks (```) for technical snippets/commands and Markdown tables for comparative data.  ---  ## Output Requirements * **Output ONLY the final, fully updated Markdown knowledge base.** * Do not include any conversational filler, meta-commentary, or explanations of what you changed (e.g., do *not* say \"I have updated the KB for you...\"). * Ensure the output starts directly with the first Markdown header.",
+                                "type": "string"
+                            },
+                            {
+                                "id": "451021b1-0e77-4e32-bd3e-6cdd3124a687",
+                                "name": "knowledgeBase",
+                                "value": "={{ $json.data || \"\"}}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    656,
+                    0
+                ],
+                "id": "d72eb164-9725-4a0d-bd53-a61376ca2f6e",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "operation": "text",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.extractFromFile",
+                "typeVersion": 1.1,
+                "position": [
+                    416,
+                    0
+                ],
+                "id": "b3bfa078-360a-4230-8290-7625436ff050",
+                "name": "Extract from File",
+                "onError": "continueRegularOutput"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "=content: {{ $json.userPrompt }}\nknowledge base: \n```\n{{ $json.knowledgeBase }}\n```",
+                    "options": {
+                        "systemMessage": "={{ $json.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    864,
+                    0
+                ],
+                "id": "5c6a77f4-d787-40a5-a480-bb53660dc832",
+                "name": "AI Agent"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+                "typeVersion": 1.1,
+                "position": [
+                    736,
+                    208
+                ],
+                "id": "3071bdf6-af22-4bea-8a02-f2f4914ba76b",
+                "name": "Google Gemini Chat Model",
+                "credentials": {
+                    "googlePalmApi": {
+                        "id": "zwRaxgOUTF4g2xjR",
+                        "name": "Google Gemini(PaLM) Api account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "263d07bd-fce2-4bf6-8dbe-b079660c9859",
+                                "name": "output",
+                                "value": "={{ $json.output }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1216,
+                    0
+                ],
+                "id": "faf89608-82f0-4fa3-9f36-d471046f0d2f",
+                "name": "Edit Fields1"
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "get",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/kb",
+                        "mode": "url"
+                    },
+                    "filePath": "src/kb1.md",
+                    "additionalParameters": {}
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    128,
+                    0
+                ],
+                "id": "ebd26498-71dd-45f7-a5eb-92964f91e91d",
+                "name": "Get a file",
+                "webhookId": "bdaeed00-213c-46cb-bd42-bde6e7e44a04",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "file",
+                    "operation": "edit",
+                    "owner": {
+                        "__rl": true,
+                        "value": "tactik8",
+                        "mode": "name"
+                    },
+                    "repository": {
+                        "__rl": true,
+                        "value": "https://github.com/tactik8/kb",
+                        "mode": "url"
+                    },
+                    "filePath": "src/kb1.md",
+                    "fileContent": "={{ $json.output }}",
+                    "commitMessage": "Knowledge added from n8n"
+                },
+                "type": "n8n-nodes-base.github",
+                "typeVersion": 1.1,
+                "position": [
+                    1424,
+                    0
+                ],
+                "id": "19beef46-2f4d-42fa-8760-2b4df3011cfc",
+                "name": "Edit a file",
+                "webhookId": "6f5b5f61-cb3e-4c14-bd63-a9d014fd9107",
+                "credentials": {
+                    "githubApi": {
+                        "id": "MYlhJCWwjzLkkP49",
+                        "name": "GitHub account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "036b273a-f1ae-4fb2-a28f-536d30411ff8",
+                                "name": "output",
+                                "value": "={{ $('Edit Fields1').item.json.output }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1632,
+                    0
+                ],
+                "id": "ba9255ba-ff72-4c27-8f39-4d438d046dbe",
+                "name": "Edit Fields2"
+            },
+            {
+                "parameters": {
+                    "public": true,
+                    "initialMessages": "Kb. Go. ",
+                    "options": {
+                        "responseMode": "responseNodes"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+                "typeVersion": 1.4,
+                "position": [
+                    -96,
+                    -416
+                ],
+                "id": "c4c1cf54-9b9f-44b2-af21-49d3c56b2b3b",
+                "name": "When chat message received",
+                "webhookId": "357884bf-da19-46ff-9e83-c7c5c404f17b"
+            },
+            {
+                "parameters": {
+                    "message": "={{ $json.output }}",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.chat",
+                "typeVersion": 1.3,
+                "position": [
+                    320,
+                    -416
+                ],
+                "id": "9d785aeb-ce5a-4c94-a59e-c64eb2594cb8",
+                "name": "Chat",
+                "webhookId": "03a7c356-0799-48db-81a8-ecfd0d24612c"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "Fw5bMH5el8sVk0Y8",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/Fw5bMH5el8sVk0Y8",
+                        "cachedResultName": "kb1 input"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "content": "={{ $json.chatInput }}"
+                        },
+                        "matchingColumns": [
+                            "content"
+                        ],
+                        "schema": [
+                            {
+                                "id": "content",
+                                "displayName": "content",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    112,
+                    -416
+                ],
+                "id": "0835e8fa-c496-4c22-af41-c03bdb0c17af",
+                "name": "Call 'kb1 input'"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Get a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Extract from File": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Google Gemini Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields1": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get a file": {
+                "main": [
+                    [
+                        {
+                            "node": "Extract from File",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit a file": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When chat message received": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'kb1 input'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'kb1 input'": {
+                "main": [
+                    [
+                        {
+                            "node": "Chat",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 9ae6a1db",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-06-11T20:15:28.175Z",
+        "updatedAt": "2026-06-11T20:15:30.831Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
