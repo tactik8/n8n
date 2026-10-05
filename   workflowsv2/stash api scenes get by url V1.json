@@ -1,0 +1,676 @@
+{
+    "id": "IccAaaXtgdnv0AYl",
+    "name": "stash api scenes get by url V1",
+    "active": true,
+    "activeVersionId": "6638bd61-e881-4113-9b49-1f72a9a5c3e6",
+    "createdAt": "2026-04-09T12:42:36.795Z",
+    "updatedAt": "2026-05-02T16:47:39.303Z",
+    "isArchived": false,
+    "versionId": "6638bd61-e881-4113-9b49-1f72a9a5c3e6",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -448,
+                -224
+            ],
+            "id": "0bb01059-9c62-460e-8ad9-71973072b2ec",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n    \"query\": \"\\n      query FindSceneByURL($url: String!) {\\n        findScenes(\\n          scene_filter: { url: { value: $url, modifier: EQUALS } }\\n          filter: { per_page: 1 }\\n        ) {\\n          scenes {\\n            id\\n            title\\n            url\\n            date\\n            created_at\\n          }\\n        }\\n      }\\n    \",\n    \"variables\": {\n        \"url\": \"{{ $json.action.object.url }}\"\n    }\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                224,
+                -224
+            ],
+            "id": "21f9d980-7a7a-4f08-95e8-c1b06c62108d",
+            "name": "Find scene by url"
+        },
+        {
+            "parameters": {
+                "jsCode": "/**\n * Converts a Stash Scene object to a Schema.org VideoObject (JSON-LD)\n * @param {Object} scene - The scene record from Stash API\n * @returns {Object} JSON-LD VideoObject\n */\nfunction mapStashSceneToSchema(scene) {\n  // Helper to convert seconds to ISO 8601 duration (PT#H#M#S)\n  const formatDuration = (seconds) => {\n    if (!seconds) return undefined;\n    const h = Math.floor(seconds / 3600);\n    const m = Math.floor((seconds % 3600) / 60);\n    const s = Math.floor(seconds % 60);\n    return `PT${h > 0 ? h + 'H' : ''}${m > 0 ? m + 'M' : ''}${s}S`;\n  };\n\n  const primaryFile = scene.files && scene.files[0];\n\n  // Helper to convert bytes to human-readable string (e.g., 1.2 GB)\n  const formatBytes = (bytes) => {\n    if (!bytes) return undefined;\n    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];\n    const i = Math.floor(Math.log(bytes) / Math.log(1024));\n    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;\n  };\n\n  \n\n  \n  let ld = {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"VideoObject\",\n    \"name\": scene.title || \"Untitled Scene\",\n    \"description\": scene.details || \"\",\n    \"thumbnailUrl\": [scene.paths?.screenshot || scene.paths?.preview],\n    \"uploadDate\": scene.date || new Date().toISOString().split('T')[0],\n    \"duration\": formatDuration(scene.file?.duration),\n    \"contentUrl\": scene.paths?.stream || \"\",\n    \"keywords\": scene.tags?.map(t => t.name).join(\", \"),\n    \"url\": scene?.urls || [],\n\n    // Technical File Details\n    \"associatedMedia\": scene.files?.map(file => ({\n      \"@type\": \"MediaObject\",\n      \"contentUrl\": `file://${file.path}`,\n      \"contentSize\": formatBytes(file.size),\n      \"encodingFormat\": \"video/mp4\", // Or detect via extension\n      \"bitrate\": file.bit_rate ? `${(file.bit_rate / 1000).toFixed(0)} kbps` : undefined,\n      \"width\": file.width,\n      \"height\": file.height\n    })),\n\n   \n  \n    // Mapping the Studio\n    \"productionCompany\": scene.studio ? {\n      \"@type\": \"Organization\",\n      \"name\": scene.studio.name,\n      \"url\": scene.studio.url\n    } : undefined,\n\n    // Mapping Performers\n    \"actor\": scene.performers?.map(performer => ({\n      \"@type\": \"Person\",\n      \"name\": performer.name,\n      \"url\": performer.url,\n      \"image\": performer.image_path\n    })),\n\n    // Mapping Internal Rating (Stash uses 1-5)\n    \"aggregateRating\": scene.rating10 ? {\n      \"@type\": \"AggregateRating\",\n      \"ratingValue\": scene.rating10 / 2, // Converting 10-point scale to 5-star if needed\n      \"bestRating\": \"5\",\n      \"worstRating\": \"1\"\n    } : undefined\n\n\n\n    \n  };\n  \n     // 1. Add Static Screenshot\n  if (scene.paths?.screenshot) {\n    ld.thumbnail = ld?.thumbnail || []\n    ld.thumbnail = Array.isArray(ld.thumbnail) ? ld.thumbnail : [ld.thumbnail]\n    ld.thumbnail.push({\n      \"@type\": \"ImageObject\",\n      \"name\": \"Static Screenshot\",\n      \"contentUrl\": scene.paths.screenshot\n    });\n  }\n\n  // 2. Add Animated Preview (GIF/WebP)\n  if (scene.paths?.preview) {\n    ld.thumbnail = ld?.thumbnail || []\n    ld.thumbnail = Array.isArray(ld.thumbnail) ? ld.thumbnail : [ld.thumbnail]\n    ld.thumbnail.push({\n      \"@type\": \"ImageObject\",\n      \"name\": \"Animated Preview\",\n      \"contentUrl\": scene.paths.preview,\n      \"encodingFormat\": \"image/webp\" // Stash usually uses WebP for previews\n    });\n  }\n\n  // 3. Add Sprite Sheet\n  if (scene.paths?.sprite) {\n    ld.associatedMedia = ld?.associatedMedia || []\n    ld.associatedMedia = Array.isArray(ld.associatedMedia) ? ld.associatedMedia : [ld.associatedMedia]\n    ld.associatedMedia.push({\n       \n      \"@type\": \"ImageObject\",\n      \"name\": \"Scene Sprite Sheet\",\n      \"description\": \"Scrubbing sprite sheet for player seek bar\",\n      \"contentUrl\": scene.paths.sprite,\n      // Include the VTT file as a related resource if available\n      \"mainEntityOfPage\": scene.paths.vtt || undefined \n    });\n  }\n\n  \n\n  // 5. Map a Video Preview (if your Stash setup generates mp4 previews)\n  if (scene.paths?.preview) {\n    ld.subjectOf = ld?.subjectOf || []\n    ld.subjectOf = Array.isArray(ld.subjectOf) ? ld.subjectOf : [ld.subjectOf]\n    ld.subjectOf.push({\n      \"@type\": \"VideoObject\",\n      \"name\": \"Scene Preview Clip\",\n      \"contentUrl\": scene.paths.preview,\n      \"description\": \"Short teaser of the full scene\"\n    });\n  }\n\n  return ld\n}\n\n\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nfor (const item of $input.all()) {\n\n  let movies = []\n  for(let m of item.json.data.findScenes.scenes || []){\n\n    \n    movies.push(mapStashSceneToSchema(m))\n    \n  }\n\n  item.json.data = undefined\n  item.json.result = movies\n}\n\n  return $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                448,
+                -224
+            ],
+            "id": "2fcda1da-05d0-42a7-a173-e99014fa4c70",
+            "name": "Schema conversion"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                            "name": "action",
+                            "value": "={{ $('Config1').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.result",
+                            "value": "={{ $json.result }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                672,
+                -224
+            ],
+            "id": "d832f165-0141-4624-98a3-682ed94b8691",
+            "name": "Action close1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                896,
+                -224
+            ],
+            "id": "de5e05b1-80a6-4fa0-8a0a-f7628b9fd148",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -224,
+                -224
+            ],
+            "id": "efb57951-bd1d-4ab4-90b2-a43cf265626a",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                            "name": "config.ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                            "name": "config.apiUrl",
+                            "value": "http://192.168.2.243:9999/graphql",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                0,
+                -224
+            ],
+            "id": "cf3abaf7-39dd-452a-b623-ba041384a531",
+            "name": "Config1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Find scene by url": {
+            "main": [
+                [
+                    {
+                        "node": "Schema conversion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action close1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schema conversion": {
+            "main": [
+                [
+                    {
+                        "node": "Action close1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config1": {
+            "main": [
+                [
+                    {
+                        "node": "Find scene by url",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://xhamster.com/videos/my-very-first-anal-experience-elena-ross-xhFb3w7"
+                }
+            },
+            {
+                "json": {
+                    "url": "https://xhamster.com/videos/veronica-leal-reality-backstage-anal-sex-and-throat-fuck-worming-up-bts-xhqcSaB"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "IccAaaXtgdnv0AYl",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-09T12:42:36.795Z",
+            "updatedAt": "2026-04-09T12:42:36.795Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "6638bd61-e881-4113-9b49-1f72a9a5c3e6",
+        "workflowId": "IccAaaXtgdnv0AYl",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "url"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -448,
+                    -224
+                ],
+                "id": "0bb01059-9c62-460e-8ad9-71973072b2ec",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "method": "POST",
+                    "url": "={{ $json.config.apiUrl }}",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "ApiKey",
+                                "value": "={{ $json.config.ApiKey }}"
+                            }
+                        ]
+                    },
+                    "sendBody": true,
+                    "specifyBody": "json",
+                    "jsonBody": "={\n    \"query\": \"\\n      query FindSceneByURL($url: String!) {\\n        findScenes(\\n          scene_filter: { url: { value: $url, modifier: EQUALS } }\\n          filter: { per_page: 1 }\\n        ) {\\n          scenes {\\n            id\\n            title\\n            url\\n            date\\n            created_at\\n          }\\n        }\\n      }\\n    \",\n    \"variables\": {\n        \"url\": \"{{ $json.action.object.url }}\"\n    }\n}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    224,
+                    -224
+                ],
+                "id": "21f9d980-7a7a-4f08-95e8-c1b06c62108d",
+                "name": "Find scene by url"
+            },
+            {
+                "parameters": {
+                    "jsCode": "/**\n * Converts a Stash Scene object to a Schema.org VideoObject (JSON-LD)\n * @param {Object} scene - The scene record from Stash API\n * @returns {Object} JSON-LD VideoObject\n */\nfunction mapStashSceneToSchema(scene) {\n  // Helper to convert seconds to ISO 8601 duration (PT#H#M#S)\n  const formatDuration = (seconds) => {\n    if (!seconds) return undefined;\n    const h = Math.floor(seconds / 3600);\n    const m = Math.floor((seconds % 3600) / 60);\n    const s = Math.floor(seconds % 60);\n    return `PT${h > 0 ? h + 'H' : ''}${m > 0 ? m + 'M' : ''}${s}S`;\n  };\n\n  const primaryFile = scene.files && scene.files[0];\n\n  // Helper to convert bytes to human-readable string (e.g., 1.2 GB)\n  const formatBytes = (bytes) => {\n    if (!bytes) return undefined;\n    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];\n    const i = Math.floor(Math.log(bytes) / Math.log(1024));\n    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;\n  };\n\n  \n\n  \n  let ld = {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"VideoObject\",\n    \"name\": scene.title || \"Untitled Scene\",\n    \"description\": scene.details || \"\",\n    \"thumbnailUrl\": [scene.paths?.screenshot || scene.paths?.preview],\n    \"uploadDate\": scene.date || new Date().toISOString().split('T')[0],\n    \"duration\": formatDuration(scene.file?.duration),\n    \"contentUrl\": scene.paths?.stream || \"\",\n    \"keywords\": scene.tags?.map(t => t.name).join(\", \"),\n    \"url\": scene?.urls || [],\n\n    // Technical File Details\n    \"associatedMedia\": scene.files?.map(file => ({\n      \"@type\": \"MediaObject\",\n      \"contentUrl\": `file://${file.path}`,\n      \"contentSize\": formatBytes(file.size),\n      \"encodingFormat\": \"video/mp4\", // Or detect via extension\n      \"bitrate\": file.bit_rate ? `${(file.bit_rate / 1000).toFixed(0)} kbps` : undefined,\n      \"width\": file.width,\n      \"height\": file.height\n    })),\n\n   \n  \n    // Mapping the Studio\n    \"productionCompany\": scene.studio ? {\n      \"@type\": \"Organization\",\n      \"name\": scene.studio.name,\n      \"url\": scene.studio.url\n    } : undefined,\n\n    // Mapping Performers\n    \"actor\": scene.performers?.map(performer => ({\n      \"@type\": \"Person\",\n      \"name\": performer.name,\n      \"url\": performer.url,\n      \"image\": performer.image_path\n    })),\n\n    // Mapping Internal Rating (Stash uses 1-5)\n    \"aggregateRating\": scene.rating10 ? {\n      \"@type\": \"AggregateRating\",\n      \"ratingValue\": scene.rating10 / 2, // Converting 10-point scale to 5-star if needed\n      \"bestRating\": \"5\",\n      \"worstRating\": \"1\"\n    } : undefined\n\n\n\n    \n  };\n  \n     // 1. Add Static Screenshot\n  if (scene.paths?.screenshot) {\n    ld.thumbnail = ld?.thumbnail || []\n    ld.thumbnail = Array.isArray(ld.thumbnail) ? ld.thumbnail : [ld.thumbnail]\n    ld.thumbnail.push({\n      \"@type\": \"ImageObject\",\n      \"name\": \"Static Screenshot\",\n      \"contentUrl\": scene.paths.screenshot\n    });\n  }\n\n  // 2. Add Animated Preview (GIF/WebP)\n  if (scene.paths?.preview) {\n    ld.thumbnail = ld?.thumbnail || []\n    ld.thumbnail = Array.isArray(ld.thumbnail) ? ld.thumbnail : [ld.thumbnail]\n    ld.thumbnail.push({\n      \"@type\": \"ImageObject\",\n      \"name\": \"Animated Preview\",\n      \"contentUrl\": scene.paths.preview,\n      \"encodingFormat\": \"image/webp\" // Stash usually uses WebP for previews\n    });\n  }\n\n  // 3. Add Sprite Sheet\n  if (scene.paths?.sprite) {\n    ld.associatedMedia = ld?.associatedMedia || []\n    ld.associatedMedia = Array.isArray(ld.associatedMedia) ? ld.associatedMedia : [ld.associatedMedia]\n    ld.associatedMedia.push({\n       \n      \"@type\": \"ImageObject\",\n      \"name\": \"Scene Sprite Sheet\",\n      \"description\": \"Scrubbing sprite sheet for player seek bar\",\n      \"contentUrl\": scene.paths.sprite,\n      // Include the VTT file as a related resource if available\n      \"mainEntityOfPage\": scene.paths.vtt || undefined \n    });\n  }\n\n  \n\n  // 5. Map a Video Preview (if your Stash setup generates mp4 previews)\n  if (scene.paths?.preview) {\n    ld.subjectOf = ld?.subjectOf || []\n    ld.subjectOf = Array.isArray(ld.subjectOf) ? ld.subjectOf : [ld.subjectOf]\n    ld.subjectOf.push({\n      \"@type\": \"VideoObject\",\n      \"name\": \"Scene Preview Clip\",\n      \"contentUrl\": scene.paths.preview,\n      \"description\": \"Short teaser of the full scene\"\n    });\n  }\n\n  return ld\n}\n\n\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nfor (const item of $input.all()) {\n\n  let movies = []\n  for(let m of item.json.data.findScenes.scenes || []){\n\n    \n    movies.push(mapStashSceneToSchema(m))\n    \n  }\n\n  item.json.data = undefined\n  item.json.result = movies\n}\n\n  return $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    448,
+                    -224
+                ],
+                "id": "2fcda1da-05d0-42a7-a173-e99014fa4c70",
+                "name": "Schema conversion"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                                "name": "action",
+                                "value": "={{ $('Config1').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                                "name": "action.result",
+                                "value": "={{ $json.result }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    672,
+                    -224
+                ],
+                "id": "d832f165-0141-4624-98a3-682ed94b8691",
+                "name": "Action close1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    896,
+                    -224
+                ],
+                "id": "de5e05b1-80a6-4fa0-8a0a-f7628b9fd148",
+                "name": "Output1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "WebPage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.url",
+                                "value": "={{ $json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTIme",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -224,
+                    -224
+                ],
+                "id": "efb57951-bd1d-4ab4-90b2-a43cf265626a",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                                "name": "config.ApiKey",
+                                "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                                "name": "config.apiUrl",
+                                "value": "http://192.168.2.243:9999/graphql",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    0,
+                    -224
+                ],
+                "id": "cf3abaf7-39dd-452a-b623-ba041384a531",
+                "name": "Config1"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Find scene by url": {
+                "main": [
+                    [
+                        {
+                            "node": "Schema conversion",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action close1": {
+                "main": [
+                    [
+                        {
+                            "node": "Output1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Schema conversion": {
+                "main": [
+                    [
+                        {
+                            "node": "Action close1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config1": {
+                "main": [
+                    [
+                        {
+                            "node": "Find scene by url",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 6638bd61",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-05-02T16:47:39.306Z",
+        "updatedAt": "2026-05-02T16:47:51.222Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
