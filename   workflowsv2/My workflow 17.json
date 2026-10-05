@@ -1,0 +1,89 @@
+{
+    "id": "QwK3HY2mkzQaKsTH",
+    "name": "My workflow 17",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-07-13T12:16:16.321Z",
+    "updatedAt": "2026-07-13T12:19:14.795Z",
+    "isArchived": false,
+    "versionId": "42995678-1c5d-456b-a9f9-ef1ab5023e3a",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -384,
+                -48
+            ],
+            "id": "a6c418b8-3573-4f45-a70a-3d0125e937b8",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "authentication": "databaseToken",
+                "tableId": 75,
+                "additionalOptions": {}
+            },
+            "type": "n8n-nodes-base.baserow",
+            "typeVersion": 1.1,
+            "position": [
+                -176,
+                -48
+            ],
+            "id": "3ebb6b9a-2ea3-411b-a590-2e5298d4995c",
+            "name": "Get many rows",
+            "credentials": {
+                "baserowTokenApi": {
+                    "id": "Oe1kSqpIJLyeX7m7",
+                    "name": "Baserow Token account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Get many rows",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "QwK3HY2mkzQaKsTH",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-07-13T12:16:16.321Z",
+            "updatedAt": "2026-07-13T12:16:16.321Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
