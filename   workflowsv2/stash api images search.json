@@ -1,0 +1,545 @@
+{
+    "id": "nIHaUsFLp8AToRw8",
+    "name": "stash api images search",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-08-09T16:09:36.066Z",
+    "updatedAt": "2026-08-09T17:06:46.292Z",
+    "isArchived": false,
+    "versionId": "334f2d8b-d334-4139-be00-706350bc78da",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "limit"
+                        },
+                        {
+                            "name": "offset"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -448,
+                -224
+            ],
+            "id": "a842d161-c931-4580-afac-37ae3ee71bea",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                            "name": "action",
+                            "value": "={{ $('Config1').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.result",
+                            "value": "={{ $json.result }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1264,
+                -240
+            ],
+            "id": "c3cb99ac-c217-4fde-af6f-e00a8141e9f3",
+            "name": "Action close1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1488,
+                -240
+            ],
+            "id": "8e72c53f-2b9b-425c-99b7-da62b58e6387",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTIme",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -224,
+                -224
+            ],
+            "id": "14f184b3-6ff6-469e-a522-0496d19e7ec3",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b9fe5bd0-88f2-468c-b171-6ae59942af8e",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "5eae11be-3dd8-433b-8527-c274cc89ea68",
+                            "name": "config.ApiKey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJ0YWN0aWs4Iiwic3ViIjoiQVBJS2V5IiwiaWF0IjoxNzY4NTc3Mjk0fQ.rvMjLZHg0P6k5s4Npu07fat-xFutxTeyAIlR2pY2yU8",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d3085adb-4290-429c-9d89-7546f8203e1f",
+                            "name": "config.apiUrl",
+                            "value": "http://192.168.2.243:9999/graphql",
+                            "type": "string"
+                        },
+                        {
+                            "id": "dd2ea3b8-7a03-49cc-958b-de90346106f9",
+                            "name": "config.images.query",
+                            "value": "query getImages ($filter: FindFilterType) { findImages(     filter: $filter ) {     images {       date       details       files {         basename         created_at         format         height         id         mod_time         parent_folder_id         path         size         updated_at         width       }       id       o_counter       organized       paths {         image         preview         thumbnail       }       performers {         alias_list         birthdate         career_end         country         created_at         gender         favorite         ethnicity         details         disambiguation         death_date         hair_color         height_cm         id         name         rating100         scene_count         url         urls         weight         tattoos         twitter         updated_at       }       studio {         id         name         url         urls       }       rating100       tags {         aliases         id         name       }       title       updated_at       url       urls       visual_files {         ... on VideoFile {           id           basename           created_at           duration           format           frame_rate           height           mod_time           path           size           updated_at           video_codec           width         }         ... on ImageFile {           id           basename           created_at           format           height           mod_time           path           size           updated_at           width         }       }     }     megapixels   }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6c577797-003b-454b-837e-0878178c2adc",
+                            "name": "config.images.variables.filter.page",
+                            "value": 0,
+                            "type": "number"
+                        },
+                        {
+                            "id": "6be243ee-5fc9-4eb7-90f4-280732038ab9",
+                            "name": "config.images.variables.filter.per_page",
+                            "value": 20,
+                            "type": "number"
+                        },
+                        {
+                            "id": "9e43c5e1-108d-4f8d-bd3c-c8904a35862b",
+                            "name": "config.images.variables.filter.sort",
+                            "value": "created_at",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ed983d5e-6e96-4ca0-824d-6335046b166e",
+                            "name": "config.images.variables.filter.direction",
+                            "value": "DESC",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                0,
+                -224
+            ],
+            "id": "b40eba5a-f5ae-4ea8-a5ac-f170dc5d7a42",
+            "name": "Config1"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.data.allScenes = item.json.data.allScenes.filter(x => (x?.files?.[0]?.path || \"\").includes('redgifs'))\n\n  let result = []\n  for(let s of item.json.data.allScenes){\n\n    let f = s.files?.[0]?.path\n    if(!f){\n      continue\n    }\n\n    let name =  f.split('/')\n    name = name[name.length -1]\n    name = name.split('.')\n    name = name.slice(0, name.length -1)\n    name = name.join('.')\n\n    name = name.replace('redgifs_', '')\n\n    name = \"https://www.redgifs.com/watch/\" + name\n    if (s.url != name){\n      s.url = name\n      result.push(s)\n    }\n  }\n  item.json = {result: result}\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                656,
+                -576
+            ],
+            "id": "cb1d40a8-4531-410d-b42b-1aed0cb158d3",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $('Config1').item.json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $('Config1').item.json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"query\": \"mutation SceneUpdate($input: SceneUpdateInput!) { sceneUpdate(input: $input) { id url files { id path } } }\",\n  \"variables\": {\n    \"input\": {\n      \"id\": \"{{ $json.id }}\",\n      \"url\": \"{{ $json.url }}\"\n     \n    }\n  }\n}",
+                "options": {
+                    "batching": {
+                        "batch": {
+                            "batchSize": 1
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                1024,
+                -240
+            ],
+            "id": "e825e73b-c8e5-4752-95f4-98c1fe6a7b47",
+            "name": "Add metadata"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                800,
+                -224
+            ],
+            "id": "d5740ecc-c61a-4ca6-9e2f-f0ceab9518a7",
+            "name": "Split Out"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0cd08f0a-c123-4ab9-8312-5670ab772f6e",
+                            "name": "config.scraper",
+                            "value": "ScrapeWithURL",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1248,
+                -416
+            ],
+            "id": "4f759f23-f288-4c2c-bc51-253116f768fa",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "content": "## \nAdd url to redgifs videos downloaded based on file name\n"
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                112,
+                -528
+            ],
+            "typeVersion": 1,
+            "id": "8905b677-250b-4cb7-8dcb-000e3a0233a4",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={ \n  \"query\": \"query MyQuery { allScenes { id\\n files {\\n basename\\n id\\n path\\n }\\n title\\n url\\n urls\\n }\\n }\"\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                448,
+                -576
+            ],
+            "id": "39e025d4-f347-4b61-8c80-7df62d1a7fa0",
+            "name": "Get scenes"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $json.config.apiUrl }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "ApiKey",
+                            "value": "={{ $json.config.ApiKey }}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "value": "={{ $json.config.images.query }}"
+                        },
+                        {
+                            "name": "variables",
+                            "value": "={{ $json.config.images.variables }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                288,
+                -224
+            ],
+            "id": "fdac66f4-d9d8-4543-bffb-179255328ff9",
+            "name": "Get images"
+        },
+        {
+            "parameters": {
+                "jsCode": "\n\nfunction mapPerformer(record){\n\n  let result = {\n    \"@type\": \"Person\",\n     \"@id\": record?.url ? (record?.url || \"\") + \"#person\" : undefined,\n    \"name\": record?.name,\n    \"url\": record?.url,\n    \"image\": record?.image_path\n  }\n\n  return result\n}\n\nfunction mapStudio(record){\n\n   let result = {\n      \"@type\": \"Organization\",\n     \"@id\": record?.url ? (record?.url || \"\") + \"#organization\" : undefined,\n      \"name\": record?.name,\n      \"url\": record?.url\n    } \n\n  return result\n}\n\nfunction mapRating(scene){\n\n  let result =  {\n    \"@type\": \"AggregateRating\",\n    \"ratingValue\": scene.rating10 / 2, \n    \"bestRating\": \"5\",\n    \"worstRating\": \"1\"\n  }\n  return result\n}\n\nfunction getVideoRecord(record){\n\n  let result = {\n    \"@type\": \"VideoObject\",\n    \"@id\": record?.url ? (record?.url || \"\") + \"#videoobject\" : undefined,\n    \"url\": record?.url,\n    \"about\": {\n      \"@type\": \"DataPoint\",\n      \"@id\": `https://stash.tactik8.com/scenes/${record.id}#datapoint`,\n      \"identifier\": record.id\n    \n    }\n  }\n\n  return result\n  \n}\n\nfunction getImageRecord(record){\n\n  let result = {\n    \"@type\": \"ImageObject\",\n    \"@id\": record?.url ? (record?.url || \"\") + \"#imageobject\" : undefined,\n    \"url\": record?.url,\n    \"about\": {\n      \"@type\": \"DataPoint\",\n      \"@id\": `https://stash.tactik8.com/images/${record.id}#datapoint`,\n      \"identifier\": record.id\n    \n    }\n  }\n\n  return result\n}\n\n\nfunction mapScene(record){\n\n  if()\n\n  \n}\n\n\nfunction mapStashSceneToSchema(scene) {\n  // Helper to convert seconds to ISO 8601 duration (PT#H#M#S)\n  const formatDuration = (seconds) => {\n    if (!seconds) return undefined;\n    const h = Math.floor(seconds / 3600);\n    const m = Math.floor((seconds % 3600) / 60);\n    const s = Math.floor(seconds % 60);\n    return `PT${h > 0 ? h + 'H' : ''}${m > 0 ? m + 'M' : ''}${s}S`;\n  };\n\n  const primaryFile = scene.files && scene.files[0];\n\n  // Helper to convert bytes to human-readable string (e.g., 1.2 GB)\n  const formatBytes = (bytes) => {\n    if (!bytes) return undefined;\n    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];\n    const i = Math.floor(Math.log(bytes) / Math.log(1024));\n    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;\n  };\n\n  \n\n  \n  let ld = {\n    \"@context\": \"https://schema.org\",\n    \"@type\": \"VideoObject\",\n    \"name\": scene.title || \"Untitled Scene\",\n    \"description\": scene.details || \"\",\n    \"thumbnailUrl\": [scene.paths?.screenshot || scene.paths?.preview],\n    \"uploadDate\": scene.date || new Date().toISOString().split('T')[0],\n    \"duration\": formatDuration(scene.file?.duration),\n    \"contentUrl\": scene.paths?.stream || \"\",\n    \"embedUrl\": scene.paths?.stream || \"\",\n    \"keywords\": scene.tags?.map(t => t.name).join(\", \"),\n    \"url\": scene?.urls || [],\n\n    // Technical File Details\n    \"associatedMedia\": scene.files?.map(file => ({\n      \"@type\": \"MediaObject\",\n      \"contentUrl\": `file://${file.path}`,\n      \"contentSize\": formatBytes(file.size),\n      \"encodingFormat\": \"video/mp4\", // Or detect via extension\n      \"bitrate\": file.bit_rate ? `${(file.bit_rate / 1000).toFixed(0)} kbps` : undefined,\n      \"width\": file.width,\n      \"height\": file.height\n    })),\n\n   \n  \n    // Mapping the Studio\n    \"productionCompany\": scene.studio ? {\n      \"@type\": \"Organization\",\n      \"name\": scene.studio.name,\n      \"url\": scene.studio.url\n    } : undefined,\n\n    // Mapping Performers\n    \"actor\": scene.performers?.map(performer => ({\n      \"@type\": \"Person\",\n      \"name\": performer.name,\n      \"url\": performer.url,\n      \"image\": performer.image_path\n    })),\n\n    // Mapping Internal Rating (Stash uses 1-5)\n    \"aggregateRating\": scene.rating10 ? {\n      \"@type\": \"AggregateRating\",\n      \"ratingValue\": scene.rating10 / 2, // Converting 10-point scale to 5-star if needed\n      \"bestRating\": \"5\",\n      \"worstRating\": \"1\"\n    } : undefined\n\n\n\n    \n  };\n  \n     // 1. Add Static Screenshot\n  if (scene.paths?.screenshot) {\n    ld.thumbnail = ld?.thumbnail || []\n    ld.thumbnail = Array.isArray(ld.thumbnail) ? ld.thumbnail : [ld.thumbnail]\n    ld.thumbnail.push({\n      \"@type\": \"ImageObject\",\n      \"name\": \"Static Screenshot\",\n      \"contentUrl\": scene.paths.screenshot\n    });\n  }\n\n  // 2. Add Animated Preview (GIF/WebP)\n  if (scene.paths?.preview) {\n    ld.thumbnail = ld?.thumbnail || []\n    ld.thumbnail = Array.isArray(ld.thumbnail) ? ld.thumbnail : [ld.thumbnail]\n    ld.thumbnail.push({\n      \"@type\": \"ImageObject\",\n      \"name\": \"Animated Preview\",\n      \"contentUrl\": scene.paths.preview,\n      \"encodingFormat\": \"image/webp\" // Stash usually uses WebP for previews\n    });\n  }\n\n  // 3. Add Sprite Sheet\n  if (scene.paths?.sprite) {\n    ld.associatedMedia = ld?.associatedMedia || []\n    ld.associatedMedia = Array.isArray(ld.associatedMedia) ? ld.associatedMedia : [ld.associatedMedia]\n    ld.associatedMedia.push({\n       \n      \"@type\": \"ImageObject\",\n      \"name\": \"Scene Sprite Sheet\",\n      \"description\": \"Scrubbing sprite sheet for player seek bar\",\n      \"contentUrl\": scene.paths.sprite,\n      // Include the VTT file as a related resource if available\n      \"mainEntityOfPage\": scene.paths.vtt || undefined \n    });\n  }\n\n  \n\n  // 5. Map a Video Preview (if your Stash setup generates mp4 previews)\n  if (scene.paths?.preview) {\n    ld.subjectOf = ld?.subjectOf || []\n    ld.subjectOf = Array.isArray(ld.subjectOf) ? ld.subjectOf : [ld.subjectOf]\n    ld.subjectOf.push({\n      \"@type\": \"VideoObject\",\n      \"name\": \"Scene Preview Clip\",\n      \"contentUrl\": scene.paths.preview,\n      \"description\": \"Short teaser of the full scene\"\n    });\n  }\n\n  return ld\n}\n\n\n\n// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.data.allScenes = item.json.data.allScenes.filter(x => (x?.files?.[0]?.path || \"\").includes('redgifs'))\n\n  let result = []\n  for(let s of item.json.data.allScenes){\n\n    let f = s.files?.[0]?.path\n    if(!f){\n      continue\n    }\n\n    let name =  f.split('/')\n    name = name[name.length -1]\n    name = name.split('.')\n    name = name.slice(0, name.length -1)\n    name = name.join('.')\n\n    name = name.replace('redgifs_', '')\n\n    name = \"https://www.redgifs.com/watch/\" + name\n    if (s.url != name){\n      s.url = name\n      result.push(s)\n    }\n  }\n  item.json = {result: result}\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                576,
+                -32
+            ],
+            "id": "31079612-2bc1-4610-890f-aef2d89e2823",
+            "name": "Code in JavaScript1"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action close1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config1": {
+            "main": [
+                [
+                    {
+                        "node": "Get images",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out": {
+            "main": [
+                [
+                    {
+                        "node": "Add metadata",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add metadata": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get scenes": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get images": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": {
+        "node:Schedule Trigger": {
+            "recurrenceRules": [
+                null
+            ],
+            "recurrenceRuleSignatures": [
+                null
+            ]
+        }
+    },
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {}
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "nIHaUsFLp8AToRw8",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-08-09T16:09:36.066Z",
+            "updatedAt": "2026-08-09T16:09:36.066Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
