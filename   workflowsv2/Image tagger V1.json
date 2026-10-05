@@ -1,0 +1,387 @@
+{
+    "id": "uWXqbtATJi892cBQ",
+    "name": "Image tagger V1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-09-02T21:29:54.296Z",
+    "updatedAt": "2026-09-27T16:55:44.904Z",
+    "isArchived": false,
+    "versionId": "ed8ea470-a7f4-4739-96b5-489ef2fe5b91",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                -16
+            ],
+            "id": "619d802f-9cac-43ba-ad70-e666d968473e",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "operation": "list",
+                "path": "/media2/pictures/X-Art.com 18.02.26.Leila.Honeymoon.Sex.XXX.IMAGESET-FuGLi/X-Art.com_18.02.26.Leila.Honeymoon.Sex.XXX.IMAGESET-FuGLi",
+                "recursive": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.ftp",
+            "typeVersion": 1.1,
+            "position": [
+                448,
+                -16
+            ],
+            "id": "46340ed6-0d43-4284-81d4-fd470c994e36",
+            "name": "FTP",
+            "credentials": {
+                "ftp": {
+                    "id": "qTaDbG5yNBTTQ5Nv",
+                    "name": "FTP account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "c4d213cd-b629-448f-852c-fa4c064278aa",
+                            "leftValue": "={{ $json.path }}",
+                            "rightValue": ".jpg",
+                            "operator": {
+                                "type": "string",
+                                "operation": "endsWith"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.3,
+            "position": [
+                672,
+                -16
+            ],
+            "id": "8c430326-6d43-4ffd-a2e4-406dc3155852",
+            "name": "Filter"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Describe the image provided.",
+                "options": {
+                    "systemMessage": "={{ $('Edit Fields').item.json.config.systemPrompt }}",
+                    "passthroughBinaryImages": true,
+                    "passthroughBinaryPdfs": false
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                1568,
+                -16
+            ],
+            "id": "507a3d46-ea82-41fa-bb82-98a23186c56b",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "maxItems": 4,
+                "keep": "lastItems"
+            },
+            "type": "n8n-nodes-base.limit",
+            "typeVersion": 1,
+            "position": [
+                896,
+                -16
+            ],
+            "id": "ded7f2a8-c29c-4cf4-9bc1-a620d3cf81ed",
+            "name": "Limit"
+        },
+        {
+            "parameters": {
+                "model": "huihui_ai/qwen2.5-vl-abliterated:latest",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                1472,
+                224
+            ],
+            "id": "e7fb6512-1d42-4f05-937c-44bc50a1bec0",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "path": "={{ $json.path }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.ftp",
+            "typeVersion": 1.1,
+            "position": [
+                1120,
+                -16
+            ],
+            "id": "d93a71b9-7c05-4444-a209-a416e213da9d",
+            "name": "FTP1",
+            "credentials": {
+                "ftp": {
+                    "id": "qTaDbG5yNBTTQ5Nv",
+                    "name": "FTP account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "resize",
+                "width": 300,
+                "height": 300,
+                "resizeOption": "onlyIfLarger",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.editImage",
+            "typeVersion": 1,
+            "position": [
+                1344,
+                -16
+            ],
+            "id": "bf16987c-63ff-4387-afba-5d27ce961965",
+            "name": "Edit Image"
+        },
+        {
+            "parameters": {
+                "operation": "list",
+                "path": "/media2/pictures/1",
+                "recursive": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.ftp",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                320
+            ],
+            "id": "b8c319dc-9350-4c55-ad2b-b6f9e0d37d6d",
+            "name": "FTP2",
+            "credentials": {
+                "ftp": {
+                    "id": "qTaDbG5yNBTTQ5Nv",
+                    "name": "FTP account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "dee4387a-e489-4169-8553-2cbbaea52300",
+                            "name": "config.systemPrompt",
+                            "value": "Role:\nYou are a pornographic image tagger. \n\nTask:\nYou tag images based on different dimensions from a list of tags. \nWhen appropriate you can pick more than one tag per dimensions.\nOnly apply a tag if probability is high. \n\nHere are the dimensions to evaluate and the list of tags associated:\n- sexual position: standing, sitting, missionary, doggy style, pronebone, 69\n- number of participants: onesome, twosome, threesome, foursome, group\n- setting: public, outside, inside, kitchen, bedroom, living room, dungeon, bathroom, car\n- sexual act: fellatio, cunnilingus, vaginal penetration, anal penetration, vaginal fingering, anal fingering\n\noutput:\nThe output should be a list of tags separated with comma, without anything else. \n\n",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f9bde0d5-2659-46cf-8d75-e0fcd98b7533",
+                            "name": "config.systemPromptOLD",
+                            "value": "Role: You are a pornographic image describer.  Task: You describe the image provided.  You identify the sexual position performed if any. You identify the setting (outside, inside, kitchen, bedroom, living room, etc). You identify the people in the picture, for each defining: - gender - skin color - hair color - clothing - position (standing, kneeling, laying down, prone, etc...) - state of undress (full, topless, bottomless, underwear, clothed)",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                -16
+            ],
+            "id": "9b6b5ce7-13e3-4ae5-9c12-cb45b35509f7",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "endpointUrl": "https://karakeep.tactik8.com/mcp",
+                "serverTransport": "sse",
+                "authentication": "headerAuth",
+                "include": "selected",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1.4,
+            "position": [
+                1584,
+                240
+            ],
+            "id": "9900bd55-c8ef-4cd1-a49a-4ad7e55f8fdb",
+            "name": "MCP Client",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "J1oWm6yIJTVUQPiq",
+                    "name": "Header Auth account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-karakeep.karakeep",
+            "typeVersion": 1,
+            "position": [
+                1056,
+                592
+            ],
+            "id": "d178cb4a-b719-4e2e-9b46-d890b2fcecd7",
+            "name": "Get many bookmarks",
+            "credentials": {
+                "karakeepApi": {
+                    "id": "d38V0wSWTe8hTf3Q",
+                    "name": "Karakeep account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "FTP": {
+            "main": [
+                [
+                    {
+                        "node": "Filter",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter": {
+            "main": [
+                [
+                    {
+                        "node": "Limit",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Limit": {
+            "main": [
+                [
+                    {
+                        "node": "FTP1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "FTP1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Image": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "FTP",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MCP Client": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "uWXqbtATJi892cBQ",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-09-02T21:29:54.296Z",
+            "updatedAt": "2026-09-02T21:29:54.296Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
