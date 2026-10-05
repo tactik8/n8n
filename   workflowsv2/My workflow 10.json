@@ -1,0 +1,86 @@
+{
+    "id": "VrZ6QbJcv5o6uPFN",
+    "name": "My workflow 10",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-05-08T11:20:47.372Z",
+    "updatedAt": "2026-05-08T11:21:14.337Z",
+    "isArchived": false,
+    "versionId": "58c8f6ad-63c2-4f9a-aa94-b990b1337dc4",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "1fa0d4c8-8c8d-41ab-abd4-41f7b3c24e22",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                208,
+                0
+            ],
+            "id": "ecf5a2c4-fbea-4fe6-b35d-67df6ef541af",
+            "name": "Code in JavaScript"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "https://www.duchesnay.com/en"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "VrZ6QbJcv5o6uPFN",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-08T11:20:47.372Z",
+            "updatedAt": "2026-05-08T11:20:47.372Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
