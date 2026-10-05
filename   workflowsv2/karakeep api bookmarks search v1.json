@@ -1,0 +1,630 @@
+{
+    "id": "J5r71fBePBjwGlY4",
+    "name": "karakeep api bookmarks search v1",
+    "active": true,
+    "activeVersionId": "b927fce2-537a-45e9-951d-b8b85db5af14",
+    "createdAt": "2026-05-08T11:48:54.328Z",
+    "updatedAt": "2026-05-08T11:48:54.328Z",
+    "isArchived": false,
+    "versionId": "b927fce2-537a-45e9-951d-b8b85db5af14",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -480,
+                -112
+            ],
+            "id": "ea6f14ce-47e3-4124-a889-ab68460bb456",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "content": "## I'm a note \nak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44",
+                "height": 192
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -32,
+                -464
+            ],
+            "typeVersion": 1,
+            "id": "d55ad1ee-d8c1-4e87-aeaf-b3b17fecbcba",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "url": "https://karakeep.tactik8.com/api/v1/bookmarks",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer ak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44"
+                        },
+                        {
+                            "name": "Accept",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "options": {
+                    "pagination": {
+                        "pagination": {
+                            "parameters": {
+                                "parameters": [
+                                    {
+                                        "name": "cursor",
+                                        "value": "={{ $response.body.nextCursor || \"\" }}"
+                                    }
+                                ]
+                            },
+                            "paginationCompleteWhen": "other",
+                            "completeExpression": "={{ $response.body?.nextCursor == undefined }}"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                -32,
+                -112
+            ],
+            "id": "ac0a16c8-5d1c-4df5-a538-8ef2332c6fc1",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "fieldsToAggregate": {
+                    "fieldToAggregate": [
+                        {
+                            "fieldToAggregate": "bookmarks"
+                        }
+                    ]
+                },
+                "options": {
+                    "mergeLists": true
+                }
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                192,
+                -112
+            ],
+            "id": "0800752c-ec75-4050-a1c3-2d953b2c798a",
+            "name": "Aggregate"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let bookmarks = []\n  for(let m of item.json.bookmarks){\n\n    let r = {\n      \"@type\": \"BookmarkAction\",\n      \"@id\": \"https://karakeep.tactik8.com/bookmarks/\" + m.id,\n      \"object\":{\n        \"@type\": \"WebPage\",\n        \"@id\": m.content.url + \"#webpage\",\n        \"name\": m.content?.title,\n        \"url\": m.content.url,\n        \"description\": m.content.description\n      },\n      \"startTime\": m.createdAt,\n      \"endTime\": m.modifiedAt,\n      \"agent\": {\n        \"@type\": \"Person\",\n        \"@id\": \"https://karakeep.tactik8.com/users/\" + m.userId\n      }\n     \n    }\n    bookmarks.push(r)\n    \n  }\n\n\n  item.json.results = (item.json.results || []).concat(bookmarks)\n}\n\n  return $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                416,
+                -112
+            ],
+            "id": "f8e12124-9e67-4eb2-8d5e-ca59b4008f89",
+            "name": "Schema conversion1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                            "name": "action",
+                            "value": "={{ $('Action init').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.result",
+                            "value": "={{ $json.results }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                656,
+                -112
+            ],
+            "id": "5cadc6ab-c49e-49a3-9c86-c9de05387429",
+            "name": "Action close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                896,
+                -112
+            ],
+            "id": "f52867f7-61e6-4d9d-a6ae-db8e84b80286",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                            "name": "action.@type",
+                            "value": "SearchAction",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.object",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -240,
+                -112
+            ],
+            "id": "016aab03-9248-4141-b59a-b9e2907d5543",
+            "name": "Action init"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action init",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request1": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate": {
+            "main": [
+                [
+                    {
+                        "node": "Schema conversion1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schema conversion1": {
+            "main": [
+                [
+                    {
+                        "node": "Action close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action init": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {}
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "J5r71fBePBjwGlY4",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-05-08T11:48:54.328Z",
+            "updatedAt": "2026-05-08T11:48:54.328Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "b927fce2-537a-45e9-951d-b8b85db5af14",
+        "workflowId": "J5r71fBePBjwGlY4",
+        "nodes": [
+            {
+                "parameters": {
+                    "inputSource": "passthrough"
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -480,
+                    -112
+                ],
+                "id": "ea6f14ce-47e3-4124-a889-ab68460bb456",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "content": "## I'm a note \nak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44",
+                    "height": 192
+                },
+                "type": "n8n-nodes-base.stickyNote",
+                "position": [
+                    -32,
+                    -464
+                ],
+                "typeVersion": 1,
+                "id": "d55ad1ee-d8c1-4e87-aeaf-b3b17fecbcba",
+                "name": "Sticky Note"
+            },
+            {
+                "parameters": {
+                    "url": "https://karakeep.tactik8.com/api/v1/bookmarks",
+                    "sendHeaders": true,
+                    "headerParameters": {
+                        "parameters": [
+                            {
+                                "name": "Authorization",
+                                "value": "Bearer ak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44"
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "pagination": {
+                            "pagination": {
+                                "parameters": {
+                                    "parameters": [
+                                        {
+                                            "name": "cursor",
+                                            "value": "={{ $response.body.nextCursor || \"\" }}"
+                                        }
+                                    ]
+                                },
+                                "paginationCompleteWhen": "other",
+                                "completeExpression": "={{ $response.body?.nextCursor == undefined }}"
+                            }
+                        }
+                    }
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    -32,
+                    -112
+                ],
+                "id": "ac0a16c8-5d1c-4df5-a538-8ef2332c6fc1",
+                "name": "HTTP Request1"
+            },
+            {
+                "parameters": {
+                    "fieldsToAggregate": {
+                        "fieldToAggregate": [
+                            {
+                                "fieldToAggregate": "bookmarks"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "mergeLists": true
+                    }
+                },
+                "type": "n8n-nodes-base.aggregate",
+                "typeVersion": 1,
+                "position": [
+                    192,
+                    -112
+                ],
+                "id": "0800752c-ec75-4050-a1c3-2d953b2c798a",
+                "name": "Aggregate"
+            },
+            {
+                "parameters": {
+                    "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n\n  let bookmarks = []\n  for(let m of item.json.bookmarks){\n\n    let r = {\n      \"@type\": \"BookmarkAction\",\n      \"@id\": \"https://karakeep.tactik8.com/bookmarks/\" + m.id,\n      \"object\":{\n        \"@type\": \"WebPage\",\n        \"@id\": m.content.url + \"#webpage\",\n        \"name\": m.content?.title,\n        \"url\": m.content.url,\n        \"description\": m.content.description\n      },\n      \"startTime\": m.createdAt,\n      \"endTime\": m.modifiedAt,\n      \"agent\": {\n        \"@type\": \"Person\",\n        \"@id\": \"https://karakeep.tactik8.com/users/\" + m.userId\n      }\n     \n    }\n    bookmarks.push(r)\n    \n  }\n\n\n  item.json.results = (item.json.results || []).concat(bookmarks)\n}\n\n  return $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    416,
+                    -112
+                ],
+                "id": "f8e12124-9e67-4eb2-8d5e-ca59b4008f89",
+                "name": "Schema conversion1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "4c6e3681-a8f0-4857-8ef1-3097428a5e2c",
+                                "name": "action",
+                                "value": "={{ $('Action init').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                                "name": "action.result",
+                                "value": "={{ $json.results }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    656,
+                    -112
+                ],
+                "id": "5cadc6ab-c49e-49a3-9c86-c9de05387429",
+                "name": "Action close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "0c6b4270-978f-4c54-9a2c-7f13d6ef39f4",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    896,
+                    -112
+                ],
+                "id": "f52867f7-61e6-4d9d-a6ae-db8e84b80286",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                                "name": "action.@type",
+                                "value": "SearchAction",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "54644264-e916-4c78-b528-17dc6947debf",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                                "name": "action.object",
+                                "value": "={{ $json }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -240,
+                    -112
+                ],
+                "id": "016aab03-9248-4141-b59a-b9e2907d5543",
+                "name": "Action init"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action init",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request1": {
+                "main": [
+                    [
+                        {
+                            "node": "Aggregate",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Aggregate": {
+                "main": [
+                    [
+                        {
+                            "node": "Schema conversion1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Schema conversion1": {
+                "main": [
+                    [
+                        {
+                            "node": "Action close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action init": {
+                "main": [
+                    [
+                        {
+                            "node": "HTTP Request1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version b927fce2",
+        "description": "",
+        "autosaved": false,
+        "createdAt": "2026-05-08T11:48:54.328Z",
+        "updatedAt": "2026-06-21T18:34:06.350Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
