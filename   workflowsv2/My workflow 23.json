@@ -1,0 +1,79 @@
+{
+    "id": "cNCq2rmgdDYcjXq5",
+    "name": "My workflow 23",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-10-04T19:02:32.208Z",
+    "updatedAt": "2026-10-04T19:03:21.355Z",
+    "isArchived": false,
+    "versionId": "751d7e0d-40dd-4780-83e1-115d58cf0a0b",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "path": "15ae129f-cb79-4e69-b4e7-3be0af24fbf9"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "8d3312ae-4fb5-4aa5-8f59-ac8ee141f731",
+            "name": "MCP Server Trigger",
+            "webhookId": "15ae129f-cb79-4e69-b4e7-3be0af24fbf9"
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.5,
+            "position": [
+                96,
+                208
+            ],
+            "id": "9ba0aa53-c539-4b0a-a28c-7742a9035065",
+            "name": "HTTP Request"
+        }
+    ],
+    "connections": {
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "cNCq2rmgdDYcjXq5",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-04T19:02:32.208Z",
+            "updatedAt": "2026-10-04T19:02:32.208Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
