@@ -1,0 +1,281 @@
+{
+    "id": "Uzt51OjhwN9jNgDA",
+    "name": "schema get id",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-04-13T20:31:22.723Z",
+    "updatedAt": "2026-06-12T13:23:32.240Z",
+    "isArchived": false,
+    "versionId": "22770488-9259-44a2-9494-a31aaf575bb7",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "content"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "fe523a59-62c2-41ba-a31d-43e7e70ada16",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6eee53fb-09fd-4a56-aa3e-c452ffa135fa",
+                            "name": "action.@type",
+                            "value": "SearchAction",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e2a1e81e-a6dc-4b13-af70-8cb16ad12fd8",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7c87198b-5c91-4fa1-9f81-f5e4e75d98f7",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "54644264-e916-4c78-b528-17dc6947debf",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9d0a266f-734c-4b27-8f4c-a8cf625465a5",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b8c9630d-e3fe-4a14-857c-bbac90465ce4",
+                            "name": "action.object",
+                            "value": "={{ $json }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                240,
+                0
+            ],
+            "id": "f372b346-9afa-45ab-a0aa-f8d5320c7ba4",
+            "name": "Action init"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.config.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.config.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                736,
+                0
+            ],
+            "id": "8b006ff1-e6de-4d0d-a833-8a3696c78a50",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "model": "granite4:1b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                608,
+                208
+            ],
+            "id": "cadf3bb4-9389-4294-9693-e2a71c8263a6",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "c5ddfdea-386a-4a32-bbe4-a8ad78b40030",
+                            "name": "config.systemPrompt",
+                            "value": "You are a highly precise Entity Resolution Agent specializing in linking real-world entities, text fragments, or database records to their official Wikipedia identifiers. Your primary goal is to find the exact Wikipedia JSON-LD `@id` (the standard Wikipedia article URL) for the entity described.  \n\n### Objective Analyze the provided input (which may be raw text, a structured record, or an entity name) and determine its corresponding Wikipedia JSON-LD ID.   \n### Instructions \n1. **Identify the Core Entity:** Determine the primary person, place, organization, concept, or object being referenced in the input. Use context clues, dates, locations, or surrounding text to resolve duplicates or ambiguous names. \n2. **Retrieve the Wikipedia URL:** Find the correct Wikipedia article URL for this specific entity. Wikipedia uses this URL as its canonical JSON-LD identifier (e.g., `https://en.wikipedia.org/wiki/Donald_Trump`). \n3. **Handle Ambiguity:** If the input matches multiple entities (e.g., \"Apple\" the company vs. \"Apple\" the fruit), look for contextual clues in the input to disambiguate. If the context is missing, pick the most globally prominent entity. \n4. **Format Output:** Your output must strictly be a valid JSON object. Do not include any markdown formatting wrappers (like ```json), conversational text, or explanations.   \n\n### Output Schema Your response must match this exact JSON structure: \n{   \n    \"entity_found\": true, // Boolean: true if a specific matching page is found, false otherwise   \n    \"wikipedia_id\": \"[https://en.wikipedia.org/wiki/Exact_Page_Name](https://en.wikipedia.org/wiki/Exact_Page_Name)\", // String: The canonical Wikipedia URL, or null if entity_found is false   \n    \"confidence_score\": 0.95, // Float: Your confidence from 0.00 to 1.00 based on context match   \n    \"disambiguation_notes\": \"Brief note on why this specific entity was selected if ambiguity existed, otherwise null\" \n}  \n\n### Constraint Checklist & Strict Rules \n- Use canonical English Wikipedia links (`[https://en.wikipedia.org/wiki/](https://en.wikipedia.org/wiki/)...`). \n- If an exact match does not exist on Wikipedia, return `\"entity_found\": false` and `\"wikipedia_id\": null`. Never link to search result pages or disambiguation pages. \n- Output ONLY the raw JSON block. No introductory or concluding remarks.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "207c18fa-1e72-492c-aad8-59b0a761650a",
+                            "name": "config.userPrompt",
+                            "value": "={{ $json.action.object.content }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                448,
+                0
+            ],
+            "id": "eb6aed6b-1904-4691-8aa1-c4b8519355d5",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.4,
+            "position": [
+                896,
+                208
+            ],
+            "id": "e910993a-c4cf-4ca0-926c-103945646a45",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.1,
+            "position": [
+                704,
+                304
+            ],
+            "id": "ff67b98b-1198-463e-b44c-4fbf587f7e7f",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action init",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action init": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                []
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "content": "OpenAi"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "Uzt51OjhwN9jNgDA",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-04-13T20:31:22.723Z",
+            "updatedAt": "2026-04-13T20:31:22.723Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
