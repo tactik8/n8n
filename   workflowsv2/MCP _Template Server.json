@@ -1,0 +1,671 @@
+{
+    "id": "3SrCD0ybfRZVIS3q",
+    "name": "MCP _Template Server",
+    "active": true,
+    "activeVersionId": "fc71b5e7-c48e-4b13-a9cf-04db4a43e336",
+    "createdAt": "2026-10-05T14:20:15.806Z",
+    "updatedAt": "2026-10-05T15:03:32.338Z",
+    "isArchived": false,
+    "versionId": "fc71b5e7-c48e-4b13-a9cf-04db4a43e336",
+    "triggerCount": 1,
+    "nodes": [
+        {
+            "parameters": {
+                "path": "mcp_template",
+                "instructions": "Set of tools to manage todo items. \n- get_todo: tool to retrieve a specific todo item. \n- get_active: tool to retrieve all active todo items.\n- get_all: tool to retrieve all todo items. \n- create_todo: tool to add or replace a todo item. \n- set_todo_completed: tool to change the status of a todo item as completed. \n\nTodo items use jsonld schema.org Action properties. \nTo update a todo, you should first get it from the list in order to get the proper @id value."
+            },
+            "id": "7c631594-4bcb-4730-9b5e-1f509241eb2b",
+            "name": "MCP Server Trigger",
+            "webhookId": "2aea2c53-d1fb-4905-90d0-f7a6ed3d6f80",
+            "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+            "typeVersion": 2.1,
+            "position": [
+                192,
+                -272
+            ]
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to get a specific todo from the database by its @id property.",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "zFYrQx4bPwv98fC4",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/zFYrQx4bPwv98fC4",
+                    "cachedResultName": "MCP _Template Get"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('_id', `The @id value of the record to retrieve. `, 'string') }}"
+                    },
+                    "matchingColumns": [
+                        "@id"
+                    ],
+                    "schema": [
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "id": "a1c11437-5b15-4a5a-a8f7-d44b042d2c36",
+            "name": "get_todo",
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                48,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to search for todo items in the database. The filter argument takes in an object matching the desired parameters using jsonld schema.org Action properties. For example, { \"actionStatus\": \"ActiveActionStatus\"} would return the todos still active. ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "jAiTaxss9aevCvuJ",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/jAiTaxss9aevCvuJ",
+                    "cachedResultName": "MCP _Template Search"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "filter": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('filter', `An object representation of the values the todos should contain. \nFor example, { \"actionStatus\": \"ActiveActionStatus\"} would return the todos still active. `, 'string') }}"
+                    },
+                    "matchingColumns": [
+                        "filter"
+                    ],
+                    "schema": [
+                        {
+                            "id": "filter",
+                            "displayName": "filter",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "id": "7767be34-d692-4868-aabe-54ffca58362b",
+            "name": "search_todo",
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                224,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to create a new todo record in the database. Provide the name and it will return the @id value for the todo. ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "t8JG3A7VwcU9IxSO",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/t8JG3A7VwcU9IxSO",
+                    "cachedResultName": "MCP _Template Post"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', `The name or title of the todo item. `, 'string') }}"
+                    },
+                    "matchingColumns": [
+                        "name"
+                    ],
+                    "schema": [
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "id": "f695a85e-7441-4c31-8f88-bf3f473b75c3",
+            "name": "create_todo",
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                400,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to set a todo as completed. \nIf a todo has a particular result, it can be added in the result input (not mandatory). \nEnsure you have the proper @id value. Retrieve it from the list of all todos if required. ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "TxYvpHAns7zoxjvY",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/TxYvpHAns7zoxjvY",
+                    "cachedResultName": "MCP _Template Set Completed"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "@id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('_id', `The @id value of the todo item to update. `, 'string') }}",
+                        "result": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('result', `The result or deliverable of the todo (optional).`, 'string') }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "@id",
+                            "displayName": "@id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "result",
+                            "displayName": "result",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "id": "8c3ae419-2540-435d-be31-87c951382038",
+            "name": "set_todo_completed",
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                624,
+                -16
+            ]
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to get all active todo items. ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "mAvKDwlndg303YdR",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/mAvKDwlndg303YdR",
+                    "cachedResultName": "MCP _Template Get Active"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "id": "1a70d681-615e-450e-a5ec-dce0a62b5dec",
+            "name": "get_active",
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                -208,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "description": "Call this tool to get all todo items. ",
+                "workflowId": {
+                    "__rl": true,
+                    "value": "PiYjdB03OH38A87J",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/PiYjdB03OH38A87J",
+                    "cachedResultName": "MCP _Template Get All"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {},
+                    "matchingColumns": [],
+                    "schema": [],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                }
+            },
+            "id": "cb8f4056-3daf-4ba4-a35f-215cd1705e7a",
+            "name": "get_all",
+            "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+            "typeVersion": 2.2,
+            "position": [
+                -144,
+                0
+            ]
+        }
+    ],
+    "connections": {
+        "get_todo": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "search_todo": {
+            "ai_tool": [
+                []
+            ]
+        },
+        "create_todo": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "set_todo_completed": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "get_active": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "get_all": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "MCP Server Trigger",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "3SrCD0ybfRZVIS3q",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-05T14:20:15.806Z",
+            "updatedAt": "2026-10-05T14:20:15.806Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "fc71b5e7-c48e-4b13-a9cf-04db4a43e336",
+        "workflowId": "3SrCD0ybfRZVIS3q",
+        "nodes": [
+            {
+                "parameters": {
+                    "path": "mcp_template",
+                    "instructions": "Set of tools to manage todo items. \n- get_todo: tool to retrieve a specific todo item. \n- get_active: tool to retrieve all active todo items.\n- get_all: tool to retrieve all todo items. \n- create_todo: tool to add or replace a todo item. \n- set_todo_completed: tool to change the status of a todo item as completed. \n\nTodo items use jsonld schema.org Action properties. \nTo update a todo, you should first get it from the list in order to get the proper @id value."
+                },
+                "id": "7c631594-4bcb-4730-9b5e-1f509241eb2b",
+                "name": "MCP Server Trigger",
+                "webhookId": "2aea2c53-d1fb-4905-90d0-f7a6ed3d6f80",
+                "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+                "typeVersion": 2.1,
+                "position": [
+                    192,
+                    -272
+                ]
+            },
+            {
+                "parameters": {
+                    "description": "Call this tool to get a specific todo from the database by its @id property.",
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "zFYrQx4bPwv98fC4",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/zFYrQx4bPwv98fC4",
+                        "cachedResultName": "MCP _Template Get"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "@id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('_id', `The @id value of the record to retrieve. `, 'string') }}"
+                        },
+                        "matchingColumns": [
+                            "@id"
+                        ],
+                        "schema": [
+                            {
+                                "id": "@id",
+                                "displayName": "@id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": false
+                    }
+                },
+                "id": "a1c11437-5b15-4a5a-a8f7-d44b042d2c36",
+                "name": "get_todo",
+                "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+                "typeVersion": 2.2,
+                "position": [
+                    48,
+                    16
+                ]
+            },
+            {
+                "parameters": {
+                    "description": "Call this tool to search for todo items in the database. The filter argument takes in an object matching the desired parameters using jsonld schema.org Action properties. For example, { \"actionStatus\": \"ActiveActionStatus\"} would return the todos still active. ",
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "jAiTaxss9aevCvuJ",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/jAiTaxss9aevCvuJ",
+                        "cachedResultName": "MCP _Template Search"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "filter": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('filter', `An object representation of the values the todos should contain. \nFor example, { \"actionStatus\": \"ActiveActionStatus\"} would return the todos still active. `, 'string') }}"
+                        },
+                        "matchingColumns": [
+                            "filter"
+                        ],
+                        "schema": [
+                            {
+                                "id": "filter",
+                                "displayName": "filter",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": false
+                    }
+                },
+                "id": "7767be34-d692-4868-aabe-54ffca58362b",
+                "name": "search_todo",
+                "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+                "typeVersion": 2.2,
+                "position": [
+                    224,
+                    0
+                ]
+            },
+            {
+                "parameters": {
+                    "description": "Call this tool to create a new todo record in the database. Provide the name and it will return the @id value for the todo. ",
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "t8JG3A7VwcU9IxSO",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/t8JG3A7VwcU9IxSO",
+                        "cachedResultName": "MCP _Template Post"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', `The name or title of the todo item. `, 'string') }}"
+                        },
+                        "matchingColumns": [
+                            "name"
+                        ],
+                        "schema": [
+                            {
+                                "id": "name",
+                                "displayName": "name",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": false
+                    }
+                },
+                "id": "f695a85e-7441-4c31-8f88-bf3f473b75c3",
+                "name": "create_todo",
+                "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+                "typeVersion": 2.2,
+                "position": [
+                    400,
+                    0
+                ]
+            },
+            {
+                "parameters": {
+                    "description": "Call this tool to set a todo as completed. \nIf a todo has a particular result, it can be added in the result input (not mandatory). \nEnsure you have the proper @id value. Retrieve it from the list of all todos if required. ",
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "TxYvpHAns7zoxjvY",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/TxYvpHAns7zoxjvY",
+                        "cachedResultName": "MCP _Template Set Completed"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "@id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('_id', `The @id value of the todo item to update. `, 'string') }}",
+                            "result": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('result', `The result or deliverable of the todo (optional).`, 'string') }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "@id",
+                                "displayName": "@id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "result",
+                                "displayName": "result",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": false
+                    }
+                },
+                "id": "8c3ae419-2540-435d-be31-87c951382038",
+                "name": "set_todo_completed",
+                "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+                "typeVersion": 2.2,
+                "position": [
+                    624,
+                    -16
+                ]
+            },
+            {
+                "parameters": {
+                    "description": "Call this tool to get all active todo items. ",
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "mAvKDwlndg303YdR",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/mAvKDwlndg303YdR",
+                        "cachedResultName": "MCP _Template Get Active"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {},
+                        "matchingColumns": [],
+                        "schema": [],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": false
+                    }
+                },
+                "id": "1a70d681-615e-450e-a5ec-dce0a62b5dec",
+                "name": "get_active",
+                "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+                "typeVersion": 2.2,
+                "position": [
+                    -208,
+                    -112
+                ]
+            },
+            {
+                "parameters": {
+                    "description": "Call this tool to get all todo items. ",
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "PiYjdB03OH38A87J",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/PiYjdB03OH38A87J",
+                        "cachedResultName": "MCP _Template Get All"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {},
+                        "matchingColumns": [],
+                        "schema": [],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": false
+                    }
+                },
+                "id": "cb8f4056-3daf-4ba4-a35f-215cd1705e7a",
+                "name": "get_all",
+                "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+                "typeVersion": 2.2,
+                "position": [
+                    -144,
+                    0
+                ]
+            }
+        ],
+        "connections": {
+            "get_todo": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "MCP Server Trigger",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "search_todo": {
+                "ai_tool": [
+                    []
+                ]
+            },
+            "create_todo": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "MCP Server Trigger",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "set_todo_completed": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "MCP Server Trigger",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "get_active": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "MCP Server Trigger",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "get_all": {
+                "ai_tool": [
+                    [
+                        {
+                            "node": "MCP Server Trigger",
+                            "type": "ai_tool",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version fc71b5e7",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-05T15:03:32.348Z",
+        "updatedAt": "2026-10-05T15:03:34.380Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
