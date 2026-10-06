@@ -1,0 +1,477 @@
+{
+    "id": "jAiTaxss9aevCvuJ",
+    "name": "MCP _Template Search",
+    "active": true,
+    "activeVersionId": "d8df00af-a926-4078-b7ff-f61df85de63a",
+    "createdAt": "2026-10-05T14:20:15.935Z",
+    "updatedAt": "2026-10-05T14:27:27.108Z",
+    "isArchived": false,
+    "versionId": "d8df00af-a926-4078-b7ff-f61df85de63a",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "filter"
+                        }
+                    ]
+                }
+            },
+            "id": "bb95e916-effe-4c9a-953f-a2593e6a0833",
+            "name": "When Executed by Another Workflow",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1356c335-09e1-45f8-94b6-994c8a6bc04e",
+                            "name": "output",
+                            "value": "={{ $json.output.result }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "ee57760e-1349-4216-9d18-83ecd7bd2135",
+            "name": "Edit Fields1",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                672,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "hQIfMGH0AMhM5xjj",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/hQIfMGH0AMhM5xjj",
+                    "cachedResultName": "api_db search V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "dwv1",
+                        "tenantID": "todo",
+                        "filter": "={{ $json.filter }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "filter",
+                            "displayName": "filter",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "limit",
+                            "displayName": "limit",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "offset",
+                            "displayName": "offset",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "orderBy",
+                            "displayName": "orderBy",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "orderDirection",
+                            "displayName": "orderDirection",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "id": "49e4358f-9613-49b3-997d-cc095cfb3cbd",
+            "name": "Call 'api_db search V1'",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                448,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "11ff8fce-8928-4037-ab4b-34fe4f53e836",
+                            "name": "databaseID",
+                            "value": "dwv1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "5a2d0228-c7d5-49d9-aab0-5427bcaa2982",
+                            "name": "tenantID",
+                            "value": "template",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3c39be38-e878-4759-bb7e-099ba416f3ec",
+                            "name": "filter",
+                            "value": "={{ $json.filter || {} }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "id": "f04a23b5-cafc-4924-8fe2-0632e63dc1ab",
+            "name": "Config",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                0
+            ]
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db search V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db search V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "jAiTaxss9aevCvuJ",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-05T14:20:15.935Z",
+            "updatedAt": "2026-10-05T14:20:15.935Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "d8df00af-a926-4078-b7ff-f61df85de63a",
+        "workflowId": "jAiTaxss9aevCvuJ",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "filter"
+                            }
+                        ]
+                    }
+                },
+                "id": "bb95e916-effe-4c9a-953f-a2593e6a0833",
+                "name": "When Executed by Another Workflow",
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    0,
+                    0
+                ]
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "1356c335-09e1-45f8-94b6-994c8a6bc04e",
+                                "name": "output",
+                                "value": "={{ $json.output.result }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "id": "ee57760e-1349-4216-9d18-83ecd7bd2135",
+                "name": "Edit Fields1",
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    672,
+                    0
+                ]
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "hQIfMGH0AMhM5xjj",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/hQIfMGH0AMhM5xjj",
+                        "cachedResultName": "api_db search V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "dwv1",
+                            "tenantID": "todo",
+                            "filter": "={{ $json.filter }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "filter",
+                                "displayName": "filter",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "limit",
+                                "displayName": "limit",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "offset",
+                                "displayName": "offset",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "orderBy",
+                                "displayName": "orderBy",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "orderDirection",
+                                "displayName": "orderDirection",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "id": "49e4358f-9613-49b3-997d-cc095cfb3cbd",
+                "name": "Call 'api_db search V1'",
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    448,
+                    0
+                ]
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "11ff8fce-8928-4037-ab4b-34fe4f53e836",
+                                "name": "databaseID",
+                                "value": "dwv1",
+                                "type": "string"
+                            },
+                            {
+                                "id": "5a2d0228-c7d5-49d9-aab0-5427bcaa2982",
+                                "name": "tenantID",
+                                "value": "template",
+                                "type": "string"
+                            },
+                            {
+                                "id": "3c39be38-e878-4759-bb7e-099ba416f3ec",
+                                "name": "filter",
+                                "value": "={{ $json.filter || {} }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "includeOtherFields": true,
+                    "options": {}
+                },
+                "id": "f04a23b5-cafc-4924-8fe2-0632e63dc1ab",
+                "name": "Config",
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    224,
+                    0
+                ]
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db search V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "Edit Fields1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db search V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version d8df00af",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-05T14:27:27.122Z",
+        "updatedAt": "2026-10-05T14:27:37.584Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
