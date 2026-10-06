@@ -1,0 +1,569 @@
+{
+    "id": "zFYrQx4bPwv98fC4",
+    "name": "MCP _Template Get",
+    "active": true,
+    "activeVersionId": "f5d3c8a1-f7bc-417d-91b3-b4b29afa1b8a",
+    "createdAt": "2026-10-05T14:20:15.849Z",
+    "updatedAt": "2026-10-05T14:44:13.934Z",
+    "isArchived": false,
+    "versionId": "f5d3c8a1-f7bc-417d-91b3-b4b29afa1b8a",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "@id"
+                        }
+                    ]
+                }
+            },
+            "id": "94246a70-b4d8-4d47-8bd0-db0f24ebdafc",
+            "name": "When Executed by Another Workflow",
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "AlhzQzNAkyn2CBDP",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                    "cachedResultName": "api_db get V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "tenantID": "={{ $json.tenantID }}",
+                        "record_id": "={{ $json['@id'] }}",
+                        "databaseID": "={{ $json.databaseID }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record_id",
+                            "displayName": "record_id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "id": "48d8ce7d-0225-4a06-95ea-5a093ff260ef",
+            "name": "Call 'api_db get V1'",
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                448,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "e05f308c-df90-4cff-b3c6-810228afc248",
+                            "name": "databaseID",
+                            "value": "=dwv1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "cf8265d0-ddd3-42c7-8f2e-706224223530",
+                            "name": "tenantID",
+                            "value": "=template",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e347fc16-8984-4942-a5bb-435142857385",
+                            "name": "@id",
+                            "value": "={{ $json['@id'] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "6ee7d75c-e6ad-4bfe-a250-245e8189f8cb",
+            "name": "Config",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "a31850ff-aabc-43a7-8e73-2ec87ee16a25",
+                            "leftValue": "={{ $json.output.result }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "object",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                672,
+                0
+            ],
+            "id": "b4a96d26-dde1-4c81-bded-39f84c3bb451",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "cf4d61e3-ef1d-4df2-b598-eed49b20f9b8",
+                            "name": "status",
+                            "value": "failed",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d1f61bb2-5adf-4ec8-a6f0-012146f16115",
+                            "name": "error",
+                            "value": "=No record exist with id {{ $('Config').item.json['@id'] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "6b6282f5-b3c8-45ce-98e0-157bce32f21d",
+            "name": "Return error",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                976,
+                -192
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "cf4d61e3-ef1d-4df2-b598-eed49b20f9b8",
+                            "name": "status",
+                            "value": "success",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d1f61bb2-5adf-4ec8-a6f0-012146f16115",
+                            "name": "result",
+                            "value": "={{ $json.output.result }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "819d37c2-ff61-42fe-b1bb-b48230ebeb7e",
+            "name": "Return",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                992,
+                0
+            ]
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api_db get V1'": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api_db get V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Return error",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Return",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "zFYrQx4bPwv98fC4",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-05T14:20:15.849Z",
+            "updatedAt": "2026-10-05T14:20:15.849Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "f5d3c8a1-f7bc-417d-91b3-b4b29afa1b8a",
+        "workflowId": "zFYrQx4bPwv98fC4",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "@id"
+                            }
+                        ]
+                    }
+                },
+                "id": "94246a70-b4d8-4d47-8bd0-db0f24ebdafc",
+                "name": "When Executed by Another Workflow",
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    0,
+                    0
+                ]
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "AlhzQzNAkyn2CBDP",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/AlhzQzNAkyn2CBDP",
+                        "cachedResultName": "api_db get V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "tenantID": "={{ $json.tenantID }}",
+                            "record_id": "={{ $json['@id'] }}",
+                            "databaseID": "={{ $json.databaseID }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record_id",
+                                "displayName": "record_id",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "id": "48d8ce7d-0225-4a06-95ea-5a093ff260ef",
+                "name": "Call 'api_db get V1'",
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    448,
+                    0
+                ]
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "e05f308c-df90-4cff-b3c6-810228afc248",
+                                "name": "databaseID",
+                                "value": "=dwv1",
+                                "type": "string"
+                            },
+                            {
+                                "id": "cf8265d0-ddd3-42c7-8f2e-706224223530",
+                                "name": "tenantID",
+                                "value": "=template",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e347fc16-8984-4942-a5bb-435142857385",
+                                "name": "@id",
+                                "value": "={{ $json['@id'] }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "id": "6ee7d75c-e6ad-4bfe-a250-245e8189f8cb",
+                "name": "Config",
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    224,
+                    0
+                ]
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "a31850ff-aabc-43a7-8e73-2ec87ee16a25",
+                                "leftValue": "={{ $json.output.result }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "object",
+                                    "operation": "empty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    672,
+                    0
+                ],
+                "id": "b4a96d26-dde1-4c81-bded-39f84c3bb451",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "cf4d61e3-ef1d-4df2-b598-eed49b20f9b8",
+                                "name": "status",
+                                "value": "failed",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d1f61bb2-5adf-4ec8-a6f0-012146f16115",
+                                "name": "error",
+                                "value": "=No record exist with id {{ $('Config').item.json['@id'] }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "id": "6b6282f5-b3c8-45ce-98e0-157bce32f21d",
+                "name": "Return error",
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    976,
+                    -192
+                ]
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "cf4d61e3-ef1d-4df2-b598-eed49b20f9b8",
+                                "name": "status",
+                                "value": "success",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d1f61bb2-5adf-4ec8-a6f0-012146f16115",
+                                "name": "result",
+                                "value": "={{ $json.output.result }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "id": "819d37c2-ff61-42fe-b1bb-b48230ebeb7e",
+                "name": "Return",
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    992,
+                    0
+                ]
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api_db get V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api_db get V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Return error",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Return",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version f5d3c8a1",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-05T14:44:13.957Z",
+        "updatedAt": "2026-10-05T14:44:22.354Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
