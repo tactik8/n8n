@@ -1,0 +1,757 @@
+{
+    "id": "PeYO7PlkUIxcWU3J",
+    "name": "Agent Node Selector V1",
+    "active": true,
+    "activeVersionId": "b72ace3a-fd1d-4cab-a653-14f86b5e00f7",
+    "createdAt": "2026-10-07T16:08:15.660Z",
+    "updatedAt": "2026-10-07T16:29:14.265Z",
+    "isArchived": false,
+    "versionId": "b72ace3a-fd1d-4cab-a653-14f86b5e00f7",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "responseSchema"
+                        },
+                        {
+                            "name": "complexity"
+                        },
+                        {
+                            "name": "minSize"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "695cc672-6e05-45fd-889f-22b3fa8bd147",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8f2bd30b-3108-4347-924d-f1a44d654d01",
+                            "name": "config.responseSchema",
+                            "value": "={{ $json.responseSchema }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d56b0ba0-c208-47fa-b8ad-4f86913b2199",
+                            "name": "config.complexity",
+                            "value": "={{ $json.complexity }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b0fa27e8-6398-458f-bc1b-0880e02c4a2e",
+                            "name": "config.minSize",
+                            "value": "={{ Number($json?.minSize ?? 0) }}",
+                            "type": "number"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                0
+            ],
+            "id": "5ba91c1f-83a8-41af-aa12-b76f5fdf43d6",
+            "name": "Input"
+        },
+        {
+            "parameters": {
+                "operation": "get",
+                "dataTableId": {
+                    "__rl": true,
+                    "value": "WJXDi1tNgKunbQiT",
+                    "mode": "list",
+                    "cachedResultName": "llm models",
+                    "cachedResultUrl": "/projects/dEfW1GXlVF1TxZtT/datatables/WJXDi1tNgKunbQiT"
+                }
+            },
+            "type": "n8n-nodes-base.dataTable",
+            "typeVersion": 1.1,
+            "position": [
+                672,
+                0
+            ],
+            "id": "cb50786a-5ff9-43e9-83b7-ec98ef1a55c5",
+            "name": "Get row(s)"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d14496b6-b079-4c37-b02b-35db6bb5beeb",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "fa6091ca-b020-4b25-b2e5-706a8a787052",
+                            "name": "config.needTools",
+                            "value": "={{ $json.config.responseSchema ? true : false }}",
+                            "type": "boolean"
+                        },
+                        {
+                            "id": "89a3cd87-8d25-4689-a801-ac7400efaac8",
+                            "name": "config.needVision",
+                            "value": "={{ $json.data ? true : false }}",
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                448,
+                0
+            ],
+            "id": "876d1f95-2e82-4866-aebf-b90b21ae1c8b",
+            "name": "Evaluate"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "9afc2209-ad6d-4a18-9462-e344360aecc2",
+                            "leftValue": "={{ $json.vision }}",
+                            "rightValue": "={{ $('Evaluate').item.json.config.needVision }}",
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "equals"
+                            }
+                        },
+                        {
+                            "id": "68e0e366-c2f4-473d-936e-6c734519f6ce",
+                            "leftValue": "={{ $('Evaluate').item.json.config.needVision }}",
+                            "rightValue": false,
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "or"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.3,
+            "position": [
+                896,
+                0
+            ],
+            "id": "f3f344a4-7785-4e74-a009-9d9ff1ac1649",
+            "name": "Filter Vision"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "9afc2209-ad6d-4a18-9462-e344360aecc2",
+                            "leftValue": "={{ $json.tool }}",
+                            "rightValue": "={{ $('Evaluate').item.json.config.needTools }}",
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "equals"
+                            }
+                        },
+                        {
+                            "id": "68e0e366-c2f4-473d-936e-6c734519f6ce",
+                            "leftValue": "={{ $('Evaluate').item.json.config.needTools }}",
+                            "rightValue": false,
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "or"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.3,
+            "position": [
+                1120,
+                0
+            ],
+            "id": "e19523dc-e176-4ba1-96a7-f51b9207012f",
+            "name": "Filter Tools"
+        },
+        {
+            "parameters": {
+                "sortFieldsUi": {
+                    "sortField": [
+                        {
+                            "fieldName": "cost"
+                        },
+                        {
+                            "fieldName": "size"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.sort",
+            "typeVersion": 1,
+            "position": [
+                1536,
+                0
+            ],
+            "id": "c5889725-6d6d-4fb8-928d-65160dcd6d4e",
+            "name": "Sort"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.limit",
+            "typeVersion": 1,
+            "position": [
+                1760,
+                0
+            ],
+            "id": "e18585d6-9bca-4a55-a338-d16f2089cf0d",
+            "name": "Limit"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "25e3f146-3b3d-4760-9e99-f9c259a49339",
+                            "leftValue": "={{ Number($json.size ?? 0) }}",
+                            "rightValue": "={{ $('Input').item.json.config.minSize }}",
+                            "operator": {
+                                "type": "number",
+                                "operation": "gte"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.filter",
+            "typeVersion": 2.3,
+            "position": [
+                1344,
+                0
+            ],
+            "id": "14eb5d30-dd5b-43c6-83bb-e09fd2724293",
+            "name": "Filter Size"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Input": {
+            "main": [
+                [
+                    {
+                        "node": "Evaluate",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get row(s)": {
+            "main": [
+                [
+                    {
+                        "node": "Filter Vision",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Evaluate": {
+            "main": [
+                [
+                    {
+                        "node": "Get row(s)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter Vision": {
+            "main": [
+                [
+                    {
+                        "node": "Filter Tools",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter Tools": {
+            "main": [
+                [
+                    {
+                        "node": "Filter Size",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Sort": {
+            "main": [
+                [
+                    {
+                        "node": "Limit",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter Size": {
+            "main": [
+                [
+                    {
+                        "node": "Sort",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "PeYO7PlkUIxcWU3J",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-07T16:08:15.660Z",
+            "updatedAt": "2026-10-07T16:08:15.660Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "b72ace3a-fd1d-4cab-a653-14f86b5e00f7",
+        "workflowId": "PeYO7PlkUIxcWU3J",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "responseSchema"
+                            },
+                            {
+                                "name": "complexity"
+                            },
+                            {
+                                "name": "minSize"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "695cc672-6e05-45fd-889f-22b3fa8bd147",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "8f2bd30b-3108-4347-924d-f1a44d654d01",
+                                "name": "config.responseSchema",
+                                "value": "={{ $json.responseSchema }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "d56b0ba0-c208-47fa-b8ad-4f86913b2199",
+                                "name": "config.complexity",
+                                "value": "={{ $json.complexity }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b0fa27e8-6398-458f-bc1b-0880e02c4a2e",
+                                "name": "config.minSize",
+                                "value": "={{ Number($json?.minSize ?? 0) }}",
+                                "type": "number"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    224,
+                    0
+                ],
+                "id": "5ba91c1f-83a8-41af-aa12-b76f5fdf43d6",
+                "name": "Input"
+            },
+            {
+                "parameters": {
+                    "operation": "get",
+                    "dataTableId": {
+                        "__rl": true,
+                        "value": "WJXDi1tNgKunbQiT",
+                        "mode": "list",
+                        "cachedResultName": "llm models",
+                        "cachedResultUrl": "/projects/dEfW1GXlVF1TxZtT/datatables/WJXDi1tNgKunbQiT"
+                    }
+                },
+                "type": "n8n-nodes-base.dataTable",
+                "typeVersion": 1.1,
+                "position": [
+                    672,
+                    0
+                ],
+                "id": "cb50786a-5ff9-43e9-83b7-ec98ef1a55c5",
+                "name": "Get row(s)"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "d14496b6-b079-4c37-b02b-35db6bb5beeb",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "fa6091ca-b020-4b25-b2e5-706a8a787052",
+                                "name": "config.needTools",
+                                "value": "={{ $json.config.responseSchema ? true : false }}",
+                                "type": "boolean"
+                            },
+                            {
+                                "id": "89a3cd87-8d25-4689-a801-ac7400efaac8",
+                                "name": "config.needVision",
+                                "value": "={{ $json.data ? true : false }}",
+                                "type": "boolean"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    448,
+                    0
+                ],
+                "id": "876d1f95-2e82-4866-aebf-b90b21ae1c8b",
+                "name": "Evaluate"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "9afc2209-ad6d-4a18-9462-e344360aecc2",
+                                "leftValue": "={{ $json.vision }}",
+                                "rightValue": "={{ $('Evaluate').item.json.config.needVision }}",
+                                "operator": {
+                                    "type": "boolean",
+                                    "operation": "equals"
+                                }
+                            },
+                            {
+                                "id": "68e0e366-c2f4-473d-936e-6c734519f6ce",
+                                "leftValue": "={{ $('Evaluate').item.json.config.needVision }}",
+                                "rightValue": false,
+                                "operator": {
+                                    "type": "boolean",
+                                    "operation": "equals"
+                                }
+                            }
+                        ],
+                        "combinator": "or"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.filter",
+                "typeVersion": 2.3,
+                "position": [
+                    896,
+                    0
+                ],
+                "id": "f3f344a4-7785-4e74-a009-9d9ff1ac1649",
+                "name": "Filter Vision"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "9afc2209-ad6d-4a18-9462-e344360aecc2",
+                                "leftValue": "={{ $json.tool }}",
+                                "rightValue": "={{ $('Evaluate').item.json.config.needTools }}",
+                                "operator": {
+                                    "type": "boolean",
+                                    "operation": "equals"
+                                }
+                            },
+                            {
+                                "id": "68e0e366-c2f4-473d-936e-6c734519f6ce",
+                                "leftValue": "={{ $('Evaluate').item.json.config.needTools }}",
+                                "rightValue": false,
+                                "operator": {
+                                    "type": "boolean",
+                                    "operation": "equals"
+                                }
+                            }
+                        ],
+                        "combinator": "or"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.filter",
+                "typeVersion": 2.3,
+                "position": [
+                    1120,
+                    0
+                ],
+                "id": "e19523dc-e176-4ba1-96a7-f51b9207012f",
+                "name": "Filter Tools"
+            },
+            {
+                "parameters": {
+                    "sortFieldsUi": {
+                        "sortField": [
+                            {
+                                "fieldName": "cost"
+                            },
+                            {
+                                "fieldName": "size"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.sort",
+                "typeVersion": 1,
+                "position": [
+                    1536,
+                    0
+                ],
+                "id": "c5889725-6d6d-4fb8-928d-65160dcd6d4e",
+                "name": "Sort"
+            },
+            {
+                "parameters": {},
+                "type": "n8n-nodes-base.limit",
+                "typeVersion": 1,
+                "position": [
+                    1760,
+                    0
+                ],
+                "id": "e18585d6-9bca-4a55-a338-d16f2089cf0d",
+                "name": "Limit"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "25e3f146-3b3d-4760-9e99-f9c259a49339",
+                                "leftValue": "={{ Number($json.size ?? 0) }}",
+                                "rightValue": "={{ $('Input').item.json.config.minSize }}",
+                                "operator": {
+                                    "type": "number",
+                                    "operation": "gte"
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.filter",
+                "typeVersion": 2.3,
+                "position": [
+                    1344,
+                    0
+                ],
+                "id": "14eb5d30-dd5b-43c6-83bb-e09fd2724293",
+                "name": "Filter Size"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Input",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Input": {
+                "main": [
+                    [
+                        {
+                            "node": "Evaluate",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get row(s)": {
+                "main": [
+                    [
+                        {
+                            "node": "Filter Vision",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Evaluate": {
+                "main": [
+                    [
+                        {
+                            "node": "Get row(s)",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Filter Vision": {
+                "main": [
+                    [
+                        {
+                            "node": "Filter Tools",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Filter Tools": {
+                "main": [
+                    [
+                        {
+                            "node": "Filter Size",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Sort": {
+                "main": [
+                    [
+                        {
+                            "node": "Limit",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Filter Size": {
+                "main": [
+                    [
+                        {
+                            "node": "Sort",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version b72ace3a",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-07T16:29:14.267Z",
+        "updatedAt": "2026-10-07T16:29:15.938Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
