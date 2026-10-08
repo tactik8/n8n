@@ -1,0 +1,909 @@
+{
+    "id": "moZht36jjbxGFatb",
+    "name": "DW API Post Bronze Record V1",
+    "active": true,
+    "activeVersionId": "bd7622a1-5368-47a8-a762-89b2c98a894c",
+    "createdAt": "2026-10-07T13:10:09.993Z",
+    "updatedAt": "2026-10-07T13:37:16.847Z",
+    "isArchived": false,
+    "versionId": "bd7622a1-5368-47a8-a762-89b2c98a894c",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "systemID"
+                        },
+                        {
+                            "name": "objectID"
+                        },
+                        {
+                            "name": "data",
+                            "type": "any"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -272,
+                0
+            ],
+            "id": "3d841ff0-6529-40b3-a13b-647a20f3b71c",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1344,
+                0
+            ],
+            "id": "e27c6348-0d07-41bb-a095-8e48b73e4f43",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1568,
+                0
+            ],
+            "id": "86431290-1e09-40d2-bd68-ef2404726a0d",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1792,
+                0
+            ],
+            "id": "7606503c-ec45-43a8-97e5-88107420d2a1",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config",
+                            "value": "={{ {} }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "ae9aaa49-ef03-4c38-8a20-abc78aac4f2d",
+                            "name": "config.bucket",
+                            "value": "bronze",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9bbd4dfa-78c7-47be-b358-3dc790fd6494",
+                            "name": "config.filename",
+                            "value": "={{ $json.action.object['@id'].split('#')[0].replaceAll('https://', '').replaceAll('www.', '') }}/datafeed_{{ $now }}.json",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                256,
+                0
+            ],
+            "id": "ba00e307-873d-4b22-b764-0c6cdacc2c57",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.@type",
+                            "value": "=DataFeed",
+                            "type": "string"
+                        },
+                        {
+                            "id": "57e7a591-9cb0-4f7e-8e3f-34f86e1ac9ef",
+                            "name": "action.object.@id",
+                            "value": "={{ [($json.systemID || '').replaceAll('https://', '').split('#')[0],  ($json.objectID || '').split('/')].flat().filter(x => x).join('/') }}#datafeed",
+                            "type": "string"
+                        },
+                        {
+                            "id": "44476a3f-1262-418a-a27f-d2a46caba97f",
+                            "name": "action.object.dataFeedElement",
+                            "value": "={{ Array.isArray($json.data) ? $json.data : [$json.data] }}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTime",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                0,
+                0
+            ],
+            "id": "03825ee1-360a-4031-b348-08cf82cd3d71",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "={{ $json.config.bucket }}",
+                "fileName": "={{ $json.config.filename }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1136,
+                0
+            ],
+            "id": "1fae51a6-8f3b-4351-a367-a8f0055cfa3b",
+            "name": "Upload a file",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "toJson",
+                "options": {
+                    "format": true,
+                    "encoding": "utf8",
+                    "fileName": "={{ $('Config').item.json.config.filename.split('/')[$('Config').item.json.config.filename.split('/').length -1] }}"
+                }
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                688,
+                0
+            ],
+            "id": "0b0283fe-9b75-48b8-bfdf-3926f89cfff7",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json = item.json.action\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                480,
+                0
+            ],
+            "id": "cb3cc820-8098-48f4-80bf-6272df5cd573",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "d43e730c-9788-48e2-836d-4a162feba671",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "1307def5-2163-4f0a-b02f-cc010883d322",
+                            "name": "config",
+                            "value": "={{ $('Config').item.json.config }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "include": "selected",
+                "includeFields": "data",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                912,
+                0
+            ],
+            "id": "d90a8593-5b69-4c5b-972e-8de7c909b0e3",
+            "name": "input3"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload a file": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "input3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "input3": {
+            "main": [
+                [
+                    {
+                        "node": "Upload a file",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "systemID": "https://www.api.com#webapi",
+                    "objectID": "message",
+                    "data": {
+                        "name": "some data"
+                    }
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "moZht36jjbxGFatb",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-07T13:10:09.993Z",
+            "updatedAt": "2026-10-07T13:10:09.993Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "bd7622a1-5368-47a8-a762-89b2c98a894c",
+        "workflowId": "moZht36jjbxGFatb",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "systemID"
+                            },
+                            {
+                                "name": "objectID"
+                            },
+                            {
+                                "name": "data",
+                                "type": "any"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -272,
+                    0
+                ],
+                "id": "3d841ff0-6529-40b3-a13b-647a20f3b71c",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1344,
+                    0
+                ],
+                "id": "e27c6348-0d07-41bb-a095-8e48b73e4f43",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1568,
+                    0
+                ],
+                "id": "86431290-1e09-40d2-bd68-ef2404726a0d",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1792,
+                    0
+                ],
+                "id": "7606503c-ec45-43a8-97e5-88107420d2a1",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config",
+                                "value": "={{ {} }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "ae9aaa49-ef03-4c38-8a20-abc78aac4f2d",
+                                "name": "config.bucket",
+                                "value": "bronze",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9bbd4dfa-78c7-47be-b358-3dc790fd6494",
+                                "name": "config.filename",
+                                "value": "={{ $json.action.object['@id'].split('#')[0].replaceAll('https://', '').replaceAll('www.', '') }}/datafeed_{{ $now }}.json",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    256,
+                    0
+                ],
+                "id": "ba00e307-873d-4b22-b764-0c6cdacc2c57",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.@type",
+                                "value": "=DataFeed",
+                                "type": "string"
+                            },
+                            {
+                                "id": "57e7a591-9cb0-4f7e-8e3f-34f86e1ac9ef",
+                                "name": "action.object.@id",
+                                "value": "={{ [($json.systemID || '').replaceAll('https://', '').split('#')[0],  ($json.objectID || '').split('/')].flat().filter(x => x).join('/') }}#datafeed",
+                                "type": "string"
+                            },
+                            {
+                                "id": "44476a3f-1262-418a-a27f-d2a46caba97f",
+                                "name": "action.object.dataFeedElement",
+                                "value": "={{ Array.isArray($json.data) ? $json.data : [$json.data] }}",
+                                "type": "array"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTime",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "03825ee1-360a-4031-b348-08cf82cd3d71",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "operation": "upload",
+                    "bucketName": "={{ $json.config.bucket }}",
+                    "fileName": "={{ $json.config.filename }}",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    1136,
+                    0
+                ],
+                "id": "1fae51a6-8f3b-4351-a367-a8f0055cfa3b",
+                "name": "Upload a file",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "operation": "toJson",
+                    "options": {
+                        "format": true,
+                        "encoding": "utf8",
+                        "fileName": "={{ $('Config').item.json.config.filename.split('/')[$('Config').item.json.config.filename.split('/').length -1] }}"
+                    }
+                },
+                "type": "n8n-nodes-base.convertToFile",
+                "typeVersion": 1.1,
+                "position": [
+                    688,
+                    0
+                ],
+                "id": "0b0283fe-9b75-48b8-bfdf-3926f89cfff7",
+                "name": "Convert to File"
+            },
+            {
+                "parameters": {
+                    "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json = item.json.action\n}\n\nreturn $input.all();"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    480,
+                    0
+                ],
+                "id": "cb3cc820-8098-48f4-80bf-6272df5cd573",
+                "name": "Code in JavaScript"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "d43e730c-9788-48e2-836d-4a162feba671",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "1307def5-2163-4f0a-b02f-cc010883d322",
+                                "name": "config",
+                                "value": "={{ $('Config').item.json.config }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "includeOtherFields": true,
+                    "include": "selected",
+                    "includeFields": "data",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    912,
+                    0
+                ],
+                "id": "d90a8593-5b69-4c5b-972e-8de7c909b0e3",
+                "name": "input3"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Code in JavaScript",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Upload a file": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Convert to File": {
+                "main": [
+                    [
+                        {
+                            "node": "input3",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Code in JavaScript": {
+                "main": [
+                    [
+                        {
+                            "node": "Convert to File",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "input3": {
+                "main": [
+                    [
+                        {
+                            "node": "Upload a file",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version bd7622a1",
+        "description": "",
+        "autosaved": false,
+        "createdAt": "2026-10-07T13:37:16.850Z",
+        "updatedAt": "2026-10-07T13:37:25.550Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
