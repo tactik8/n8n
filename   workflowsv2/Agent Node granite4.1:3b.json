@@ -1,0 +1,1180 @@
+{
+    "id": "byWPKQOH4ylZ6fEQ",
+    "name": "Agent Node granite4.1:3b",
+    "active": true,
+    "activeVersionId": "2f72607c-4820-47fe-a3d3-d5d53274a801",
+    "createdAt": "2026-10-07T16:37:47.214Z",
+    "updatedAt": "2026-10-07T16:45:12.096Z",
+    "isArchived": false,
+    "versionId": "2f72607c-4820-47fe-a3d3-d5d53274a801",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                416,
+                -464
+            ],
+            "id": "6f46ab82-0c65-4093-b3b1-1e0a3b281f33",
+            "name": "AI Agent2",
+            "retryOnFail": true,
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "model": "granite4.1:3b",
+                "options": {
+                    "numCtx": 64000
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                416,
+                -224
+            ],
+            "id": "6f20d10a-2805-457d-989c-5d0952c3f05a",
+            "name": "Ollama Chat Model1",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "={{ $json.conversationID }}",
+                "databaseName": "n8n_memory",
+                "contextWindowLength": 10
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+            "typeVersion": 1.1,
+            "position": [
+                544,
+                -224
+            ],
+            "id": "768d3644-4217-4d05-9726-811fe6d7ce2f",
+            "name": "MongoDB Chat Memory2",
+            "credentials": {
+                "mongoDb": {
+                    "id": "dHeEVtBeWey2f4lB",
+                    "name": "MongoDB account 2"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "conversationDatabaseID"
+                        },
+                        {
+                            "name": "conversationTenantID"
+                        },
+                        {
+                            "name": "conversationID"
+                        },
+                        {
+                            "name": "userPrompt"
+                        },
+                        {
+                            "name": "systemPrompt"
+                        },
+                        {
+                            "name": "responseSchema"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -352,
+                -464
+            ],
+            "id": "771b6157-7862-48bf-9420-4f1cf59b9b75",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                -128,
+                -464
+            ],
+            "id": "4ed2150e-1297-4858-a1b9-26e4505e9281",
+            "name": "Input"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "638525bd-90ea-436c-8afa-e3634dd902c5",
+                            "name": "response.message",
+                            "value": "={{ $json.output?.message ||  $json.output }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f0756cfa-c6e0-440a-aee9-283735043607",
+                            "name": "response.status",
+                            "value": "={{ $json.output?.status  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "787a4a4c-b0df-4900-ae0e-32d86ea73f2d",
+                            "name": "response.deliverable",
+                            "value": "={{ $json.output?.deliverable  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3a281f3c-e215-4ce3-84da-99825da38703",
+                            "name": "response.error",
+                            "value": "={{ $json?.error  }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                768,
+                -560
+            ],
+            "id": "094bc68c-00bf-44e1-811d-1d8d790d39b0",
+            "name": "Format output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "638525bd-90ea-436c-8afa-e3634dd902c5",
+                            "name": "response.message",
+                            "value": "={{ $json.output?.message ||  $json.output }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f0756cfa-c6e0-440a-aee9-283735043607",
+                            "name": "response.status",
+                            "value": "=failed",
+                            "type": "string"
+                        },
+                        {
+                            "id": "787a4a4c-b0df-4900-ae0e-32d86ea73f2d",
+                            "name": "response.deliverable",
+                            "value": "={{ $json.output?.deliverable  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3a281f3c-e215-4ce3-84da-99825da38703",
+                            "name": "response.error",
+                            "value": "={{ $json?.error  }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                768,
+                -368
+            ],
+            "id": "1b404ced-2b6d-4df3-a448-f57a1d8f6610",
+            "name": "Format output Failed"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "a92e178d-f7f9-412a-8b3a-106bc6d4a5d8",
+                            "leftValue": "={{ $json.responseSchema || \"\" }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                96,
+                -464
+            ],
+            "id": "695b1a22-673b-403d-8fd0-c1f882967657",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "={{ $json.userPrompt }}",
+                "hasOutputParser": true,
+                "options": {
+                    "systemMessage": "={{ $json.systemPrompt }}"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                400,
+                64
+            ],
+            "id": "6e27f754-766a-40ff-8aec-4c5422727f2c",
+            "name": "AI Agent",
+            "retryOnFail": true,
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "model": "granite4.1:3b",
+                "options": {
+                    "numCtx": 64000
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+            "typeVersion": 1,
+            "position": [
+                400,
+                304
+            ],
+            "id": "9c2b5f34-bc5c-4a28-8f0a-fa3ef057b6cc",
+            "name": "Ollama Chat Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "={{ $json.conversationID }}",
+                "databaseName": "n8n_memory",
+                "contextWindowLength": 10
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+            "typeVersion": 1.1,
+            "position": [
+                528,
+                304
+            ],
+            "id": "afa748ea-b863-4a1f-b811-5c4f49bd98ac",
+            "name": "MongoDB Chat Memory",
+            "credentials": {
+                "mongoDb": {
+                    "id": "dHeEVtBeWey2f4lB",
+                    "name": "MongoDB account 2"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "638525bd-90ea-436c-8afa-e3634dd902c5",
+                            "name": "response.message",
+                            "value": "={{ $json.output?.message ||  $json.output }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f0756cfa-c6e0-440a-aee9-283735043607",
+                            "name": "response.status",
+                            "value": "={{ $json.output?.status  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "787a4a4c-b0df-4900-ae0e-32d86ea73f2d",
+                            "name": "response.deliverable",
+                            "value": "={{ $json.output?.deliverable  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3a281f3c-e215-4ce3-84da-99825da38703",
+                            "name": "response.error",
+                            "value": "={{ $json?.error  }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                752,
+                -32
+            ],
+            "id": "e1a6a76a-dafe-4485-8ccd-2d92e7291cba",
+            "name": "Format output1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "638525bd-90ea-436c-8afa-e3634dd902c5",
+                            "name": "response.message",
+                            "value": "={{ $json.output?.message ||  $json.output }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f0756cfa-c6e0-440a-aee9-283735043607",
+                            "name": "response.status",
+                            "value": "=failed",
+                            "type": "string"
+                        },
+                        {
+                            "id": "787a4a4c-b0df-4900-ae0e-32d86ea73f2d",
+                            "name": "response.deliverable",
+                            "value": "={{ $json.output?.deliverable  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3a281f3c-e215-4ce3-84da-99825da38703",
+                            "name": "response.error",
+                            "value": "={{ $json?.error  }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                752,
+                160
+            ],
+            "id": "3454cd90-44f1-4139-bf91-afc35d578523",
+            "name": "Format output Failed1"
+        },
+        {
+            "parameters": {
+                "schemaType": "manual",
+                "inputSchema": "={{ $('Input').item.json.responseSchema }}",
+                "autoFix": true
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.3,
+            "position": [
+                656,
+                368
+            ],
+            "id": "26f9d326-8559-427a-9f98-5405d27bf579",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "model": "granite4.1:3b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmOllama",
+            "typeVersion": 1,
+            "position": [
+                576,
+                496
+            ],
+            "id": "fd1e78f6-3b53-4c06-b289-31cddabf6065",
+            "name": "Ollama Model",
+            "credentials": {
+                "ollamaApi": {
+                    "id": "eYA4JvgcNcu0q3Nd",
+                    "name": "Ollama account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "AI Agent2": {
+            "main": [
+                [
+                    {
+                        "node": "Format output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Format output Failed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model1": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MongoDB Chat Memory2": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Input": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Format output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Format output Failed1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "MongoDB Chat Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ollama Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Structured Output Parser",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "conversationDatabaseID": "n8n_chat_histories",
+                    "conversationTenantID": "n8n_memory",
+                    "conversationID": "https://www.test.com/conversationTest1234#conversation",
+                    "systemPrompt": "You are a helpful agent.",
+                    "userPrompt": "What is the capital of Canada?",
+                    "responseSchema": ""
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "byWPKQOH4ylZ6fEQ",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-07T16:37:47.214Z",
+            "updatedAt": "2026-10-07T16:37:47.214Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "2f72607c-4820-47fe-a3d3-d5d53274a801",
+        "workflowId": "byWPKQOH4ylZ6fEQ",
+        "nodes": [
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "={{ $json.userPrompt }}",
+                    "options": {
+                        "systemMessage": "={{ $json.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    416,
+                    -464
+                ],
+                "id": "6f46ab82-0c65-4093-b3b1-1e0a3b281f33",
+                "name": "AI Agent2",
+                "retryOnFail": true,
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "model": "granite4.1:3b",
+                    "options": {
+                        "numCtx": 64000
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+                "typeVersion": 1,
+                "position": [
+                    416,
+                    -224
+                ],
+                "id": "6f20d10a-2805-457d-989c-5d0952c3f05a",
+                "name": "Ollama Chat Model1",
+                "credentials": {
+                    "ollamaApi": {
+                        "id": "eYA4JvgcNcu0q3Nd",
+                        "name": "Ollama account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "sessionIdType": "customKey",
+                    "sessionKey": "={{ $json.conversationID }}",
+                    "databaseName": "n8n_memory",
+                    "contextWindowLength": 10
+                },
+                "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+                "typeVersion": 1.1,
+                "position": [
+                    544,
+                    -224
+                ],
+                "id": "768d3644-4217-4d05-9726-811fe6d7ce2f",
+                "name": "MongoDB Chat Memory2",
+                "credentials": {
+                    "mongoDb": {
+                        "id": "dHeEVtBeWey2f4lB",
+                        "name": "MongoDB account 2"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "conversationDatabaseID"
+                            },
+                            {
+                                "name": "conversationTenantID"
+                            },
+                            {
+                                "name": "conversationID"
+                            },
+                            {
+                                "name": "userPrompt"
+                            },
+                            {
+                                "name": "systemPrompt"
+                            },
+                            {
+                                "name": "responseSchema"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    -352,
+                    -464
+                ],
+                "id": "771b6157-7862-48bf-9420-4f1cf59b9b75",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "includeOtherFields": true,
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    -128,
+                    -464
+                ],
+                "id": "4ed2150e-1297-4858-a1b9-26e4505e9281",
+                "name": "Input"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "638525bd-90ea-436c-8afa-e3634dd902c5",
+                                "name": "response.message",
+                                "value": "={{ $json.output?.message ||  $json.output }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f0756cfa-c6e0-440a-aee9-283735043607",
+                                "name": "response.status",
+                                "value": "={{ $json.output?.status  }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "787a4a4c-b0df-4900-ae0e-32d86ea73f2d",
+                                "name": "response.deliverable",
+                                "value": "={{ $json.output?.deliverable  }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "3a281f3c-e215-4ce3-84da-99825da38703",
+                                "name": "response.error",
+                                "value": "={{ $json?.error  }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    768,
+                    -560
+                ],
+                "id": "094bc68c-00bf-44e1-811d-1d8d790d39b0",
+                "name": "Format output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "638525bd-90ea-436c-8afa-e3634dd902c5",
+                                "name": "response.message",
+                                "value": "={{ $json.output?.message ||  $json.output }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f0756cfa-c6e0-440a-aee9-283735043607",
+                                "name": "response.status",
+                                "value": "=failed",
+                                "type": "string"
+                            },
+                            {
+                                "id": "787a4a4c-b0df-4900-ae0e-32d86ea73f2d",
+                                "name": "response.deliverable",
+                                "value": "={{ $json.output?.deliverable  }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "3a281f3c-e215-4ce3-84da-99825da38703",
+                                "name": "response.error",
+                                "value": "={{ $json?.error  }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    768,
+                    -368
+                ],
+                "id": "1b404ced-2b6d-4df3-a448-f57a1d8f6610",
+                "name": "Format output Failed"
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 3
+                        },
+                        "conditions": [
+                            {
+                                "id": "a92e178d-f7f9-412a-8b3a-106bc6d4a5d8",
+                                "leftValue": "={{ $json.responseSchema || \"\" }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "empty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.3,
+                "position": [
+                    96,
+                    -464
+                ],
+                "id": "695b1a22-673b-403d-8fd0-c1f882967657",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "={{ $json.userPrompt }}",
+                    "hasOutputParser": true,
+                    "options": {
+                        "systemMessage": "={{ $json.systemPrompt }}"
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.agent",
+                "typeVersion": 3.1,
+                "position": [
+                    400,
+                    64
+                ],
+                "id": "6e27f754-766a-40ff-8aec-4c5422727f2c",
+                "name": "AI Agent",
+                "retryOnFail": true,
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "model": "granite4.1:3b",
+                    "options": {
+                        "numCtx": 64000
+                    }
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+                "typeVersion": 1,
+                "position": [
+                    400,
+                    304
+                ],
+                "id": "9c2b5f34-bc5c-4a28-8f0a-fa3ef057b6cc",
+                "name": "Ollama Chat Model",
+                "credentials": {
+                    "ollamaApi": {
+                        "id": "eYA4JvgcNcu0q3Nd",
+                        "name": "Ollama account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "sessionIdType": "customKey",
+                    "sessionKey": "={{ $json.conversationID }}",
+                    "databaseName": "n8n_memory",
+                    "contextWindowLength": 10
+                },
+                "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+                "typeVersion": 1.1,
+                "position": [
+                    528,
+                    304
+                ],
+                "id": "afa748ea-b863-4a1f-b811-5c4f49bd98ac",
+                "name": "MongoDB Chat Memory",
+                "credentials": {
+                    "mongoDb": {
+                        "id": "dHeEVtBeWey2f4lB",
+                        "name": "MongoDB account 2"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "638525bd-90ea-436c-8afa-e3634dd902c5",
+                                "name": "response.message",
+                                "value": "={{ $json.output?.message ||  $json.output }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f0756cfa-c6e0-440a-aee9-283735043607",
+                                "name": "response.status",
+                                "value": "={{ $json.output?.status  }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "787a4a4c-b0df-4900-ae0e-32d86ea73f2d",
+                                "name": "response.deliverable",
+                                "value": "={{ $json.output?.deliverable  }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "3a281f3c-e215-4ce3-84da-99825da38703",
+                                "name": "response.error",
+                                "value": "={{ $json?.error  }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    752,
+                    -32
+                ],
+                "id": "e1a6a76a-dafe-4485-8ccd-2d92e7291cba",
+                "name": "Format output1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "638525bd-90ea-436c-8afa-e3634dd902c5",
+                                "name": "response.message",
+                                "value": "={{ $json.output?.message ||  $json.output }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f0756cfa-c6e0-440a-aee9-283735043607",
+                                "name": "response.status",
+                                "value": "=failed",
+                                "type": "string"
+                            },
+                            {
+                                "id": "787a4a4c-b0df-4900-ae0e-32d86ea73f2d",
+                                "name": "response.deliverable",
+                                "value": "={{ $json.output?.deliverable  }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "3a281f3c-e215-4ce3-84da-99825da38703",
+                                "name": "response.error",
+                                "value": "={{ $json?.error  }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    752,
+                    160
+                ],
+                "id": "3454cd90-44f1-4139-bf91-afc35d578523",
+                "name": "Format output Failed1"
+            },
+            {
+                "parameters": {
+                    "schemaType": "manual",
+                    "inputSchema": "={{ $('Input').item.json.responseSchema }}",
+                    "autoFix": true
+                },
+                "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+                "typeVersion": 1.3,
+                "position": [
+                    656,
+                    368
+                ],
+                "id": "26f9d326-8559-427a-9f98-5405d27bf579",
+                "name": "Structured Output Parser"
+            },
+            {
+                "parameters": {
+                    "model": "granite4.1:3b",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmOllama",
+                "typeVersion": 1,
+                "position": [
+                    576,
+                    496
+                ],
+                "id": "fd1e78f6-3b53-4c06-b289-31cddabf6065",
+                "name": "Ollama Model",
+                "credentials": {
+                    "ollamaApi": {
+                        "id": "eYA4JvgcNcu0q3Nd",
+                        "name": "Ollama account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "AI Agent2": {
+                "main": [
+                    [
+                        {
+                            "node": "Format output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Format output Failed",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Ollama Chat Model1": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent2",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "MongoDB Chat Memory2": {
+                "ai_memory": [
+                    [
+                        {
+                            "node": "AI Agent2",
+                            "type": "ai_memory",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Input",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Input": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "AI Agent2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "AI Agent": {
+                "main": [
+                    [
+                        {
+                            "node": "Format output1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Format output Failed1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Ollama Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "MongoDB Chat Memory": {
+                "ai_memory": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_memory",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Structured Output Parser": {
+                "ai_outputParser": [
+                    [
+                        {
+                            "node": "AI Agent",
+                            "type": "ai_outputParser",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Ollama Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "Structured Output Parser",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 2f72607c",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-07T16:45:12.098Z",
+        "updatedAt": "2026-10-07T16:45:13.800Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
