@@ -1,0 +1,1110 @@
+{
+    "id": "iIzNLyb5wlm0oZLq",
+    "name": "App Schema mapping V1",
+    "active": true,
+    "activeVersionId": "d1cffe0d-f906-40b3-acf9-2f3e05f99846",
+    "createdAt": "2026-10-07T12:46:22.344Z",
+    "updatedAt": "2026-10-07T16:50:03.225Z",
+    "isArchived": false,
+    "versionId": "1f70f37e-dcad-487d-b93d-5a41a5459e32",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "systemID"
+                        },
+                        {
+                            "name": "entityID"
+                        },
+                        {
+                            "name": "record",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -112,
+                80
+            ],
+            "id": "96715a5e-61fa-433d-893c-ce348065a5a8",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{ $json.output.result }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1008,
+                80
+            ],
+            "id": "b9bb416c-4587-4f26-88a5-4cd332d641cd",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1232,
+                80
+            ],
+            "id": "64e61385-309f-4251-80cb-1be49cea07ae",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1456,
+                80
+            ],
+            "id": "43e871cc-31ce-4743-9947-f734372d25ee",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config",
+                            "value": "={{ {} }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "cf3860af-c295-4119-8b12-686381fc8788",
+                            "name": "config.databaseID",
+                            "value": "appSchemaMapping",
+                            "type": "string"
+                        },
+                        {
+                            "id": "98f866d7-a21f-494d-9209-3f811c30c8c6",
+                            "name": "config.tenantID",
+                            "value": "appSchemaMappingV1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "18a2b0c5-35c2-4f30-a0d9-07dd4631b34a",
+                            "name": "config.conversationID",
+                            "value": "={{ $json.action.instrument['@id'] }}/conversation/{{ $execution.id }}#conversation",
+                            "type": "string"
+                        },
+                        {
+                            "id": "c07049bf-5c5d-473e-9cd5-5a7b80020ab2",
+                            "name": "config.systemPrompt",
+                            "value": "You are an expert JavaScript software engineer specializing in Linked Data, semantic web technologies, and schema.org standards. Your sole responsibility is to generate clean, robust, and deterministic JavaScript functions that transform source records (from database models, external APIs, or legacy systems) into valid JSON-LD objects adhering to schema.org standards.  ### core Requirements  1. **Output Format & Signature**:    - Write pure JavaScript functions using modern standard syntax (ES6+).    - Functions must accept a single argument (e.g., `sourceRecord` or `record`) representing the input entity/data.    - Functions must return a standard JavaScript object representing the JSON-LD payload (do not return a raw JSON string unless explicitly requested).    - The returned object must always include `@context`: \"https://schema.org\" and a valid `@type` corresponding to the schema.org entity.  2. **Schema.org Compliance**:    - Use correct schema.org term capitalization (e.g., camelCase for properties like `datePublished`, PascalCase for types like `Article` or `Person`).    - For nested entities (e.g., an author inside an article), include appropriate nested JSON-LD objects with their own `@type` attribute.    - Express dates and times using ISO-8601 formatting (e.g., `YYYY-MM-DD` or `YYYY-MM-DDTHH:mm:ssZ`).    - Ensure mandatory and recommended properties for Google Rich Results / Search features are mapped whenever present in the input record.  3. **Data Handling & Safety**:    - **Defensive Mapping**: Safely handle missing, `null`, or `undefined` values from the source record. Do not emit keys with `undefined` values in the final JSON-LD object.    - **Arrays vs. Single Values**: Correctly handle single values versus arrays (e.g., multiple authors, images, or categories). Map arrays using `.map()` or filter out falsy values before assignment.    - **Data Cleaning**: Sanitize input strings (trim unnecessary whitespace) and ensure numeric types (prices, ratings, dimensions) are cast to proper numbers where schema.org expects numbers.  4. **Code Quality**:    - Keep functions self-contained, side-effect-free, and easy to unit test.    - Include JSDoc annotations detailing input type structures and return expectations.    - Include concise, inline comments explaining non-obvious mappings or schema requirements.  ### Response Structure  When generated, present your output using the following format: 1. **JavaScript Function**: The complete, executable JS converter function. 2. **TypeScript Interfaces (Optional)**: Type definitions for the input record and output JSON-LD structure if beneficial. 3. **Example Input & Output**: A brief demonstration showing a sample input record and the resulting JSON-LD object.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7fa4f881-2fcc-4049-96f5-c34c1fb209cc",
+                            "name": "config.userPrompt",
+                            "value": "=Please make a js function to convert this record to jsonld schema.org.\n\nsource system:\n{{ $('test').item.json.systemID.split('#')[0] }}\n\nsource object type:\n{{ $('test').item.json.entityID }}\n\nsample record\n```\n{{ $('test').item.json.recordJson }}\n```\n\n",
+                            "type": "string"
+                        },
+                        {
+                            "id": "68f480cb-d9fd-45ef-9440-0357c9d18922",
+                            "name": "config.systemID",
+                            "value": "={{ $('test').item.json.systemID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "15cc7018-a2ce-48c4-91a2-a1dbcbf1022b",
+                            "name": "config.entityID",
+                            "value": "={{ $('test').item.json.entityID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "9bb13fe4-7d0f-4ffb-9c38-b3cb893846c0",
+                            "name": "config.recordJson",
+                            "value": "={{ $('test').item.json.recordJson }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                560,
+                80
+            ],
+            "id": "1d3f66a2-688f-4041-a93b-957a7659df2d",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "DataFeedItem",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTime",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                336,
+                80
+            ],
+            "id": "46621f72-c2fc-4a80-8f3c-7594feba1f70",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dIAkYGJZamb3Rksb",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dIAkYGJZamb3Rksb",
+                    "cachedResultName": "agent generic V2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "userPrompt": "={{ $json.config.userPrompt }}",
+                        "systemPrompt": "={{ $json.config.systemPrompt }}",
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "conversationID": "={{ $json.config.conversationID }}",
+                        "sender": "={{ $json.action.instrument }}",
+                        "recipient": "={{ {\"@id\": \"https://www.test.com/anon#person\"}  }}",
+                        "taskFormat": true,
+                        "minSize": "7",
+                        "modelName": "gemini3:flash"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "conversationID",
+                            "displayName": "conversationID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "systemPrompt",
+                            "displayName": "systemPrompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "userPrompt",
+                            "displayName": "userPrompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "sender",
+                            "displayName": "sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "recipient",
+                            "displayName": "recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "testMode",
+                            "displayName": "testMode",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "boolean",
+                            "removed": false
+                        },
+                        {
+                            "id": "taskFormat",
+                            "displayName": "taskFormat",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "boolean",
+                            "removed": false
+                        },
+                        {
+                            "id": "minSize",
+                            "displayName": "minSize",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "modelName",
+                            "displayName": "modelName",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                784,
+                80
+            ],
+            "id": "ee976473-0087-4880-ad84-1964635bbcf0",
+            "name": "Call 'agent generic V2'"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6f169239-f541-4d16-841f-cf2b18b153aa",
+                            "name": "systemID",
+                            "value": "=https://www.gmail.com#webapi",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1afb76d8-7b60-4d80-9bb9-8419730ca39a",
+                            "name": "entityID",
+                            "value": "=message",
+                            "type": "string"
+                        },
+                        {
+                            "id": "18905c4f-fd1c-47e8-8277-ee9475225aae",
+                            "name": "recordJson",
+                            "value": "=  \n  \n\"html\": \n\"<!DOCTYPE html><html lang=en xmlns=http://www.w3.org/1999/xhtml xmlns:v=urn:schemas-microsoft-com:vml xmlns:o=urn:schemas-microsoft-com:office:office>\\n<head><title>AIS: LC-CR: Billing Account Tier Cap Hit - April 2026</title><!--[if !mso]><!-- --><meta http-equiv=X-UA-Compatible content=IE=edge><!--<![endif]--><meta http-equiv=Content-Type content=\\\"text/html; charset=UTF-8\\\"><meta name=viewport content=width=device-width,initial-scale=1><style type=text/css>#outlook a { padding:0; }\\n          table { border-spacing:0;}\\n          img { border:0;height:auto;line-height:100%; outline:none;text-decoration:none;-ms-interpolation-mode:bicubic; }\\n          p { display:block; }</style><!--[if mso]>         \\n          <xml>         \\n            <o:OfficeDocumentSettings xmlns:o=\\\"urn:schemas-microsoft-com:office:office\\\">     \\n              <o:AllowPNG/>           \\n              <o:PixelsPerInch>96</o:PixelsPerInch>         \\n            </o:OfficeDocumentSettings>      \\n            <w:WordDocument xmlns:w=\\\"urn:schemas-microsoft-com:office:word\\\">\\n              <w:DontUseAdvancedTypographyReadingMail/>\\n            </w:WordDocument>       \\n          </xml>             \\n          <style type=\\\"text/css\\\">\\n            table { border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt; }\\n            .mj-outlook-group-fix { width:100% !important; }\\n          </style>         \\n        <![endif]--><!--[if !mso]><!--><link href=https://fonts.googleapis.com/css?family=Google+Sans rel=stylesheet type=text/css><link href=https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i rel=stylesheet type=text/css><link href=https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500,700|Google+Sans+Display:400,500,700|Open+Sans:400,500,700 rel=stylesheet type=text/css><style type=text/css>@import url(https://fonts.googleapis.com/css?family=Google+Sans);\\n@import url(https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i);\\n@import url(https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500,700|Google+Sans+Display:400,500,700|Open+Sans:400,500,700);</style><!--<![endif]--><style type=text/css>@media only screen and (min-width:950px) {\\n        .mj-column-per-100 { width:100% !important; max-width: 100%; }\\n.mj-column-per-33-333333333333336 { width:33.333333333333336% !important; max-width: 33.333333333333336%; }\\n.mj-column-per-33 { width:33% !important; max-width: 33%; }\\n.mj-column-per-11 { width:11% !important; max-width: 11%; }\\n.mj-column-per-89 { width:89% !important; max-width: 89%; }\\n.mj-column-per-38 { width:38% !important; max-width: 38%; }\\n.mj-column-per-29 { width:29% !important; max-width: 29%; }\\n.mj-column-per-14 { width:14% !important; max-width: 14%; }\\n.mj-column-per-86 { width:86% !important; max-width: 86%; }\\n      }</style><style type=text/css>body, .body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%; }\\n.links-5F6368-underline a { color: #5F6368; text-decoration: underline; }\\n#body #main [x-apple-data-detectors-type] { \\n          color: inherit !important; \\n          -webkit-text-decoration-color: inherit !important; \\n          text-decoration: inherit !important;\\n          font-weight: inherit !important;\\n         }\\n[data-ogsc] .img-container img:hover, [data-ogsb] .img-container img:hover { background-color: transparent !important }\\n.links-1A73E8-underline a { color: #1A73E8; text-decoration: underline; }\\nu ~ div ul, u ~ div ol {margin-left: -3px}\\n.mso-button-dark-mode a {background: transparent !important;}\\n.links-717378 a { color: #717378; text-decoration: none; }\\nu ~ div .img-container img + div { display: none }\\n        \\n\\n        \\n        \\n            @media only screen and (min-width:950px) {        \\n                .padding-24px-50px-24px-50px { padding: 24px 50px 24px 50px !important}\\n.padding-24px-50px-14px-50px { padding: 24px 50px 14px 50px !important}\\n.padding-0px-50px-24px-50px { padding: 0px 50px 24px 50px !important}\\n.padding-0px-0px-38px-0px { padding: 0px 0px 38px 0px !important}\\n.padding-0px-50px-0px-50px { padding: 0px 50px 0px 50px !important}\\n.padding-0px-35px-0px-35px { padding: 0px 35px 0px 35px !important}\\n.padding-0px-50px-48px-50px { padding: 0px 50px 48px 50px !important}\\n.padding-0px-0px-0px-0px { padding: 0px 0px 0px 0px !important}\\n.padding-0px-0px-0px-28px { padding: 0px 0px 0px 28px !important}\\n.padding-2px-0px-0px-0px { padding: 2px 0px 0px 0px !important}\\n.img-full-width { max-width: 100% !important}\\n.padding-0px-0px-0px-10px { padding: 0px 0px 0px 10px !important}\\n.padding-0px-0px-0px-6px { padding: 0px 0px 0px 6px !important}\\n.padding-0px-0px-0px-8px { padding: 0px 0px 0px 8px !important}\\n.padding-12px-0px-40px-0px { padding: 12px 0px 40px 0px !important}\\n            }</style><style type=text/css>ul{display: block;}sup, sub{line-height:0;}body a{text-decoration: none; color: #1A73E8;}.image-highlight{transition: 0.3s;}.image-highlight:hover{filter: brightness(1.2);}@media only screen and (min-width: 950px) { .hide-on-mobile{display:block !important;}td.hide-on-mobile{display:table-cell !important;}table.hide-on-mobile{display:inline-block !important;}.hide-on-desktop{display:none !important;} }.hide-on-desktop{display:block;}.hide-on-mobile{display:none;}</style><!--[if mso]>\\n            <style>\\n                .hide-on-mobile {display:block !important}\\n            </style>\\n        <![endif]--><!--[if mso]>\\n                <style>         \\n                    .ul-25aa4480-bc2a-11f1-bc4d-851d7dff2d51 li { \\n          margin-left: -47px !important; \\n          text-indent: -17px; }\\n        .ul-25aa4480-bc2a-11f1-bc4d-851d7dff2d51 li li { \\n          margin-left: -47px !important;\\n          text-indent: -17px; \\n         }\\nul li { tab-stops: 100%; }\\n.ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 li { \\n          margin-left: -18px !important; \\n          text-indent: -26px; }\\n        .ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 li li { \\n          margin-left: -47px !important;\\n          text-indent: -17px; \\n         }\\n          .ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 li.level1 { \\n            mso-bullet-image: 'https://gstatic.com/growthlab/api/SovAqqN9bDGiJycZUDyMMoFncP8qLMMTSHH9NrnL.png';\\n            mso-ansi-font-size: 23px; mso-line-height-alt: 131%;\\n          }\\n          .ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 .list-item {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n          .ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 li li {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n\\n        .image-list { margin-left: -8px; } \\n      \\n\\n        .image-list li.level1 { mso-special-format: bullet; vertical-align: middle; margin: 0; }\\n      \\n.ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 li { \\n          margin-left: -15px !important; \\n          text-indent: -29px; }\\n        .ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 li li { \\n          margin-left: -47px !important;\\n          text-indent: -17px; \\n         }\\n          .ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 li.level1 { \\n            mso-bullet-image: 'https://gstatic.com/growthlab/api/dkQI9lf4yla7LoPNYCDT6cDAzDLQNJHukJV77L0R.png';\\n            mso-ansi-font-size: 19px; mso-line-height-alt: 131%;\\n          }\\n          .ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 .list-item {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n          .ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 li li {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n.ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 li { \\n          margin-left: -19px !important; \\n          text-indent: -25px; }\\n        .ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 li li { \\n          margin-left: -47px !important;\\n          text-indent: -17px; \\n         }\\n          .ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 li.level1 { \\n            mso-bullet-image: 'https://gstatic.com/growthlab/api/t0Eaq083sywsTg0AfKFZxA2uv1a8NGGGtbepuDPD.png';\\n            mso-ansi-font-size: 23px; mso-line-height-alt: 131%;\\n          }\\n          .ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 .list-item {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n          .ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 li li {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n                </style>\\n            <![endif]--><style>[class~=\\\"x_body\\\"] { width: 99.9% }</style>\\n</head>\\n<body style=word-spacing:normal;background-color:#FFFFFF; class=body id=body><!--[if !mso 9]><!--><div id=emailPreHeader style=\\\"display: none;\\\">No action needed unless you want to increase or remove the spend cap.</div><!--<![endif]--><div style=\\\"background-color:#FFFFFF;background-position:center center;background-size:auto;background-repeat:repeat;\\\" id=main>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=font-size:0px;padding:0px;text-align:center;vertical-align:top; class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:middle;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:middle;padding:24px 24px 24px 24px;mso-padding-alt:24px 50px 24px 50px;\\\" class=padding-24px-50px-24px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=img-container style=font-size:0px;padding:0px;word-break:break-word;text-align:left;><div style=\\\"margin:0 auto 0 0;max-width:150px;\\\"><a href=https://c.gle/AAuDWvmGV85Qd8gBAN9GNh9NrDRLwN3EiLcQC9SgQjv2yugaEtjZp1J5bNu7k1oZp1QYzOjw_1XvUxe_bkIWaiuSr1_M30Pf2n5oWjPea7FXZUpg0hxdQp4OE3Vd4wB4cSwAgWvkedORTJ10pQUiVGrDys-4-zA target=_blank style=\\\"text-decoration: none; color: #1A73E8;\\\"><img alt=\\\"Google AI Studio\\\" height=auto width=150 src=https://www.gstatic.com/growthlab/api/Y8UhBcJMQhTFZvnZtuXOdzPtIvDpLssbOs6YYAAz.jpg style=border:none;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:block;></a></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#FFFFFF;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 0px 0px 0px;text-align:center;vertical-align:top;mso-padding-alt:0px 0px 0px 0px;\\\" class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:24px 24px 14px 24px;mso-padding-alt:24px 50px 14px 50px;\\\" class=padding-24px-50px-14px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-weight:normal;letter-spacing:0.2px;text-align:left;color:#1C1B1B;\\\"><h2 style=\\\"margin: 0; font-size: 22px; font-weight: 400; line-height: 1.5; mso-line-height-alt: 2.063em\\\">To protect your inactive Gemini API project(s), we&#39;ve applied monthly spend caps</h2></div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#FFFFFF;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 0px 0px 0px;text-align:center;vertical-align:top;mso-padding-alt:0px 0px 0px 0px;\\\" class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 24px 24px;mso-padding-alt:0px 50px 24px 50px;\\\" class=padding-0px-50px-24px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:21px;text-align:left;mso-line-height-alt:1.313em;color:#45474A;\\\"><p style=\\\"margin: 0;\\\">Your project(s) have been inactive for 50+ days. To help mitigate against unauthorized usage and accidental charges, we&#39;ve auto-applied project spend caps. You can increase or remove the cap at any time.</p><p style=\\\"margin: 0;\\\"> </p><p style=\\\"margin: 0;\\\"><span style=\\\"color: #5f6368;\\\"><strong>Projects affected:</strong></span></p>\\n<ul style=\\\"margin: 8px 0 0 0; padding-left: 20px;\\\">\\n  <li style=\\\"margin-bottom: 4px;\\\">\\n    <a href=https://c.gle/AAuDWvlrJH7UIjp1f5H-2z0N7FYF1VQw0DYx88674Pf15DvI6btEGhVEYI5SfzW31xT9j1zo72Li0Pt5FIVMatjFldvWUV8otEDmvUp9srZQ6G0MpHLWtvOaD4ead8feCZtIN8YLi_RBGTdUWRuaaYa1DTt63PTzAkVSdG6OQhJ_aLXquFRVhq6ofDGxrkSZGZjYC1GD4yQocaXNJAw style=\\\"color: #1a73e8; text-decoration: none;\\\" target=_blank>gen-lang-client-0471206242</a> (Project Number: 918254055873) (Spend cap: 141.67 CAD)\\n  </li>\\n</ul>\\n</div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:8px 0px 38px 0px;text-align:center;vertical-align:top;mso-padding-alt:0px 0px 38px 0px;\\\" class=\\\"block-grid padding-0px-0px-38px-0px\\\"><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0;line-height:0;text-align:left;display:inline-block;width:100%;direction:ltr;vertical-align:top;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:middle;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:middle;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td valign=middle class=button-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div><!--[if mso]>\\n<table width=\\\"100%\\\" align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" style=\\\"border-spacing:0;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;\\\">\\n<tr>\\n<td align=\\\"left\\\" class=\\\"mso-button-dark-mode\\\"><a:roundrect xmlns:a=\\\"urn:schemas-microsoft-com:vml\\\" xmlns:w=\\\"urn:schemas-microsoft-com:office:word\\\" href=\\\"https://aistudio.google.com/spend?project=gen-lang-client-0471206242\\\" data-gnp-link-name=\\\"BodyCTA:Change-Spend-Caps\\\" fillcolor=\\\"#FFFFFF\\\" arcsize=\\\"15%\\\" style=\\\"v-text-anchor:middle;width:130.5pt;height:41.25pt;\\\" strokecolor=\\\"#4285F4\\\" strokeweight=\\\"0.75pt\\\" ><w:anchorlock/><a:textbox inset=\\\"0,0,0,0\\\"><center style=\\\"color:#ffffff; font-family:sans-serif, Arial; font-size:16px\\\"><![endif]--> <a href=https://c.gle/AAuDWvnzGIYshYdCXx1tWqm_2zMsj0pe0EMEZvIyX8gD3k6h4W4bsrTJjP7pj56_AxyIwWn6YkD3gdaqGMoXFIa2RKoZmVqWa_F0TQ7A_hoyE9SxeeeEZbyFj95LvRS3khScGlgvIfAujzGFkmuKmVdUoDgFSwA9c8H73_EJweo_fyQCx_Lm1SaPjExcK083eoDLw-va3grYIM43n1mCAKc title=\\\"Manage Spend Cap\\\" style=\\\"display: inline-block; width: auto; background: #FFFFFF; color: #1A73E8; font-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Roboto, sans-serif; font-size: 14px; font-weight: 600; line-height: 1.50; margin: 0; text-align: center; text-decoration: none; text-transform: none; padding: 16px 20px 16px 20px; mso-padding-alt: 0px; border-radius: 8px; border-left: 1px solid #4285F4; border-right: 1px solid #4285F4; border-top: 1px solid #4285F4; border-bottom: 1px solid #4285F4; mso-border-alt: none; box-sizing: border-box;\\\" target=_blank width=175>Change Spend Caps</a><!--[if mso]></center></a:textbox></a:roundrect>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px;text-align:center;vertical-align:top;mso-padding-alt:0px 35px 0px 35px;\\\" class=\\\"block-grid padding-0px-35px-0px-35px\\\"><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:530px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#EAEAEB;border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;text-align:center;\\\">\\n<table width=100% role=none border=0 cellpadding=0 cellspacing=0 style=\\\"border-top:solid 1px transparent;font-size:0;display:inline-block;line-height:0;\\\">\\n<tr>\\n<td height=0 style=height:0;line-height:0;> </td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#FFFFFF;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:38px 0px 8px 0px;text-align:center;vertical-align:top;mso-padding-alt:38px 0px 8px 0px;\\\" class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-weight:normal;letter-spacing:0.2px;text-align:left;color:#5F6368;\\\"><h1 style=\\\"margin: 0; font-size: 18px; font-weight: 400; line-height: 27.00px; mso-line-height-alt: 1.688em\\\">About project spend caps</h1></div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#FFFFFF;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 0px 0px 0px;text-align:center;vertical-align:top;mso-padding-alt:0px 0px 0px 0px;\\\" class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:21.00px;text-align:left;mso-line-height-alt:1.313em;color:#5F6368;\\\"><p style=\\\"margin: 0;\\\">Project caps are designed to help mitigate your account from unexpected overages. They are also useful if you have multiple projects under the same billing account and want to ensure each has access to enough of the cumulative spending limit.</p></div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 24px 48px 24px;text-align:center;vertical-align:top;mso-padding-alt:0px 50px 48px 50px;\\\" class=\\\"block-grid padding-0px-50px-48px-50px\\\"><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:500px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td valign=middle class=button-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div><!--[if mso]>\\n<table width=\\\"100%\\\" align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" style=\\\"border-spacing:0;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;\\\">\\n<tr>\\n<td align=\\\"left\\\" class=\\\"mso-button-dark-mode\\\"><a:roundrect xmlns:a=\\\"urn:schemas-microsoft-com:vml\\\" xmlns:w=\\\"urn:schemas-microsoft-com:office:word\\\" href=\\\"https://ai.google.dev/gemini-api/docs/billing#project-spend-caps\\\" data-gnp-link-name=\\\"BodyCTA:Learn-more\\\" fillcolor=\\\"none\\\" arcsize=\\\"27%\\\" style=\\\"v-text-anchor:middle;width:77pt;height:33.75pt;\\\" stroke=\\\"f\\\" ><w:anchorlock/><a:textbox inset=\\\"0,0,0,0\\\"><span style=\\\"color:#ffffff; font-family:sans-serif, Arial; font-size:16px\\\"><![endif]--> <a href=https://c.gle/AAuDWvnpPLkLxkPmGqlSR7T6MNwnvXyaO9IZSWB-SGTrO6rNQAW5JhLPxGD54QTPM5cD7G3Ou-b9E_iTitj3Mpju4TzoQ4pSj0riijqCG1Q9aY4txsr36VB0ST-Ko7njXngyHJc5zdLISyYM_luUYWI1Wbeic8D7iJdoeZoEIRgM3n-gJo9rqpgSzmlR7NyoJHLmoogb title=\\\"Learn More\\\" style=\\\"display: inline-block; width: auto; background: transparent; color: #1A73E8; font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.5px; line-height: 21.00px; margin: 0; text-align: left; text-decoration: none; text-transform: none; padding: 12px 0px 12px 0px; mso-padding-alt: 0px; border-radius: 12px; mso-border-alt: none; box-sizing: border-box;\\\" target=_blank width=76>Learn More</a><!--[if mso]></span></a:textbox></a:roundrect>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table><!--[if !mso]><!-->\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#F8F9FA;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"hide-on-desktop-outlook block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:#F8F9FA;background-color:#F8F9FA;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#F8F9FA;width:100%;>\\n<tr>\\n<td style=\\\"display: block; font-size: 0px; padding: 26px 0px 24px 0px; text-align: center; vertical-align: top;\\\" class=\\\"hide-on-desktop block-grid\\\" align=center valign=top>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=background-color:#F8F9FA;line-height:0;font-size:0;direction:ltr;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=\\\"font-size:0px;text-align:center;vertical-align:top;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;\\\"><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:166.66666666666669px;\\\" ><![endif]--><div class=\\\"mj-column-per-33-333333333333336 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-0px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><div class=image-list><ul class=ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 style=\\\"display: block; margin-top: 0px; margin-bottom: 0px; padding-left: 0px; list-style-type: none; mso-para-margin-left: 0px;\\\"><li class=level1 style=\\\"background: left top / 19px no-repeat; padding-left: 28px; margin-left: 0px; margin-top: 0px; margin-bottom: 0px; background-image: url(https://gstatic.com/growthlab/api/SovAqqN9bDGiJycZUDyMMoFncP8qLMMTSHH9NrnL.png); background-size: 19px; background-repeat: no-repeat; background-position: left top;\\\"><span class=list-item><a href=https://c.gle/AAuDWvkyqhzsAA8gm7gY9sCX10yjJoIJ5hF7_4uXhW0fwjoMbjQ1AIHcHy1bYFFll5IdP4AVom0y69pPYT_sX7N3k_dHR2ji8HgjcYkFA7RtnJTcFVJGRW8peLCYufWd7VBNrZXYp2CU6PBp_zN9ocO94oE data-k-tracking-label=Footer:Get-support target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Get support</a></span></li></ul></div></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:166.66666666666669px;\\\" ><![endif]--><div class=\\\"mj-column-per-33-333333333333336 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-0px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;\\\"><div class=image-list><ul class=ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 style=\\\"display: block; margin-top: 0px; margin-bottom: 0px; padding-left: 0px; list-style-type: none; mso-para-margin-left: 0px;\\\"><li class=level1 style=\\\"background: left top / 16px no-repeat; padding-left: 28px; margin-left: 0px; margin-top: 1px; margin-bottom: 0px; background-image: url(https://gstatic.com/growthlab/api/dkQI9lf4yla7LoPNYCDT6cDAzDLQNJHukJV77L0R.png); background-size: 16px; background-repeat: no-repeat; background-position: left top;\\\"><span class=list-item><a href=https://c.gle/AAuDWvklnDPsPO0wTCE5Hr_FwiP8JEvlTntZ3WzXudZNsaftP_-xgnV7HQKC3f_1py1OkZXtBjiUdOmuJccx-LaoT-LFSZhx5ez6gvpf1iZeaF1e3dtRtYaQimpu5hspetVY3mjEdP7I-cx9ADqFE8fJg-H4xOX3XWnKOg data-k-tracking-label=Footer:Manage-API-keys target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Manage API keys</a></span></li></ul></div></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:166.66666666666669px;\\\" ><![endif]--><div class=\\\"mj-column-per-33-333333333333336 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-28px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 28px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><div class=image-list><ul class=ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 style=\\\"display: block; margin-top: 0px; margin-bottom: 0px; padding-left: 0px; list-style-type: none; mso-para-margin-left: 0px;\\\"><li class=level1 style=\\\"background: left top / 19px no-repeat; padding-left: 27px; margin-left: 0px; margin-top: 0px; margin-bottom: 0px; background-image: url(https://gstatic.com/growthlab/api/t0Eaq083sywsTg0AfKFZxA2uv1a8NGGGtbepuDPD.png); background-size: 19px; background-repeat: no-repeat; background-position: left top;\\\"><span class=list-item><a href=https://c.gle/AAuDWvkFfbqP4PsaO7eCSMJtqMBETaaxgAJXGlH7jSJmkETkwUB_7pU3Eewj6p9-9byVfPKd6ECVN_lHCn1j0nWMFR_ghM-xSu4iVITUbAqm4sKN3k6C6EbkAfzjN7CygWSUUrmPuxfNlRNkJE9CvZjJE_zUaCqhycA data-k-tracking-label=Footer:Manage-billing target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Manage billing</a></span></li></ul></div></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table><!--<![endif]-->\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#F8FAFD;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"hide-on-mobile-outlook block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"display: none; font-size: 0px; padding: 26px 0px 24px 0px; text-align: center; vertical-align: top;\\\" class=\\\"hide-on-mobile block-grid\\\" align=center valign=top>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=background-color:transparent;line-height:0;font-size:0;direction:ltr;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=\\\"font-size:0px;text-align:center;vertical-align:top;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;\\\"><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:165px;\\\" ><![endif]--><div class=\\\"mj-column-per-33 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=font-size:0px;text-align:center;vertical-align:top;padding:0px;word-break:break-word;><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:165px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0;line-height:0;text-align:left;display:inline-block;width:100%;direction:ltr;vertical-align:top;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:18px;\\\" ><![endif]--><div class=\\\"mj-column-per-11 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:6%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-2px-0px-0px-0px img-container\\\" style=\\\"font-size:0px;padding:0px;word-break:break-word;mso-padding-alt:2px 0px 0px 0px;text-align:left;\\\"><div style=\\\"margin:0 auto 0 0;max-width:18px;\\\" class=img-full-width><img alt height=auto width=18 src=https://www.gstatic.com/growthlab/api/SovAqqN9bDGiJycZUDyMMoFncP8qLMMTSHH9NrnL.png style=border:none;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:block;></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:146px;\\\" ><![endif]--><div class=\\\"mj-column-per-89 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:94%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-10px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 10px;word-break:break-word;mso-padding-alt:0px 0px 0px 10px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><p style=\\\"margin: 0 0 0px 0;\\\"><a href=https://c.gle/AAuDWvkyqhzsAA8gm7gY9sCX10yjJoIJ5hF7_4uXhW0fwjoMbjQ1AIHcHy1bYFFll5IdP4AVom0y69pPYT_sX7N3k_dHR2ji8HgjcYkFA7RtnJTcFVJGRW8peLCYufWd7VBNrZXYp2CU6PBp_zN9ocO94oE data-k-tracking-label=Footer:Get-support target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Get support</a></p></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:190px;\\\" ><![endif]--><div class=\\\"mj-column-per-38 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=font-size:0px;text-align:center;vertical-align:top;padding:0px;word-break:break-word;><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:190px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0;line-height:0;text-align:left;display:inline-block;width:100%;direction:ltr;vertical-align:top;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:20px;\\\" ><![endif]--><div class=\\\"mj-column-per-11 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:6%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-2px-0px-0px-0px img-container\\\" style=\\\"font-size:0px;padding:0px;word-break:break-word;mso-padding-alt:2px 0px 0px 0px;text-align:left;\\\"><div style=\\\"margin:0 auto 0 0;max-width:16px;\\\"><img alt height=auto width=16 src=https://www.gstatic.com/growthlab/api/dkQI9lf4yla7LoPNYCDT6cDAzDLQNJHukJV77L0R.png style=border:none;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:block;></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:169px;\\\" ><![endif]--><div class=\\\"mj-column-per-89 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:94%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-6px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 10px;word-break:break-word;mso-padding-alt:0px 0px 0px 6px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><p style=\\\"margin: 0 0 0px 0;\\\"><a href=https://c.gle/AAuDWvklnDPsPO0wTCE5Hr_FwiP8JEvlTntZ3WzXudZNsaftP_-xgnV7HQKC3f_1py1OkZXtBjiUdOmuJccx-LaoT-LFSZhx5ez6gvpf1iZeaF1e3dtRtYaQimpu5hspetVY3mjEdP7I-cx9ADqFE8fJg-H4xOX3XWnKOg data-k-tracking-label=Footer:Manage-API-keys target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Manage API keys</a></p></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:145px;\\\" ><![endif]--><div class=\\\"mj-column-per-29 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=font-size:0px;text-align:center;vertical-align:top;padding:0px;word-break:break-word;><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:145px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0;line-height:0;text-align:left;display:inline-block;width:100%;direction:ltr;vertical-align:top;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:20px;\\\" ><![endif]--><div class=\\\"mj-column-per-14 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:6%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=img-container style=\\\"font-size:0px;padding:1px 0px 0px 0px;word-break:break-word;text-align:left;\\\"><div style=\\\"margin:0 auto 0 0;max-width:19px;\\\"><img alt height=auto width=19 src=https://www.gstatic.com/growthlab/api/t0Eaq083sywsTg0AfKFZxA2uv1a8NGGGtbepuDPD.png style=border:none;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:block;></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:124px;\\\" ><![endif]--><div class=\\\"mj-column-per-86 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:94%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-8px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 10px;word-break:break-word;mso-padding-alt:0px 0px 0px 8px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><p style=\\\"margin: 0 0 0px 0;\\\"><a href=https://c.gle/AAuDWvkFfbqP4PsaO7eCSMJtqMBETaaxgAJXGlH7jSJmkETkwUB_7pU3Eewj6p9-9byVfPKd6ECVN_lHCn1j0nWMFR_ghM-xSu4iVITUbAqm4sKN3k6C6EbkAfzjN7CygWSUUrmPuxfNlRNkJE9CvZjJE_zUaCqhycA data-k-tracking-label=Footer:Manage-billing target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Manage billing</a></p></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#F8FAFD;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:12px 0px 34px 0px;text-align:center;vertical-align:top;mso-padding-alt:12px 0px 40px 0px;\\\" class=\\\"block-grid padding-12px-0px-40px-0px\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=background-color:transparent;line-height:0;font-size:0;direction:ltr;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:12px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.125em;color:#5F6368;\\\"><p style=\\\"margin: 0;\\\">© 2026 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA</p></div></div>\\n</td>\\n</tr>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:10px 0px 0px 0px;word-break:break-word;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:12px;font-weight:normal;letter-spacing:none;line-height:1.5;text-align:left;mso-line-height-alt:1.125em;color:#5F6368;\\\"><p style=\\\"margin: 0;\\\">You&#39;ve received this mandatory service announcement email to update you on important actions to be taken related to your Google AI Studio account.</p></div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table></div><img alt=\\\"\\\" height=1 width=3 src=https://notifications.google.com/g/img/AAuDWvnurnOmFGuHHxMFsvCa3avFddre9YoC4shLkI0TIgWyKLMiqmy8tFfAeIPVxwAT5JMdUdI6juc-ATJkoY2mFYYqhJCBeBOhocnvFYkFfUZp76Qd12Ql4kSVebmMCbwr9OHoNw.gif></body></html>\",\n  \n  \n\"text\": \n\"Google AI Studio<https://c.gle/AAuDWvncsL5fn0QbrUP3GFm6oUWbsrcplLrY_WGUHp3gZhdc_YtgWdl0yXFKGIcBXBYchNjYHWYI1rAcO6nJydeCDxjjFWnAzRIGznR7hiDbTxP6wmcWecOEpkCMdacZnEW5D0-KVEwa7hWS3wYRTatvHL2p>\\n\\nTo protect your inactive Gemini API project(s), we've applied monthly spend caps\\n\\nYour project(s) have been inactive for 50+ days. To help mitigate against unauthorized usage and accidental charges, we've auto-applied project spend caps. You can increase or remove the cap at any time.\\n\\nProjects affected:\\n\\n- gen-lang-client-0471206242 (918254055873) (141.67 CAD)<https://c.gle/AAuDWvm5cmqgsBSFcqhvrsGhq4Y58Pa9BJ_SslfVzkOw_JEp8CZqXqvc3abVsfcRcm2vkLzdnTbbRoYucgLbGYw8QhHSNR6yt8CJQXwN8eRMJrVklTb5j2W49qVIQ-_nzlvHWL2P1e0b6OTRO3Ogx_2Hin8l6sFfdmzeZkjuVH7zkLRRU1zTmaCxMvACrq7-3McALUI>\\n\\nChange Spend Caps<https://c.gle/AAuDWvm9SH9WvSsFg1135bZ8TwtbDV92ca7pmKvEcsfcrAjgKld7f1oFoOXNlVlOFmRV7eeYeOEWxk50rryKgVh5uikPPHTp8GpMoob3n36o4ZyKiT4y9niwfsB7s7qj5b4m5wFC6qf_2kUFO9MnoZqF8g72aSOssbdRtkkxXndwJ8ZFgqhoDx-943Z6SiA6pKNdpo9HZJ9m5zNDTTz9>\\n\\nAbout project spend caps\\n\\nProject caps are designed to help mitigate your account from unexpected overages. They are also useful if you have multiple projects under the same billing account and want to ensure each has access to enough of the cumulative spending limit.\\n\\nLearn More<https://c.gle/AAuDWvmO7wkGOxVfO1dKBOniei_q5W5SJPEYNQmLsMKZ5QM8Si7QJZ80NRzEMuHhEbCqHznZwVt_MascuzF2o0s4RqwrXrO_LhKOR3WsZWDfrBAdOULVkyOqP4HmZZcLJOy5qXo6jbwB96Vcs74kNuvFmeK5_hTIVkwnjCnN3tKhyDrpU1zq4SV942Rj0wYxdcYazg>\\n\\nGet support<https://c.gle/AAuDWvmm0qcjy6CXrhJUEShsmHQsrl_0mE0Zb7KWcXBEhukIcsgruY9Nmg76CvZAIrowwognrUj2SaDlUSAP3E7tgY-rZJyPy-FU7TOxbNp3VbLBljKKhSZTStvb_q9Uva8hf37YkPMcwqZODaHGswCW>\\n\\nManage API keys<https://c.gle/AAuDWvkqIiun3Z0EeE8ZI5y8z7zBNwDejd0Z4lH7I9I3TSMWLvqZOYvL_mRKoim9Mj7O2zReyKunOSA6brUqsrwyZadk7UW7-20suY03h4lcho90kFd0ZnUjsPm3egzdpH019YMjn3zlGWFDl5u6HNXzaqRLKvgyaSM>\\n\\nManage billing<https://c.gle/AAuDWvmXd7D5hVSAaamw3vZcA9GZXC7ljWCx_KCO0SbwVu-V5Or0cay81QnZ6zx7u2q7mn_9SVCHQydC-iO5I0ifR1m9c8LqXjDyrZd-KNNqoso1uuyyzn4NToPFL_YIaR1x1m_oJoEFimheivyIin0v9zi7sFsg>\\n\\n© 2026 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA\\n\\nYou've received this mandatory service announcement email to update you on important actions to be taken related to your Google AI Studio account.\",\n  \n  \n\"textAsHtml\": \n\"<p>Google AI Studio&lt;<a href=\\\"https://c.gle/AAuDWvncsL5fn0QbrUP3GFm6oUWbsrcplLrY_WGUHp3gZhdc_YtgWdl0yXFKGIcBXBYchNjYHWYI1rAcO6nJydeCDxjjFWnAzRIGznR7hiDbTxP6wmcWecOEpkCMdacZnEW5D0-KVEwa7hWS3wYRTatvHL2p\\\">https://c.gle/AAuDWvncsL5fn0QbrUP3GFm6oUWbsrcplLrY_WGUHp3gZhdc_YtgWdl0yXFKGIcBXBYchNjYHWYI1rAcO6nJydeCDxjjFWnAzRIGznR7hiDbTxP6wmcWecOEpkCMdacZnEW5D0-KVEwa7hWS3wYRTatvHL2p</a>&gt;</p><p>To protect your inactive Gemini API project(s), we&apos;ve applied monthly spend caps</p><p>Your project(s) have been inactive for 50+ days. To help mitigate against unauthorized usage and accidental charges, we&apos;ve auto-applied project spend caps. You can increase or remove the cap at any time.</p><p>Projects affected:</p><p>- gen-lang-client-0471206242 (918254055873) (141.67 CAD)&lt;<a href=\\\"https://c.gle/AAuDWvm5cmqgsBSFcqhvrsGhq4Y58Pa9BJ_SslfVzkOw_JEp8CZqXqvc3abVsfcRcm2vkLzdnTbbRoYucgLbGYw8QhHSNR6yt8CJQXwN8eRMJrVklTb5j2W49qVIQ-_nzlvHWL2P1e0b6OTRO3Ogx_2Hin8l6sFfdmzeZkjuVH7zkLRRU1zTmaCxMvACrq7-3McALUI\\\">https://c.gle/AAuDWvm5cmqgsBSFcqhvrsGhq4Y58Pa9BJ_SslfVzkOw_JEp8CZqXqvc3abVsfcRcm2vkLzdnTbbRoYucgLbGYw8QhHSNR6yt8CJQXwN8eRMJrVklTb5j2W49qVIQ-_nzlvHWL2P1e0b6OTRO3Ogx_2Hin8l6sFfdmzeZkjuVH7zkLRRU1zTmaCxMvACrq7-3McALUI</a>&gt;</p><p>Change Spend Caps&lt;<a href=\\\"https://c.gle/AAuDWvm9SH9WvSsFg1135bZ8TwtbDV92ca7pmKvEcsfcrAjgKld7f1oFoOXNlVlOFmRV7eeYeOEWxk50rryKgVh5uikPPHTp8GpMoob3n36o4ZyKiT4y9niwfsB7s7qj5b4m5wFC6qf_2kUFO9MnoZqF8g72aSOssbdRtkkxXndwJ8ZFgqhoDx-943Z6SiA6pKNdpo9HZJ9m5zNDTTz9\\\">https://c.gle/AAuDWvm9SH9WvSsFg1135bZ8TwtbDV92ca7pmKvEcsfcrAjgKld7f1oFoOXNlVlOFmRV7eeYeOEWxk50rryKgVh5uikPPHTp8GpMoob3n36o4ZyKiT4y9niwfsB7s7qj5b4m5wFC6qf_2kUFO9MnoZqF8g72aSOssbdRtkkxXndwJ8ZFgqhoDx-943Z6SiA6pKNdpo9HZJ9m5zNDTTz9</a>&gt;</p><p>About project spend caps</p><p>Project caps are designed to help mitigate your account from unexpected overages. They are also useful if you have multiple projects under the same billing account and want to ensure each has access to enough of the cumulative spending limit.</p><p>Learn More&lt;<a href=\\\"https://c.gle/AAuDWvmO7wkGOxVfO1dKBOniei_q5W5SJPEYNQmLsMKZ5QM8Si7QJZ80NRzEMuHhEbCqHznZwVt_MascuzF2o0s4RqwrXrO_LhKOR3WsZWDfrBAdOULVkyOqP4HmZZcLJOy5qXo6jbwB96Vcs74kNuvFmeK5_hTIVkwnjCnN3tKhyDrpU1zq4SV942Rj0wYxdcYazg\\\">https://c.gle/AAuDWvmO7wkGOxVfO1dKBOniei_q5W5SJPEYNQmLsMKZ5QM8Si7QJZ80NRzEMuHhEbCqHznZwVt_MascuzF2o0s4RqwrXrO_LhKOR3WsZWDfrBAdOULVkyOqP4HmZZcLJOy5qXo6jbwB96Vcs74kNuvFmeK5_hTIVkwnjCnN3tKhyDrpU1zq4SV942Rj0wYxdcYazg</a>&gt;</p><p>Get support&lt;<a href=\\\"https://c.gle/AAuDWvmm0qcjy6CXrhJUEShsmHQsrl_0mE0Zb7KWcXBEhukIcsgruY9Nmg76CvZAIrowwognrUj2SaDlUSAP3E7tgY-rZJyPy-FU7TOxbNp3VbLBljKKhSZTStvb_q9Uva8hf37YkPMcwqZODaHGswCW\\\">https://c.gle/AAuDWvmm0qcjy6CXrhJUEShsmHQsrl_0mE0Zb7KWcXBEhukIcsgruY9Nmg76CvZAIrowwognrUj2SaDlUSAP3E7tgY-rZJyPy-FU7TOxbNp3VbLBljKKhSZTStvb_q9Uva8hf37YkPMcwqZODaHGswCW</a>&gt;</p><p>Manage API keys&lt;<a href=\\\"https://c.gle/AAuDWvkqIiun3Z0EeE8ZI5y8z7zBNwDejd0Z4lH7I9I3TSMWLvqZOYvL_mRKoim9Mj7O2zReyKunOSA6brUqsrwyZadk7UW7-20suY03h4lcho90kFd0ZnUjsPm3egzdpH019YMjn3zlGWFDl5u6HNXzaqRLKvgyaSM\\\">https://c.gle/AAuDWvkqIiun3Z0EeE8ZI5y8z7zBNwDejd0Z4lH7I9I3TSMWLvqZOYvL_mRKoim9Mj7O2zReyKunOSA6brUqsrwyZadk7UW7-20suY03h4lcho90kFd0ZnUjsPm3egzdpH019YMjn3zlGWFDl5u6HNXzaqRLKvgyaSM</a>&gt;</p><p>Manage billing&lt;<a href=\\\"https://c.gle/AAuDWvmXd7D5hVSAaamw3vZcA9GZXC7ljWCx_KCO0SbwVu-V5Or0cay81QnZ6zx7u2q7mn_9SVCHQydC-iO5I0ifR1m9c8LqXjDyrZd-KNNqoso1uuyyzn4NToPFL_YIaR1x1m_oJoEFimheivyIin0v9zi7sFsg\\\">https://c.gle/AAuDWvmXd7D5hVSAaamw3vZcA9GZXC7ljWCx_KCO0SbwVu-V5Or0cay81QnZ6zx7u2q7mn_9SVCHQydC-iO5I0ifR1m9c8LqXjDyrZd-KNNqoso1uuyyzn4NToPFL_YIaR1x1m_oJoEFimheivyIin0v9zi7sFsg</a>&gt;</p><p>&copy; 2026 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA</p><p>You&apos;ve received this mandatory service announcement email to update you on important actions to be taken related to your Google AI Studio account.</p>\",\n  \n  \n\"subject\": \n\"Automatic spend cap applied to protect your inactive Gemini API project(s)\",\n  \n  \n\"date\": \n\"2026-10-06T16:41:12.000Z\",\n  \n  \n\"to\": \n{\n  \n  \n  \n\"value\": \n[\n  \n  \n  \n  \n{\n  \n  \n  \n  \n  \n\"address\": \n\"admin@tactik8.com\",\n  \n  \n  \n  \n  \n\"name\": \n\"\"\n  \n  \n  \n  \n}\n  \n  \n  \n],\n  \n  \n  \n\"html\": \n\"<span class=\\\"mp_address_group\\\"><a href=\\\"mailto:admin@tactik8.com\\\" class=\\\"mp_address_email\\\">admin@tactik8.com</a></span>\",\n  \n  \n  \n\"text\": \n\"admin@tactik8.com\"\n  \n  \n},\n  \n  \n\"from\": \n{\n  \n  \n  \n\"value\": \n[\n  \n  \n  \n  \n{\n  \n  \n  \n  \n  \n\"address\": \n\"googleaistudio-noreply@google.com\",\n  \n  \n  \n  \n  \n\"name\": \n\"Google AI Studio\"\n  \n  \n  \n  \n}\n  \n  \n  \n],\n  \n  \n  \n\"html\": \n\"<span class=\\\"mp_address_group\\\"><span class=\\\"mp_address_name\\\">Google AI Studio</span> &lt;<a href=\\\"mailto:googleaistudio-noreply@google.com\\\" class=\\\"mp_address_email\\\">googleaistudio-noreply@google.com</a>&gt;</span>\",\n  \n  \n  \n\"text\": \n\"\\\"Google AI Studio\\\" <googleaistudio-noreply@google.com>\"\n  \n  \n},\n  \n  \n\"messageId\": \n\"<67db4ada92f340ab9d3dffb556c4ece3181bd9d5-20413727-337030291@google.com>\"\n  \n}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                112,
+                80
+            ],
+            "id": "7e6d8f93-7d1c-4751-a314-4994bc4571ef",
+            "name": "test"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "test",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'agent generic V2'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'agent generic V2'": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "test": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "systemID": null,
+                    "entityID": null,
+                    "record": null
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "iIzNLyb5wlm0oZLq",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-07T12:46:22.344Z",
+            "updatedAt": "2026-10-07T12:46:22.344Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "d1cffe0d-f906-40b3-acf9-2f3e05f99846",
+        "workflowId": "iIzNLyb5wlm0oZLq",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "systemID"
+                            },
+                            {
+                                "name": "entityID"
+                            },
+                            {
+                                "name": "record",
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    -112,
+                    80
+                ],
+                "id": "96715a5e-61fa-433d-893c-ce348065a5a8",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{ $json.output.result }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1008,
+                    80
+                ],
+                "id": "b9bb416c-4587-4f26-88a5-4cd332d641cd",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1232,
+                    80
+                ],
+                "id": "64e61385-309f-4251-80cb-1be49cea07ae",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1456,
+                    80
+                ],
+                "id": "43e871cc-31ce-4743-9947-f734372d25ee",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config",
+                                "value": "={{ {} }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "cf3860af-c295-4119-8b12-686381fc8788",
+                                "name": "config.databaseID",
+                                "value": "appSchemaMapping",
+                                "type": "string"
+                            },
+                            {
+                                "id": "98f866d7-a21f-494d-9209-3f811c30c8c6",
+                                "name": "config.tenantID",
+                                "value": "appSchemaMappingV1",
+                                "type": "string"
+                            },
+                            {
+                                "id": "18a2b0c5-35c2-4f30-a0d9-07dd4631b34a",
+                                "name": "config.conversationID",
+                                "value": "={{ $json.action.instrument['@id'] }}/conversation/{{ $execution.id }}#conversation",
+                                "type": "string"
+                            },
+                            {
+                                "id": "c07049bf-5c5d-473e-9cd5-5a7b80020ab2",
+                                "name": "config.systemPrompt",
+                                "value": "You are an expert JavaScript software engineer specializing in Linked Data, semantic web technologies, and schema.org standards. Your sole responsibility is to generate clean, robust, and deterministic JavaScript functions that transform source records (from database models, external APIs, or legacy systems) into valid JSON-LD objects adhering to schema.org standards.  ### core Requirements  1. **Output Format & Signature**:    - Write pure JavaScript functions using modern standard syntax (ES6+).    - Functions must accept a single argument (e.g., `sourceRecord` or `record`) representing the input entity/data.    - Functions must return a standard JavaScript object representing the JSON-LD payload (do not return a raw JSON string unless explicitly requested).    - The returned object must always include `@context`: \"https://schema.org\" and a valid `@type` corresponding to the schema.org entity.  2. **Schema.org Compliance**:    - Use correct schema.org term capitalization (e.g., camelCase for properties like `datePublished`, PascalCase for types like `Article` or `Person`).    - For nested entities (e.g., an author inside an article), include appropriate nested JSON-LD objects with their own `@type` attribute.    - Express dates and times using ISO-8601 formatting (e.g., `YYYY-MM-DD` or `YYYY-MM-DDTHH:mm:ssZ`).    - Ensure mandatory and recommended properties for Google Rich Results / Search features are mapped whenever present in the input record.  3. **Data Handling & Safety**:    - **Defensive Mapping**: Safely handle missing, `null`, or `undefined` values from the source record. Do not emit keys with `undefined` values in the final JSON-LD object.    - **Arrays vs. Single Values**: Correctly handle single values versus arrays (e.g., multiple authors, images, or categories). Map arrays using `.map()` or filter out falsy values before assignment.    - **Data Cleaning**: Sanitize input strings (trim unnecessary whitespace) and ensure numeric types (prices, ratings, dimensions) are cast to proper numbers where schema.org expects numbers.  4. **Code Quality**:    - Keep functions self-contained, side-effect-free, and easy to unit test.    - Include JSDoc annotations detailing input type structures and return expectations.    - Include concise, inline comments explaining non-obvious mappings or schema requirements.  ### Response Structure  When generated, present your output using the following format: 1. **JavaScript Function**: The complete, executable JS converter function. 2. **TypeScript Interfaces (Optional)**: Type definitions for the input record and output JSON-LD structure if beneficial. 3. **Example Input & Output**: A brief demonstration showing a sample input record and the resulting JSON-LD object.",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7fa4f881-2fcc-4049-96f5-c34c1fb209cc",
+                                "name": "config.userPrompt",
+                                "value": "=Please make a js function to convert this record to jsonld schema.org.\n\nsource system:\n{{ $('test').item.json.systemID.split('#')[0] }}\n\nsource object type:\n{{ $('test').item.json.entityID }}\n\nsample record\n```\n{{ $('test').item.json.recordJson }}\n```\n\n",
+                                "type": "string"
+                            },
+                            {
+                                "id": "68f480cb-d9fd-45ef-9440-0357c9d18922",
+                                "name": "config.systemID",
+                                "value": "={{ $('test').item.json.systemID }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "15cc7018-a2ce-48c4-91a2-a1dbcbf1022b",
+                                "name": "config.entityID",
+                                "value": "={{ $('test').item.json.entityID }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "9bb13fe4-7d0f-4ffb-9c38-b3cb893846c0",
+                                "name": "config.recordJson",
+                                "value": "={{ $('test').item.json.recordJson }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    560,
+                    80
+                ],
+                "id": "1d3f66a2-688f-4041-a93b-957a7659df2d",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "DataFeedItem",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTime",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    336,
+                    80
+                ],
+                "id": "46621f72-c2fc-4a80-8f3c-7594feba1f70",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "dIAkYGJZamb3Rksb",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/dIAkYGJZamb3Rksb",
+                        "cachedResultName": "agent generic V2"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "userPrompt": "={{ $json.config.userPrompt }}",
+                            "systemPrompt": "={{ $json.config.systemPrompt }}",
+                            "databaseID": "={{ $json.config.databaseID }}",
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "conversationID": "={{ $json.config.conversationID }}",
+                            "sender": "={{ $json.action.instrument }}",
+                            "recipient": "={{ {\"@id\": \"https://www.test.com/anon#person\"}  }}",
+                            "taskFormat": true,
+                            "minSize": "7"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "conversationID",
+                                "displayName": "conversationID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "systemPrompt",
+                                "displayName": "systemPrompt",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "userPrompt",
+                                "displayName": "userPrompt",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "sender",
+                                "displayName": "sender",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "recipient",
+                                "displayName": "recipient",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "testMode",
+                                "displayName": "testMode",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "boolean",
+                                "removed": false
+                            },
+                            {
+                                "id": "taskFormat",
+                                "displayName": "taskFormat",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "boolean",
+                                "removed": false
+                            },
+                            {
+                                "id": "minSize",
+                                "displayName": "minSize",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    784,
+                    80
+                ],
+                "id": "ee976473-0087-4880-ad84-1964635bbcf0",
+                "name": "Call 'agent generic V2'"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6f169239-f541-4d16-841f-cf2b18b153aa",
+                                "name": "systemID",
+                                "value": "=https://www.gmail.com#webapi",
+                                "type": "string"
+                            },
+                            {
+                                "id": "1afb76d8-7b60-4d80-9bb9-8419730ca39a",
+                                "name": "entityID",
+                                "value": "=message",
+                                "type": "string"
+                            },
+                            {
+                                "id": "18905c4f-fd1c-47e8-8277-ee9475225aae",
+                                "name": "recordJson",
+                                "value": "=  \n  \n\"html\": \n\"<!DOCTYPE html><html lang=en xmlns=http://www.w3.org/1999/xhtml xmlns:v=urn:schemas-microsoft-com:vml xmlns:o=urn:schemas-microsoft-com:office:office>\\n<head><title>AIS: LC-CR: Billing Account Tier Cap Hit - April 2026</title><!--[if !mso]><!-- --><meta http-equiv=X-UA-Compatible content=IE=edge><!--<![endif]--><meta http-equiv=Content-Type content=\\\"text/html; charset=UTF-8\\\"><meta name=viewport content=width=device-width,initial-scale=1><style type=text/css>#outlook a { padding:0; }\\n          table { border-spacing:0;}\\n          img { border:0;height:auto;line-height:100%; outline:none;text-decoration:none;-ms-interpolation-mode:bicubic; }\\n          p { display:block; }</style><!--[if mso]>         \\n          <xml>         \\n            <o:OfficeDocumentSettings xmlns:o=\\\"urn:schemas-microsoft-com:office:office\\\">     \\n              <o:AllowPNG/>           \\n              <o:PixelsPerInch>96</o:PixelsPerInch>         \\n            </o:OfficeDocumentSettings>      \\n            <w:WordDocument xmlns:w=\\\"urn:schemas-microsoft-com:office:word\\\">\\n              <w:DontUseAdvancedTypographyReadingMail/>\\n            </w:WordDocument>       \\n          </xml>             \\n          <style type=\\\"text/css\\\">\\n            table { border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt; }\\n            .mj-outlook-group-fix { width:100% !important; }\\n          </style>         \\n        <![endif]--><!--[if !mso]><!--><link href=https://fonts.googleapis.com/css?family=Google+Sans rel=stylesheet type=text/css><link href=https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i rel=stylesheet type=text/css><link href=https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500,700|Google+Sans+Display:400,500,700|Open+Sans:400,500,700 rel=stylesheet type=text/css><style type=text/css>@import url(https://fonts.googleapis.com/css?family=Google+Sans);\\n@import url(https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i);\\n@import url(https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700|Google+Sans:400,500,700|Google+Sans+Display:400,500,700|Open+Sans:400,500,700);</style><!--<![endif]--><style type=text/css>@media only screen and (min-width:950px) {\\n        .mj-column-per-100 { width:100% !important; max-width: 100%; }\\n.mj-column-per-33-333333333333336 { width:33.333333333333336% !important; max-width: 33.333333333333336%; }\\n.mj-column-per-33 { width:33% !important; max-width: 33%; }\\n.mj-column-per-11 { width:11% !important; max-width: 11%; }\\n.mj-column-per-89 { width:89% !important; max-width: 89%; }\\n.mj-column-per-38 { width:38% !important; max-width: 38%; }\\n.mj-column-per-29 { width:29% !important; max-width: 29%; }\\n.mj-column-per-14 { width:14% !important; max-width: 14%; }\\n.mj-column-per-86 { width:86% !important; max-width: 86%; }\\n      }</style><style type=text/css>body, .body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%; }\\n.links-5F6368-underline a { color: #5F6368; text-decoration: underline; }\\n#body #main [x-apple-data-detectors-type] { \\n          color: inherit !important; \\n          -webkit-text-decoration-color: inherit !important; \\n          text-decoration: inherit !important;\\n          font-weight: inherit !important;\\n         }\\n[data-ogsc] .img-container img:hover, [data-ogsb] .img-container img:hover { background-color: transparent !important }\\n.links-1A73E8-underline a { color: #1A73E8; text-decoration: underline; }\\nu ~ div ul, u ~ div ol {margin-left: -3px}\\n.mso-button-dark-mode a {background: transparent !important;}\\n.links-717378 a { color: #717378; text-decoration: none; }\\nu ~ div .img-container img + div { display: none }\\n        \\n\\n        \\n        \\n            @media only screen and (min-width:950px) {        \\n                .padding-24px-50px-24px-50px { padding: 24px 50px 24px 50px !important}\\n.padding-24px-50px-14px-50px { padding: 24px 50px 14px 50px !important}\\n.padding-0px-50px-24px-50px { padding: 0px 50px 24px 50px !important}\\n.padding-0px-0px-38px-0px { padding: 0px 0px 38px 0px !important}\\n.padding-0px-50px-0px-50px { padding: 0px 50px 0px 50px !important}\\n.padding-0px-35px-0px-35px { padding: 0px 35px 0px 35px !important}\\n.padding-0px-50px-48px-50px { padding: 0px 50px 48px 50px !important}\\n.padding-0px-0px-0px-0px { padding: 0px 0px 0px 0px !important}\\n.padding-0px-0px-0px-28px { padding: 0px 0px 0px 28px !important}\\n.padding-2px-0px-0px-0px { padding: 2px 0px 0px 0px !important}\\n.img-full-width { max-width: 100% !important}\\n.padding-0px-0px-0px-10px { padding: 0px 0px 0px 10px !important}\\n.padding-0px-0px-0px-6px { padding: 0px 0px 0px 6px !important}\\n.padding-0px-0px-0px-8px { padding: 0px 0px 0px 8px !important}\\n.padding-12px-0px-40px-0px { padding: 12px 0px 40px 0px !important}\\n            }</style><style type=text/css>ul{display: block;}sup, sub{line-height:0;}body a{text-decoration: none; color: #1A73E8;}.image-highlight{transition: 0.3s;}.image-highlight:hover{filter: brightness(1.2);}@media only screen and (min-width: 950px) { .hide-on-mobile{display:block !important;}td.hide-on-mobile{display:table-cell !important;}table.hide-on-mobile{display:inline-block !important;}.hide-on-desktop{display:none !important;} }.hide-on-desktop{display:block;}.hide-on-mobile{display:none;}</style><!--[if mso]>\\n            <style>\\n                .hide-on-mobile {display:block !important}\\n            </style>\\n        <![endif]--><!--[if mso]>\\n                <style>         \\n                    .ul-25aa4480-bc2a-11f1-bc4d-851d7dff2d51 li { \\n          margin-left: -47px !important; \\n          text-indent: -17px; }\\n        .ul-25aa4480-bc2a-11f1-bc4d-851d7dff2d51 li li { \\n          margin-left: -47px !important;\\n          text-indent: -17px; \\n         }\\nul li { tab-stops: 100%; }\\n.ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 li { \\n          margin-left: -18px !important; \\n          text-indent: -26px; }\\n        .ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 li li { \\n          margin-left: -47px !important;\\n          text-indent: -17px; \\n         }\\n          .ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 li.level1 { \\n            mso-bullet-image: 'https://gstatic.com/growthlab/api/SovAqqN9bDGiJycZUDyMMoFncP8qLMMTSHH9NrnL.png';\\n            mso-ansi-font-size: 23px; mso-line-height-alt: 131%;\\n          }\\n          .ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 .list-item {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n          .ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 li li {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n\\n        .image-list { margin-left: -8px; } \\n      \\n\\n        .image-list li.level1 { mso-special-format: bullet; vertical-align: middle; margin: 0; }\\n      \\n.ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 li { \\n          margin-left: -15px !important; \\n          text-indent: -29px; }\\n        .ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 li li { \\n          margin-left: -47px !important;\\n          text-indent: -17px; \\n         }\\n          .ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 li.level1 { \\n            mso-bullet-image: 'https://gstatic.com/growthlab/api/dkQI9lf4yla7LoPNYCDT6cDAzDLQNJHukJV77L0R.png';\\n            mso-ansi-font-size: 19px; mso-line-height-alt: 131%;\\n          }\\n          .ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 .list-item {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n          .ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 li li {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n.ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 li { \\n          margin-left: -19px !important; \\n          text-indent: -25px; }\\n        .ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 li li { \\n          margin-left: -47px !important;\\n          text-indent: -17px; \\n         }\\n          .ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 li.level1 { \\n            mso-bullet-image: 'https://gstatic.com/growthlab/api/t0Eaq083sywsTg0AfKFZxA2uv1a8NGGGtbepuDPD.png';\\n            mso-ansi-font-size: 23px; mso-line-height-alt: 131%;\\n          }\\n          .ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 .list-item {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n          .ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 li li {\\n            mso-ansi-font-size: 14px !important;\\n          }\\n                </style>\\n            <![endif]--><style>[class~=\\\"x_body\\\"] { width: 99.9% }</style>\\n</head>\\n<body style=word-spacing:normal;background-color:#FFFFFF; class=body id=body><!--[if !mso 9]><!--><div id=emailPreHeader style=\\\"display: none;\\\">No action needed unless you want to increase or remove the spend cap.</div><!--<![endif]--><div style=\\\"background-color:#FFFFFF;background-position:center center;background-size:auto;background-repeat:repeat;\\\" id=main>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=font-size:0px;padding:0px;text-align:center;vertical-align:top; class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:middle;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:middle;padding:24px 24px 24px 24px;mso-padding-alt:24px 50px 24px 50px;\\\" class=padding-24px-50px-24px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=img-container style=font-size:0px;padding:0px;word-break:break-word;text-align:left;><div style=\\\"margin:0 auto 0 0;max-width:150px;\\\"><a href=https://c.gle/AAuDWvmGV85Qd8gBAN9GNh9NrDRLwN3EiLcQC9SgQjv2yugaEtjZp1J5bNu7k1oZp1QYzOjw_1XvUxe_bkIWaiuSr1_M30Pf2n5oWjPea7FXZUpg0hxdQp4OE3Vd4wB4cSwAgWvkedORTJ10pQUiVGrDys-4-zA target=_blank style=\\\"text-decoration: none; color: #1A73E8;\\\"><img alt=\\\"Google AI Studio\\\" height=auto width=150 src=https://www.gstatic.com/growthlab/api/Y8UhBcJMQhTFZvnZtuXOdzPtIvDpLssbOs6YYAAz.jpg style=border:none;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:block;></a></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#FFFFFF;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 0px 0px 0px;text-align:center;vertical-align:top;mso-padding-alt:0px 0px 0px 0px;\\\" class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:24px 24px 14px 24px;mso-padding-alt:24px 50px 14px 50px;\\\" class=padding-24px-50px-14px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-weight:normal;letter-spacing:0.2px;text-align:left;color:#1C1B1B;\\\"><h2 style=\\\"margin: 0; font-size: 22px; font-weight: 400; line-height: 1.5; mso-line-height-alt: 2.063em\\\">To protect your inactive Gemini API project(s), we&#39;ve applied monthly spend caps</h2></div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#FFFFFF;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 0px 0px 0px;text-align:center;vertical-align:top;mso-padding-alt:0px 0px 0px 0px;\\\" class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 24px 24px;mso-padding-alt:0px 50px 24px 50px;\\\" class=padding-0px-50px-24px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:21px;text-align:left;mso-line-height-alt:1.313em;color:#45474A;\\\"><p style=\\\"margin: 0;\\\">Your project(s) have been inactive for 50+ days. To help mitigate against unauthorized usage and accidental charges, we&#39;ve auto-applied project spend caps. You can increase or remove the cap at any time.</p><p style=\\\"margin: 0;\\\"> </p><p style=\\\"margin: 0;\\\"><span style=\\\"color: #5f6368;\\\"><strong>Projects affected:</strong></span></p>\\n<ul style=\\\"margin: 8px 0 0 0; padding-left: 20px;\\\">\\n  <li style=\\\"margin-bottom: 4px;\\\">\\n    <a href=https://c.gle/AAuDWvlrJH7UIjp1f5H-2z0N7FYF1VQw0DYx88674Pf15DvI6btEGhVEYI5SfzW31xT9j1zo72Li0Pt5FIVMatjFldvWUV8otEDmvUp9srZQ6G0MpHLWtvOaD4ead8feCZtIN8YLi_RBGTdUWRuaaYa1DTt63PTzAkVSdG6OQhJ_aLXquFRVhq6ofDGxrkSZGZjYC1GD4yQocaXNJAw style=\\\"color: #1a73e8; text-decoration: none;\\\" target=_blank>gen-lang-client-0471206242</a> (Project Number: 918254055873) (Spend cap: 141.67 CAD)\\n  </li>\\n</ul>\\n</div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:8px 0px 38px 0px;text-align:center;vertical-align:top;mso-padding-alt:0px 0px 38px 0px;\\\" class=\\\"block-grid padding-0px-0px-38px-0px\\\"><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0;line-height:0;text-align:left;display:inline-block;width:100%;direction:ltr;vertical-align:top;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:middle;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:middle;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td valign=middle class=button-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div><!--[if mso]>\\n<table width=\\\"100%\\\" align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" style=\\\"border-spacing:0;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;\\\">\\n<tr>\\n<td align=\\\"left\\\" class=\\\"mso-button-dark-mode\\\"><a:roundrect xmlns:a=\\\"urn:schemas-microsoft-com:vml\\\" xmlns:w=\\\"urn:schemas-microsoft-com:office:word\\\" href=\\\"https://aistudio.google.com/spend?project=gen-lang-client-0471206242\\\" data-gnp-link-name=\\\"BodyCTA:Change-Spend-Caps\\\" fillcolor=\\\"#FFFFFF\\\" arcsize=\\\"15%\\\" style=\\\"v-text-anchor:middle;width:130.5pt;height:41.25pt;\\\" strokecolor=\\\"#4285F4\\\" strokeweight=\\\"0.75pt\\\" ><w:anchorlock/><a:textbox inset=\\\"0,0,0,0\\\"><center style=\\\"color:#ffffff; font-family:sans-serif, Arial; font-size:16px\\\"><![endif]--> <a href=https://c.gle/AAuDWvnzGIYshYdCXx1tWqm_2zMsj0pe0EMEZvIyX8gD3k6h4W4bsrTJjP7pj56_AxyIwWn6YkD3gdaqGMoXFIa2RKoZmVqWa_F0TQ7A_hoyE9SxeeeEZbyFj95LvRS3khScGlgvIfAujzGFkmuKmVdUoDgFSwA9c8H73_EJweo_fyQCx_Lm1SaPjExcK083eoDLw-va3grYIM43n1mCAKc title=\\\"Manage Spend Cap\\\" style=\\\"display: inline-block; width: auto; background: #FFFFFF; color: #1A73E8; font-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Roboto, sans-serif; font-size: 14px; font-weight: 600; line-height: 1.50; margin: 0; text-align: center; text-decoration: none; text-transform: none; padding: 16px 20px 16px 20px; mso-padding-alt: 0px; border-radius: 8px; border-left: 1px solid #4285F4; border-right: 1px solid #4285F4; border-top: 1px solid #4285F4; border-bottom: 1px solid #4285F4; mso-border-alt: none; box-sizing: border-box;\\\" target=_blank width=175>Change Spend Caps</a><!--[if mso]></center></a:textbox></a:roundrect>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px;text-align:center;vertical-align:top;mso-padding-alt:0px 35px 0px 35px;\\\" class=\\\"block-grid padding-0px-35px-0px-35px\\\"><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:530px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#EAEAEB;border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;text-align:center;\\\">\\n<table width=100% role=none border=0 cellpadding=0 cellspacing=0 style=\\\"border-top:solid 1px transparent;font-size:0;display:inline-block;line-height:0;\\\">\\n<tr>\\n<td height=0 style=height:0;line-height:0;> </td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#FFFFFF;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:38px 0px 8px 0px;text-align:center;vertical-align:top;mso-padding-alt:38px 0px 8px 0px;\\\" class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-weight:normal;letter-spacing:0.2px;text-align:left;color:#5F6368;\\\"><h1 style=\\\"margin: 0; font-size: 18px; font-weight: 400; line-height: 27.00px; mso-line-height-alt: 1.688em\\\">About project spend caps</h1></div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#FFFFFF;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 0px 0px 0px;text-align:center;vertical-align:top;mso-padding-alt:0px 0px 0px 0px;\\\" class=block-grid><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:21.00px;text-align:left;mso-line-height-alt:1.313em;color:#5F6368;\\\"><p style=\\\"margin: 0;\\\">Project caps are designed to help mitigate your account from unexpected overages. They are also useful if you have multiple projects under the same billing account and want to ensure each has access to enough of the cumulative spending limit.</p></div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:0px 24px 48px 24px;text-align:center;vertical-align:top;mso-padding-alt:0px 50px 48px 50px;\\\" class=\\\"block-grid padding-0px-50px-48px-50px\\\"><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:500px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td valign=middle class=button-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div><!--[if mso]>\\n<table width=\\\"100%\\\" align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" style=\\\"border-spacing:0;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;\\\">\\n<tr>\\n<td align=\\\"left\\\" class=\\\"mso-button-dark-mode\\\"><a:roundrect xmlns:a=\\\"urn:schemas-microsoft-com:vml\\\" xmlns:w=\\\"urn:schemas-microsoft-com:office:word\\\" href=\\\"https://ai.google.dev/gemini-api/docs/billing#project-spend-caps\\\" data-gnp-link-name=\\\"BodyCTA:Learn-more\\\" fillcolor=\\\"none\\\" arcsize=\\\"27%\\\" style=\\\"v-text-anchor:middle;width:77pt;height:33.75pt;\\\" stroke=\\\"f\\\" ><w:anchorlock/><a:textbox inset=\\\"0,0,0,0\\\"><span style=\\\"color:#ffffff; font-family:sans-serif, Arial; font-size:16px\\\"><![endif]--> <a href=https://c.gle/AAuDWvnpPLkLxkPmGqlSR7T6MNwnvXyaO9IZSWB-SGTrO6rNQAW5JhLPxGD54QTPM5cD7G3Ou-b9E_iTitj3Mpju4TzoQ4pSj0riijqCG1Q9aY4txsr36VB0ST-Ko7njXngyHJc5zdLISyYM_luUYWI1Wbeic8D7iJdoeZoEIRgM3n-gJo9rqpgSzmlR7NyoJHLmoogb title=\\\"Learn More\\\" style=\\\"display: inline-block; width: auto; background: transparent; color: #1A73E8; font-family: Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.5px; line-height: 21.00px; margin: 0; text-align: left; text-decoration: none; text-transform: none; padding: 12px 0px 12px 0px; mso-padding-alt: 0px; border-radius: 12px; mso-border-alt: none; box-sizing: border-box;\\\" target=_blank width=76>Learn More</a><!--[if mso]></span></a:textbox></a:roundrect>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table><!--[if !mso]><!-->\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#F8F9FA;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"hide-on-desktop-outlook block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:#F8F9FA;background-color:#F8F9FA;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#F8F9FA;width:100%;>\\n<tr>\\n<td style=\\\"display: block; font-size: 0px; padding: 26px 0px 24px 0px; text-align: center; vertical-align: top;\\\" class=\\\"hide-on-desktop block-grid\\\" align=center valign=top>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=background-color:#F8F9FA;line-height:0;font-size:0;direction:ltr;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=\\\"font-size:0px;text-align:center;vertical-align:top;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;\\\"><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:166.66666666666669px;\\\" ><![endif]--><div class=\\\"mj-column-per-33-333333333333336 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-0px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><div class=image-list><ul class=ul-25aed860-bc2a-11f1-bc4d-851d7dff2d51 style=\\\"display: block; margin-top: 0px; margin-bottom: 0px; padding-left: 0px; list-style-type: none; mso-para-margin-left: 0px;\\\"><li class=level1 style=\\\"background: left top / 19px no-repeat; padding-left: 28px; margin-left: 0px; margin-top: 0px; margin-bottom: 0px; background-image: url(https://gstatic.com/growthlab/api/SovAqqN9bDGiJycZUDyMMoFncP8qLMMTSHH9NrnL.png); background-size: 19px; background-repeat: no-repeat; background-position: left top;\\\"><span class=list-item><a href=https://c.gle/AAuDWvkyqhzsAA8gm7gY9sCX10yjJoIJ5hF7_4uXhW0fwjoMbjQ1AIHcHy1bYFFll5IdP4AVom0y69pPYT_sX7N3k_dHR2ji8HgjcYkFA7RtnJTcFVJGRW8peLCYufWd7VBNrZXYp2CU6PBp_zN9ocO94oE data-k-tracking-label=Footer:Get-support target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Get support</a></span></li></ul></div></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:166.66666666666669px;\\\" ><![endif]--><div class=\\\"mj-column-per-33-333333333333336 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-0px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;\\\"><div class=image-list><ul class=ul-25afe9d0-bc2a-11f1-bc4d-851d7dff2d51 style=\\\"display: block; margin-top: 0px; margin-bottom: 0px; padding-left: 0px; list-style-type: none; mso-para-margin-left: 0px;\\\"><li class=level1 style=\\\"background: left top / 16px no-repeat; padding-left: 28px; margin-left: 0px; margin-top: 1px; margin-bottom: 0px; background-image: url(https://gstatic.com/growthlab/api/dkQI9lf4yla7LoPNYCDT6cDAzDLQNJHukJV77L0R.png); background-size: 16px; background-repeat: no-repeat; background-position: left top;\\\"><span class=list-item><a href=https://c.gle/AAuDWvklnDPsPO0wTCE5Hr_FwiP8JEvlTntZ3WzXudZNsaftP_-xgnV7HQKC3f_1py1OkZXtBjiUdOmuJccx-LaoT-LFSZhx5ez6gvpf1iZeaF1e3dtRtYaQimpu5hspetVY3mjEdP7I-cx9ADqFE8fJg-H4xOX3XWnKOg data-k-tracking-label=Footer:Manage-API-keys target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Manage API keys</a></span></li></ul></div></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:166.66666666666669px;\\\" ><![endif]--><div class=\\\"mj-column-per-33-333333333333336 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-28px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 28px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><div class=image-list><ul class=ul-25b0d430-bc2a-11f1-bc4d-851d7dff2d51 style=\\\"display: block; margin-top: 0px; margin-bottom: 0px; padding-left: 0px; list-style-type: none; mso-para-margin-left: 0px;\\\"><li class=level1 style=\\\"background: left top / 19px no-repeat; padding-left: 27px; margin-left: 0px; margin-top: 0px; margin-bottom: 0px; background-image: url(https://gstatic.com/growthlab/api/t0Eaq083sywsTg0AfKFZxA2uv1a8NGGGtbepuDPD.png); background-size: 19px; background-repeat: no-repeat; background-position: left top;\\\"><span class=list-item><a href=https://c.gle/AAuDWvkFfbqP4PsaO7eCSMJtqMBETaaxgAJXGlH7jSJmkETkwUB_7pU3Eewj6p9-9byVfPKd6ECVN_lHCn1j0nWMFR_ghM-xSu4iVITUbAqm4sKN3k6C6EbkAfzjN7CygWSUUrmPuxfNlRNkJE9CvZjJE_zUaCqhycA data-k-tracking-label=Footer:Manage-billing target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Manage billing</a></span></li></ul></div></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table><!--<![endif]-->\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#F8FAFD;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"hide-on-mobile-outlook block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"display: none; font-size: 0px; padding: 26px 0px 24px 0px; text-align: center; vertical-align: top;\\\" class=\\\"hide-on-mobile block-grid\\\" align=center valign=top>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=background-color:transparent;line-height:0;font-size:0;direction:ltr;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=\\\"font-size:0px;text-align:center;vertical-align:top;padding:0px 0px 0px 0px;word-break:break-word;mso-padding-alt:0px 0px 0px 0px;\\\"><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:165px;\\\" ><![endif]--><div class=\\\"mj-column-per-33 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=font-size:0px;text-align:center;vertical-align:top;padding:0px;word-break:break-word;><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:165px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0;line-height:0;text-align:left;display:inline-block;width:100%;direction:ltr;vertical-align:top;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:18px;\\\" ><![endif]--><div class=\\\"mj-column-per-11 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:6%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-2px-0px-0px-0px img-container\\\" style=\\\"font-size:0px;padding:0px;word-break:break-word;mso-padding-alt:2px 0px 0px 0px;text-align:left;\\\"><div style=\\\"margin:0 auto 0 0;max-width:18px;\\\" class=img-full-width><img alt height=auto width=18 src=https://www.gstatic.com/growthlab/api/SovAqqN9bDGiJycZUDyMMoFncP8qLMMTSHH9NrnL.png style=border:none;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:block;></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:146px;\\\" ><![endif]--><div class=\\\"mj-column-per-89 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:94%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-10px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 10px;word-break:break-word;mso-padding-alt:0px 0px 0px 10px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><p style=\\\"margin: 0 0 0px 0;\\\"><a href=https://c.gle/AAuDWvkyqhzsAA8gm7gY9sCX10yjJoIJ5hF7_4uXhW0fwjoMbjQ1AIHcHy1bYFFll5IdP4AVom0y69pPYT_sX7N3k_dHR2ji8HgjcYkFA7RtnJTcFVJGRW8peLCYufWd7VBNrZXYp2CU6PBp_zN9ocO94oE data-k-tracking-label=Footer:Get-support target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Get support</a></p></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:190px;\\\" ><![endif]--><div class=\\\"mj-column-per-38 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=font-size:0px;text-align:center;vertical-align:top;padding:0px;word-break:break-word;><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:190px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0;line-height:0;text-align:left;display:inline-block;width:100%;direction:ltr;vertical-align:top;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:20px;\\\" ><![endif]--><div class=\\\"mj-column-per-11 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:6%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-2px-0px-0px-0px img-container\\\" style=\\\"font-size:0px;padding:0px;word-break:break-word;mso-padding-alt:2px 0px 0px 0px;text-align:left;\\\"><div style=\\\"margin:0 auto 0 0;max-width:16px;\\\"><img alt height=auto width=16 src=https://www.gstatic.com/growthlab/api/dkQI9lf4yla7LoPNYCDT6cDAzDLQNJHukJV77L0R.png style=border:none;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:block;></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:169px;\\\" ><![endif]--><div class=\\\"mj-column-per-89 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:94%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-6px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 10px;word-break:break-word;mso-padding-alt:0px 0px 0px 6px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><p style=\\\"margin: 0 0 0px 0;\\\"><a href=https://c.gle/AAuDWvklnDPsPO0wTCE5Hr_FwiP8JEvlTntZ3WzXudZNsaftP_-xgnV7HQKC3f_1py1OkZXtBjiUdOmuJccx-LaoT-LFSZhx5ez6gvpf1iZeaF1e3dtRtYaQimpu5hspetVY3mjEdP7I-cx9ADqFE8fJg-H4xOX3XWnKOg data-k-tracking-label=Footer:Manage-API-keys target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Manage API keys</a></p></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:145px;\\\" ><![endif]--><div class=\\\"mj-column-per-29 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=width:100%; class=section>\\n<tr>\\n<td align=center style=font-size:0px;text-align:center;vertical-align:top;padding:0px;word-break:break-word;><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:145px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0;line-height:0;text-align:left;display:inline-block;width:100%;direction:ltr;vertical-align:top;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:20px;\\\" ><![endif]--><div class=\\\"mj-column-per-14 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:6%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=img-container style=\\\"font-size:0px;padding:1px 0px 0px 0px;word-break:break-word;text-align:left;\\\"><div style=\\\"margin:0 auto 0 0;max-width:19px;\\\"><img alt height=auto width=19 src=https://www.gstatic.com/growthlab/api/t0Eaq083sywsTg0AfKFZxA2uv1a8NGGGtbepuDPD.png style=border:none;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;display:block;></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n<td style=\\\"vertical-align:top;width:124px;\\\" ><![endif]--><div class=\\\"mj-column-per-86 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:94%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation style=border-radius:0px;vertical-align:top; width=100%>\\n<tr>\\n<td class=\\\"padding-0px-0px-0px-8px text-container\\\" style=\\\"font-size:0px;padding:0px 0px 24px 10px;word-break:break-word;mso-padding-alt:0px 0px 0px 8px;text-align:left;\\\"><div class=links-717378><div style=\\\"font-family:&#39;Google Sans&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:14px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.313em;color:#717378;direction:ltr;\\\" dir=ltr><p style=\\\"margin: 0 0 0px 0;\\\"><a href=https://c.gle/AAuDWvkFfbqP4PsaO7eCSMJtqMBETaaxgAJXGlH7jSJmkETkwUB_7pU3Eewj6p9-9byVfPKd6ECVN_lHCn1j0nWMFR_ghM-xSu4iVITUbAqm4sKN3k6C6EbkAfzjN7CygWSUUrmPuxfNlRNkJE9CvZjJE_zUaCqhycA data-k-tracking-label=Footer:Manage-billing target=_blank rel=noopener style=\\\"color: rgb(113, 115, 120); text-decoration: none;\\\">Manage billing</a></p></div></div>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table>\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:#F8FAFD;width:100%; class=section>\\n<tr>\\n<td align=center><div role=presentation><!--[if mso | IE]>\\n<table align=\\\"center\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\" class=\\\"block-grid-outlook\\\" style=\\\"width:600px;\\\" width=\\\"600\\\" >\\n<tr>\\n<td style=\\\"line-height:0px;font-size:0px;mso-line-height-rule:exactly;\\\"><![endif]--><div style=\\\"background:transparent;background-color:transparent;margin:0 auto;max-width:600px;\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation style=background-color:transparent;width:100%;>\\n<tr>\\n<td style=\\\"font-size:0px;padding:12px 0px 34px 0px;text-align:center;vertical-align:top;mso-padding-alt:12px 0px 40px 0px;\\\" class=\\\"block-grid padding-12px-0px-40px-0px\\\">\\n<table align=center border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=background-color:transparent;line-height:0;font-size:0;direction:ltr;><!--[if mso | IE]>\\n<table role=\\\"presentation\\\" border=\\\"0\\\" cellpadding=\\\"0\\\" cellspacing=\\\"0\\\">\\n<tr>\\n<td style=\\\"vertical-align:top;width:600px;\\\" ><![endif]--><div class=\\\"mj-column-per-100 mj-outlook-group-fix\\\" style=font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td style=\\\"border-radius:0px;vertical-align:top;padding:0px 24px 0px 24px;mso-padding-alt:0px 50px 0px 50px;\\\" class=padding-0px-50px-0px-50px>\\n<table border=0 cellpadding=0 cellspacing=0 role=presentation width=100%>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:0px 0px 0px 0px;word-break:break-word;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:12px;font-weight:normal;letter-spacing:none;line-height:1.50;text-align:left;mso-line-height-alt:1.125em;color:#5F6368;\\\"><p style=\\\"margin: 0;\\\">© 2026 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA</p></div></div>\\n</td>\\n</tr>\\n<tr>\\n<td class=text-container style=\\\"font-size:0px;padding:10px 0px 0px 0px;word-break:break-word;text-align:left;\\\"><div class=links-1A73E8-underline><div style=\\\"font-family:&#39;Roboto&#39;, &#39;Open Sans&#39;, Arial, sans-serif;font-size:12px;font-weight:normal;letter-spacing:none;line-height:1.5;text-align:left;mso-line-height-alt:1.125em;color:#5F6368;\\\"><p style=\\\"margin: 0;\\\">You&#39;ve received this mandatory service announcement email to update you on important actions to be taken related to your Google AI Studio account.</p></div></div>\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]-->\\n</td>\\n</tr>\\n</table>\\n</td>\\n</tr>\\n</table></div><!--[if mso | IE]>\\n</td>\\n</tr>\\n</table><![endif]--></div>\\n</td>\\n</tr>\\n</table></div><img alt=\\\"\\\" height=1 width=3 src=https://notifications.google.com/g/img/AAuDWvnurnOmFGuHHxMFsvCa3avFddre9YoC4shLkI0TIgWyKLMiqmy8tFfAeIPVxwAT5JMdUdI6juc-ATJkoY2mFYYqhJCBeBOhocnvFYkFfUZp76Qd12Ql4kSVebmMCbwr9OHoNw.gif></body></html>\",\n  \n  \n\"text\": \n\"Google AI Studio<https://c.gle/AAuDWvncsL5fn0QbrUP3GFm6oUWbsrcplLrY_WGUHp3gZhdc_YtgWdl0yXFKGIcBXBYchNjYHWYI1rAcO6nJydeCDxjjFWnAzRIGznR7hiDbTxP6wmcWecOEpkCMdacZnEW5D0-KVEwa7hWS3wYRTatvHL2p>\\n\\nTo protect your inactive Gemini API project(s), we've applied monthly spend caps\\n\\nYour project(s) have been inactive for 50+ days. To help mitigate against unauthorized usage and accidental charges, we've auto-applied project spend caps. You can increase or remove the cap at any time.\\n\\nProjects affected:\\n\\n- gen-lang-client-0471206242 (918254055873) (141.67 CAD)<https://c.gle/AAuDWvm5cmqgsBSFcqhvrsGhq4Y58Pa9BJ_SslfVzkOw_JEp8CZqXqvc3abVsfcRcm2vkLzdnTbbRoYucgLbGYw8QhHSNR6yt8CJQXwN8eRMJrVklTb5j2W49qVIQ-_nzlvHWL2P1e0b6OTRO3Ogx_2Hin8l6sFfdmzeZkjuVH7zkLRRU1zTmaCxMvACrq7-3McALUI>\\n\\nChange Spend Caps<https://c.gle/AAuDWvm9SH9WvSsFg1135bZ8TwtbDV92ca7pmKvEcsfcrAjgKld7f1oFoOXNlVlOFmRV7eeYeOEWxk50rryKgVh5uikPPHTp8GpMoob3n36o4ZyKiT4y9niwfsB7s7qj5b4m5wFC6qf_2kUFO9MnoZqF8g72aSOssbdRtkkxXndwJ8ZFgqhoDx-943Z6SiA6pKNdpo9HZJ9m5zNDTTz9>\\n\\nAbout project spend caps\\n\\nProject caps are designed to help mitigate your account from unexpected overages. They are also useful if you have multiple projects under the same billing account and want to ensure each has access to enough of the cumulative spending limit.\\n\\nLearn More<https://c.gle/AAuDWvmO7wkGOxVfO1dKBOniei_q5W5SJPEYNQmLsMKZ5QM8Si7QJZ80NRzEMuHhEbCqHznZwVt_MascuzF2o0s4RqwrXrO_LhKOR3WsZWDfrBAdOULVkyOqP4HmZZcLJOy5qXo6jbwB96Vcs74kNuvFmeK5_hTIVkwnjCnN3tKhyDrpU1zq4SV942Rj0wYxdcYazg>\\n\\nGet support<https://c.gle/AAuDWvmm0qcjy6CXrhJUEShsmHQsrl_0mE0Zb7KWcXBEhukIcsgruY9Nmg76CvZAIrowwognrUj2SaDlUSAP3E7tgY-rZJyPy-FU7TOxbNp3VbLBljKKhSZTStvb_q9Uva8hf37YkPMcwqZODaHGswCW>\\n\\nManage API keys<https://c.gle/AAuDWvkqIiun3Z0EeE8ZI5y8z7zBNwDejd0Z4lH7I9I3TSMWLvqZOYvL_mRKoim9Mj7O2zReyKunOSA6brUqsrwyZadk7UW7-20suY03h4lcho90kFd0ZnUjsPm3egzdpH019YMjn3zlGWFDl5u6HNXzaqRLKvgyaSM>\\n\\nManage billing<https://c.gle/AAuDWvmXd7D5hVSAaamw3vZcA9GZXC7ljWCx_KCO0SbwVu-V5Or0cay81QnZ6zx7u2q7mn_9SVCHQydC-iO5I0ifR1m9c8LqXjDyrZd-KNNqoso1uuyyzn4NToPFL_YIaR1x1m_oJoEFimheivyIin0v9zi7sFsg>\\n\\n© 2026 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA\\n\\nYou've received this mandatory service announcement email to update you on important actions to be taken related to your Google AI Studio account.\",\n  \n  \n\"textAsHtml\": \n\"<p>Google AI Studio&lt;<a href=\\\"https://c.gle/AAuDWvncsL5fn0QbrUP3GFm6oUWbsrcplLrY_WGUHp3gZhdc_YtgWdl0yXFKGIcBXBYchNjYHWYI1rAcO6nJydeCDxjjFWnAzRIGznR7hiDbTxP6wmcWecOEpkCMdacZnEW5D0-KVEwa7hWS3wYRTatvHL2p\\\">https://c.gle/AAuDWvncsL5fn0QbrUP3GFm6oUWbsrcplLrY_WGUHp3gZhdc_YtgWdl0yXFKGIcBXBYchNjYHWYI1rAcO6nJydeCDxjjFWnAzRIGznR7hiDbTxP6wmcWecOEpkCMdacZnEW5D0-KVEwa7hWS3wYRTatvHL2p</a>&gt;</p><p>To protect your inactive Gemini API project(s), we&apos;ve applied monthly spend caps</p><p>Your project(s) have been inactive for 50+ days. To help mitigate against unauthorized usage and accidental charges, we&apos;ve auto-applied project spend caps. You can increase or remove the cap at any time.</p><p>Projects affected:</p><p>- gen-lang-client-0471206242 (918254055873) (141.67 CAD)&lt;<a href=\\\"https://c.gle/AAuDWvm5cmqgsBSFcqhvrsGhq4Y58Pa9BJ_SslfVzkOw_JEp8CZqXqvc3abVsfcRcm2vkLzdnTbbRoYucgLbGYw8QhHSNR6yt8CJQXwN8eRMJrVklTb5j2W49qVIQ-_nzlvHWL2P1e0b6OTRO3Ogx_2Hin8l6sFfdmzeZkjuVH7zkLRRU1zTmaCxMvACrq7-3McALUI\\\">https://c.gle/AAuDWvm5cmqgsBSFcqhvrsGhq4Y58Pa9BJ_SslfVzkOw_JEp8CZqXqvc3abVsfcRcm2vkLzdnTbbRoYucgLbGYw8QhHSNR6yt8CJQXwN8eRMJrVklTb5j2W49qVIQ-_nzlvHWL2P1e0b6OTRO3Ogx_2Hin8l6sFfdmzeZkjuVH7zkLRRU1zTmaCxMvACrq7-3McALUI</a>&gt;</p><p>Change Spend Caps&lt;<a href=\\\"https://c.gle/AAuDWvm9SH9WvSsFg1135bZ8TwtbDV92ca7pmKvEcsfcrAjgKld7f1oFoOXNlVlOFmRV7eeYeOEWxk50rryKgVh5uikPPHTp8GpMoob3n36o4ZyKiT4y9niwfsB7s7qj5b4m5wFC6qf_2kUFO9MnoZqF8g72aSOssbdRtkkxXndwJ8ZFgqhoDx-943Z6SiA6pKNdpo9HZJ9m5zNDTTz9\\\">https://c.gle/AAuDWvm9SH9WvSsFg1135bZ8TwtbDV92ca7pmKvEcsfcrAjgKld7f1oFoOXNlVlOFmRV7eeYeOEWxk50rryKgVh5uikPPHTp8GpMoob3n36o4ZyKiT4y9niwfsB7s7qj5b4m5wFC6qf_2kUFO9MnoZqF8g72aSOssbdRtkkxXndwJ8ZFgqhoDx-943Z6SiA6pKNdpo9HZJ9m5zNDTTz9</a>&gt;</p><p>About project spend caps</p><p>Project caps are designed to help mitigate your account from unexpected overages. They are also useful if you have multiple projects under the same billing account and want to ensure each has access to enough of the cumulative spending limit.</p><p>Learn More&lt;<a href=\\\"https://c.gle/AAuDWvmO7wkGOxVfO1dKBOniei_q5W5SJPEYNQmLsMKZ5QM8Si7QJZ80NRzEMuHhEbCqHznZwVt_MascuzF2o0s4RqwrXrO_LhKOR3WsZWDfrBAdOULVkyOqP4HmZZcLJOy5qXo6jbwB96Vcs74kNuvFmeK5_hTIVkwnjCnN3tKhyDrpU1zq4SV942Rj0wYxdcYazg\\\">https://c.gle/AAuDWvmO7wkGOxVfO1dKBOniei_q5W5SJPEYNQmLsMKZ5QM8Si7QJZ80NRzEMuHhEbCqHznZwVt_MascuzF2o0s4RqwrXrO_LhKOR3WsZWDfrBAdOULVkyOqP4HmZZcLJOy5qXo6jbwB96Vcs74kNuvFmeK5_hTIVkwnjCnN3tKhyDrpU1zq4SV942Rj0wYxdcYazg</a>&gt;</p><p>Get support&lt;<a href=\\\"https://c.gle/AAuDWvmm0qcjy6CXrhJUEShsmHQsrl_0mE0Zb7KWcXBEhukIcsgruY9Nmg76CvZAIrowwognrUj2SaDlUSAP3E7tgY-rZJyPy-FU7TOxbNp3VbLBljKKhSZTStvb_q9Uva8hf37YkPMcwqZODaHGswCW\\\">https://c.gle/AAuDWvmm0qcjy6CXrhJUEShsmHQsrl_0mE0Zb7KWcXBEhukIcsgruY9Nmg76CvZAIrowwognrUj2SaDlUSAP3E7tgY-rZJyPy-FU7TOxbNp3VbLBljKKhSZTStvb_q9Uva8hf37YkPMcwqZODaHGswCW</a>&gt;</p><p>Manage API keys&lt;<a href=\\\"https://c.gle/AAuDWvkqIiun3Z0EeE8ZI5y8z7zBNwDejd0Z4lH7I9I3TSMWLvqZOYvL_mRKoim9Mj7O2zReyKunOSA6brUqsrwyZadk7UW7-20suY03h4lcho90kFd0ZnUjsPm3egzdpH019YMjn3zlGWFDl5u6HNXzaqRLKvgyaSM\\\">https://c.gle/AAuDWvkqIiun3Z0EeE8ZI5y8z7zBNwDejd0Z4lH7I9I3TSMWLvqZOYvL_mRKoim9Mj7O2zReyKunOSA6brUqsrwyZadk7UW7-20suY03h4lcho90kFd0ZnUjsPm3egzdpH019YMjn3zlGWFDl5u6HNXzaqRLKvgyaSM</a>&gt;</p><p>Manage billing&lt;<a href=\\\"https://c.gle/AAuDWvmXd7D5hVSAaamw3vZcA9GZXC7ljWCx_KCO0SbwVu-V5Or0cay81QnZ6zx7u2q7mn_9SVCHQydC-iO5I0ifR1m9c8LqXjDyrZd-KNNqoso1uuyyzn4NToPFL_YIaR1x1m_oJoEFimheivyIin0v9zi7sFsg\\\">https://c.gle/AAuDWvmXd7D5hVSAaamw3vZcA9GZXC7ljWCx_KCO0SbwVu-V5Or0cay81QnZ6zx7u2q7mn_9SVCHQydC-iO5I0ifR1m9c8LqXjDyrZd-KNNqoso1uuyyzn4NToPFL_YIaR1x1m_oJoEFimheivyIin0v9zi7sFsg</a>&gt;</p><p>&copy; 2026 Google LLC 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA</p><p>You&apos;ve received this mandatory service announcement email to update you on important actions to be taken related to your Google AI Studio account.</p>\",\n  \n  \n\"subject\": \n\"Automatic spend cap applied to protect your inactive Gemini API project(s)\",\n  \n  \n\"date\": \n\"2026-10-06T16:41:12.000Z\",\n  \n  \n\"to\": \n{\n  \n  \n  \n\"value\": \n[\n  \n  \n  \n  \n{\n  \n  \n  \n  \n  \n\"address\": \n\"admin@tactik8.com\",\n  \n  \n  \n  \n  \n\"name\": \n\"\"\n  \n  \n  \n  \n}\n  \n  \n  \n],\n  \n  \n  \n\"html\": \n\"<span class=\\\"mp_address_group\\\"><a href=\\\"mailto:admin@tactik8.com\\\" class=\\\"mp_address_email\\\">admin@tactik8.com</a></span>\",\n  \n  \n  \n\"text\": \n\"admin@tactik8.com\"\n  \n  \n},\n  \n  \n\"from\": \n{\n  \n  \n  \n\"value\": \n[\n  \n  \n  \n  \n{\n  \n  \n  \n  \n  \n\"address\": \n\"googleaistudio-noreply@google.com\",\n  \n  \n  \n  \n  \n\"name\": \n\"Google AI Studio\"\n  \n  \n  \n  \n}\n  \n  \n  \n],\n  \n  \n  \n\"html\": \n\"<span class=\\\"mp_address_group\\\"><span class=\\\"mp_address_name\\\">Google AI Studio</span> &lt;<a href=\\\"mailto:googleaistudio-noreply@google.com\\\" class=\\\"mp_address_email\\\">googleaistudio-noreply@google.com</a>&gt;</span>\",\n  \n  \n  \n\"text\": \n\"\\\"Google AI Studio\\\" <googleaistudio-noreply@google.com>\"\n  \n  \n},\n  \n  \n\"messageId\": \n\"<67db4ada92f340ab9d3dffb556c4ece3181bd9d5-20413727-337030291@google.com>\"\n  \n}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    112,
+                    80
+                ],
+                "id": "7e6d8f93-7d1c-4751-a314-4994bc4571ef",
+                "name": "test"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "test",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'agent generic V2'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'agent generic V2'": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "test": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version d1cffe0d",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-07T16:29:59.560Z",
+        "updatedAt": "2026-10-07T16:30:01.891Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
