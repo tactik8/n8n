@@ -1,0 +1,1053 @@
+{
+    "id": "cyqMEcwNwwk8dTLQ",
+    "name": "test summarization",
+    "active": true,
+    "activeVersionId": "3107966e-8ab4-44aa-8096-b056b5ce6ab9",
+    "createdAt": "2026-10-14T12:38:31.853Z",
+    "updatedAt": "2026-10-14T13:50:40.087Z",
+    "isArchived": false,
+    "versionId": "f4bdac12-d6e8-4695-80f3-c1adae995e73",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "document",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                416,
+                144
+            ],
+            "id": "1a6e7556-f64e-473f-b57c-9eb955f55be8",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{ $json.output.result }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "7475b033-547b-4b14-a443-22787f9f378e",
+                            "name": "action.hasPart",
+                            "value": "={{ ($('Config').item.json.action.hasPart || []).concat(Array.isArray($json.output) ? $json.output : [$json.output] ) }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1312,
+                144
+            ],
+            "id": "010d0e60-2866-4c6e-9dcb-ab647c232f52",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1536,
+                144
+            ],
+            "id": "06d3bcb5-aca2-47ef-b9d9-571ce3dd079f",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1760,
+                144
+            ],
+            "id": "ff3b5883-c503-474d-8a1b-985a2aa200ef",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config",
+                            "value": "={{ {} }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c07049bf-5c5d-473e-9cd5-5a7b80020ab2",
+                            "name": "config.systemPrompt",
+                            "value": "You are a precise ontological knowledge extraction engine. Your task is to extract structured entities and relationships from the provided text into valid JSON.  Rules: 1. Extract only facts directly mentioned in the text. Do not extrapolate or assume. 2. Output format must match the following JSON schema: {\"entities\": [{\"name\": \"\", \"type\": \"\"}], \"relations\": [{\"subject\": \"\", \"predicate\": \"\", \"object\": \"\"}]} 3. If a field or relation is absent, omit it or set it to null. Do not hallucinate.  Example Input: \"Marie Curie discovered radium in Paris.\"  Example Output: {   \"entities\": [     {\"name\": \"Marie Curie\", \"type\": \"Person\"},     {\"name\": \"radium\", \"type\": \"ChemicalElement\"},     {\"name\": \"Paris\", \"type\": \"Location\"}   ],   \"relations\": [     {\"subject\": \"Marie Curie\", \"predicate\": \"discovered\", \"object\": \"radium\"}   ] }",
+                            "type": "string"
+                        },
+                        {
+                            "id": "7fa4f881-2fcc-4049-96f5-c34c1fb209cc",
+                            "name": "config.userPrompt",
+                            "value": "What is Manage Returns and why would I use it? Manage Returns is a tool that advises Canada Post on handling your returns. In Manage Returns, you can create and manage your return policies. You can also track return labels, access a 5-day return forecast and examine all policy returns for the last 12 months.  Who should use Manage Returns? Manage Returns can be used by any business customer, including Solutions for Small Business program members. Manage Returns is for customers with a parcel agreement that includes returns or those with a separate return agreement.  What is a return policy? A return policy is a set of instructions you create for Canada Post to handle your returned items. It includes information like the speed of delivery (parcel service), return address and company name. You can also add if your customer needs a Return Authorization number or if you want an additional piece of information on the return label. Most customers generally only need to set up one policy. You might have multiple policies if you have more than one return location or specific return instructions.  How many labels can I print from a return policy? There is no limit on the number of labels that can be produced per policy.  How do my customers access my return policy? In your policy, you decide if customers can start the return process online or at a post office. We recommend online returns to lessen the time customers spend at the post office.  For returns started online, provide your customers with the unique link you receive for the policy. Customers can then get a label online to print at home or bring a QR code to a post office for a label-free return. For returns started at the post office, provide your customers with your policy number. Customers will give the number to the post office clerk, who will print the label and accept the return. How long are labels valid for when created from my policy? Once the customer prints a label, there is no time limit on mailing the return. Labels that have been created online but not printed are an exception. Customers must print the label or bring the QR code to the post office within 30 days or it will expire.  What if my customer doesn’t have a printer? Customers can have their labels printed by the post office clerk when they bring in the QR code they get online. The clerk will also print the label from the policy number a customer gets from the merchant.  How do my labels get charged? Your account will be charged for the return shipment when it is delivered to you. This applies if you have a returns agreement with Canada Post or a signed parcel agreement that includes returns. If you are a Solutions for Small Business program member, your credit card will be charged for the shipment when it is returned.  How do I add a credit card to my profile? You can add a credit card to your profile by signing in to your account. Click on your username in the top right corner to select ‘My Profile’. In the ‘Payment’ section, select ‘Manage credit cards’ to add a credit card to your profile.  How do I edit, delete or manage the status of a policy? Click on the ‘Return Policies’ tab on the main Manage Returns page. Find the policy you want to update and click on the 3 dots under the ‘Actions’ column. There is a menu where you can select Edit, View and Delete. If the policy is Active, you will see the option to Deactivate it. If the policy is currently Inactive, you will see the option to Activate it.  How do I see the returns created under my polices? On the Manage Returns page, click the ‘Inbound Returns’ tab to view returns that will be delivered in the next 5 business days. These returns are based on when the label was created and handed off to Canada Post. You can also view reports (Excel or CSV format) at the policy level for all returns received in the last 12 months.  Can I use a return policy to return packages to or from outside of Canada? No, unfortunately, return policies are only applicable for returns within Canada.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "05e066ea-b645-4683-a21c-65a089e5d076",
+                            "name": "config.systemPrompt2",
+                            "value": "You are an expert text-summarization agent. Your sole function is to analyze provided text, extract core concepts, and synthesize them into clear, accurate, and concise summaries.  ## Core Directives  1. **Strict Source Adherence:** Base your summary ONLY on the information present in the source text. Do NOT add outside knowledge, external context, assumptions, personal commentary, or extrapolation. 2. **Fact Preservation:** Preserve all key statistics, dates, names, proper nouns, and central facts. Do not alter or misrepresent numerical data or quotes. 3. **Neutrality:** Maintain an objective, neutral tone. Do not reflect bias, preference, or emotional tone unless analyzing the original author's sentiment is explicitly requested. 4. **No Meta-Talk:** Output only the summary itself. Never include introductory filler (e.g., \"Here is a summary:\", \"This article discusses...\") or closing remarks. Jump directly into the summarized content.  ## Default Output Format  Unless the user specifies a custom length or format, follow this standard structure:  ### Key Takeaways - [1 to 3 core high-level takeaways in bullet points]  ### Executive Summary [A concise 2–4 sentence paragraph synthesizing the main narrative, logical flow, and primary conclusion of the text.]  ## Custom Instruction Processing  If the user provides explicit constraints in their prompt, override the default format and prioritize their instructions for: - **Format:** (e.g., bullet points, single paragraph, executive memo, section-by-section breakdown) - **Length / Detail Level:** (e.g., 50 words, 1 page, brief TL;DR) - **Focus Area:** (e.g., \"focus only on financial data,\" \"summarize action items only\")  ## Failure Handling - If the provided text is too short, nonsensical, or lacks sufficient context to summarize, state clearly: *\"The provided text does not contain sufficient content to generate a meaningful summary.\"* - If the text is empty or missing, request the source text directly.",
+                            "type": "string"
+                        },
+                        {
+                            "id": "23ac0830-d237-4a32-ada2-dc9441e6084b",
+                            "name": "config.jsonSchema",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "1c146767-305f-4c4b-b559-4ecf1bf5a354",
+                            "name": "config.databaseID",
+                            "value": "agentKnowledgeExtractorV1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ab6da317-97c1-443c-b934-0ebf13fc9794",
+                            "name": "config.tenantID",
+                            "value": "test1",
+                            "type": "string"
+                        },
+                        {
+                            "id": "228c075f-fa25-45a4-b8c8-ca118af019dd",
+                            "name": "config.conversationID",
+                            "value": "={{ $json.action.instrument['@id'] }}/conversation/{{ $execution.id }}#conversation",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                864,
+                144
+            ],
+            "id": "8aec955a-2685-4f22-9755-771c6486466d",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@type",
+                            "value": "WebPage",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                            "name": "action.object.url",
+                            "value": "={{ $json.url }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTime",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "96247d5c-bc94-4126-88d7-a4f774d37070",
+                            "name": "action.hasPart",
+                            "value": "={{ []  }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                640,
+                144
+            ],
+            "id": "124c957f-859a-41eb-b1b9-e67e501f6abb",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dIAkYGJZamb3Rksb",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dIAkYGJZamb3Rksb",
+                    "cachedResultName": "agent generic V2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "testMode": false,
+                        "taskFormat": false,
+                        "databaseID": "={{ $json.config.databaseID }}",
+                        "tenantID": "={{ $json.config.tenantID }}",
+                        "conversationID": "={{ $json.config.conversationID }}",
+                        "systemPrompt": "={{ $json.config.systemPrompt2 }}",
+                        "userPrompt": "={{ $json.config.userPrompt }}",
+                        "sender": "={{ {\"@id\": \"https://www.test.com/person1#person\"} }}",
+                        "recipient": "={{ {\"@id\": \"https://www.test.com/webapi#webapi\"} }}",
+                        "responseSchema": "={{ $json.config.jsonSchema }}",
+                        "minSize": "7",
+                        "modelName": "gemini3:flash"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "conversationID",
+                            "displayName": "conversationID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "systemPrompt",
+                            "displayName": "systemPrompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "userPrompt",
+                            "displayName": "userPrompt",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "sender",
+                            "displayName": "sender",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "recipient",
+                            "displayName": "recipient",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "testMode",
+                            "displayName": "testMode",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "boolean",
+                            "removed": false
+                        },
+                        {
+                            "id": "taskFormat",
+                            "displayName": "taskFormat",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "boolean",
+                            "removed": false
+                        },
+                        {
+                            "id": "minSize",
+                            "displayName": "minSize",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "modelName",
+                            "displayName": "modelName",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "responseSchema",
+                            "displayName": "responseSchema",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                1088,
+                144
+            ],
+            "id": "3aed1d15-0fbd-4ecf-bc83-6d0143336458",
+            "name": "Call 'agent generic V2'"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'agent generic V2'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'agent generic V2'": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "document": {
+                        "text": "Some text here\n pick up milk"
+                    }
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "cyqMEcwNwwk8dTLQ",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-14T12:38:31.853Z",
+            "updatedAt": "2026-10-14T12:38:31.853Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "3107966e-8ab4-44aa-8096-b056b5ce6ab9",
+        "workflowId": "cyqMEcwNwwk8dTLQ",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "document",
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.1,
+                "position": [
+                    416,
+                    144
+                ],
+                "id": "1a6e7556-f64e-473f-b57c-9eb955f55be8",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{ $json.output.result }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1312,
+                    144
+                ],
+                "id": "010d0e60-2866-4c6e-9dcb-ab647c232f52",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1536,
+                    144
+                ],
+                "id": "06d3bcb5-aca2-47ef-b9d9-571ce3dd079f",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1760,
+                    144
+                ],
+                "id": "ff3b5883-c503-474d-8a1b-985a2aa200ef",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config",
+                                "value": "={{ {} }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c07049bf-5c5d-473e-9cd5-5a7b80020ab2",
+                                "name": "config.systemPrompt",
+                                "value": "You are a precise ontological knowledge extraction engine. Your task is to extract structured entities and relationships from the provided text into valid JSON.  Rules: 1. Extract only facts directly mentioned in the text. Do not extrapolate or assume. 2. Output format must match the following JSON schema: {\"entities\": [{\"name\": \"\", \"type\": \"\"}], \"relations\": [{\"subject\": \"\", \"predicate\": \"\", \"object\": \"\"}]} 3. If a field or relation is absent, omit it or set it to null. Do not hallucinate.  Example Input: \"Marie Curie discovered radium in Paris.\"  Example Output: {   \"entities\": [     {\"name\": \"Marie Curie\", \"type\": \"Person\"},     {\"name\": \"radium\", \"type\": \"ChemicalElement\"},     {\"name\": \"Paris\", \"type\": \"Location\"}   ],   \"relations\": [     {\"subject\": \"Marie Curie\", \"predicate\": \"discovered\", \"object\": \"radium\"}   ] }",
+                                "type": "string"
+                            },
+                            {
+                                "id": "7fa4f881-2fcc-4049-96f5-c34c1fb209cc",
+                                "name": "config.userPrompt",
+                                "value": "What is Manage Returns and why would I use it? Manage Returns is a tool that advises Canada Post on handling your returns. In Manage Returns, you can create and manage your return policies. You can also track return labels, access a 5-day return forecast and examine all policy returns for the last 12 months.  Who should use Manage Returns? Manage Returns can be used by any business customer, including Solutions for Small Business program members. Manage Returns is for customers with a parcel agreement that includes returns or those with a separate return agreement.  What is a return policy? A return policy is a set of instructions you create for Canada Post to handle your returned items. It includes information like the speed of delivery (parcel service), return address and company name. You can also add if your customer needs a Return Authorization number or if you want an additional piece of information on the return label. Most customers generally only need to set up one policy. You might have multiple policies if you have more than one return location or specific return instructions.  How many labels can I print from a return policy? There is no limit on the number of labels that can be produced per policy.  How do my customers access my return policy? In your policy, you decide if customers can start the return process online or at a post office. We recommend online returns to lessen the time customers spend at the post office.  For returns started online, provide your customers with the unique link you receive for the policy. Customers can then get a label online to print at home or bring a QR code to a post office for a label-free return. For returns started at the post office, provide your customers with your policy number. Customers will give the number to the post office clerk, who will print the label and accept the return. How long are labels valid for when created from my policy? Once the customer prints a label, there is no time limit on mailing the return. Labels that have been created online but not printed are an exception. Customers must print the label or bring the QR code to the post office within 30 days or it will expire.  What if my customer doesn’t have a printer? Customers can have their labels printed by the post office clerk when they bring in the QR code they get online. The clerk will also print the label from the policy number a customer gets from the merchant.  How do my labels get charged? Your account will be charged for the return shipment when it is delivered to you. This applies if you have a returns agreement with Canada Post or a signed parcel agreement that includes returns. If you are a Solutions for Small Business program member, your credit card will be charged for the shipment when it is returned.  How do I add a credit card to my profile? You can add a credit card to your profile by signing in to your account. Click on your username in the top right corner to select ‘My Profile’. In the ‘Payment’ section, select ‘Manage credit cards’ to add a credit card to your profile.  How do I edit, delete or manage the status of a policy? Click on the ‘Return Policies’ tab on the main Manage Returns page. Find the policy you want to update and click on the 3 dots under the ‘Actions’ column. There is a menu where you can select Edit, View and Delete. If the policy is Active, you will see the option to Deactivate it. If the policy is currently Inactive, you will see the option to Activate it.  How do I see the returns created under my polices? On the Manage Returns page, click the ‘Inbound Returns’ tab to view returns that will be delivered in the next 5 business days. These returns are based on when the label was created and handed off to Canada Post. You can also view reports (Excel or CSV format) at the policy level for all returns received in the last 12 months.  Can I use a return policy to return packages to or from outside of Canada? No, unfortunately, return policies are only applicable for returns within Canada.",
+                                "type": "string"
+                            },
+                            {
+                                "id": "05e066ea-b645-4683-a21c-65a089e5d076",
+                                "name": "config.systemPrompt2",
+                                "value": "You are an expert text-summarization agent. Your sole function is to analyze provided text, extract core concepts, and synthesize them into clear, accurate, and concise summaries.  ## Core Directives  1. **Strict Source Adherence:** Base your summary ONLY on the information present in the source text. Do NOT add outside knowledge, external context, assumptions, personal commentary, or extrapolation. 2. **Fact Preservation:** Preserve all key statistics, dates, names, proper nouns, and central facts. Do not alter or misrepresent numerical data or quotes. 3. **Neutrality:** Maintain an objective, neutral tone. Do not reflect bias, preference, or emotional tone unless analyzing the original author's sentiment is explicitly requested. 4. **No Meta-Talk:** Output only the summary itself. Never include introductory filler (e.g., \"Here is a summary:\", \"This article discusses...\") or closing remarks. Jump directly into the summarized content.  ## Default Output Format  Unless the user specifies a custom length or format, follow this standard structure:  ### Key Takeaways - [1 to 3 core high-level takeaways in bullet points]  ### Executive Summary [A concise 2–4 sentence paragraph synthesizing the main narrative, logical flow, and primary conclusion of the text.]  ## Custom Instruction Processing  If the user provides explicit constraints in their prompt, override the default format and prioritize their instructions for: - **Format:** (e.g., bullet points, single paragraph, executive memo, section-by-section breakdown) - **Length / Detail Level:** (e.g., 50 words, 1 page, brief TL;DR) - **Focus Area:** (e.g., \"focus only on financial data,\" \"summarize action items only\")  ## Failure Handling - If the provided text is too short, nonsensical, or lacks sufficient context to summarize, state clearly: *\"The provided text does not contain sufficient content to generate a meaningful summary.\"* - If the text is empty or missing, request the source text directly.",
+                                "type": "string"
+                            },
+                            {
+                                "id": "23ac0830-d237-4a32-ada2-dc9441e6084b",
+                                "name": "config.jsonSchema",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "1c146767-305f-4c4b-b559-4ecf1bf5a354",
+                                "name": "config.databaseID",
+                                "value": "agentKnowledgeExtractorV1",
+                                "type": "string"
+                            },
+                            {
+                                "id": "ab6da317-97c1-443c-b934-0ebf13fc9794",
+                                "name": "config.tenantID",
+                                "value": "test1",
+                                "type": "string"
+                            },
+                            {
+                                "id": "228c075f-fa25-45a4-b8c8-ca118af019dd",
+                                "name": "config.conversationID",
+                                "value": "={{ $json.action.instrument['@id'] }}/conversation/{{ $execution.id }}#conversation",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    864,
+                    144
+                ],
+                "id": "8aec955a-2685-4f22-9755-771c6486466d",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@type",
+                                "value": "WebPage",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e28c30a6-8b2d-4f01-aa7c-4a55fa297657",
+                                "name": "action.object.url",
+                                "value": "={{ $json.url }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTime",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    640,
+                    144
+                ],
+                "id": "124c957f-859a-41eb-b1b9-e67e501f6abb",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "dIAkYGJZamb3Rksb",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/dIAkYGJZamb3Rksb",
+                        "cachedResultName": "agent generic V2"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "testMode": false,
+                            "taskFormat": false,
+                            "databaseID": "={{ $json.config.databaseID }}",
+                            "tenantID": "={{ $json.config.tenantID }}",
+                            "conversationID": "={{ $json.config.conversationID }}",
+                            "systemPrompt": "={{ $json.config.systemPrompt2 }}",
+                            "userPrompt": "={{ $json.config.userPrompt }}",
+                            "sender": "={{ {\"@id\": \"https://www.test.com/person1#person\"} }}",
+                            "recipient": "={{ {\"@id\": \"https://www.test.com/webapi#webapi\"} }}",
+                            "responseSchema": "={{ $json.config.jsonSchema }}",
+                            "minSize": "7",
+                            "modelName": "gemini3:flash"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "conversationID",
+                                "displayName": "conversationID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "systemPrompt",
+                                "displayName": "systemPrompt",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "userPrompt",
+                                "displayName": "userPrompt",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "sender",
+                                "displayName": "sender",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "recipient",
+                                "displayName": "recipient",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            },
+                            {
+                                "id": "testMode",
+                                "displayName": "testMode",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "boolean",
+                                "removed": false
+                            },
+                            {
+                                "id": "taskFormat",
+                                "displayName": "taskFormat",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "boolean",
+                                "removed": false
+                            },
+                            {
+                                "id": "minSize",
+                                "displayName": "minSize",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "modelName",
+                                "displayName": "modelName",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "responseSchema",
+                                "displayName": "responseSchema",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    1088,
+                    144
+                ],
+                "id": "3aed1d15-0fbd-4ecf-bc83-6d0143336458",
+                "name": "Call 'agent generic V2'"
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'agent generic V2'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'agent generic V2'": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 3107966e",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-10-14T12:43:08.676Z",
+        "updatedAt": "2026-10-14T12:43:11.082Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
