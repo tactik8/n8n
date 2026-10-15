@@ -1,0 +1,86 @@
+{
+    "id": "VCoT4CO2IK5gTCZR",
+    "name": "API Mealie post recipe by url v1",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-10-14T11:39:19.623Z",
+    "updatedAt": "2026-10-14T12:02:55.478Z",
+    "isArchived": false,
+    "versionId": "15c17768-23bc-4bab-859d-bfe89a146d19",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "4e1b76b6-3fdb-419b-88fc-6b62d0546015",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://mealie.tactik8.com/api/recipes/create/url",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb25nX3Rva2VuIjp0cnVlLCJpZCI6Ijc5M2NhODQyLWEzMzktNGMyOC04ZjdkLTQ5ODI0OGZhYjA1OSIsIm5hbWUiOiJuOG4iLCJpbnRlZ3JhdGlvbl9pZCI6ImdlbmVyaWMiLCJpc3MiOiJtZWFsaWUiLCJpYXQiOjE3OTE5NzgwNDYsImV4cCI6MTk0OTY1ODA0Nn0.dix2eV8YqFwnFKT1YmTyl0MrtGiC3R3K1lyLVS5-AIM"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "{\n  \"url\": \"https://www.instagram.com/p/DW9bEftDHSC/?stkn=MTM5dm95ajFhejhvYQ%3D%3D\",\n  \"useOpenAI\": true\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                224,
+                0
+            ],
+            "id": "dd6d4eb0-b832-4e2e-823b-df3484c125eb",
+            "name": "HTTP Request"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "VCoT4CO2IK5gTCZR",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-10-14T11:39:19.623Z",
+            "updatedAt": "2026-10-14T11:39:19.623Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
