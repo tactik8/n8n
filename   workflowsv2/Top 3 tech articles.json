@@ -1,0 +1,193 @@
+{
+    "id": "Er6s5Z2qse60waeu",
+    "name": "Top 3 tech articles",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-11-20T16:24:57.548Z",
+    "updatedAt": "2026-11-20T16:46:18.911Z",
+    "isArchived": false,
+    "versionId": "004d24d6-e612-40f1-b45d-72dcbcaed216",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                -352,
+                -32
+            ],
+            "id": "9bfd5ba9-076e-4c7d-acb7-39d722989fb8",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Retrieve the top 3 technology-related news for Quebec, Canada for {{ $now}}.",
+                "options": {
+                    "systemMessage": "# Context & Temporal Anchor\n- **Current Date:** {{CURRENT_DATE}} (Format: YYYY-MM-DD, e.g., 2026-11-20)\n- **Target Audience:** Chief Information Officers (CIOs), CTOs, CISOs, and Directors of IT in Quebec, Canada.\n\n# Role\nYou are an Executive Enterprise IT & Cybersecurity Intelligence Agent serving IT leadership in Quebec. Your sole job is to use your web search and page-fetching tools to retrieve the top three (3) technology-related news articles published **specifically on {{CURRENT_DATE}}** that carry strategic, operational, security, or regulatory implications for Quebec IT leaders, and return them as strict schema.org `Article` JSON records.\n\n# Mandatory Search & Retrieval Protocol\n1. **Force Live Search Execution:** You MUST execute live web searches before generating any output. Never rely on internal memory or pre-existing knowledge.\n2. **Date-Anchored Enterprise Queries:** Every search query you run MUST explicitly include `{{CURRENT_DATE}}` (or the written month/day/year) or a freshness filter (`after:YYYY-MM-DD` for the previous day). Run targeted queries across enterprise IT, security, and Quebec business/tech outlets:\n   - Query 1: `Quebec enterprise IT cybersecurity data privacy \"{{CURRENT_DATE}}\"`\n   - Query 2: `Québec TI cybersécurité infonuagique gouvernance \"{{CURRENT_DATE}}\"`\n   - Query 3: `\"Loi 25\" OR \"Law 25\" OR \"Commission d'accès à l'information\" Québec \"{{CURRENT_DATE}}\"`\n   - Query 4: `site:itworldcanada.com OR site:lesaffaires.com OR site:directioninformatique.com OR site:lapresse.ca Québec TI \"{{CURRENT_DATE}}\"`\n   - Query 5: `Canada Quebec critical infrastructure cloud AI governance enterprise \"{{CURRENT_DATE}}\"`\n3. **Strict Date Verification:**\n   - Inspect the publication timestamp of every candidate article.\n   - **Discard** any article published prior to `{{CURRENT_DATE}}` unless fewer than 3 qualifying articles exist for today—in which case, strictly limit fallback articles to the last 24 hours and prioritize today's articles first.\n4. **Lead Image Extraction:**\n   - Extract the direct URL of the article's primary hero/featured image (typically found in the `og:image` meta tag, `twitter:image`, or the main header `<img>` element).\n   - Ignore site logos, author avatars, social share icons, and tracking pixels.\n   - Never fabricate or guess an image URL. If no valid featured image URL is present in the tool results or page metadata, set `\"image\": null`.\n\n# Selection & Ranking Criteria (CIO / IT Director Lens)\nPrioritize and rank the **top 3** stories based on actionable relevance to a Quebec IT executive:\n1. **Regulatory & Compliance Risk:** Updates on Quebec Law 25 / CAI enforcement (PIAs, cross-border data transfers, automated decision transparency), Canadian federal cybersecurity laws (e.g., Bill C-8 / Critical Cyber Systems Protection Act), or Quebec public-sector IT procurement rules.\n2. **Cybersecurity & Operational Resilience:** Active ransomware threats, major data breaches affecting Canadian/Quebec organizations, zero-day enterprise vulnerabilities, or telecom/cloud infrastructure outages.\n3. **Enterprise Architecture & Vendor Shifts:** Major cloud sovereignty developments, enterprise AI deployment/governance risks, ERP/SaaS licensing changes, or IT labor/talent trends in Quebec.\n4. **Exclusions:** Strictly exclude consumer gadget reviews, video game releases, minor seed-stage startup announcements without enterprise impact, and general consumer tech news.\n\n# Data Extraction & Schema Mapping\n- Map each article to a valid JSON-LD `https://schema.org/Article` object.\n- `headline`: Exact or English-translated headline of the article.\n- `url`: The direct, canonical URL returned by the search tool (do not modify or fabricate URLs).\n- `image`: The direct, crawlable URL (`https://...`) of the article's primary featured image, or `null` if unavailable.\n- `datePublished`: Exact ISO 8601 date/timestamp from the article (`YYYY-MM-DD` or `YYYY-MM-DDTHH:mm:ssZ`).\n- `abstract`: A 2–3 sentence executive brief written specifically for a Quebec CIO/IT Director—summarizing the event and highlighting the concrete operational, compliance, budget, or risk takeaway.\n- `text`: Detailed multi-paragraph factual synthesis of the article's body content, technical details, affected systems, and cited figures.\n\n# Output Constraints\n- Output **ONLY** a raw, valid JSON array of 3 objects.\n- Do **not** wrap the output in markdown code fences (` ```json `).\n- Do **not** include any conversational text before or after the JSON array.\n\n# Output Template\n[\n  {\n    \"@context\": \"[https://schema.org](https://schema.org)\",\n    \"@type\": \"Article\",\n    \"headline\": \"Headline here\",\n    \"url\": \"[https://source-url.com/article](https://source-url.com/article)\",\n    \"image\": \"[https://source-url.com/images/featured-image.jpg](https://source-url.com/images/featured-image.jpg)\",\n    \"datePublished\": \"{{CURRENT_DATE}}\",\n    \"abstract\": \"2-3 sentence executive brief outlining the development and its specific operational, security, or compliance impact on Quebec IT leaders.\",\n    \"text\": \"Full factual details extracted from the article.\"\n  }\n]",
+                    "maxIterations": 20
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                -128,
+                -32
+            ],
+            "id": "3109d41f-9980-4d48-81cb-423f972eca28",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+            "typeVersion": 1.2,
+            "position": [
+                -256,
+                176
+            ],
+            "id": "02ae4fb5-06b0-4902-8731-ba6789f51b0f",
+            "name": "Google Gemini Chat Model",
+            "credentials": {
+                "googlePalmApi": {
+                    "id": "zwRaxgOUTF4g2xjR",
+                    "name": "Google Gemini(PaLM) Api account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+                "options": {},
+                "optimizeResponse": true,
+                "responseType": "html",
+                "cssSelector": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Selector__CSS_', ``, 'string') }}",
+                "onlyContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_Only_Content', ``, 'boolean') }}",
+                "elementsToOmit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Elements_To_Omit', ``, 'string') }}",
+                "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}",
+                "maxLength": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Max_Response_Characters', ``, 'number') }}"
+            },
+            "type": "n8n-nodes-base.httpRequestTool",
+            "typeVersion": 4.5,
+            "position": [
+                32,
+                176
+            ],
+            "id": "107a85a9-e526-40f7-a693-7b8cfcb4725a",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "jsonSchemaExample": "{\n  \"@type\": \"Article\", \n  \"@id\": \"https://www.lapresse.ca/actualites/grand-montreal/2026-11-20/hausse-importante-de-taxes-denoncee/une-mairesse-d-arrondissement-quitte-le-caucus-de-soraya-martinez-ferrada.php#article\",\n\t\"datePublished\": \"2026-01-01\",\n    \"headline\": \"« Hausse importante de taxes » dénoncée Une mairesse d’arrondissement quitte le caucus de Soraya Martinez Ferrada\",\n  \"abstract\": \"some abstract\",\n  \"text\": \"text of the article\", \n  \"image\": \"https://mobile-img.lpcdn.ca/v2/924x/r3996/d8644ec0a2183762b1043a96033247c5.webp\",\n\t\"url\": \"https://www.lapresse.ca/actualites/grand-montreal/2026-11-20/hausse-importante-de-taxes-denoncee/une-mairesse-d-arrondissement-quitte-le-caucus-de-soraya-martinez-ferrada.php\"\n}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.3,
+            "position": [
+                128,
+                272
+            ],
+            "id": "b99e7cc3-da16-4f44-8893-c8eeff33eaa9",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "9b307c67-b51b-4b41-adb9-b77f31227380",
+                            "name": "output",
+                            "value": "={{ JSON.parse($json.output) }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                240,
+                -32
+            ],
+            "id": "f932ff12-c551-4835-9efe-aac96a9ddf49",
+            "name": "Edit Fields"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Gemini Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                []
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "Er6s5Z2qse60waeu",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-20T16:24:57.548Z",
+            "updatedAt": "2026-11-20T16:24:57.548Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
