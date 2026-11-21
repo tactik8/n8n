@@ -1,0 +1,215 @@
+{
+    "id": "5zCdjmsCnv7IEfoS",
+    "name": "My workflow 24",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-11-20T16:03:10.355Z",
+    "updatedAt": "2026-11-20T16:57:07.202Z",
+    "isArchived": false,
+    "versionId": "13e6904c-8de7-4060-8287-109829d37d28",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "jsonExample",
+                "jsonExample": "[\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\": \"Article\",\n        \"headline\": \"Montreal’s STM Transit Authority Announces $30M Cost-Cutting Plan and Elimination of 120 Positions\",\n        \"url\": \"https://www.cbc.ca/news/canada/montreal/stm-budget-cuts-30-million-1.7429689\",\n        \"image\": \"https://i.cbc.ca/ais/48371cd3-8de0-41c8-828e-fb21ea502755,1795189476498/full/max/0/default.jpg?im=Crop%2Crect%3D%280%2C212%2C4069%2C2288%29%3B\",\n        \"datePublished\": \"2026-11-20T10:45:00Z\",\n        \"abstract\": \"Montreal's transit authority (STM) has unveiled a strategic plan to save $30 million next year by cutting 120 positions and restructuring maintenance schedules. For Quebec IT and operations leaders, this signals increased fiscal pressure on public sector infrastructure and potential delays in non-critical technological upgrades.\",\n        \"text\": \"The Société de transport de Montréal (STM) has officially announced a series of drastic measures to address its current budget deficit, aiming for $30 million in savings in the coming fiscal year. Aref Salem, chair of the STM board of directors, stated that the majority of these savings would be achieved through the elimination of approximately 120 positions and significant modifications to the authority's fleet and infrastructure maintenance schedules. While the STM frames these as 'optimization' measures, the move suggests a period of austerity that may impact the deployment of smart transit technologies and operational IT support. IT directors in the public and parapublic sectors should note this as part of a wider trend of workforce rationalization and operational cost-containment across Quebec’s critical infrastructure.\"\n      },\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\": \"Article\",\n        \"headline\": \"Ubisoft Eliminates 166 Positions in Montreal and Quebec City Amid Industry Restructuring\",\n        \"url\": \"https://www.lapresse.ca/affaires/techno/2026-11-19/jeu-video/ubisoft-supprime-166-emplois-a-montreal-et-a-quebec.php\",\n        \"image\": \"https://mobile-img.lpcdn.ca/v2/357x/r3996/11b6be1dba5731f38bea8437be011839.jpg\",\n        \"datePublished\": \"2026-11-19T10:15:00Z\",\n        \"abstract\": \"Ubisoft has cut 166 jobs at its major Quebec studios, citing a transformation driven by AI and reduced government subsidies. This development highlights a shift in the local IT labor market, providing a surge in specialized talent availability but signaling economic volatility for Quebec's tech hubs.\",\n        \"text\": \"French gaming giant Ubisoft has announced the layoff of 128 employees at its Montreal studio and 38 at its Quebec City studio, just hours before releasing its quarterly results. The company describes this as a necessary step in a global restructuring effort. Key factors cited by industry analysts include the aggressive integration of generative AI into game development workflows—which has optimized production but reduced the need for certain manual technical roles—and a tightening of provincial tax credits and subsidies for the interactive media sector. For Quebec IT leaders, these layoffs mark a significant release of high-level engineering and project management talent into the market, while also highlighting the need for strategic workforce planning as AI continues to disrupt traditional tech roles.\"\n      },\n      {\n        \"@context\": \"https://schema.org\",\n        \"@type\": \"Article\",\n        \"headline\": \"JPMorgan, Visa, and Mastercard Targeted in Cyberattack on Shared Subcontractor\",\n        \"url\": \"https://www.lapresse.ca/affaires/techno/2026-11-19/cyberattaque/jpmorgan-visa-et-mastercard-victimes-secondaires-du-piratage-d-un-fournisseur.php\",\n        \"image\": \"https://mobile-img.lpcdn.ca/v2/357x/r3996/63aa43eaf3b83eb694e5467661aa5589.jpg\",\n        \"datePublished\": \"2026-11-19T15:56:00Z\",\n        \"abstract\": \"A significant supply chain breach involving a third-party vendor has exposed customer data for JPMorgan, Visa, and Mastercard. Quebec CIOs and CISOs must view this as a priority case study for Law 25 compliance, emphasizing the urgent need for enhanced vendor risk assessment and third-party security audits.\",\n        \"text\": \"JPMorgan Chase, along with payment giants Visa and Mastercard, confirmed they were secondary victims of a cyberattack targeting one of their service providers. While the financial institutions have assured the public that no direct financial credentials or account funds were compromised, hackers managed to access customer personal information. The breach underscores the vulnerability of the financial ecosystem to 'island hopping' attacks, where smaller subcontractors are used as gateways to major enterprises. Under Quebec's Law 25, organizations are required to conduct Privacy Impact Assessments (PIAs) for all third-party data transfers; this incident serves as a critical reminder for Quebec IT executives to re-evaluate their supply chain security posture and ensure that all vendors meet the province's rigorous data protection standards.\"\n      }\n    ]\n  "
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                -224,
+                240
+            ],
+            "id": "8658bfaf-8849-4ae1-a7bc-633940a0f799",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "operation": "getPosts",
+                "startDate": "2026-11-07T00:00:00",
+                "endDate": "2026-11-30T00:00:00"
+            },
+            "type": "n8n-nodes-postiz.postiz",
+            "typeVersion": 1,
+            "position": [
+                224,
+                0
+            ],
+            "id": "a6348264-3867-48a5-956d-cd25b751ba2f",
+            "name": "Postiz",
+            "credentials": {
+                "postizApi": {
+                    "id": "kX88ttQSArMOLrcK",
+                    "name": "Postiz account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "date": "2026-11-20T11:17:00",
+                "posts": {
+                    "post": [
+                        {
+                            "integrationId": "cmwp6tnbl000cms7dlr2lmrm9",
+                            "settings": {
+                                "setting": []
+                            },
+                            "value": {
+                                "contentItem": [
+                                    {
+                                        "content": "={{ $json.headline }}",
+                                        "image": {
+                                            "imageItem": []
+                                        }
+                                    },
+                                    {
+                                        "content": "={{ $json.url }}"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-postiz.postiz",
+            "typeVersion": 1,
+            "position": [
+                336,
+                384
+            ],
+            "id": "85af4ad2-25b1-40e1-80dd-9d4da458ce45",
+            "name": "Postiz1",
+            "credentials": {
+                "postizApi": {
+                    "id": "kX88ttQSArMOLrcK",
+                    "name": "Postiz account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "getIntegrations"
+            },
+            "type": "n8n-nodes-postiz.postiz",
+            "typeVersion": 1,
+            "position": [
+                400,
+                160
+            ],
+            "id": "1b6e03a8-7f16-407b-b719-9f671c6345c9",
+            "name": "Postiz2",
+            "credentials": {
+                "postizApi": {
+                    "id": "kX88ttQSArMOLrcK",
+                    "name": "Postiz account"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.limit",
+            "typeVersion": 1,
+            "position": [
+                0,
+                240
+            ],
+            "id": "314a7149-d2f2-43c0-b571-84537f715eb9",
+            "name": "Limit"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Postiz",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Postiz2",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Limit",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Limit": {
+            "main": [
+                [
+                    {
+                        "node": "Postiz1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "@context": "https://schema.org",
+                    "@type": "Article",
+                    "headline": "Montreal’s STM Transit Authority Announces $30M Cost-Cutting Plan and Elimination of 120 Positions",
+                    "url": "https://www.cbc.ca/news/canada/montreal/stm-budget-cuts-30-million-1.7429689",
+                    "image": "https://i.cbc.ca/ais/48371cd3-8de0-41c8-828e-fb21ea502755,1795189476498/full/max/0/default.jpg?im=Crop%2Crect%3D%280%2C212%2C4069%2C2288%29%3B",
+                    "datePublished": "2026-11-20T10:45:00Z",
+                    "abstract": "Montreal's transit authority (STM) has unveiled a strategic plan to save $30 million next year by cutting 120 positions and restructuring maintenance schedules. For Quebec IT and operations leaders, this signals increased fiscal pressure on public sector infrastructure and potential delays in non-critical technological upgrades.",
+                    "text": "The Société de transport de Montréal (STM) has officially announced a series of drastic measures to address its current budget deficit, aiming for $30 million in savings in the coming fiscal year. Aref Salem, chair of the STM board of directors, stated that the majority of these savings would be achieved through the elimination of approximately 120 positions and significant modifications to the authority's fleet and infrastructure maintenance schedules. While the STM frames these as 'optimization' measures, the move suggests a period of austerity that may impact the deployment of smart transit technologies and operational IT support. IT directors in the public and parapublic sectors should note this as part of a wider trend of workforce rationalization and operational cost-containment across Quebec’s critical infrastructure."
+                }
+            },
+            {
+                "json": {
+                    "@context": "https://schema.org",
+                    "@type": "Article",
+                    "headline": "Ubisoft Eliminates 166 Positions in Montreal and Quebec City Amid Industry Restructuring",
+                    "url": "https://www.lapresse.ca/affaires/techno/2026-11-19/jeu-video/ubisoft-supprime-166-emplois-a-montreal-et-a-quebec.php",
+                    "image": "https://mobile-img.lpcdn.ca/v2/357x/r3996/11b6be1dba5731f38bea8437be011839.jpg",
+                    "datePublished": "2026-11-19T10:15:00Z",
+                    "abstract": "Ubisoft has cut 166 jobs at its major Quebec studios, citing a transformation driven by AI and reduced government subsidies. This development highlights a shift in the local IT labor market, providing a surge in specialized talent availability but signaling economic volatility for Quebec's tech hubs.",
+                    "text": "French gaming giant Ubisoft has announced the layoff of 128 employees at its Montreal studio and 38 at its Quebec City studio, just hours before releasing its quarterly results. The company describes this as a necessary step in a global restructuring effort. Key factors cited by industry analysts include the aggressive integration of generative AI into game development workflows—which has optimized production but reduced the need for certain manual technical roles—and a tightening of provincial tax credits and subsidies for the interactive media sector. For Quebec IT leaders, these layoffs mark a significant release of high-level engineering and project management talent into the market, while also highlighting the need for strategic workforce planning as AI continues to disrupt traditional tech roles."
+                }
+            },
+            {
+                "json": {
+                    "@context": "https://schema.org",
+                    "@type": "Article",
+                    "headline": "JPMorgan, Visa, and Mastercard Targeted in Cyberattack on Shared Subcontractor",
+                    "url": "https://www.lapresse.ca/affaires/techno/2026-11-19/cyberattaque/jpmorgan-visa-et-mastercard-victimes-secondaires-du-piratage-d-un-fournisseur.php",
+                    "image": "https://mobile-img.lpcdn.ca/v2/357x/r3996/63aa43eaf3b83eb694e5467661aa5589.jpg",
+                    "datePublished": "2026-11-19T15:56:00Z",
+                    "abstract": "A significant supply chain breach involving a third-party vendor has exposed customer data for JPMorgan, Visa, and Mastercard. Quebec CIOs and CISOs must view this as a priority case study for Law 25 compliance, emphasizing the urgent need for enhanced vendor risk assessment and third-party security audits.",
+                    "text": "JPMorgan Chase, along with payment giants Visa and Mastercard, confirmed they were secondary victims of a cyberattack targeting one of their service providers. While the financial institutions have assured the public that no direct financial credentials or account funds were compromised, hackers managed to access customer personal information. The breach underscores the vulnerability of the financial ecosystem to 'island hopping' attacks, where smaller subcontractors are used as gateways to major enterprises. Under Quebec's Law 25, organizations are required to conduct Privacy Impact Assessments (PIAs) for all third-party data transfers; this incident serves as a critical reminder for Quebec IT executives to re-evaluate their supply chain security posture and ensure that all vendors meet the province's rigorous data protection standards."
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "5zCdjmsCnv7IEfoS",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-20T16:03:10.355Z",
+            "updatedAt": "2026-11-20T16:03:10.355Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
