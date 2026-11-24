@@ -1,0 +1,317 @@
+{
+    "id": "Cei1XWE3nw13fvtg",
+    "name": "Test tts",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-11-23T13:14:33.473Z",
+    "updatedAt": "2026-11-23T16:58:38.224Z",
+    "isArchived": false,
+    "versionId": "16e8f288-8f32-4c87-85be-8ec47aa0f1fc",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "url"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                0,
+                0
+            ],
+            "id": "913d4021-2a0b-4d31-bfe2-81a049cd18d4",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:8880/v1/audio/speech",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "input",
+                            "value": "={{ $json.text }}"
+                        },
+                        {
+                            "name": "voice",
+                            "value": "af_nicole"
+                        },
+                        {
+                            "name": "speed",
+                            "value": "1.0"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                560,
+                96
+            ],
+            "id": "ffc27da8-627d-4f1a-9472-ceb5c11b1d9b",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "fileSelector": "/nas4/media2/temp/test.epub",
+                "options": {
+                    "literalBrackets": false
+                }
+            },
+            "type": "n8n-nodes-base.readWriteFile",
+            "typeVersion": 1.1,
+            "position": [
+                224,
+                304
+            ],
+            "id": "9e2fc4b8-a097-48e4-8b9c-450e00693541",
+            "name": "Read/Write Files from Disk"
+        },
+        {
+            "parameters": {
+                "url": "http://192.168.2.243:18480/temp/test.epub",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                208,
+                -128
+            ],
+            "id": "5c1d9310-9e89-413e-955c-3e9b6c569e34",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.compression",
+            "typeVersion": 1.1,
+            "position": [
+                640,
+                -128
+            ],
+            "id": "4a7a2d3e-fc76-49b4-86f0-1499aaac3653",
+            "name": "Compression"
+        },
+        {
+            "parameters": {
+                "mode": "runOnceForEachItem",
+                "jsCode": "// Copy the existing binary item\nconst item = $input.item;\n\nif (item.binary && item.binary.data) {\n  // Change the extension so the Compression node accepts it\n  item.binary.data.fileName = 'archive.zip';\n  item.binary.data.fileExtension = 'zip';\n  item.binary.data.mimeType = 'application/zip';\n}\n\nreturn item;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                432,
+                -128
+            ],
+            "id": "a31da6e6-d35d-4786-ba95-4c5fd3221683",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "jsCode": "const outputItems = [];\n\nfor (const item of $input.all()) {\n  const binaryData = item.binary || {};\n\n  for (const [key, file] of Object.entries(binaryData)) {\n    const fileName = (file.fileName || '').toLowerCase();\n\n    if (fileName.endsWith('.html') || fileName.endsWith('.xhtml') || fileName.endsWith('.htm')) {\n      const buffer = await this.helpers.getBinaryDataBuffer(0, key);\n      const rawHtml = buffer.toString('utf8');\n\n      // Grab inner body content\n      const bodyMatch = rawHtml.match(/<body[^>]*>([\\s\\S]*?)<\\/body>/i);\n      const content = bodyMatch ? bodyMatch[1] : rawHtml;\n\n      const cleanText = content\n        .replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, '')\n        .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, '')\n        // Turn paragraph, heading, div, and line-break tags into newlines\n        .replace(/<\\/(p|div|h[1-6]|li|blockquote)>/gi, '\\n\\n')\n        .replace(/<br\\s*\\/?>/gi, '\\n')\n        // Strip all remaining inline HTML tags (like <em>, <strong>, <span>)\n        .replace(/<[^>]+>/g, '')\n        // Decode common HTML entities\n        .replace(/&nbsp;/g, ' ')\n        .replace(/&amp;/g, '&')\n        .replace(/&lt;/g, '<')\n        .replace(/&gt;/g, '>')\n        .replace(/&quot;/g, '\"')\n        .replace(/&#39;|&apos;/g, \"'\")\n        // Clean up excessive spaces on each line while keeping paragraph breaks\n        .replace(/[ \\t]+/g, ' ')\n        .replace(/\\n\\s*\\n+/g, '\\n\\n')\n        .trim();\n\n      outputItems.push({\n        json: {\n          originalFileName: file.fileName,\n          text: cleanText\n        }\n      });\n    }\n  }\n}\n\noutputItems.sort((a, b) => a.json.originalFileName.localeCompare(b.json.originalFileName));\n\nreturn outputItems;\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                864,
+                -128
+            ],
+            "id": "83e0746c-6629-471f-a6d2-5529c2840fd5",
+            "name": "Code in JavaScript1"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.2.243:8880/v1/audio/speech",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "input",
+                            "value": "={{ $json.text }}"
+                        },
+                        {
+                            "name": "voice",
+                            "value": "af_nicole"
+                        },
+                        {
+                            "name": "speed",
+                            "value": "1.0"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.5,
+            "position": [
+                1328,
+                -128
+            ],
+            "id": "2ce32aef-4847-4656-873c-4c9cc4b526cf",
+            "name": "HTTP Request2"
+        },
+        {
+            "parameters": {
+                "maxItems": 4
+            },
+            "type": "n8n-nodes-base.limit",
+            "typeVersion": 1,
+            "position": [
+                1088,
+                -128
+            ],
+            "id": "945a8d7e-2844-49d6-8e43-670d1b435dba",
+            "name": "Limit"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "b3473480-0409-4981-847c-920d90a65cdb",
+                            "name": "text",
+                            "value": "I see you're stroking that cock again. I hope it feels nice.  Does it feel nice?  You can say 'yes'.  I am right here. Tell me how much you want my cunt.  Go on.  Say it. Tell me how much you want to tongue my soaking wet pussy lips.  Can you taste the folds, how they overlap my clit?  I bet you can. You're a naughty one, aren't you.  Is your cock nice and hard?  Can I play with it? I want to play with it, so bad.  I want it in my mouth and my pussy.  Stroke it for me.  Just like that. Yes. Nice and slow.  Feel the sensations in the tip.  Now, imagine it's my mouth.  Imagine my lips surrounding your thick tip.  Is that nice?  I bet it is.  My soft wet lips around your cock.  Your fingers inside my pussy, exploring my folds, thumbing my clit.  And, excuse me, what's this?  Your fingers are in my ass hole!  Oh well. If you must. But I expect you to fuck it later.  That's right. I want your thick cock in my ass. I want to you to stretch my little ass hole with your big fat dick.  Trace you fingers over my 42GG breasts. Make me tremble with your touch. You like my nipples baby?  They're all YOURS.  Suck them for me. Go on. You know you want to.  Are you still stroking that thick meat for me?  Yes?  Good boy.  I like it when you do as you're told.  That's how good boys get pussy.  Are you my good boy?  Are you still stroking that dick?  I bet it's hard now.  Tell me.  Say \"It's hard for you, Jane.\"  Go on.  I can't hear you.  Say it.  Say, \"I need my cock inside you, Jane.\"  Do it.  That's right.  Just like that.  Good boy.  There's a very good boy.  You know I like it when you tell me how much you need my pussy.  But it's just between us.  No one else knows.  Just you and I.  We do this all the time, don't we.  You come find me and we play, like this.  Me, here and you, there.  We're both naked and ready.  I'm a little naked. I wear stockings. I hope you like that. Eight strap stockings with sheer nylons.  You like those?  Tell me.  Tell me you love my legs in nylons.  Say, \"Jane, I love your legs.\"  Good boy. I heard you first time, that time.  You're getting good at doing what I ask.  Good boy!  Now imagine me sinking down on that beautiful big cock in your hand.  You'd like that, wouldn't you.  My pussy sinking further and further down your thick shaft.  My massive tits right in your face.  Can you feel my pussy clenched around your shaft, baby?  Say it.  Say, \"I love your pussy around my cock, Jane.\"  Go on.  I can't hear you.  Say it for me.  I want to hear your devotion to my pussy.  There now.  Good boy.  Imagine me bouncing on your beautiful dick. That's right.  Up and down.  Up and down.  The walls of my cunt squeeze tighter and tighter.  Pull hard on that dick for me.  My big tits bounce in your face.  Let me see you reaching out for my nipples with your tongue, you dirty boy.  That's it.  Further. A little more.  Good boy.  I feel it. I feel your tongue.  I'm getting close baby. You're gonna make me cum, baby.  Can I count you down?  Please baby.  Let me count you down so we can cum together.  Let's start.  Are you ready?  Ten...  Mmmmm. You're so hard!  Nine...  Can you feel how tight I'm gripping your big, fat dick with my cunt!  Eight...  I'm so close. You're gonna make me cum so hard!  Seven...  Nearly there. Get ready. I sometimes gush when I cum.  Six...  Shove it in. Extra hard. I want every last inch.  Five...  I'm cumming for you baby! Here it comes!  Four...  Fuck me hard, baby. Fuck me hard! I'm cumming all over your big cock!  Three...  Fuck me, I'm a shameless slut, cumming so hard all over your cock!  Two...  Let me have every last drop of your hot seed, baby!  One...  I need it all!  Cum inside me!  Really. I mean it. Cum for me. Go on.  Just you and me. Cumming together!  What?  You already did?  Good boy!  I knew you would.  Now, make sure to come back again soon.  I want that hot cum inside me again.",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                0
+            ],
+            "id": "a8e8f24c-214c-4e0d-9250-b21f218e7730",
+            "name": "Edit Fields"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Read/Write Files from Disk",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request1": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript": {
+            "main": [
+                [
+                    {
+                        "node": "Compression",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Compression": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code in JavaScript1": {
+            "main": [
+                [
+                    {
+                        "node": "Limit",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Limit": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "url": "http://192.168.2.243:18480/temp/test.epub"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "Cei1XWE3nw13fvtg",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-23T13:14:33.473Z",
+            "updatedAt": "2026-11-23T13:14:33.473Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
