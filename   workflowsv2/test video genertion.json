@@ -1,0 +1,121 @@
+{
+    "id": "05nOnCY2cfKdhMvu",
+    "name": "test video genertion",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-11-23T14:20:51.687Z",
+    "updatedAt": "2026-11-23T16:58:53.862Z",
+    "isArchived": false,
+    "versionId": "e6515044-e202-472d-ad5b-84cdab047b66",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "song"
+                        },
+                        {
+                            "name": "voice"
+                        },
+                        {
+                            "name": "video"
+                        },
+                        {
+                            "name": "output"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                -288,
+                -16
+            ],
+            "id": "bf0193da-de71-4b66-b2af-58a620db51c6",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "command": "=/root/.n8n/nodes/node_modules/n8n-nodes-mediafx/node_modules/@ffmpeg-installer/ffmpeg/node_modules/@ffmpeg-installer/linux-x64/ffmpeg -y -i {{ $json.voice }} -stream_loop -1 -i {{$json.song}} \\\n  -filter_complex \"[1:a]volume=0.15[bg];[0:a][bg]amix=inputs=2:duration=first:dropout_transition=2[aout]\" \\\n  -map \"[aout]\" -c:a libmp3lame -q:a 2 {{ $json.output }}"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -48,
+                -144
+            ],
+            "id": "915c59ed-14b5-46cc-9fcb-6632b55d04b5",
+            "name": "Mix sound"
+        },
+        {
+            "parameters": {
+                "command": "=/root/.n8n/nodes/node_modules/n8n-nodes-mediafx/node_modules/@ffmpeg-installer/ffmpeg/node_modules/@ffmpeg-installer/linux-x64/ffmpeg -y \\\n  -stream_loop -1 -i \"{{ $json.video }}\" \\\n  -i \"{{ $json.voice }}\" \\\n  -stream_loop -1 -i \"{{ $json.song }}\" \\\n  -filter_complex \"[2:a]volume=0.15[bg];[1:a][bg]amix=inputs=2:duration=first:dropout_transition=2[aout]\" \\\n  -map 0:v:0 -map \"[aout]\" \\\n  -c:v libx264 -preset veryfast -crf 23 -pix_fmt yuv420p \\\n  -c:a aac -b:a 192k \\\n  -shortest \"{{ $json.output }}\""
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -64,
+                48
+            ],
+            "id": "965ae733-2acd-4a7b-8b9a-622b90270810",
+            "name": "Mix sound and video"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Mix sound",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Mix sound and video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Mix sound": {
+            "main": [
+                []
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "song": "http://192.168.2.243:18480/temp/song.mp4",
+                    "voice": "http://192.168.2.243:18480/temp/voice.mp3",
+                    "video": "http://192.168.2.243:18480/temp/video.mkv",
+                    "output": "/nas4/media2/temp/mixed_output.mkv"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "05nOnCY2cfKdhMvu",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-23T14:20:51.687Z",
+            "updatedAt": "2026-11-23T14:20:51.687Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
