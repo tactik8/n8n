@@ -1,0 +1,47 @@
+{
+    "id": "zHrD1WNfSwTYr283",
+    "name": "My workflow 25",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-11-23T17:38:55.660Z",
+    "updatedAt": "2026-11-23T17:38:58.109Z",
+    "isArchived": false,
+    "versionId": "322f62a8-6464-497a-b700-eb84d86fd8b1",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                0,
+                0
+            ],
+            "id": "1451b1e0-95f4-4e46-9ce1-421e865b219d",
+            "name": "When Executed by Another Workflow"
+        }
+    ],
+    "connections": {},
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "zHrD1WNfSwTYr283",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-23T17:38:55.660Z",
+            "updatedAt": "2026-11-23T17:38:55.660Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
