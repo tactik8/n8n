@@ -1,0 +1,1065 @@
+{
+    "id": "yAOmTcU70oRxLLaG",
+    "name": "taskview ingest pipeline V1",
+    "active": true,
+    "activeVersionId": "fb17dfbe-a3f1-453f-ae59-ad85ffc8666f",
+    "createdAt": "2026-11-24T13:54:02.055Z",
+    "updatedAt": "2026-11-24T15:38:57.454Z",
+    "isArchived": false,
+    "versionId": "fb17dfbe-a3f1-453f-ae59-ad85ffc8666f",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "databaseID"
+                        },
+                        {
+                            "name": "tenantID"
+                        },
+                        {
+                            "name": "ingestActionRecord",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                -400,
+                16
+            ],
+            "id": "9198090f-fc83-4066-a60c-b56d2983d526",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{ $('Ingest Action Close1').item.json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                976,
+                16
+            ],
+            "id": "16982d16-80a6-4b30-9fcc-cfd99d33b683",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1200,
+                16
+            ],
+            "id": "4b3d5813-bf9b-46c5-b9ab-ca7edafc22e1",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1424,
+                16
+            ],
+            "id": "1c792bdc-194c-4d5a-9ee5-6ea4b412a242",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config",
+                            "value": "={{ {} }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "f72a3958-c9cf-4986-9bc6-fe67a56d31d1",
+                            "name": "config.databaseID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.databaseID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "893a7103-d2ee-47f7-90a7-011509f9cceb",
+                            "name": "config.tenantID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.tenantID }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                48,
+                16
+            ],
+            "id": "8bc57d77-6a00-4ac7-b321-769cece0293b",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object",
+                            "value": "={{ $json.ingestActionRecord }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTime",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6c1f0c83-6d61-46ae-be3a-3e8335390c12",
+                            "name": "action.hasPart",
+                            "value": "={{ [] }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -176,
+                16
+            ],
+            "id": "9809d757-caad-46ef-825d-917c80e04ae1",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "dV0pnJ9Ihc9uPshU",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/dV0pnJ9Ihc9uPshU",
+                    "cachedResultName": "schemaConversion V1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "datafeedRecord": "={{ $json.action.object.object }}"
+                    },
+                    "matchingColumns": [
+                        "datafeedRecord"
+                    ],
+                    "schema": [
+                        {
+                            "id": "datafeedRecord",
+                            "displayName": "datafeedRecord",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.3,
+            "position": [
+                272,
+                16
+            ],
+            "id": "b3936df5-9a7d-4fb6-9ff8-da14d5491d3d",
+            "name": "Call 'schemaConversion V1'"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "ZNdb9Lzp9qRl8tG1",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/ZNdb9Lzp9qRl8tG1",
+                    "cachedResultName": "api mongodb post v1"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "={{ $('Config').item.json.config.databaseID }}",
+                        "tenantID": "={{ $('Config').item.json.config.tenantID }}",
+                        "record": "={{ $json.action }}"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.4,
+            "position": [
+                720,
+                16
+            ],
+            "id": "56ada361-a5ae-46b4-a28e-71479e85113f",
+            "name": "Call 'api mongodb post v1'"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $('Config').item.json.action.object }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "cd73e5f8-67e8-4107-8089-69d6fa009a89",
+                            "name": "action.result",
+                            "value": "={{ $json.output.result }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                496,
+                16
+            ],
+            "id": "bc8cd50c-f962-480a-bd2e-29707f38a3cf",
+            "name": "Ingest Action Close1"
+        }
+    ],
+    "connections": {
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'schemaConversion V1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'schemaConversion V1'": {
+            "main": [
+                [
+                    {
+                        "node": "Ingest Action Close1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'api mongodb post v1'": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Ingest Action Close1": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api mongodb post v1'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "databaseID": "testdb",
+                    "tenantID": "testtenant",
+                    "ingestActionRecord": {
+                        "@id": "https://n8n.tactik8.com/workflow/SKT9qMIhq1HyI6Yu/execution/305582",
+                        "@type": "Action",
+                        "actionStatus": "ActiveActionStatus",
+                        "endTime": "",
+                        "hasPart": [],
+                        "instrument": {
+                            "@type": "WebAPI",
+                            "@id": "https://n9n.tactik8.com/workflow/SKT9qMIhq1HyI6Yu",
+                            "name": "Ingest webhook url generic V1"
+                        },
+                        "name": "Ingest webhook url generic V1",
+                        "object": {
+                            "@type": "DataFeed",
+                            "@id": "https://taskview.tactik8.com",
+                            "dataFeedElement": {
+                                "item": {
+                                    "@graph": [
+                                        {
+                                            "task": {
+                                                "id": 11,
+                                                "note": null,
+                                                "owner": 1,
+                                                "amount": null,
+                                                "goalId": 1,
+                                                "endDate": null,
+                                                "endTime": null,
+                                                "complete": false,
+                                                "parentId": null,
+                                                "sprintId": null,
+                                                "statusId": null,
+                                                "creatorId": 1,
+                                                "sourceUrl": null,
+                                                "startDate": null,
+                                                "startTime": null,
+                                                "taskOrder": 11,
+                                                "goalListId": null,
+                                                "priorityId": 1,
+                                                "description": "test7",
+                                                "kanbanOrder": -114688,
+                                                "dateComplete": null,
+                                                "estimateValue": null,
+                                                "transactionType": null,
+                                                "recurrenceRuleId": null,
+                                                "nodeGraphPosition": null,
+                                                "recurrenceInstanceDate": null
+                                            },
+                                            "event": "task.created",
+                                            "timestamp": "2026-11-24T13:24:39.293Z",
+                                            "initiatorId": 1
+                                        }
+                                    ]
+                                },
+                                "dateCreated": "2026-11-24T08:24:40.358-05:00",
+                                "dateModified": "2026-11-24T08:24:40.360-05:00"
+                            }
+                        },
+                        "startTime": "2026-11-24T08:24:40.350-05:00"
+                    }
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "yAOmTcU70oRxLLaG",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-24T13:54:02.055Z",
+            "updatedAt": "2026-11-24T13:54:02.055Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "fb17dfbe-a3f1-453f-ae59-ad85ffc8666f",
+        "workflowId": "yAOmTcU70oRxLLaG",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "databaseID"
+                            },
+                            {
+                                "name": "tenantID"
+                            },
+                            {
+                                "name": "ingestActionRecord",
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.3,
+                "position": [
+                    -400,
+                    16
+                ],
+                "id": "9198090f-fc83-4066-a60c-b56d2983d526",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{ $('Ingest Action Close1').item.json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    976,
+                    16
+                ],
+                "id": "16982d16-80a6-4b30-9fcc-cfd99d33b683",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1200,
+                    16
+                ],
+                "id": "4b3d5813-bf9b-46c5-b9ab-ca7edafc22e1",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1424,
+                    16
+                ],
+                "id": "1c792bdc-194c-4d5a-9ee5-6ea4b412a242",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config",
+                                "value": "={{ {} }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "f72a3958-c9cf-4986-9bc6-fe67a56d31d1",
+                                "name": "config.databaseID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.databaseID }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "893a7103-d2ee-47f7-90a7-011509f9cceb",
+                                "name": "config.tenantID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.tenantID }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    48,
+                    16
+                ],
+                "id": "8bc57d77-6a00-4ac7-b321-769cece0293b",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object",
+                                "value": "={{ $json.ingestActionRecord }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTime",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "6c1f0c83-6d61-46ae-be3a-3e8335390c12",
+                                "name": "action.hasPart",
+                                "value": "={{ [] }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    -176,
+                    16
+                ],
+                "id": "9809d757-caad-46ef-825d-917c80e04ae1",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "dV0pnJ9Ihc9uPshU",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/dV0pnJ9Ihc9uPshU",
+                        "cachedResultName": "schemaConversion V1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "datafeedRecord": "={{ $json.action.object.object }}"
+                        },
+                        "matchingColumns": [
+                            "datafeedRecord"
+                        ],
+                        "schema": [
+                            {
+                                "id": "datafeedRecord",
+                                "displayName": "datafeedRecord",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "mode": "each",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.3,
+                "position": [
+                    272,
+                    16
+                ],
+                "id": "b3936df5-9a7d-4fb6-9ff8-da14d5491d3d",
+                "name": "Call 'schemaConversion V1'"
+            },
+            {
+                "parameters": {
+                    "workflowId": {
+                        "__rl": true,
+                        "value": "ZNdb9Lzp9qRl8tG1",
+                        "mode": "list",
+                        "cachedResultUrl": "/workflow/ZNdb9Lzp9qRl8tG1",
+                        "cachedResultName": "api mongodb post v1"
+                    },
+                    "workflowInputs": {
+                        "mappingMode": "defineBelow",
+                        "value": {
+                            "databaseID": "={{ $('Config').item.json.config.databaseID }}",
+                            "tenantID": "={{ $('Config').item.json.config.tenantID }}",
+                            "record": "={{ $json.action }}"
+                        },
+                        "matchingColumns": [],
+                        "schema": [
+                            {
+                                "id": "databaseID",
+                                "displayName": "databaseID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "tenantID",
+                                "displayName": "tenantID",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "string",
+                                "removed": false
+                            },
+                            {
+                                "id": "record",
+                                "displayName": "record",
+                                "required": false,
+                                "defaultMatch": false,
+                                "display": true,
+                                "canBeUsedToMatch": true,
+                                "type": "object",
+                                "removed": false
+                            }
+                        ],
+                        "attemptToConvertTypes": false,
+                        "convertFieldsToString": true
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.executeWorkflow",
+                "typeVersion": 1.4,
+                "position": [
+                    720,
+                    16
+                ],
+                "id": "56ada361-a5ae-46b4-a28e-71479e85113f",
+                "name": "Call 'api mongodb post v1'"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $('Config').item.json.action.object }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "cd73e5f8-67e8-4107-8089-69d6fa009a89",
+                                "name": "action.result",
+                                "value": "={{ $json.output.result }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    496,
+                    16
+                ],
+                "id": "bc8cd50c-f962-480a-bd2e-29707f38a3cf",
+                "name": "Ingest Action Close1"
+            }
+        ],
+        "connections": {
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'schemaConversion V1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'schemaConversion V1'": {
+                "main": [
+                    [
+                        {
+                            "node": "Ingest Action Close1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Call 'api mongodb post v1'": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Ingest Action Close1": {
+                "main": [
+                    [
+                        {
+                            "node": "Call 'api mongodb post v1'",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version fb17dfbe",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-11-24T15:38:57.455Z",
+        "updatedAt": "2026-11-24T15:39:06.058Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
