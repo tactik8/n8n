@@ -1,0 +1,1182 @@
+{
+    "id": "XwexDZ8dWCt6AOWQ",
+    "name": "api s3 ensure path V1",
+    "active": true,
+    "activeVersionId": "89943b21-46bb-4f69-ba1b-68effe17b9e0",
+    "createdAt": "2026-11-26T15:45:34.544Z",
+    "updatedAt": "2026-11-26T16:35:18.846Z",
+    "isArchived": false,
+    "versionId": "89943b21-46bb-4f69-ba1b-68effe17b9e0",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "bucket"
+                        },
+                        {
+                            "name": "pathname"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                -144,
+                0
+            ],
+            "id": "42918b31-3d85-404f-b1b8-9d0b38578993",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "resource": "bucket",
+                "name": "={{ $('Input').item.json.bucket }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                864,
+                -176
+            ],
+            "id": "88d09cec-58c7-4483-9a1d-72373a771e83",
+            "name": "Create a bucket",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "bucket",
+                "operation": "getAll"
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                240,
+                -176
+            ],
+            "id": "2bc30f82-67e7-47e1-be19-93318ff9b1b3",
+            "name": "Get many buckets",
+            "alwaysOutputData": true,
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 4
+                    },
+                    "conditions": [
+                        {
+                            "id": "1dba7f63-83ed-4f9b-93ec-b4337b5a1ffb",
+                            "leftValue": "={{ $json.buckets.find(x => x.Name ==  $('Input').item.json.bucket) }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "object",
+                                "operation": "notExists",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.4,
+            "position": [
+                608,
+                -176
+            ],
+            "id": "9782747d-d60d-4081-8c3e-d8eebb5901df",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "destinationFieldName": "buckets",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                416,
+                -176
+            ],
+            "id": "5ca9835c-7c84-4e2e-bcbb-a26adcc42db6",
+            "name": "Aggregate"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "6abcb515-d956-4c1c-892b-556cd0c07ddf",
+                            "name": "bucket",
+                            "value": "={{ $json.bucket }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ecb0a143-6772-4a57-9b99-de77a66635c4",
+                            "name": "pathname",
+                            "value": "={{ $json.pathname }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                32,
+                0
+            ],
+            "id": "ef882965-ea36-43df-8944-83b6c9f099af",
+            "name": "Input"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "573a2007-f529-4157-b6b2-b62909738242",
+                            "name": "pathnames",
+                            "value": "={{ $json.pathname.split('/').map((currentvalue, i) => (\n  { \n    currentvalue, \n    previousvalue: i > 0 ?  $json.pathname.split('/')[i - 1] : null,\n    previousValues: i > 0 ?  $json.pathname.split('/').slice(0, i).join('/') : null,\nfullPath: i > 0 ?  $json.pathname.split('/').slice(0, i+1).join('/') : null\n  \n  }\n\n)) \n\n}}",
+                            "type": "array"
+                        },
+                        {
+                            "id": "865c943e-b404-45cd-9b51-cb6e0b623938",
+                            "name": "bucket",
+                            "value": "={{ $json.bucket }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "85de4ae6-2d54-4a85-9233-56acf4658319",
+                            "name": "pathname",
+                            "value": "={{ $json.pathname }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                224,
+                48
+            ],
+            "id": "e6a75d3b-40a4-4e5e-9b4f-efd3d303e5b9",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                640,
+                64
+            ],
+            "id": "aeb2a347-5bc7-4b26-966e-0e9268e107d7",
+            "name": "Loop Over Items"
+        },
+        {
+            "parameters": {
+                "resource": "folder",
+                "bucketName": "={{ $('Loop input').item.json.bucket }}",
+                "folderName": "={{ $('Loop input').item.json.pathnames.currentvalue }}",
+                "additionalFields": {
+                    "parentFolderKey": "={{ $('Loop input').item.json.pathnames.previousValues }}/"
+                }
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                2128,
+                336
+            ],
+            "id": "99ef5e8c-727b-4e52-adc1-4ec7e09f16b7",
+            "name": "Create a folder",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "folder",
+                "operation": "getAll",
+                "bucketName": "={{ $json.bucket }}",
+                "options": {
+                    "folderKey": "={{ $json.pathnames.previousValues }}"
+                }
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1440,
+                0
+            ],
+            "id": "c3bfec57-4f01-4a37-824f-32e8b93cf597",
+            "name": "Get many folders",
+            "alwaysOutputData": true,
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 4
+                    },
+                    "conditions": [
+                        {
+                            "id": "1dba7f63-83ed-4f9b-93ec-b4337b5a1ffb",
+                            "leftValue": "={{ $json.buckets.find(x => x.Key ==  $('Loop input').item.json.pathnames.fullPath)  }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "object",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.4,
+            "position": [
+                1872,
+                144
+            ],
+            "id": "2e016a88-8246-4df6-b9fb-e3d5061facd8",
+            "name": "If1"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "destinationFieldName": "buckets",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                1680,
+                144
+            ],
+            "id": "637c3072-9669-4196-b47b-6ae87bf7180c",
+            "name": "Aggregate1"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "pathnames",
+                "include": "allOtherFields",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1.1,
+            "position": [
+                448,
+                48
+            ],
+            "id": "b68cbce5-d6c5-42e4-bb9c-8ab01ea147ef",
+            "name": "Split Out"
+        },
+        {
+            "parameters": {
+                "resource": "folder",
+                "operation": "getAll",
+                "bucketName": "={{ $json.bucket }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1424,
+                224
+            ],
+            "id": "1c3c61fc-11c1-43c2-9eb3-8b31af9a4835",
+            "name": "Get many folders1",
+            "alwaysOutputData": true,
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 4
+                    },
+                    "conditions": [
+                        {
+                            "id": "0459cd11-7940-4271-947d-22b6c808c918",
+                            "leftValue": "={{ $json.pathnames.previousvalue }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "exists",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.4,
+            "position": [
+                1136,
+                144
+            ],
+            "id": "ac39ddad-3467-4c50-8985-958d1b464ad3",
+            "name": "If2"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": []
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                912,
+                144
+            ],
+            "id": "40cafccc-fd24-4ebb-ad46-f79d67629d1f",
+            "name": "Loop input"
+        }
+    ],
+    "connections": {
+        "Get many buckets": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Create a bucket",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Input": {
+            "main": [
+                [
+                    {
+                        "node": "Get many buckets",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop Over Items": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Loop input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many folders": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If1": {
+            "main": [
+                [
+                    {
+                        "node": "Create a folder",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate1": {
+            "main": [
+                [
+                    {
+                        "node": "If1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If2": {
+            "main": [
+                [
+                    {
+                        "node": "Get many folders",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Get many folders1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many folders1": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create a folder": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop input": {
+            "main": [
+                [
+                    {
+                        "node": "If2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "bucket": "testbucket1",
+                    "pathname": "path1/path2/path3"
+                }
+            }
+        ]
+    },
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "XwexDZ8dWCt6AOWQ",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-26T15:45:34.544Z",
+            "updatedAt": "2026-11-26T15:45:34.544Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "89943b21-46bb-4f69-ba1b-68effe17b9e0",
+        "workflowId": "XwexDZ8dWCt6AOWQ",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "bucket"
+                            },
+                            {
+                                "name": "pathname"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.3,
+                "position": [
+                    -144,
+                    0
+                ],
+                "id": "42918b31-3d85-404f-b1b8-9d0b38578993",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "resource": "bucket",
+                    "name": "={{ $('Input').item.json.bucket }}",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    864,
+                    -176
+                ],
+                "id": "88d09cec-58c7-4483-9a1d-72373a771e83",
+                "name": "Create a bucket",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "bucket",
+                    "operation": "getAll"
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    240,
+                    -176
+                ],
+                "id": "2bc30f82-67e7-47e1-be19-93318ff9b1b3",
+                "name": "Get many buckets",
+                "alwaysOutputData": true,
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 4
+                        },
+                        "conditions": [
+                            {
+                                "id": "1dba7f63-83ed-4f9b-93ec-b4337b5a1ffb",
+                                "leftValue": "={{ $json.buckets.find(x => x.Name ==  $('Input').item.json.bucket) }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "object",
+                                    "operation": "notExists",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.4,
+                "position": [
+                    608,
+                    -176
+                ],
+                "id": "9782747d-d60d-4081-8c3e-d8eebb5901df",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "aggregate": "aggregateAllItemData",
+                    "destinationFieldName": "buckets",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.aggregate",
+                "typeVersion": 1,
+                "position": [
+                    416,
+                    -176
+                ],
+                "id": "5ca9835c-7c84-4e2e-bcbb-a26adcc42db6",
+                "name": "Aggregate"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "6abcb515-d956-4c1c-892b-556cd0c07ddf",
+                                "name": "bucket",
+                                "value": "={{ $json.bucket }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "ecb0a143-6772-4a57-9b99-de77a66635c4",
+                                "name": "pathname",
+                                "value": "={{ $json.pathname }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    32,
+                    0
+                ],
+                "id": "ef882965-ea36-43df-8944-83b6c9f099af",
+                "name": "Input"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "573a2007-f529-4157-b6b2-b62909738242",
+                                "name": "pathnames",
+                                "value": "={{ $json.pathname.split('/').map((currentvalue, i) => (\n  { \n    currentvalue, \n    previousvalue: i > 0 ?  $json.pathname.split('/')[i - 1] : null,\n    previousValues: i > 0 ?  $json.pathname.split('/').slice(0, i).join('/') : null,\nfullPath: i > 0 ?  $json.pathname.split('/').slice(0, i+1).join('/') : null\n  \n  }\n\n)) \n\n}}",
+                                "type": "array"
+                            },
+                            {
+                                "id": "865c943e-b404-45cd-9b51-cb6e0b623938",
+                                "name": "bucket",
+                                "value": "={{ $json.bucket }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "85de4ae6-2d54-4a85-9233-56acf4658319",
+                                "name": "pathname",
+                                "value": "={{ $json.pathname }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    224,
+                    48
+                ],
+                "id": "e6a75d3b-40a4-4e5e-9b4f-efd3d303e5b9",
+                "name": "Edit Fields"
+            },
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.splitInBatches",
+                "typeVersion": 3,
+                "position": [
+                    640,
+                    64
+                ],
+                "id": "aeb2a347-5bc7-4b26-966e-0e9268e107d7",
+                "name": "Loop Over Items"
+            },
+            {
+                "parameters": {
+                    "resource": "folder",
+                    "bucketName": "={{ $('Loop input').item.json.bucket }}",
+                    "folderName": "={{ $('Loop input').item.json.pathnames.currentvalue }}",
+                    "additionalFields": {
+                        "parentFolderKey": "={{ $('Loop input').item.json.pathnames.previousValues }}/"
+                    }
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    2128,
+                    336
+                ],
+                "id": "99ef5e8c-727b-4e52-adc1-4ec7e09f16b7",
+                "name": "Create a folder",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "folder",
+                    "operation": "getAll",
+                    "bucketName": "={{ $json.bucket }}",
+                    "options": {
+                        "folderKey": "={{ $json.pathnames.previousValues }}"
+                    }
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    1440,
+                    0
+                ],
+                "id": "c3bfec57-4f01-4a37-824f-32e8b93cf597",
+                "name": "Get many folders",
+                "alwaysOutputData": true,
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 4
+                        },
+                        "conditions": [
+                            {
+                                "id": "1dba7f63-83ed-4f9b-93ec-b4337b5a1ffb",
+                                "leftValue": "={{ $json.buckets.find(x => x.Key ==  $('Loop input').item.json.pathnames.fullPath)  }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "object",
+                                    "operation": "empty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.4,
+                "position": [
+                    1872,
+                    144
+                ],
+                "id": "2e016a88-8246-4df6-b9fb-e3d5061facd8",
+                "name": "If1"
+            },
+            {
+                "parameters": {
+                    "aggregate": "aggregateAllItemData",
+                    "destinationFieldName": "buckets",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.aggregate",
+                "typeVersion": 1,
+                "position": [
+                    1680,
+                    144
+                ],
+                "id": "637c3072-9669-4196-b47b-6ae87bf7180c",
+                "name": "Aggregate1"
+            },
+            {
+                "parameters": {
+                    "fieldToSplitOut": "pathnames",
+                    "include": "allOtherFields",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.splitOut",
+                "typeVersion": 1.1,
+                "position": [
+                    448,
+                    48
+                ],
+                "id": "b68cbce5-d6c5-42e4-bb9c-8ab01ea147ef",
+                "name": "Split Out"
+            },
+            {
+                "parameters": {
+                    "resource": "folder",
+                    "operation": "getAll",
+                    "bucketName": "={{ $json.bucket }}",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    1424,
+                    224
+                ],
+                "id": "1c3c61fc-11c1-43c2-9eb3-8b31af9a4835",
+                "name": "Get many folders1",
+                "alwaysOutputData": true,
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 4
+                        },
+                        "conditions": [
+                            {
+                                "id": "0459cd11-7940-4271-947d-22b6c808c918",
+                                "leftValue": "={{ $json.pathnames.previousvalue }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "exists",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.4,
+                "position": [
+                    1136,
+                    144
+                ],
+                "id": "ac39ddad-3467-4c50-8985-958d1b464ad3",
+                "name": "If2"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": []
+                    },
+                    "includeOtherFields": true,
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    912,
+                    144
+                ],
+                "id": "40cafccc-fd24-4ebb-ad46-f79d67629d1f",
+                "name": "Loop input"
+            }
+        ],
+        "connections": {
+            "Get many buckets": {
+                "main": [
+                    [
+                        {
+                            "node": "Aggregate",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Create a bucket",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Aggregate": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Input",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Input": {
+                "main": [
+                    [
+                        {
+                            "node": "Get many buckets",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Edit Fields",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Edit Fields": {
+                "main": [
+                    [
+                        {
+                            "node": "Split Out",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Loop Over Items": {
+                "main": [
+                    [],
+                    [
+                        {
+                            "node": "Loop input",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get many folders": {
+                "main": [
+                    [
+                        {
+                            "node": "Aggregate1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If1": {
+                "main": [
+                    [
+                        {
+                            "node": "Create a folder",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Loop Over Items",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Aggregate1": {
+                "main": [
+                    [
+                        {
+                            "node": "If1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Split Out": {
+                "main": [
+                    [
+                        {
+                            "node": "Loop Over Items",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "If2": {
+                "main": [
+                    [
+                        {
+                            "node": "Get many folders",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Get many folders1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get many folders1": {
+                "main": [
+                    [
+                        {
+                            "node": "Aggregate1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Create a folder": {
+                "main": [
+                    [
+                        {
+                            "node": "Loop Over Items",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Loop input": {
+                "main": [
+                    [
+                        {
+                            "node": "If2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 89943b21",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-11-26T16:35:18.848Z",
+        "updatedAt": "2026-11-26T16:35:38.364Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
