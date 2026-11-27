@@ -1,0 +1,1295 @@
+{
+    "id": "1kwBv6cqXjVvkTwt",
+    "name": "api s3 search V2",
+    "active": true,
+    "activeVersionId": "9609cd76-5353-4315-9e0e-8cf4c28413a1",
+    "createdAt": "2026-11-26T14:46:40.093Z",
+    "updatedAt": "2026-11-26T16:43:56.999Z",
+    "isArchived": false,
+    "versionId": "9609cd76-5353-4315-9e0e-8cf4c28413a1",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "workflowInputs": {
+                    "values": [
+                        {
+                            "name": "databaseID"
+                        },
+                        {
+                            "name": "tenantID"
+                        },
+                        {
+                            "name": "recordID"
+                        },
+                        {
+                            "name": "metadata",
+                            "type": "object"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                -16,
+                128
+            ],
+            "id": "b47259a5-e7e2-4449-b79f-c64469b48355",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{ $json.data?.item || undefined }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "ab63580d-bdd9-4bc6-b3b8-0c04ceb63d94",
+                            "name": "action.hasPart",
+                            "value": "={{ ($('Config').item.json.action.hasPart || []).concat(Array.isArray($json.output) ? $json.output : [$json.output] ) }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1552,
+                32
+            ],
+            "id": "e7e0ebc0-d1cb-4283-af95-1297a2bc7bcf",
+            "name": "Format"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1776,
+                32
+            ],
+            "id": "b07874b0-f220-4d19-bc78-dc7d05870abc",
+            "name": "Action Close"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2000,
+                32
+            ],
+            "id": "917327b7-3bb7-4574-ab4d-2eebe8e9b774",
+            "name": "Output"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                            "name": "config",
+                            "value": "={{ {} }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "e8d38086-1a5d-4668-958f-1e15d5016ba5",
+                            "name": "config.databaseID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.databaseID || 'testDatabaseId'}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b44607be-924c-4ae2-bcdc-976a93bbbe0c",
+                            "name": "config.tenantID",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.tenantID || 'testTenantId'}}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "af1b774c-cf47-49d9-8f92-02675cdaec27",
+                            "name": "config.metadata",
+                            "value": "={{ $('When Executed by Another Workflow').item.json.metadata || {} }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "18befdf9-7a07-4f5d-871b-f03ad6178f17",
+                            "name": "config.bucket",
+                            "value": "records",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                432,
+                128
+            ],
+            "id": "c7171a69-afdf-47f1-a389-1509c80e325b",
+            "name": "Config"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                            "name": "action.@type",
+                            "value": "Action",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                            "name": "action.@id",
+                            "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                            "name": "action.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                            "name": "action.object.@id",
+                            "value": "={{ $json.recordID }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                            "name": "action.startTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                            "name": "action.endTime",
+                            "value": "",
+                            "type": "string"
+                        },
+                        {
+                            "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                            "name": "action.actionStatus",
+                            "value": "ActiveActionStatus",
+                            "type": "string"
+                        },
+                        {
+                            "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                            "name": "action.instrument.@type",
+                            "value": "WebAPI",
+                            "type": "string"
+                        },
+                        {
+                            "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                            "name": "action.instrument.@id",
+                            "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                            "name": "action.instrument.name",
+                            "value": "={{ $workflow.name }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "6c1f0c83-6d61-46ae-be3a-3e8335390c12",
+                            "name": "action.hasPart",
+                            "value": "={{ [] }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                208,
+                128
+            ],
+            "id": "82d1c6bb-5a29-49da-ad49-2f5f4b016594",
+            "name": "Action"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ca865e8a-fd4b-4e95-8eb7-cedadbad98c6",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d6114e07-038a-4a8d-9449-d966b2680c8a",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "cd92aa7f-4a59-40e9-9dc9-9afb0e929454",
+                            "name": "config.safeDatabaseID",
+                            "value": "={{ $json.config.databaseID.replace(/^https?:\\/\\//i, '').replaceAll(/[^a-z0-9.-]/gi, '_')\n    .replaceAll(/_+/g, '_')\n    .replaceAll(/^_|_$/g, '')\n    .slice(0, 200)  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "5f5caa62-8d44-4989-a0d7-aeebc97e885b",
+                            "name": "config.safeTenantID",
+                            "value": "={{ $json.config.tenantID.replace(/^https?:\\/\\//i, '').replaceAll(/[^a-z0-9.-]/gi, '_')\n    .replaceAll(/_+/g, '_')\n    .replaceAll(/^_|_$/g, '')\n    .slice(0, 200)  }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "13b7eb44-103a-4bdd-841b-e88f9d4ed336",
+                            "name": "config.safeRecordId",
+                            "value": "={{ $json.action.object?.['@id'].replace(/^https?:\\/\\//i, '').replaceAll(/[^a-z0-9.-]/gi, '_')\n    .replaceAll(/_+/g, '_')\n    .replaceAll(/^_|_$/g, '')\n    .slice(0, 200)  }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                656,
+                128
+            ],
+            "id": "01ebd320-a80f-4d19-99ad-b9684d6d66f5",
+            "name": "safeId"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "8b1b66d4-cd3c-4a76-bee3-9bdbec7c58b0",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "6471065f-dd7f-40fd-bedb-b85b283e9510",
+                            "name": "config",
+                            "value": "={{ $json.config }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d36ccbde-9147-4c17-a8cd-94e3ba34fd0b",
+                            "name": "config.filepath",
+                            "value": "={{ $json.config.databaseID }}/{{ $json.config.tenantID }}/{{ $json.config.safeRecordId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4a7fa4ea-0955-4f46-b2cc-daf930efe8f7",
+                            "name": "config.filePathValue",
+                            "value": "={{ $json.config.databaseID }}/{{ $json.config.tenantID }}/{{ $json.config.safeRecordId }}/value.json",
+                            "type": "string"
+                        },
+                        {
+                            "id": "8bcf3fca-88a2-4cc2-95db-8808f37b04f7",
+                            "name": "config.filePathHistory",
+                            "value": "={{ $json.config.databaseID }}/{{ $json.config.tenantID }}/{{ $json.config.safeRecordId }}/history/record_{{$now.toISO()}}.json",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.5,
+            "position": [
+                880,
+                128
+            ],
+            "id": "2ec819f1-de11-4718-96f2-2c9cf8b28a01",
+            "name": "filepath"
+        },
+        {
+            "parameters": {
+                "operation": "fromJson",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.2,
+            "position": [
+                1328,
+                128
+            ],
+            "id": "1d34f56a-7f0f-4d27-89dc-bcc05c93ac62",
+            "name": "Extract from File",
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                            "name": "action",
+                            "value": "={{ $('Action').item.json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                            "name": "action.result",
+                            "value": "={{  undefined }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "ab63580d-bdd9-4bc6-b3b8-0c04ceb63d94",
+                            "name": "action.hasPart",
+                            "value": "={{ ($('Config').item.json.action.hasPart || []).concat(Array.isArray($json.output) ? $json.output : [$json.output] ) }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {
+                    "ignoreConversionErrors": true
+                }
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1552,
+                224
+            ],
+            "id": "a2cd8787-05c5-49ff-bbf6-2ed869ab3d20",
+            "name": "Format1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                            "name": "action",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                            "name": "action.endTime",
+                            "value": "={{ $now }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                            "name": "action.actionStatus",
+                            "value": "CompletedActionStatus",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1776,
+                224
+            ],
+            "id": "b160d6f0-f407-4091-b1ca-a6c5fb437489",
+            "name": "Action Close1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                            "name": "output",
+                            "value": "={{ $json.action }}",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2000,
+                224
+            ],
+            "id": "f466e8eb-34ae-4ca3-a90e-72651d228cff",
+            "name": "Output1"
+        },
+        {
+            "parameters": {
+                "resource": "folder",
+                "operation": "getAll",
+                "bucketName": "={{ $json.config.bucket }}",
+                "returnAll": true,
+                "options": {
+                    "folderKey": "={{ $json.config.databaseID }}/{{ $json.config.tenantID }}"
+                }
+            },
+            "type": "n8n-nodes-base.s3",
+            "typeVersion": 1,
+            "position": [
+                1104,
+                128
+            ],
+            "id": "494e640c-0bd7-43c2-8acf-0980c64c5b00",
+            "name": "Get many folders",
+            "credentials": {
+                "s3": {
+                    "id": "CdQ69TLyaEtJxpdB",
+                    "name": "S3 account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Action",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close": {
+            "main": [
+                [
+                    {
+                        "node": "Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Config": {
+            "main": [
+                [
+                    {
+                        "node": "safeId",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action": {
+            "main": [
+                [
+                    {
+                        "node": "Config",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "safeId": {
+            "main": [
+                [
+                    {
+                        "node": "filepath",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "filepath": {
+            "main": [
+                [
+                    {
+                        "node": "Get many folders",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "Format",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Format1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format1": {
+            "main": [
+                [
+                    {
+                        "node": "Action Close1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Action Close1": {
+            "main": [
+                [
+                    {
+                        "node": "Output1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many folders": {
+            "main": [
+                [
+                    {
+                        "node": "Extract from File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {
+        "When Executed by Another Workflow": [
+            {
+                "json": {
+                    "databaseID": "testdb1",
+                    "tenantID": "testtenant1",
+                    "recordID": "https://www.test.com/thing1#thing"
+                }
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "1kwBv6cqXjVvkTwt",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-26T14:46:40.093Z",
+            "updatedAt": "2026-11-26T14:46:40.093Z"
+        }
+    ],
+    "activeVersion": {
+        "versionId": "9609cd76-5353-4315-9e0e-8cf4c28413a1",
+        "workflowId": "1kwBv6cqXjVvkTwt",
+        "nodes": [
+            {
+                "parameters": {
+                    "workflowInputs": {
+                        "values": [
+                            {
+                                "name": "databaseID"
+                            },
+                            {
+                                "name": "tenantID"
+                            },
+                            {
+                                "name": "recordID"
+                            },
+                            {
+                                "name": "metadata",
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                "type": "n8n-nodes-base.executeWorkflowTrigger",
+                "typeVersion": 1.3,
+                "position": [
+                    -16,
+                    128
+                ],
+                "id": "b47259a5-e7e2-4449-b79f-c64469b48355",
+                "name": "When Executed by Another Workflow"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{ $json.data?.item || undefined }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "ab63580d-bdd9-4bc6-b3b8-0c04ceb63d94",
+                                "name": "action.hasPart",
+                                "value": "={{ ($('Config').item.json.action.hasPart || []).concat(Array.isArray($json.output) ? $json.output : [$json.output] ) }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1552,
+                    32
+                ],
+                "id": "e7e0ebc0-d1cb-4283-af95-1297a2bc7bcf",
+                "name": "Format"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1776,
+                    32
+                ],
+                "id": "b07874b0-f220-4d19-bc78-dc7d05870abc",
+                "name": "Action Close"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    2000,
+                    32
+                ],
+                "id": "917327b7-3bb7-4574-ab4d-2eebe8e9b774",
+                "name": "Output"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "f6f65096-8dee-4aca-84e5-26e47450e14d",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "c9e3e2f0-ce46-4e34-9012-7bbf215a012e",
+                                "name": "config",
+                                "value": "={{ {} }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "e8d38086-1a5d-4668-958f-1e15d5016ba5",
+                                "name": "config.databaseID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.databaseID || 'testDatabaseId'}}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "b44607be-924c-4ae2-bcdc-976a93bbbe0c",
+                                "name": "config.tenantID",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.tenantID || 'testTenantId'}}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "af1b774c-cf47-49d9-8f92-02675cdaec27",
+                                "name": "config.metadata",
+                                "value": "={{ $('When Executed by Another Workflow').item.json.metadata || {} }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "18befdf9-7a07-4f5d-871b-f03ad6178f17",
+                                "name": "config.bucket",
+                                "value": "records",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    432,
+                    128
+                ],
+                "id": "c7171a69-afdf-47f1-a389-1509c80e325b",
+                "name": "Config"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "31784879-2a81-49a9-a163-1b6f1341d027",
+                                "name": "action.@type",
+                                "value": "Action",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f8fe532d-0561-48f1-9f0f-0f26e166327e",
+                                "name": "action.@id",
+                                "value": "=https://n8n.tactik8.com/workflow/{{ $workflow.id }}/execution/{{ $execution.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "e8d3982e-3c99-4ece-a41e-628a085689e4",
+                                "name": "action.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "91cedf8f-774c-4fb4-a349-9dc33ff24603",
+                                "name": "action.object.@id",
+                                "value": "={{ $json.recordID }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "00c9e5ea-eb61-4af5-9e78-51da9cc92f4f",
+                                "name": "action.startTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "0c0692c5-5326-4175-b2a3-28753d95e30f",
+                                "name": "action.endTime",
+                                "value": "",
+                                "type": "string"
+                            },
+                            {
+                                "id": "899b1d28-272f-4cc6-b98a-9cb8da64cf17",
+                                "name": "action.actionStatus",
+                                "value": "ActiveActionStatus",
+                                "type": "string"
+                            },
+                            {
+                                "id": "950385b8-08f8-40b0-9895-6189ad2c0ef3",
+                                "name": "action.instrument.@type",
+                                "value": "WebAPI",
+                                "type": "string"
+                            },
+                            {
+                                "id": "28776b11-af12-4ea1-827e-a5adfc747bab",
+                                "name": "action.instrument.@id",
+                                "value": "=https://n9n.tactik8.com/workflow/{{ $workflow.id }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "f2ff0d43-23e3-4353-a3b4-4545f359d9de",
+                                "name": "action.instrument.name",
+                                "value": "={{ $workflow.name }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "6c1f0c83-6d61-46ae-be3a-3e8335390c12",
+                                "name": "action.hasPart",
+                                "value": "={{ [] }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    208,
+                    128
+                ],
+                "id": "82d1c6bb-5a29-49da-ad49-2f5f4b016594",
+                "name": "Action"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "ca865e8a-fd4b-4e95-8eb7-cedadbad98c6",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d6114e07-038a-4a8d-9449-d966b2680c8a",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "cd92aa7f-4a59-40e9-9dc9-9afb0e929454",
+                                "name": "config.safeDatabaseID",
+                                "value": "={{ $json.config.databaseID.replace(/^https?:\\/\\//i, '').replaceAll(/[^a-z0-9.-]/gi, '_')\n    .replaceAll(/_+/g, '_')\n    .replaceAll(/^_|_$/g, '')\n    .slice(0, 200)  }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "5f5caa62-8d44-4989-a0d7-aeebc97e885b",
+                                "name": "config.safeTenantID",
+                                "value": "={{ $json.config.tenantID.replace(/^https?:\\/\\//i, '').replaceAll(/[^a-z0-9.-]/gi, '_')\n    .replaceAll(/_+/g, '_')\n    .replaceAll(/^_|_$/g, '')\n    .slice(0, 200)  }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "13b7eb44-103a-4bdd-841b-e88f9d4ed336",
+                                "name": "config.safeRecordId",
+                                "value": "={{ $json.action.object?.['@id'].replace(/^https?:\\/\\//i, '').replaceAll(/[^a-z0-9.-]/gi, '_')\n    .replaceAll(/_+/g, '_')\n    .replaceAll(/^_|_$/g, '')\n    .slice(0, 200)  }}",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    656,
+                    128
+                ],
+                "id": "01ebd320-a80f-4d19-99ad-b9684d6d66f5",
+                "name": "safeId"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "8b1b66d4-cd3c-4a76-bee3-9bdbec7c58b0",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "6471065f-dd7f-40fd-bedb-b85b283e9510",
+                                "name": "config",
+                                "value": "={{ $json.config }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d36ccbde-9147-4c17-a8cd-94e3ba34fd0b",
+                                "name": "config.filepath",
+                                "value": "={{ $json.config.databaseID }}/{{ $json.config.tenantID }}/{{ $json.config.safeRecordId }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "4a7fa4ea-0955-4f46-b2cc-daf930efe8f7",
+                                "name": "config.filePathValue",
+                                "value": "={{ $json.config.databaseID }}/{{ $json.config.tenantID }}/{{ $json.config.safeRecordId }}/value.json",
+                                "type": "string"
+                            },
+                            {
+                                "id": "8bcf3fca-88a2-4cc2-95db-8808f37b04f7",
+                                "name": "config.filePathHistory",
+                                "value": "={{ $json.config.databaseID }}/{{ $json.config.tenantID }}/{{ $json.config.safeRecordId }}/history/record_{{$now.toISO()}}.json",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.5,
+                "position": [
+                    880,
+                    128
+                ],
+                "id": "2ec819f1-de11-4718-96f2-2c9cf8b28a01",
+                "name": "filepath"
+            },
+            {
+                "parameters": {
+                    "operation": "fromJson",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.extractFromFile",
+                "typeVersion": 1.2,
+                "position": [
+                    1328,
+                    128
+                ],
+                "id": "1d34f56a-7f0f-4d27-89dc-bcc05c93ac62",
+                "name": "Extract from File",
+                "onError": "continueErrorOutput"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "7cf8f86d-be31-4001-887c-ecb2b91e5c6a",
+                                "name": "action",
+                                "value": "={{ $('Action').item.json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "b6cbd49b-94ac-4704-9676-9ef7687627fb",
+                                "name": "action.result",
+                                "value": "={{  undefined }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "ab63580d-bdd9-4bc6-b3b8-0c04ceb63d94",
+                                "name": "action.hasPart",
+                                "value": "={{ ($('Config').item.json.action.hasPart || []).concat(Array.isArray($json.output) ? $json.output : [$json.output] ) }}",
+                                "type": "array"
+                            }
+                        ]
+                    },
+                    "options": {
+                        "ignoreConversionErrors": true
+                    }
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1552,
+                    224
+                ],
+                "id": "a2cd8787-05c5-49ff-bbf6-2ed869ab3d20",
+                "name": "Format1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "a796e775-2bdb-4895-9049-8ca4b4866a16",
+                                "name": "action",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            },
+                            {
+                                "id": "d753e148-e9bb-4d54-8440-2dfd302da08e",
+                                "name": "action.endTime",
+                                "value": "={{ $now }}",
+                                "type": "string"
+                            },
+                            {
+                                "id": "04fe1c9d-0038-48a7-9fff-2fe800ec9fc9",
+                                "name": "action.actionStatus",
+                                "value": "CompletedActionStatus",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    1776,
+                    224
+                ],
+                "id": "b160d6f0-f407-4091-b1ca-a6c5fb437489",
+                "name": "Action Close1"
+            },
+            {
+                "parameters": {
+                    "assignments": {
+                        "assignments": [
+                            {
+                                "id": "2799b96a-ecdc-49c8-ab49-d5fe257365d6",
+                                "name": "output",
+                                "value": "={{ $json.action }}",
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.set",
+                "typeVersion": 3.4,
+                "position": [
+                    2000,
+                    224
+                ],
+                "id": "f466e8eb-34ae-4ca3-a90e-72651d228cff",
+                "name": "Output1"
+            },
+            {
+                "parameters": {
+                    "resource": "folder",
+                    "operation": "getAll",
+                    "bucketName": "={{ $json.config.bucket }}",
+                    "returnAll": true,
+                    "options": {
+                        "folderKey": "={{ $json.config.databaseID }}/{{ $json.config.tenantID }}"
+                    }
+                },
+                "type": "n8n-nodes-base.s3",
+                "typeVersion": 1,
+                "position": [
+                    1104,
+                    128
+                ],
+                "id": "494e640c-0bd7-43c2-8acf-0980c64c5b00",
+                "name": "Get many folders",
+                "credentials": {
+                    "s3": {
+                        "id": "CdQ69TLyaEtJxpdB",
+                        "name": "S3 account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "When Executed by Another Workflow": {
+                "main": [
+                    [
+                        {
+                            "node": "Action",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Format": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close": {
+                "main": [
+                    [
+                        {
+                            "node": "Output",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Config": {
+                "main": [
+                    [
+                        {
+                            "node": "safeId",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action": {
+                "main": [
+                    [
+                        {
+                            "node": "Config",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "safeId": {
+                "main": [
+                    [
+                        {
+                            "node": "filepath",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "filepath": {
+                "main": [
+                    [
+                        {
+                            "node": "Get many folders",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Extract from File": {
+                "main": [
+                    [
+                        {
+                            "node": "Format",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Format1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Format1": {
+                "main": [
+                    [
+                        {
+                            "node": "Action Close1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Action Close1": {
+                "main": [
+                    [
+                        {
+                            "node": "Output1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Get many folders": {
+                "main": [
+                    [
+                        {
+                            "node": "Extract from File",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "nodeGroups": [],
+        "authors": "Admin Account",
+        "name": "Version 9609cd76",
+        "description": "",
+        "autosaved": true,
+        "createdAt": "2026-11-26T16:43:02.534Z",
+        "updatedAt": "2026-11-26T16:43:15.918Z"
+    },
+    "error": "The resource you are requesting could not be found"
+}
