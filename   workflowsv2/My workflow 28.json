@@ -1,0 +1,244 @@
+{
+    "id": "gYjQarZO6yjcyCio",
+    "name": "My workflow 28",
+    "active": false,
+    "activeVersionId": null,
+    "createdAt": "2026-11-27T15:43:57.799Z",
+    "updatedAt": "2026-11-27T16:16:57.595Z",
+    "isArchived": false,
+    "versionId": "fade127e-129b-41e7-950a-e91339ecb6db",
+    "triggerCount": 0,
+    "nodes": [
+        {
+            "parameters": {
+                "inputSource": "passthrough"
+            },
+            "type": "n8n-nodes-base.executeWorkflowTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                0,
+                0
+            ],
+            "id": "d49e0152-4a1b-44ac-a15c-84e6277a5802",
+            "name": "When Executed by Another Workflow"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "8FQvRveJHotxlLdc",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/8FQvRveJHotxlLdc",
+                    "cachedResultName": "karakeep api bookmarks search v2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "system.url": "https://karakeep.tactik8.com",
+                        "credential.token": "Bearer ak2_5b4c2bd0b95e2d052253_db0c9abd9cf3b70d3f3e1218ef74cf44",
+                        "user.email": "vllnlair@gmail.com"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "system.url",
+                            "displayName": "system.url",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "user.email",
+                            "displayName": "user.email",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "credential.token",
+                            "displayName": "credential.token",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.4,
+            "position": [
+                224,
+                0
+            ],
+            "id": "3ff6604e-f349-406f-8458-1717b15f3063",
+            "name": "Call 'karakeep api bookmarks search v2'"
+        },
+        {
+            "parameters": {
+                "command": "npm install github:tactik8/helpers_jsonld\n"
+            },
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                240,
+                -144
+            ],
+            "id": "3ebcc750-4c91-43b2-bff6-8d0394bcbd96",
+            "name": "Execute Command"
+        },
+        {
+            "parameters": {
+                "workflowId": {
+                    "__rl": true,
+                    "value": "xRqQAYmkDMvRncd0",
+                    "mode": "list",
+                    "cachedResultUrl": "/workflow/xRqQAYmkDMvRncd0",
+                    "cachedResultName": "api s3 post V2"
+                },
+                "workflowInputs": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "databaseID": "bronzeV1",
+                        "tenantID": "karakeep"
+                    },
+                    "matchingColumns": [],
+                    "schema": [
+                        {
+                            "id": "databaseID",
+                            "displayName": "databaseID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "tenantID",
+                            "displayName": "tenantID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "string",
+                            "removed": false
+                        },
+                        {
+                            "id": "record",
+                            "displayName": "record",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        },
+                        {
+                            "id": "metadata",
+                            "displayName": "metadata",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "canBeUsedToMatch": true,
+                            "type": "object",
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": true
+                },
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.executeWorkflow",
+            "typeVersion": 1.4,
+            "position": [
+                656,
+                0
+            ],
+            "id": "3cf83d72-5426-4b1e-8ff9-34ca44317705",
+            "name": "Call 'api s3 post V2'"
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "output.result",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1.1,
+            "position": [
+                448,
+                0
+            ],
+            "id": "dc632513-992c-4c54-8c17-75342c5837e0",
+            "name": "Split Out"
+        }
+    ],
+    "connections": {
+        "When Executed by Another Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'karakeep api bookmarks search v2'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call 'karakeep api bookmarks search v2'": {
+            "main": [
+                [
+                    {
+                        "node": "Split Out",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Out": {
+            "main": [
+                [
+                    {
+                        "node": "Call 'api s3 post V2'",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "nodeGroups": [],
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate"
+    },
+    "staticData": null,
+    "pinData": {},
+    "meta": null,
+    "tags": [],
+    "shared": [
+        {
+            "role": "workflow:owner",
+            "workflowId": "gYjQarZO6yjcyCio",
+            "projectId": "dEfW1GXlVF1TxZtT",
+            "createdAt": "2026-11-27T15:43:57.799Z",
+            "updatedAt": "2026-11-27T15:43:57.799Z"
+        }
+    ],
+    "activeVersion": null,
+    "error": "The resource you are requesting could not be found"
+}
